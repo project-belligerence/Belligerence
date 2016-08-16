@@ -31,6 +31,12 @@ $RECYCLE.BIN/
 # Thumbnails
 ._*
 
+# Ignore these folders
+/node_modules
+/bower_components
+/logs
+/uploads
+
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
