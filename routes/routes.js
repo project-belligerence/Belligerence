@@ -32,6 +32,10 @@
 
 	exports.setup = setup;
 
+	function renderIndex(req, res) { res.render(config.folders.static + '/' + 'index'); }
+	function renderStatic(req, res) { res.render(config.folders.static + req.params.static); }
+	function renderView(req, res) {	res.render(config.folders.partials + '/' + req.params.view); }
+
 	function setup(app, express) {
 
 		var
@@ -434,6 +438,10 @@
 			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.owner))
 		;
 
+		// DEFAULT ROUTES
+		app.get('/', renderIndex);
+		app.get('/' + config.folders.partials + '/:view', renderView);
+
 		// MOUNT API ROUTES
 		app.use(bodyParser.urlencoded({extended: true}));
 		app.use(bodyParser.json({limit: '1mb'}));
@@ -452,6 +460,8 @@
 		app.use('/api/pmcactions', PMCActionsRouter);
 		app.use('/api/generalactions', GeneralActionsRouter);
 		app.use('/api/adminactions', AdminRouter);
+
+		app.get('*', renderIndex);
 	}
 
 })();

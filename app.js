@@ -28,6 +28,7 @@
 	app.set('view engine', 'ejs');
 	app.use(morgan('dev'));
 
+	app.set('views', __dirname + '/' + config.folders.views);
 	app.use(express.static(path.join(__dirname, 'public')));
 
 	// SETS UP ROUTES
