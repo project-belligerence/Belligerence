@@ -7,6 +7,6 @@
 		partials: 'partials',
 		uploads: 'uploads',
 		uploads_images: 'images'
-	}
+	};
 
 })();

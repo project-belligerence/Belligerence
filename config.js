@@ -15,6 +15,7 @@ module.exports = {
 	port: (process.env.PORT || 8080),
 
 	folders: getConfig('folders'),
+	files: getConfig('files'),
 	db: getConfig('db'),
 
 	privileges: function() { return getConfig('privileges'); },

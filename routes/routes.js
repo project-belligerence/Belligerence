@@ -1,5 +1,6 @@
 (function() {
 	/* jshint shadow:true */
+
 	'use strict';
 
 	var Methods = require('./../modules/index.js').getMethods(),

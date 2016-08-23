@@ -49,6 +49,6 @@
 				descriptionLength: 240
 			}
 		}
-	}
+	};
 
 })();

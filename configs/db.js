@@ -17,6 +17,6 @@
 		queryPageLimit: 5,
 
 		newConnection: function() { return this.protocol + '://'+ this.cred.user + ':' + this.cred.password + '@' + this.server + ":" + this.port + '/' + this.name; },
-	}
+	};
 
 })();

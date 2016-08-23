@@ -3,6 +3,6 @@
 
 	module.exports = {
 		comma: "##COMMA##"
-	}
+	};
 
 })();
