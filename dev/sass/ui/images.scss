@@ -1,0 +1,47 @@
+
+/* =====================================
+				MIXINS
+===================================== */
+
+@mixin generate_background_image($icon, $height, $width) {
+	width: 100%;
+	background-image: $icon;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+}
+
+/* =====================================
+				IMAGES
+===================================== */
+
+/* BELLIGERENCE LOGO */
+
+$logo_belligerence_small: url("/images/belligerence-logo-small.png");
+$logo_belligerence_small_inverted: url("/images/belligerence-logo-small-inv.png");
+
+$logo_belligerence_small_height: 265px;
+$logo_belligerence_small_width: 265px;
+
+/* ================= */
+
+/* =====================================
+				CLASSES
+===================================== */
+
+.logo-belligerence {
+	height: $column_logo_belligerence;
+	@include generate_background_image($logo_belligerence_small, $logo_belligerence_small_height, $logo_belligerence_small_width);
+}
+
+.logo-belligerence-inverted {
+	height: $column_logo_belligerence;
+	@include generate_background_image($logo_belligerence_small_inverted, $logo_belligerence_small_height, $logo_belligerence_small_width);
+}
+
+.logo-belligerence-small {
+	@include generate_background_image($logo_belligerence_small, $logo_belligerence_small_height, $logo_belligerence_small_width);
+}
+
+.logo-belligerence-small-inverted {
+	@include generate_background_image($logo_belligerence_small_inverted, $logo_belligerence_small_height, $logo_belligerence_small_width);
+}

@@ -1,0 +1,107 @@
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="container">
+
+			<!-- LOGIN FORM WITH LOGO -->
+			<div class="row" id="fp-upper-section">
+
+				<div class="col-md-4 col-sm-4 col-xs-12" id="belligerence-logo">
+					<!-- <div class="logo-belligerence-inverted"></div> -->
+					<img src="images/belligerence-logo-small-inv.png" id="logo-img" />
+					<div class="content">
+						<h2>BELLIGERENCE</h2>
+						<hr/>
+						<h3>War's In Business</h3>
+					</div>
+				</div>
+
+				<div class="col-md-6 col-md-offset-2 col-sm-offset-1 col-sm-7 col-xs-12">
+					<div class="row ng-login-animation" id="fp-login-form" ng-if="displayLogin" ng-cloak>
+						<form>
+							<div class="col-md-8 col-sm-7 col-xs-9">
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="icon ion-person"></i>
+										</div>
+										<input type="text" class="form-control" id="loginInputUsername" placeholder="User">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="icon ion-locked"></i>
+										</div>
+										<input type="password" class="form-control" id="loginInputPassword" placeholder="Password">
+									</div>
+								</div>
+								<div class="pull-right">
+									<a href="#">Forgot your password?</a>
+								</div>
+							</div>
+
+							<div class="col-md-3 col-sm-3 col-xs-3" id="submitDiv">
+								<button type="submit" id="loginInputSubmit" class="btn btn-default">
+									<i class="icon ion-log-in"></i>
+								</button>
+							</div>
+						</form>
+					</div>
+					<div id="fp-join-call">
+						<div class="ng-login-animation" ng-if="displayLogin2" ng-cloak>
+							<span id="join-call-text">Interested? Join the action.</span>
+							<a href="#" role="button" class="section-button medium">
+								<ul>
+									<li><i class="icon ion-shuffle"></i></li>
+									<li>SIGN UP</li>
+								</ul>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- FRONTPAGE DESCRIPTION TEXT -->
+			<div class="row" id="fp-intro-container">
+				<div class="col-sm-12">
+					<h1>FIGHT FOR PROFIT</h1>
+					<h3>Soldiers with no ideology or principle, love or hatred:<br/> let money be the cardinal rule of the battlefield.</h3>
+					<div>
+						<p>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc id neque sem. Praesent feugiat ornare lorem. Suspendisse blandit a quam a mollis. Nam eu ante sed odio ornare finibus. Maecenas vel lorem eget quam aliquet fermentum. Praesent ac iaculis purus. In urna libero, placerat vel mi nec, porta tristique dui. Suspendisse potenti. Praesent vitae velit id odio porta rhoncus. Pellentesque augue purus, varius a mi at, rhoncus blandit mauris. Aenean efficitur pretium elit, vel rutrum augue varius ut. Donec porttitor turpis vitae commodo porttitor. Pellentesque in magna vitae libero consectetur venenatis eget id nibh.
+						</p>
+
+						<p>
+							Praesent lectus nunc, dignissim fringilla tincidunt sit amet, molestie quis libero. Nunc nec lectus id felis tempus volutpat mollis at erat. Maecenas sit amet lectus vel erat egestas ullamcorper. Donec urna enim, pulvinar quis dignissim sagittis, <a href="#">maximus non neque</a>. Nunc ac consequat purus. Sed venenatis libero at lorem cursus, nec interdum turpis sodales. Donec maximus leo et enim ultricies, sed imperdiet neque lobortis. Vestibulum sit amet luctus orci, at interdum mauris. Nullam eu nisi ut sem luctus sodales quis vitae lacus. Quisque laoreet ac sem eget tristique. Duis eleifend, lacus eu vestibulum auctor, leo massa hendrerit elit, nec tristique sapien libero sit amet nulla. Sed suscipit, enim non vulputate eleifend, odio velit interdum diam, non venenatis massa lorem a mauris. Aenean non urna magna.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid main-color-background">
+	<div class="row">
+		<div class="container">
+
+			<!-- NEWS INTEL -->
+			<div class="row" id="fp-intel-container">
+				<div class="col-sm-12">
+					<h2>Latest news</h2>
+					<h3>What's been going on out there.</h3>
+
+					<hr/>
+
+					<intel-directive></intel-directive>
+				</div>
+			</div>
+
+			<h2 style="color:white">Bottom of the page!</h2>
+
+			<!-- PROVISORY SPACER -->
+			<div style="margin-bottom: 250px"></div>
+		</div>
+	</div>
+</div>

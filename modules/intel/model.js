@@ -68,6 +68,7 @@
 		);
 
 		IntelModel.afterFind(function(model, options) {
+
 			if (model) {
 				var PlayerModel = require('./../index.js').getModels().players,
 					PMCModel = require('./../index.js').getModels().pmc,
@@ -133,7 +134,7 @@
 												}
 											}
 										} break;
-										case "anonymous": { currentModel.setDataValue('posterDetails', ["Anonymous"]); }
+										case "anonymous": { currentModel.setDataValue('posterDetails', {alias: "Anonymous"}); }
 									}
 								}
 							});

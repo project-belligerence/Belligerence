@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"main",
+				"main_color_dark"
+			],
+			[
+				"ng-bind-html",
+				"ng-bind-html-unsafe\tAngularJS"
+			],
+			[
+				"word",
+				"word-wrap"
+			],
+			[
+				"border-",
+				"border-bottom"
+			],
+			[
+				"overflo",
+				"overflow-wrap"
+			],
+			[
+				"wp_enques",
+				"wp_enqueue_script"
+			],
+			[
+				"wp_en",
+				"wp_enqueue_script"
+			],
+			[
+				"data",
+				"decipher.setAAD"
+			],
+			[
 				"purchas",
 				"purchaserModel"
 			],
@@ -85,11 +117,11 @@
 			],
 			[
 				"controll",
-				"controller	AngularJS"
+				"controller\tAngularJS"
 			],
 			[
 				"contro",
-				"$controller	AngularJS"
+				"$controller\tAngularJS"
 			]
 		]
 	},
@@ -100,38 +132,6 @@
 			"settings":
 			{
 				"buffer_size": 1102,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "routes/routes.js",
-			"settings":
-			{
-				"buffer_size": 15518,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "configs/folders.js",
-			"settings":
-			{
-				"buffer_size": 170,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "config.js",
-			"settings":
-			{
-				"buffer_size": 930,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "routes/api.js",
-			"settings":
-			{
-				"buffer_size": 20752,
 				"line_ending": "Windows"
 			}
 		}
@@ -201,140 +201,159 @@
 	"expanded_folders":
 	[
 		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/reports",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/upgrades",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/view/static"
+		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/views",
+		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/views/components",
+		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/views/partials",
+		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/views/partials/directives",
+		"/C/wamp/www/armadb/public",
+		"/C/wamp/www/armadb/views",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/category",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/events",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/frontpage",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/menu",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/page",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/post",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/search",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/components",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/directives"
 	],
 	"file_history":
 	[
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/view/static/index.ejs",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/bans/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/reports/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/routes/routes.js",
-		"/I/muhcrap/Work Folder/Belligerence/project/Wed 07-06-2016  0-29-34.38/modules/players/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/messages.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/post.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/search/controller.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/post/services.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/page.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/post.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/page/controller.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/ui-routes.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/directives.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/events/directives.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/category/controller.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/events.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/banner.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/posts.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/components/animations.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/post/directives.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/post/controller.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/menu/directives.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/frontpage/controller.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/header-top.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/body.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/category.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/category.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/footer.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/controllers.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/header-nav.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/index.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/frontpage.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/directives/events.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/app.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/init.js",
+		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/public/js/app.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/webpack.config.js",
+		"/C/Users/Ian/AppData/Local/Temp/fz3temp-1/functions.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/js/app.min.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/directives/posts.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/functions.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/routes.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/app.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/lib/init.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/events/init.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/lib/angular-scrollbar.min.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/header.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/lib/ng-scrollbar.min.css.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/main.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/Gruntfile.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/banner.html",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-simple-logger/dist/angular-simple-logger.min.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-simple-logger/dist/index.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-google-maps/dist/angular-google-maps.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-google-maps/README.md",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/footer.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/style.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/events/controller.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/search.php",
+		"/C/wamp/www/soscuesta/wp-content/plugins/events-manager/em-posts.php",
+		"/C/wamp/www/soscuesta/wp-content/plugins/events-manager/em-functions.php",
+		"/C/Users/Ian/AppData/Local/Temp/fz3temp-1/footer.php",
+		"/C/Users/Ian/AppData/Local/Temp/fz3temp-1/index.php",
+		"/C/Users/Ian/AppData/Local/Temp/fz3temp-1/header.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/index1.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/index2.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/components/colors.scss",
+		"/C/Users/Ian/AppData/Local/Temp/fz3temp-1/contato.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/lib/angular-smooth-scroll.min.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/search.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/main.scss",
+		"/C/Users/Ian/AppData/Local/Temp/fz3temp-1/frontpage.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/post/init.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/directives/menu.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/services.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/menu/init.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/lib/angular-carousel.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/js/angular-carousel.min.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-carousel/dist/angular-carousel.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-touch/angular-touch.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-touch/angular-touch.min.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/vendor.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/banner.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/lib/loading-bar.min.scss",
+		"/C/wamp/www/soscuesta/wp-content/plugins/hello.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-loading-bar/build/loading-bar.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/frontpage/init.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/js/modules/frontpage/testcont.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/bootstrap/dist/js/npm.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/bootstrap/js/collapse.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
+		"/C/Users/Ian/AppData/Local/Temp/default.css.htm",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/iconspritesheet.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/logospritesheet.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/bootstrap-mod.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/test.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/contato.php",
+		"/C/wamp/www/corregoblog2/wp-content/themes/corregofinal/functions.php",
+		"/C/wamp/www/corregoblog2/wp-content/themes/corregofinal/navbar.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/js/vendors.bundle.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/jquery/dist/jquery.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/jquery/dist/jquery.min.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/jquery/dist/core.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/jquery/dist/jquery.slim.js",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/test.html",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/test.html",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/partials/footer.php",
+		"/C/wamp/www/cascatarealiza/corregofinal/search.php",
 		"/C/Users/Ian/Documents/Arma 3 - Other Profiles/Nife/missions/broma_framework_a3_mk2.vr/README.md",
-		"/C/Games/BSDev/Classes/AssistantAbility.as",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/upgrades/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/items/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/messages/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/invites/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/numbers.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/general_methods/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/pmc_upgrades/model.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/player_upgrades/model.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/pmc/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/players/model.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/players/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/enums.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/privileges.js",
-		"/C/wamp/www/cascatarealiza/corregofinal/gallery.php",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/intel/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/app.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/routes/api.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/actions_cost/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/actions_cost/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/bans/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/cheers/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/comments/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/comments/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/friends/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/general_methods/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/intel/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/invites/invites.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/items/items.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/messages/messages.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/modifiers/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/player_items/player-items.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/player_settings/player-upgrades.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/player_upgrades/player-upgrades.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/players/players.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/pmc/pmc.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/pmc_items/pmc-items.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/pmc_settings/player-upgrades.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/pmc_upgrades/pmc-upgrades.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/reports/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/store_lines/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/store_lines/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/store_stock/store_stock.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/stores/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/template/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/transaction_history/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/transaction_history/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/transactions/test.test_template.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/upgrades/upgrades.test.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/config.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/string_alias.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/Gruntfile.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/cheers/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/friends/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/modifiers/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/player_settings/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/stores/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/stores/model.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/template/template_method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/transactions/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/upload/method.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/methods.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/folders.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/reports/model.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/configs/db.js",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/items/model.js",
-		"/C/Program Files (x86)/nodejs/node_modules/npm/node_modules/node-gyp/package.json",
-		"/C/Program Files/nodejs/node_modules/npm/node_modules/node-gyp/package.json",
-		"/C/Program Files/nodejs/node_modules/npm/node_modules/node-gyp/README.md",
-		"/C/Program Files (x86)/nodejs/node_modules/npm/node_modules/node-gyp/README.md",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/package.json",
-		"/C/Users/Ian/Documents/WorkFolder/Projects/etc/Belligerence/Project/modules/comments/model.js",
-		"/C/Users/Ian/AppData/Roaming/npm/node_modules/node-gyp/lib/build.js",
-		"/C/Users/Ian/AppData/Roaming/npm/node_modules/node-gyp/package.json",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/sharp/package.json",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/sharp/binding.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/package.json",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/comments/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/players/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/upgrades/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/intel/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/players/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/pmc/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/invites/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/comment_methods/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/general_methods/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/transaction_history/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/transactions/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/upgrades/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/actions_cost/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/pmc/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/actions_cost/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/friends/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/player_settings/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/stores/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/stores/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/messages/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/items/method.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/items/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/index.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/template/template_method.js",
-		"/C/Users/Ian/AppData/Local/Google/Chrome/User Data/Default/Extensions/hfilbmblidibnmifcabmolhlaekpfhak/0.0.4_0/manifest.json",
-		"/C/Users/Ian/AppData/Local/Google/Chrome/User Data/Default/Extensions/hfilbmblidibnmifcabmolhlaekpfhak/0.0.4_0/js/background.js",
-		"/I/muhcrap/Work Folder/Belligerence/project/Tue 04-26-2016  0-29-36.06/modules/items/model.js",
-		"/I/muhcrap/Work Folder/Belligerence/project/Thu 02-25-2016  0-29-27.70/modules/items/model.js",
-		"/C/Users/Ian/AppData/Local/Temp/coffee.yml",
-		"/C/wamp/www/corregoblog2/wp-content/themes/corregofinal/header.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/package.json",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/css/main.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/js/vendors.3a404f37a28b4ea04880.bundle.js",
+		"/C/wamp/www/corregoblog2/wp-content/themes/corregofinal/style.css",
 		"/C/wamp/www/corregoblog2/wp-content/themes/corregofinal/stylesheets/layout.css",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/config.js",
 		"/C/wamp/www/corregoblog2/wp-content/themes/corregofinal/stylesheets/base.css",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/player_upgrades/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/pmc_upgrades/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/sequelize/package.json",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/sequelize/index.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/sequelize/README.md",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/sequelize/CONTRIBUTING.md",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/sequelize/LICENSE",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/ssacl-attribute-roles/lib/index.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/node_modules/ssacl-attribute-roles/test/get.test.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/transaction_history/model.js",
-		"/C/Users/Ian/Documents/Work Folder/Projects/etc/Belligerence/Project/modules/store_stock/model.js"
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/icon-spritesheet.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/ui/icon-spritesheet.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dist/img/spritesheet.png",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/img/main.scss",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/img/Helmet_headwear_man_persona_soldier_army-512.png",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/lol.css",
+		"/C/wamp/www/corregoblog2/wp-content/themes/corregofinal/header.php",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/view/view-footer.php",
+		"/C/wamp/www/alessandro/Gruntfile.js",
+		"/C/wamp/www/alessandro/package.json",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/grunt-sass/readme.md",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/bootstrap/dist/css/bootstrap.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/node_modules/bootstrap/dist/css/bootstrap.min.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/lib/bootstraptheme.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/dev/sass/lib/bootstrap.css",
+		"/C/wamp/www/soscuesta/wp-content/themes/soscuesta/bower.json",
+		"/C/wamp/www/express-angular/Gruntfile.js"
 	],
 	"find":
 	{
@@ -345,6 +364,9 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"C:\\wamp\\www\\soscuesta\\wp-content\\themes\\soscuesta\\dev\\sass",
+			"C:\\wamp\\www\\soscuesta\\wp-content\\themes\\soscuesta\\dist",
+			"C:\\wamp\\www\\soscuesta\\wp-content\\themes\\soscuesta\\dev",
 			"C:\\Users\\Ian\\Documents\\WorkFolder\\Projects\\etc\\Belligerence\\Project\\modules",
 			"C:\\Users\\Ian\\Documents\\Work Folder\\Projects\\etc\\Belligerence\\Project\\modules",
 			"<project>",
@@ -360,6 +382,61 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"navbar-default",
+			"main-nav",
+			"$",
+			"DisplayEventsDirectiveFunction",
+			"CtrlPost",
+			"$http",
+			"$routeParams",
+			"row",
+			"eventPage",
+			"getNewEvents",
+			"has_archive",
+			"rest",
+			"post-all-container",
+			".post-all-container",
+			"tabs-bg",
+			"background-attachment",
+			"showbanner",
+			"showBanner",
+			"cloneArray",
+			".pagination",
+			".body-content",
+			"blog-post-meta",
+			"green",
+			"soscuesta",
+			"inset",
+			"header-nav",
+			"bg",
+			"callChange",
+			"CtrlCategory",
+			"CtrlCategories",
+			"CtrlSearch",
+			"CtrlFrontpage",
+			"inset",
+			"pager",
+			"getMaxPage",
+			"frontpage",
+			"mainapp",
+			"localized",
+			"{{",
+			"blog-categories",
+			"footer",
+			"angular",
+			"jQuery",
+			"angular",
+			"jQuery",
+			"dropdown",
+			"bootstrap",
+			"wp_enqueue_script('vendors', get_bloginfo('template_directory').\"/dist/css/vendor.css\");",
+			"contrib",
+			"concat",
+			"myStyle",
+			"myStule",
+			"HERE WE GO",
+			"require",
+			"file",
 			"config",
 			"()()",
 			"config.modules",
@@ -432,62 +509,7 @@
 			"methods",
 			"getMethods",
 			"getself",
-			"having",
-			"filterPlayerDetails",
-			"entity",
-			"PMC",
-			"SELF_MODE",
-			"entity",
-			"bool",
-			"Bool",
-			"entity",
-			"FREELANCER",
-			"starting",
-			"startingCash",
-			"query_resolve",
-			"SOL",
-			"SOLDIER",
-			"entity",
-			"startingCasg",
-			"visibility",
-			"statusValues",
-			"arrayFromArray",
-			"excludeArrayFromArray",
-			"playerTier",
-			"freelancer",
-			"stores",
-			"config.enums.modules.stores",
-			"alive",
-			"newPlayer",
-			"validatePlayerPrivileg",
-			"getAllPlayers",
-			"findInArray",
-			"uniqueArray",
-			"retrieveModelsRecursive",
-			"validateEntriesRecursive",
-			"generateRawQuery",
-			"dataType",
-			"lines",
-			"include",
-			"getMainEntity",
-			"getUpgrade",
-			"getUpgrades",
-			"getItems",
-			"setPseudo",
-			"API",
-			"setting",
-			"settings",
-			"array",
-			"getPseudoArray",
-			"Messages.post",
-			"admin",
-			"15",
-			"console.log",
-			"updateItemsValue",
-			"setActiveState",
-			"getLimited",
-			"getlimited",
-			"Bans"
+			"having"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -495,6 +517,15 @@
 		"regex": false,
 		"replace_history":
 		[
+			"CtrlPage",
+			"$stateParams",
+			"CtrlSearch",
+			"CtrlCategory",
+			"CategoryController",
+			"CtrlCategories",
+			"CtrlSearch",
+			"CtrlFrontpage",
+			"frontpage",
 			"()",
 			"config.privileges()",
 			"config.stringAlias()",
@@ -528,7 +559,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -544,8 +575,8 @@
 						"selection":
 						[
 							[
-								764,
-								764
+								1096,
+								1096
 							]
 						],
 						"settings":
@@ -554,122 +585,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 120.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "routes/routes.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15518,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1022,
-								1022
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": -0.0,
-						"translation.y": 347.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "configs/folders.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 170,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								164,
-								164
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "config.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 930,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "routes/api.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 20752,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3994,
-								3994
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2012.0,
+						"translation.y": 432.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -755,7 +671,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 217.0,
+	"side_bar_width": 220.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

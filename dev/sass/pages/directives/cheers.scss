@@ -1,0 +1,38 @@
+.cheers-button {
+
+	.ion-minus {
+		position: relative;
+		top: 2px;
+	}
+
+	ul {
+		li {
+			color: $main_background_color;
+			background-color: $cheer_background_color;
+			margin-bottom: 0;
+		}
+
+		&:hover {
+			> li {
+				color: $main_background_color;
+				background-color: darken($cheer_background_color, 20%);
+			}
+		}
+	}
+
+	.active {
+		> ul {
+			li {
+				color: $main_text_color;
+				background-color: $cheer_background_color_active;
+			}
+
+			&:hover {
+				li {
+					color: $main_text_color;
+					background-color: lighten($cheer_background_color_active, 20%);
+				}
+			}
+		}
+	}
+}

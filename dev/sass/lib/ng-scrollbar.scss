@@ -1,0 +1,88 @@
+.ngsb-wrap {
+    -ms-touch-action: none;
+
+    $bar_width: 10px;
+
+    &:hover .ngsb-scrollbar {
+		opacity: 1;
+		filter: "alpha(opacity=100)";
+		-ms-filter: "alpha(opacity=100)";
+	}
+
+	.ngsb-container {
+		width: auto;
+		overflow: hidden;
+		transition: all .5s;
+	}
+
+	.ngsb-scrollbar {
+		transition: opacity .5s;
+		width: 16px;
+		height: 100%;
+		top: 0;
+		right: 0;
+		opacity: .25;
+		filter: "alpha(opacity=25)";
+		-ms-filter: "alpha(opacity=25)";
+
+		a.ngsb-thumb-container {
+			margin: 20px 0;
+		}
+
+		.ngsb-thumb-container {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: auto;
+		}
+
+		.ngsb-track {
+			height: 100%;
+			margin: 0 auto;
+			width: $bar_width;
+			background: #000;
+			background: rgba(0, 0, 0, .4);
+			border-radius: 10px;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			filter: "alpha(opacity=40)";
+			-ms-filter: "alpha(opacity=40)";
+			box-shadow: 1px 1px 1px rgba(255, 255, 255, .1);
+		}
+
+		.ngsb-thumb-pos {
+			cursor: pointer;
+			width: 100%;
+			height: 30px;
+
+			.ngsb-thumb {
+				transition: .5s all;
+				width: $bar_width;
+				height: 100%;
+				margin: 0 auto;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				text-align: center;
+				background: #fff;
+				background: rgba(255, 255, 255, .4);
+				filter: "alpha(opacity=40)";
+				-ms-filter: "alpha(opacity=40)";
+			}
+
+			&:hover .ngsb-thumb {
+				background: rgba(255, 255, 255, .5);
+				filter: "alpha(opacity=50)";
+				-ms-filter: "alpha(opacity=50)";
+			}
+
+			&:active {
+				// background: rgba(255, 255, 255, .6);
+				filter: "alpha(opacity=60)";
+				-ms-filter: "alpha(opacity=60)";
+			}
+		}
+	}
+}

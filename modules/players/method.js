@@ -265,7 +265,7 @@
 			isOwner = (API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.owner)),
 			_ = require('lodash');
 
-		if (!API.methods.validate(req, res, [(!req.playerInfo) || isAdmin], config.messages().modules.players.already_registered)) { return 0; }
+		if (!API.methods.validate(req, res, [(req.playerInfo.id === 0) || isAdmin], config.messages().modules.players.already_registered)) { return 0; }
 
 		if (!API.methods.validateParameter(req, res, [
 			[req.body.username, 'string', config.numbers.modules.players.usernameLength],

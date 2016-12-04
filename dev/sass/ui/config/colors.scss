@@ -1,0 +1,40 @@
+
+/*
+	========================================
+				MAIN COLORS
+	========================================
+*/
+
+$main_color: #9a1818;
+$main_color_light: lighten($main_color, 10%);
+$main_color_dark: darken($main_color, 10%);
+
+$sub_color: #337ab7;
+$sub_color_light: lighten($sub_color, 10%);
+$sub_color_dark: darken($sub_color, 10%);
+
+/* BACKGROUND COLORS */
+
+$main_background_color: #111;
+
+/* TEXT COLORS */
+
+$main_text_color: #eee;
+
+/*
+	========================================
+				ELEMENT COLORS
+	========================================
+*/
+
+/* DEFAULT BUTTON */
+$main_button_background_color: $main_color;
+	$main_button_background_color_active: $main_color_light;
+	$main_button_background_color_focus: $main_color_light;
+	$main_button_background_color_hover: $main_color_light;
+
+/* SUCCESS BUTTON */
+$success_button_background_color: $main_color;
+	$success_button_background_color_active: $main_color_light;
+	$success_button_background_color_focus: $main_color_light;
+	$success_button_background_color_hover: $main_color_light;

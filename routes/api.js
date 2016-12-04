@@ -64,7 +64,7 @@
 						where: {'hashField': decoded.hash},
 						include: [ { model: PMCModel, as: 'PMC', attributes: ['id', 'hashField', 'PMCPrestige'] } ]
 					}).then(function(player) {
-					if (!validate(req, res, [player], config.messages().bad_permission, '', 403)) { return 0; }
+						if (!validate(req, res, [player], config.messages().bad_permission, '', 403)) { return 0; }
 						req.playerInfo = player.dataValues;
 						return next();
 					});
@@ -72,6 +72,12 @@
 			});
 		} else {
 			// USER IS A GUEST
+
+			req.playerInfo = {
+				hashField: '123456789',
+				id: 0
+			};
+
 			return next();
 		}
 	}
@@ -615,9 +621,11 @@
 
 	function generatePaginatedQuery(req, res, queryValues) {
 
+		if (!(req.serverValues)) req.serverValues = {};
+
 		var qPage = ((req.query.page || 1)),
 			orderBy = (((req.query.order || 'desc')).toUpperCase() === 'ASC') ? 'ASC' : 'DESC',
-			qLimit = validatePlayerPrivilegeFunc(req, 2) ? (req.query.limit || config.db.queryPageLimit) : (config.db.queryPageLimit),
+			qLimit = validatePlayerPrivilegeFunc(req, 2) ? (req.query.limit || (req.serverValues.contextLimit || config.db.queryPageLimit)) : (req.serverValues.contextLimit || config.db.queryPageLimit),
 			qSort = (req.query.sort || 'createdAt');
 
 		if (!validateParameter(req, res, [

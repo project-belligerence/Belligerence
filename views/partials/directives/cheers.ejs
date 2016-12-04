@@ -1,0 +1,10 @@
+<div class="cheers-button">
+	<a class="section-button small animated" role="button" ng-click="doCheer()" ng-class="{'active': (isCheered)}" ng-if="!(isLoading)"
+	ng-cloak>
+		<ul>
+			<li><i class="icon" ng-class="{ 'ion-thumbsup': (isCheered), 'ion-minus': !(isCheered) }"></i></li>
+			<li>Cheers!</li>
+			<li><div ng-bind="cheersAmount"></div></li>
+		</ul>
+	</a>
+</div>

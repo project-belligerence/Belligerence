@@ -1,0 +1,118 @@
+
+/* http://zerosixthree.se/8-sass-mixins-you-must-have-in-your-toolbox/ */
+
+/*			 Set a rem font size with pixel fallback */
+
+@function calculateRem($size) {
+	$remSize: $size / 16px;
+	@return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+	font-size: $size;
+	font-size: calculateRem($size);
+}
+
+/*			 Breakpoints */
+
+$breakpoints: (
+	'tiny':   (min-width : 320px) and (max-width : 360px),
+	'small':  (min-width : 360px) and (max-width : 767px),
+	'medium': (min-width : 768px) and (max-width : 980px),
+	'large':  (min-width : 980px)
+);
+
+@mixin breakpoint($name) {
+	@if map-has-key($breakpoints, $name) {
+		@media only screen and #{inspect(map-get($breakpoints, $name))} {
+			@content;
+		}
+	} @else {
+		@warn "Couldn't find a breakpoint named `#{$name}`.";
+	}
+}
+
+/*			 Cross-Browser Opacity */
+
+@mixin opacity($opacity) {
+	opacity: $opacity;
+	$opacity-ie: $opacity * 100;
+	filter: alpha(opacity=$opacity-ie); /* IE8 */
+}
+
+/*			Clearfix */
+
+%clearfix {
+	*zoom: 1;
+	&:before, &:after {
+		content: " ";
+		display: table;
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+/* https://www.sitepoint.com/sass-mixins-kickstart-project/ */
+
+/*			Sizing Mixin */
+
+@mixin size($width, $height: $width) {
+	width: $width;
+	height: $height;
+}
+
+/*			Vendor Prefixes */
+
+@mixin prefix($property, $value, $vendors: webkit moz ms o) {
+	@if $vendors {
+		@each $vendor in $vendors {
+			#{"-" + $vendor + "-" + $property}: #{$value};
+		}
+	}
+	#{$property}: #{$value};
+}
+
+/*			Generate state properties */
+
+@mixin hafStates($list) {
+
+	$states: ("&:hover", "&:active", "&:focus");
+
+	@for $i from 1 through length($states) {
+		$state: nth($states, $i);
+
+		@for $j from 1 through length($list) {
+			$cList: nth($list, $j);
+
+			$property: nth($cList, 1);
+			$values: nth($cList, 2);
+
+			@if (length($values) >= $i) {
+				#{$state} {
+					#{$property}: #{nth($values, $i)};
+				}
+			}
+		}
+	}
+}
+
+/*			Font-Factor */
+
+@function factor($factor) {
+	@return ($factor * $global_factor);
+}
+
+@mixin factor-property($property, $factor) {
+	#{$property}: #{factor($factor)};
+}
+
+/*			Centerer */
+// https://css-tricks.com/snippets/sass/centering-mixin/
+// Parent must be position: relative
+
+@mixin centerer {
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}

@@ -41,8 +41,9 @@
 				reasonLength: 260
 			},
 			intel: {
+				queryLimit: 4,
 				titleLength: 50,
-				bodyLength: 64,
+				bodyLength: 256,
 				bodyMaxLength: [0, 2048]
 			},
 			items: {

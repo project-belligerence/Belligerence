@@ -35,7 +35,8 @@
 
 	function renderIndex(req, res) { res.render(config.folders.static + '/' + 'index'); }
 	function renderStatic(req, res) { res.render(config.folders.static + req.params.static); }
-	function renderView(req, res) {	res.render(config.folders.partials + '/' + req.params.view); }
+	function renderPartial(req, res) {	res.render(config.folders.partials + '/' + req.params.partial); }
+	function renderDirective(req, res) { res.render(config.folders.directives + '/' + req.params.directive); }
 
 	function setup(app, express) {
 
@@ -441,7 +442,8 @@
 
 		// DEFAULT ROUTES
 		app.get('/', renderIndex);
-		app.get('/' + config.folders.partials + '/:view', renderView);
+		app.get('/partial/:partial', renderPartial);
+		app.get('/directive/:directive', renderDirective);
 
 		// MOUNT API ROUTES
 		app.use(bodyParser.urlencoded({extended: true}));

@@ -1,0 +1,37 @@
+
+html {
+	font-size: 100%;
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+}
+
+body {
+	width: 100%;
+	position: absolute;
+	background-color: $main_background_color;
+	color: $main_text_color;
+	box-sizing: border-box;
+	font-family: $font_sub;
+
+	@include font-size($default_font_size);
+}
+
+form {
+	.input-group-addon {
+		border: none;
+		border-radius: 0;
+		background-color: $main_color;
+		color: $main_text_color;
+	}
+}
+
+input {
+	&.form-control {
+		box-shadow: none;
+		border: none;
+		border-radius: 0;
+		box-sizing: border-box;
+		@include factor-property(height, 7);
+	}
+}

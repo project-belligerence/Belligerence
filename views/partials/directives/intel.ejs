@@ -1,0 +1,104 @@
+
+<div class="intel-container">
+	<div class="row">
+
+		<div class="nav-arrows anm-all">
+			<div class="arrow arrow-right" ng-click="movePage('n')" ng-class="{'disabled': isMinPage}">
+				<i class="ion ion-chevron-right"></i>
+			</div>
+			<div class="arrow arrow-left" ng-click="movePage('p')" ng-class="{'disabled': isMaxPage}">
+				<i class="ion ion-chevron-left"></i>
+			</div>
+		</div>
+
+		<ul class="intel-list">
+			<li ng-repeat="intel in currentData" class="single-intel-container ng-intel-animation">
+				<div class="col-xs-12 col-sm-6 col-md-3">
+
+					<div
+						class="hexagon"
+						uib-popover="{{intel.intelDetails.type}}"
+						popover-popup-delay="250"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip intel-tooltip"
+					>
+						<div class="in1"><div class="in2">
+							<i ng-class="intel.intelDetails.icon"></i>
+						</div></div>
+					</div>
+
+					<div class="title">
+						<h3><span ng-bind="::intel.titleField"></span></h3>
+					</div>
+
+					<div class="date">
+						<i class="icon ion-ios-calendar-outline"></i>
+						<div class="text" ng-bind="::intel.createdAt | date"></div>
+					</div>
+
+					<div class="poster">
+						Posted by
+						<a href="#">
+							<i class="icon" ng-class="{
+								'ion-person': (intel.displayAs === 'player'),
+								'ion-ios-people': (intel.displayAs === 'pmc'),
+								'ion-help-circled': (intel.displayAs === 'anonymous')
+							}"></i>
+							<strong><span ng-bind="::intel.posterDetails.alias"></span></strong>
+						</a>
+					</div>
+
+					<div class="body" ng-scrollbar rebuild-on-resize rebuild-on="rebuild">
+						<p><span ng-bind="::intel.bodyField"></span></p>
+					</div>
+
+					<div class="bottom">
+						<cheers-directive
+							initial-cheers="{{intel.cheersDetails.amount}}"
+							initial-cheered="{{ intel.cheersDetails.cheered }}"
+							cheer-target="{{ intel.hashField }}"
+							class="pull-left"
+						></cheers-directive>
+
+						<div class="comments pull-right">
+							<a class="btn btn-default" role="button"
+								popover-popup-delay="1050"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Comments"
+							>
+								<i class="ion-chatbox-working"></i> <span ng-bind="::intel.totalComments"></span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 text-center anm-all">
+			<nav aria-label="Page navigation">
+				<ul	uib-pagination
+					class="intel-pagination"
+
+					ng-change="refreshIntel()"
+
+					first-text="&laquo;"
+					last-text="&raquo;"
+					next-text="&rsaquo;"
+					previous-text="&lsaquo;"
+
+					rotate="true"
+
+					total-items="totalItems"
+					items-per-page="perPage"
+					ng-model="currentPage"
+					max-size="3"
+
+					boundary-links="true"
+					boundary-link-numbers="true"
+				></ul>
+			</nav>
+		</div>
+	</div>
+</div>

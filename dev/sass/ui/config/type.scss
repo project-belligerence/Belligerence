@@ -1,0 +1,79 @@
+
+/* ====================================
+			FONT IMPORTS
+   ==================================== */
+
+@import url('https://fonts.googleapis.com/css?family=Quantico');
+$font_quantico: 'Quantico', sans-serif;
+
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+$font_raleway: 'Raleway', sans-serif;
+
+/*  ===================================
+			FONTS DECLARATIONS
+	=================================== */
+
+$font_main: $font_quantico;
+$font_sub: $font_raleway;
+
+// I know I'm gonna end up forgetting these anyway so might as well:
+
+$main_font: $font_main;
+$sub_font: $font_sub;
+
+/* =====================================
+				FONT SIZES
+===================================== */
+
+$font_factor: factor(1);
+
+// BODY
+$default_font_size: factor(2);
+
+// HEADERS
+$header_1_font_size: factor(9);
+$header_2_font_size: factor(6);
+$header_3_font_size: factor(3);
+
+// BUTTONS
+$button_font_size_small: factor(2);
+$button_font_size_medium: factor(4);
+$button_font_size_large: factor(6);
+
+/* =====================================
+			 FONT SPACINGS
+===================================== */
+
+$default_paragraph_line_height: factor(4);
+
+/* =====================================
+			  CLASSES
+===================================== */
+
+a {
+	text-decoration: none;
+	outline: none;
+	border: none;
+	color: $sub_color;
+
+	&:hover, &:focus, &:active {
+		outline: none;
+		text-decoration: none;
+		color: $sub_color_light;
+	}
+}
+
+p {
+	line-height: $default_paragraph_line_height;
+}
+
+h1, h2, h3, h4 { font-family: $font_main; }
+
+h1, h2 { color: $main_color; }
+
+h1 { @include font-size($header_1_font_size); }
+h2 { @include font-size($header_2_font_size); }
+h3 {
+	@include font-size($header_3_font_size);
+	@include factor-property(margin-bottom, 3);
+}

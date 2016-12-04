@@ -1,0 +1,14 @@
+
+@mixin transition($transition...) {	@include prefix(transition, $transition); }
+@mixin transition-important($transition...) { @include prefix(transition, $transition !important); }
+@mixin transition-property($property...) { @include prefix(transition-property, $property); }
+@mixin transition-duration($duration...) { @include prefix(transition-property, $duration); }
+@mixin transition-timing-function($timing...) {	@include prefix(transition-timing-function, $timing); }
+@mixin transition-delay($delay...) { @include prefix(transition-delay, $delay); }
+
+.anm-all {
+	* {
+		$delay: .25s;
+		@include transition(all $delay);
+	}
+}

@@ -30,6 +30,7 @@
 
 	app.set('views', __dirname + '/' + config.folders.views);
 	app.use(express.static(path.join(__dirname, 'public')));
+	app.use(express.static(path.join(__dirname, 'uploads')));
 
 	// SETS UP ROUTES
 	routes.setup(app, express);

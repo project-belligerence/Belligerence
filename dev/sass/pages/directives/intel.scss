@@ -1,0 +1,247 @@
+
+.intel-container {
+	@include factor-property(margin-top, 5);
+	@include factor-property(margin-bottom, 5);
+
+	position: relative;
+	@include factor-property(height, 120);
+
+	h1, h2, h3 {
+		padding: 0;
+		margin: 0;
+		text-align: center;
+	}
+
+	.intel-list {
+		@include factor-property(min-height, 100);
+
+		.single-intel-container {
+			@include factor-property(margin-bottom, 10);
+
+			.main-icon {
+				@include factor-property(padding, 6);
+				text-align: center;
+				color: $main_background_color;
+				background-color: $main_text_color;
+
+				@include font-size($icon_size_huge);
+			}
+
+			.type {
+				text-align: center;
+			}
+
+			.title {
+				text-align: center;
+				color: $main_background_color;
+				background-color: $main_text_color;
+
+				@include factor-property(margin-top, 4);
+				@include factor-property(margin-bottom, 2);
+
+				padding: 10px 0px;
+			}
+
+			.date {
+				color: $main_background_color;
+				background-color: $main_text_color;
+				padding: 2px 15px;
+				@include factor-property(margin-bottom, 2);
+
+				.text {
+					display: inline;
+					@include factor-property(margin-left, 5);
+					@include font-size(factor(3));
+				}
+
+				i {
+					@include font-size($icon_size_tiny);
+				}
+			}
+
+			.poster {
+				@include factor-property(margin-bottom, 2);
+				a {
+					margin-left: 2px;
+					padding: 3px 5px;
+					color: $main_background_color;
+					background-color: $main_text_color;
+				}
+			}
+
+			.body {
+				@include factor-property(margin-bottom, 4);
+				max-height: 150px;
+				overflow-y: hidden;
+
+				p {
+					width: 94%;
+				}
+			}
+
+			.bottom {
+				a {
+					font-family: $main_font;
+					@include font-size(factor(2.5));
+				}
+
+				.comments {
+					i {
+						margin-right: 5px;
+					}
+					.btn {
+						background-color: $main_color_dark;
+					}
+				}
+			}
+		}
+	}
+
+	.nav-arrows {
+		$arrows_font_size: 100px;
+		$arrows_side_distance: -70px;
+		$arrows_top_distance: 220px;
+
+		@include font-size($arrows_font_size);
+
+		color: $main_text_color;
+
+		.arrow {
+			position: absolute;
+
+			&:hover {
+				color: $main_color_dark;
+				@include prefix(text-shadow, 0px 0px 10px #ddd);
+			}
+
+			&.arrow-right {
+				position: absolute;
+				cursor: pointer;
+
+				top: $arrows_top_distance;
+				right: $arrows_side_distance;
+			}
+
+			&.arrow-left {
+				position: absolute;
+				cursor: pointer;
+
+				top: $arrows_top_distance;
+				left: $arrows_side_distance;
+			}
+
+			&.disabled {
+				cursor: disabled;
+				color: $main_color_dark !important;
+
+				@include opacity(0.5);
+				@include prefix(text-shadow, none);
+			}
+		}
+
+	}
+
+	.intel-tooltip {
+		margin-top: 75px !important;
+		background-color: $main_color_dark;
+		.arrow::after { border-top-color: $main_color_dark !important; }
+	}
+
+	.hexagon {
+		width: 200px;
+		height: 400px;
+
+		margin: -80px 0 -60px 33px;
+
+		@include breakpoint('medium') { margin-left: 80px; }
+
+		i {
+			position: absolute;
+			left: 32%;
+			top: 33%;
+			font-size: 100px;
+			color: #222;
+		}
+	}
+
+	.ng-intel-animation {
+		$delay_xfast: .25s;
+		$delay_fast: .5s;
+		$delay_slow: 1s;
+		$delay_xslow: 1.5s;
+
+		$animationIn: fadeInRight;
+		$animationOut: fadeOutLeft;
+
+		$delay_in: $delay_fast;
+		$delay_out: $delay_xfast;
+
+		$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+		&.ng-move,
+		&.ng-enter,
+		&.ng-leave,
+		&.ng-move.ng-move-active,
+		&.ng-enter.ng-enter-active,
+		&.ng-leave.ng-leave-active {
+			position: relative;
+			width: 100%;
+		}
+
+		&.ng-leave {
+			-webkit-animation: $animationOut $delay_out both $easing;
+			-moz-animation: $animationOut $delay_out both $easing;
+			animation: $animationOut $delay_out both $easing;
+		}
+
+		&.ng-enter {
+			-webkit-animation: $animationIn $delay_in both $easing;
+			-moz-animation: $animationIn $delay_in both $easing;
+			animation: $animationIn $delay_in both $easing;
+		}
+
+		&.ng-enter-stagger {
+			transition-delay: ($delay_xfast / 5);
+			animation-delay: ($delay_xfast / 5);
+		}
+	}
+}
+
+.intel-pagination {
+
+	li {
+		border-radius: 0px;
+		a {
+			font-family: $main_font;
+			@include font-size(factor(4));
+
+			background-color: white;
+			color: $main_color;
+			border: none;
+
+			margin-right: 10px;
+
+			padding: 5px 17px;
+		}
+
+		&.active {
+			> a {
+				color: white;
+				background-color: $main_color_dark;
+			}
+
+			&:hover {
+				> a, a:focus {
+					color: white;
+					background-color: $main_color_dark;
+				}
+			}
+		}
+
+		&:hover {
+			> a {
+				color: $main_color_dark;
+			}
+		}
+	}
+}

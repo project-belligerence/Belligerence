@@ -68,6 +68,9 @@
 			items: {
 				not_owned: 'This item is not owned.'
 			},
+			intel: {
+				hidden: 'Hidden'
+			},
 			invites: {
 				invalid: 'Invalid Invite type.',
 				request_playerPMC: 'Player requests membership with PMC.',

@@ -5,6 +5,7 @@
 	var PMCModel = require('./../index.js').getModels().pmc,
 		PlayerModel = require('./../index.js').getModels().players,
 		IntelModel = require('./../index.js').getModels().intel,
+		CheersModel = require('./../index.js').getModels().cheers,
 		FriendsMethod = require('./../index.js').getMethods().friends,
 		config = require('./../../config.js'),
 		API = require('./../../routes/api.js'),
@@ -17,7 +18,6 @@
 	exports.get = get;
 	exports.put = put;
 	exports.deleteEntry = deleteEntry;
-	//exports.getAllLimited = getAllLimited;
 
 	function queryValues(req) {
 		return {
@@ -25,7 +25,8 @@
 			allowedSortValues: ['createdAt', 'poster_hash', 'title', 'body', 'type', 'visibility', 'totalComments'],
 			allowedPostValues: {
 				visibility: ["freelancers", "ownPMC", "allPMC", "friends", "friends-PMC", "everyone"],
-				displayAs: ["player", "pmc", "anonymous"]
+				displayAs: ["player", "pmc", "anonymous"],
+				types: ['statement', 'intel', 'certification']
 			},
 			generateWhereQuery:	function(req) {
 				var object = {};
@@ -44,7 +45,7 @@
 
 	function proccessIntelVisibility(req, entry, entriesToFilter) {
 
-		if (!(req.playerInfo)) { return (entry.visibilityField == "everyone"); }
+		if (req.playerInfo.id === -1) { return (entry.visibilityField == "everyone"); }
 
 		var ret = false,
 			friendList = {};
@@ -55,9 +56,8 @@
 			} break;
 			case "ownPMC": {
 				if (req.playerInfo.PMC) {
-					var originalPMCHash = "123";
-					if (entry.originalPosterDetails) originalPMCHash = (entry.originalPosterDetails || originalPMCHash);
-					ret = (req.playerInfo.PMC.hashField == originalPMCHash);
+					var originalPMCHash = (entry.originalPosterDetails ? entry.originalPosterDetails.PMCHash : "123");
+					ret = (req.playerInfo.PMC.hashField === originalPMCHash);
 				} else { ret = false; }
 			} break;
 			case "allPMC": {
@@ -101,7 +101,7 @@
 
 			curCheer.cheersDetails = {
 				amount: curCheersDetails.length,
-				cheered: (curCheersDetails.indexOf(validPlayerHash) > -1)
+				cheered: (curCheersDetails.indexOf(validPlayerHash) > (-1))
 			};
 		}
 
@@ -114,12 +114,16 @@
 
 	function getAll(req, res) {
 
+		req.serverValues = {};
+		req.serverValues.contextLimit = config.numbers.modules.intel.queryLimit;
+
 		var MainTable = 'intel_tables',
 			entity = API.methods.getMainEntity(req),
 			baseAttributes = "id, original_poster_hash AS originalPosterHash, poster_hash AS posterHash, display AS displayAs, " +
 							 "poster_details AS posterDetails, original_poster_details AS originalPosterDetails, " +
 							 "cheers AS cheersDetails, title AS titleField, body AS bodyField, type as typeField, " +
-							 "visibility AS visibilityField, hashField ",
+							 "visibility AS visibilityField, hashField," +
+							 "createdAt as createdAt ",
 			countQuery =	"(SELECT COUNT(*) FROM `comments_tables`" +
 						 	"WHERE comments_tables.subjectField = " + MainTable + ".hashField" +
 							") AS totalComments";
@@ -131,42 +135,111 @@
 			'1',
 			API.methods.generatePaginatedQuery(req, res, queryValues(req)),
 		function(entries) {
-				if (!API.methods.validate(req, res, [entries], config.messages().no_entries)) { return 0; }
+			if (!API.methods.validate(req, res, [entries], config.messages().no_entries)) { return 0; }
 
 			FriendsMethod.getFriendsAllFunc(req, res, function(friendsList) {
 				req.playerInfo.friendsList = friendsList;
 
-				var entriesToFilter = [];
+				var	foundModels = [],
+					foundModelsHashes = [],
+					posterHashes = [],
+					originalPosterHashes = []
+				;
 
-				for (var i=0; i < entries.rows.length; i++) {
-					entries.rows[i].bodyField = limitBody(entries.rows[i].bodyField);
-					if (!(proccessIntelVisibility(req, entries.rows[i]))) { entriesToFilter.push(i); }
+				foundModels = entries.rows;
+
+				for (var i=0; i < foundModels.length; i++) {
+					posterHashes.push(foundModels[i].posterHash);
+					originalPosterHashes.push(foundModels[i].originalPosterHash);
+					foundModelsHashes.push(foundModels[i].hashField);
 				}
 
-				entries.rows = proccessCheers(req, entries.rows);
+				CheersModel.findAll({ where: {"targetHash": foundModelsHashes}}).then(function(cheers) {
+		 			for (var i=0; i < foundModels.length; i++) {
+		 				var modelCheers = [],
+		 					currentModel = foundModels[i];
 
-				if (!(API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.admin))) {
-					for (var i=0; i < entries.rows.length; i++) {
-						if (entries.rows[entriesToFilter[i]]) {
-							entries.rows[entriesToFilter[i]].originalPosterHash = "Hidden";
-							entries.rows[entriesToFilter[i]].posterHash = "Hidden";
-							entries.rows[entriesToFilter[i]].displayAs = "Hidden";
-							entries.rows[entriesToFilter[i]].posterDetails = "Hidden";
-							entries.rows[entriesToFilter[i]].originalPosterDetails = "Hidden";
-							entries.rows[entriesToFilter[i]].cheersDetails = "Hidden";
-							entries.rows[entriesToFilter[i]].titleField = "Hidden";
-							entries.rows[entriesToFilter[i]].bodyField = "Hidden";
-							entries.rows[entriesToFilter[i]].typeField = "Hidden";
-							entries.rows[entriesToFilter[i]].visibilityField = "Hidden";
-							entries.rows[entriesToFilter[i]].hashField = "Hidden";
-							entries.rows[entriesToFilter[i]].createdAt = "Hidden";
-							entries.rows[entriesToFilter[i]].updatedAt = "Hidden";
-						}
-					}
-				}
+		 				for (var j=0; j < cheers.length; j++) {
+		 					if (cheers[j].targetHash == currentModel.hashField) {
+		 						modelCheers.push(cheers[j].senderHash);
+		 					}
+		 				}
+		 				currentModel.cheersDetails = modelCheers;
+		 			}
 
+					PlayerModel.findAll({ where: {"hashField": originalPosterHashes}, include: [ { model: PMCModel, as: 'PMC', attributes: ['hashField'] } ]}).then(function(original_posters) {
+						PlayerModel.findAll({ where: {"hashField": posterHashes}}).then(function(players) {
+							PMCModel.findAll({ where: {"hashField": posterHashes}}).then(function(pmc) {
 
-				API.methods.sendResponse(req, res, true, config.messages().return_entries, entries);
+								for (var i=0; i < foundModels.length; i++) {
+									var currentModel = foundModels[i];
+									for (var j=0; j < original_posters.length; j++) {
+										if (currentModel.originalPosterHash === original_posters[j].hashField) {
+											currentModel.originalPosterDetails = {
+												"alias": original_posters[j].aliasField,
+												"PMCHash": (original_posters[j].PMC ? original_posters[j].PMC.hashField : 'freelancer')
+											};
+										}
+									}
+									switch (currentModel.displayAs) {
+										case "player": {
+											for (var g=0; g < players.length; g++) {
+												if (currentModel.posterHash === players[g].hashField) {
+													currentModel.posterDetails = {
+														"alias": players[g].aliasField
+													};
+												}
+											}
+										} break;
+										case "pmc": {
+											for (var x=0; x < pmc.length; x++) {
+												if (currentModel.posterHash === pmc[x].hashField) {
+													currentModel.posterDetails = {
+														"alias": pmc[x].displaynameField
+													};
+												}
+											}
+										} break;
+										case "anonymous": { currentModel.posterDetails = {alias: "Anonymous"}; }
+									}
+								}
+
+								var entriesToFilter = [];
+
+								for (var i=0; i < foundModels.length; i++) {
+									foundModels[i].bodyField = limitBody(foundModels[i].bodyField);
+									if (!(proccessIntelVisibility(req, foundModels[i]))) { entriesToFilter.push(i); }
+								}
+
+								foundModels = proccessCheers(req, foundModels);
+
+								if (!(API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.admin))) {
+									for (var i=0; i < foundModels.length; i++) {
+										if (foundModels[entriesToFilter[i]]) {
+											var hiddenMsg = config.messages().modules.intel.hidden;
+
+											foundModels[entriesToFilter[i]].originalPosterHash = hiddenMsg;
+											foundModels[entriesToFilter[i]].posterHash = hiddenMsg;
+											foundModels[entriesToFilter[i]].displayAs = hiddenMsg;
+											foundModels[entriesToFilter[i]].posterDetails = hiddenMsg;
+											foundModels[entriesToFilter[i]].originalPosterDetails = hiddenMsg;
+											foundModels[entriesToFilter[i]].cheersDetails = hiddenMsg;
+											foundModels[entriesToFilter[i]].titleField = hiddenMsg;
+											foundModels[entriesToFilter[i]].bodyField = hiddenMsg;
+											foundModels[entriesToFilter[i]].typeField = hiddenMsg;
+											foundModels[entriesToFilter[i]].visibilityField = hiddenMsg;
+											foundModels[entriesToFilter[i]].hashField = hiddenMsg;
+											foundModels[entriesToFilter[i]].createdAt = hiddenMsg;
+											foundModels[entriesToFilter[i]].updatedAt = hiddenMsg;
+										}
+									}
+								}
+
+								API.methods.sendResponse(req, res, true, config.messages().return_entries, entries);
+							});
+						});
+					});
+				});
 			});
 		});
 	}
@@ -214,7 +287,7 @@
 			[displayAs, 'string', queryValues(req).allowedPostValues.displayAs],
 			[title, 'string', config.numbers.modules.intel.titleLength],
 			[body, 'string', config.numbers.modules.intel.bodyMaxLength],
-			[type, 'string']
+			[type, 'string', queryValues(req).allowedPostValues.types]
 		])) { return 0; }
 
 		var update = {};
@@ -259,7 +332,7 @@
 			[displayAs, 'string', queryValues(req).allowedPostValues.displayAs],
 			[title, 'string', config.numbers.modules.intel.titleLength],
 			[body, 'string', config.numbers.modules.intel.bodyMaxLength],
-			[type, 'string']
+			[type, 'string', queryValues(req).allowedPostValues.types]
 		])) { return 0; }
 
 		mainModel.findOne({where:{'hashField': req.params.Hash}}).then(function(entry) {
@@ -272,7 +345,23 @@
 
 			var update = {};
 
-			if (displayAs) update.displayAs = displayAs;
+			if (displayAs) {
+				update.displayAs = displayAs;
+
+				switch (displayAs) {
+					case "player": {
+						update.posterHash = req.playerInfo.hashField;
+					} break;
+					case "pmc": {
+						if(!API.methods.validate(req, res, [req.playerInfo.PMC], config.messages().modules.pmc.not_in_pmc)) { return 0; }
+						update.posterHash = req.playerInfo.PMC.hashField;
+					} break;
+					case "anonymous": {
+						update.posterHash = null;
+					} break;
+				}
+			}
+
 			if (title) update.title = title;
 			if (body) update.body = body;
 			if (type) update.type = type;

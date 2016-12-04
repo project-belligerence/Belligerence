@@ -3,6 +3,7 @@
 
 	module.exports = function (grunt) {
 		require('load-grunt-tasks')(grunt);
+
 		var config = require('./config');
 
 		grunt.initConfig({
@@ -31,10 +32,16 @@
 						'routes/**/*.js',
 						'test/**/*.js',
 						'modules/**/*.js',
+						'dev/js/**/*.js',
 						config.files.app,
 						config.files.config
 					],
 					tasks: ['jshint']
+				},
+
+				sass: {
+					files: [config.folders.dev + '/sass/**/*.scss'],
+					tasks: ['sass:dist']
 				},
 
 				server: {
@@ -51,63 +58,13 @@
 					}
 				},
 
-				webpack: {
-					files: [
-						'public/**/*.js'
-					]
-				},
-
 				livereload: {
 					files: [
 						config.folders.views + '/**/*.ejs',
 						config.folders.public + '/js/**/*.js',
-						config.folders.public + '/styles/*.css'
+						config.folders.public + '/styles/**/*.css'
 					],
 					options: { livereload: true }
-				}
-			},
-
-			webpack: {
-				angularApp: {
-				    context: __dirname,
-				    entry: "./public/js",
-				    output: {
-				        path: __dirname + "/dist",
-				        filename: "[name].bundle.js"
-				    },
-
-					// // webpack options
-					// entry: "/public/js/app.js",
-					// output: {
-					// 	path: "/public/js/compiled",
-					// 	filename: "[hash].js",
-					// },
-
-					stats: {
-						// Configure the console output
-						colors: false,
-						modules: true,
-						reasons: true
-					},
-					// stats: false disables the stats output
-
-					storeStatsTo: "xyz", // writes the status to a variable named xyz
-					// you may use it later in grunt i.e. <%= xyz.hash %>
-
-					failOnError: false, // don't report error to grunt if webpack find errors
-					// Use this if webpack errors are tolerable and grunt should continue
-
-					watch: true, // use webpacks watcher
-					// You need to keep the grunt process alive
-
-				watchOptions: {
-						aggregateTimeout: 500,
-						poll: true
-					},
-					// Use this when you need to fallback to poll based watching (webpack 1.9.1+ only)
-
-					keepalive: true, // don't finish the grunt task
-					// Use this in combination with the watch option
 				}
 			},
 
@@ -117,12 +74,27 @@
 					'test/**/*.js',
 					'modules/**/*.js',
 					'configs/*.js',
-					'public/*js',
+					config.folders.dev + '/js/**/*js',
 					config.files.app,
 					config.files.config,
-					config.files.gruntfile
+					config.files.gruntfile,
+
+					'!dev/js/lib/**/*.js'
 				],
 				options: { node: true }
+			},
+
+			sass: {
+				options: {
+					sourceMap: false,
+					outputStyle: 'compressed'
+				},
+				dist: {
+					files: [{
+						'public/styles/vendor.css': 'dev/sass/vendor.scss',
+						'public/styles/main.css': 'dev/sass/main.scss'
+					}]
+				}
 			},
 
 			parallel: {
@@ -131,9 +103,9 @@
 					tasks: [
 						{ grunt: true, args: ['watch:gruntfile'] },
 						{ grunt: true, args: ['watch:server'] },
-						{ grunt: true, args: ['watch:js']},
-						{ grunt: true, args: ['watch:webpack']},
-						{ grunt: true, args: ['watch:livereload']}
+						{ grunt: true, args: ['watch:js'] },
+						{ grunt: true, args: ['watch:sass'] },
+						{ grunt: true, args: ['watch:livereload'] }
 					]
 				}
 			}

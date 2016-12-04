@@ -2,29 +2,30 @@
 	'use strict';
 
 	var
-		debug = process.env.NODE_ENV !== "production",
-		webpack = require('webpack')
+		path = require('path'),
+		debug = (process.env.NODE_ENV !== "production"),
+		webpack = require('webpack'),
+		BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 	;
 
 	var
 		uglifyConfig = {
 			sourceMap: false,
 			comments: false,
-			compress: {
-				warnings: false,
-			}
+			compress: { warnings: false	}
 		},
 
   		buildConfig = {
+  			caching: true,
 			context: __dirname,
 			devtool: debug ? "inline-sourcemap" : null,
 			entry: {
-				app: "./public/js/app.js",
-				vendors: ['angular', 'lodash']
+				app: "./dev/js/app.js",
+				vendors: ['angular', 'angular-loading-bar', 'angular-animate', 'angular-ui-router']
 			},
 			output: {
 				path: __dirname + "/public/js",
-				filename: "scripts.min.js"
+				filename: "app.min.js"
 			},
 			resolve: {
 				alias: {}
@@ -36,15 +37,25 @@
 			plugins: [
 				new webpack.optimize.DedupePlugin(),
 				new webpack.optimize.OccurenceOrderPlugin(),
-				new webpack.optimize.CommonsChunkPlugin("vendors", "[name].[chunkhash].bundle.js", Infinity)
+				new webpack.ProvidePlugin({
+					$: "jquery",
+					jQuery: "jquery",
+					_: "lodash"
+				}),
+				new webpack.optimize.CommonsChunkPlugin("vendors", "[name].bundle.js", Infinity)
+				// new BundleAnalyzerPlugin()
 			],
   		}
   	;
 
-  	for (let i in buildConfig.entry.vendors) {
-  		var v = buildConfig.entry.vendors[i];
-  		buildConfig.entry.vendors[i] = v + "/" + v + ".min";
-  	}
+	buildConfig.entry.vendors.push('bootstrap/dist/js/bootstrap.min');
+	buildConfig.entry.vendors.push('bootstrap/dist/js/npm');
+
+  	buildConfig.entry.vendors.push('jquery/dist/jquery');
+
+  	buildConfig.entry.vendors.push('lodash/lodash.min');
+
+  	buildConfig.entry.vendors.push('angular-ui-bootstrap/dist/ui-bootstrap-tpls');
 
 	if (true) buildConfig.plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyConfig));
 

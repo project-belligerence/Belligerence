@@ -89,7 +89,12 @@
 						update.typeField = req.body.type;
 
 						mainModel.sync({force: false}).then(function() {
-							mainModel.create(update).then(function(entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, entry); });
+							mainModel.create(update).then(function(entry) {
+								mainModel.findAndCountAll({ where: {"targetHash": target.hashField}}).then(function(new_cheers) {
+									entry.dataValues.currentCount = new_cheers.count;
+									API.methods.sendResponse(req, res, true, config.messages().new_entry, entry);
+								});
+							});
 						});
 					}
 				});
