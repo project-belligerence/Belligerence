@@ -17,48 +17,7 @@
 				</div>
 
 				<div class="col-md-6 col-md-offset-2 col-sm-offset-1 col-sm-7 col-xs-12">
-					<div class="row ng-login-animation" id="fp-login-form" ng-if="displayLogin" ng-cloak>
-						<form>
-							<div class="col-md-8 col-sm-7 col-xs-9">
-								<div class="form-group">
-									<div class="input-group">
-										<div class="input-group-addon">
-											<i class="icon ion-person"></i>
-										</div>
-										<input type="text" class="form-control" id="loginInputUsername" placeholder="User">
-									</div>
-								</div>
-								<div class="form-group">
-									<div class="input-group">
-										<div class="input-group-addon">
-											<i class="icon ion-locked"></i>
-										</div>
-										<input type="password" class="form-control" id="loginInputPassword" placeholder="Password">
-									</div>
-								</div>
-								<div class="pull-right">
-									<a href="#">Forgot your password?</a>
-								</div>
-							</div>
-
-							<div class="col-md-3 col-sm-3 col-xs-3" id="submitDiv">
-								<button type="submit" id="loginInputSubmit" class="btn btn-default">
-									<i class="icon ion-log-in"></i>
-								</button>
-							</div>
-						</form>
-					</div>
-					<div id="fp-join-call">
-						<div class="ng-login-animation" ng-if="displayLogin2" ng-cloak>
-							<span id="join-call-text">Interested? Join the action.</span>
-							<a href="#" role="button" class="section-button medium">
-								<ul>
-									<li><i class="icon ion-shuffle"></i></li>
-									<li>SIGN UP</li>
-								</ul>
-							</a>
-						</div>
-					</div>
+					<login-directive></login-directive>
 				</div>
 			</div>
 
@@ -66,6 +25,11 @@
 			<div class="row" id="fp-intro-container">
 				<div class="col-sm-12">
 					<h1>FIGHT FOR PROFIT</h1>
+
+					<a class="btn" ui-sref="app.private.dashboard"><i class="icon ion-home"></i> Go to the Dashboard!</a>
+
+					<a class="btn" ui-sref="app.public.player"><i class="icon ion-home"></i> Operator Page</a>
+
 					<h3>Soldiers with no ideology or principle, love or hatred:<br/> let money be the cardinal rule of the battlefield.</h3>
 					<div>
 						<p>
@@ -101,7 +65,7 @@
 			<h2 style="color:white">Bottom of the page!</h2>
 
 			<!-- PROVISORY SPACER -->
-			<div style="margin-bottom: 250px"></div>
+			<div style="margin-bottom: 550px"></div>
 		</div>
 	</div>
 </div>

@@ -1,2 +1,5 @@
 ul{margin:0;padding:0;list-style:none;}
-[ng\:cloak],[ng-cloak],.ng-cloak{display:none !important}
+button,button:focus,button:active,a,a:focus,a:active,*:focus,*:active,.btn,.btn:active,.btn:focus {outline: none !important;}
+button::-moz-focus-inner{outline: none !important;}
+button:focus, button:active {outline: none !important;}
+[ng\:cloak],[ng-cloak],.ng-cloak{display:none !important;}

@@ -1,0 +1,388 @@
+
+$icon_size_main: 70px;
+$icon_size_phone: 40px;
+
+#nav-container {
+	@include transition(height .25s cubic-bezier(0.77, 0, 0.175, 1));
+
+	@include factor-property(height, 14);
+
+	z-index: 9999;
+
+	#nav {
+		font-family: $sub_font;
+		margin-top: 5px;
+		@include factor-property(height, 10);
+
+		background-color: $main_color;
+		box-shadow: 0px 0px 5px #333;
+
+		@include transition(opacity, .5s);
+
+		//opacity: .2;
+		opacity: 1;
+
+		&:hover { opacity: 1; }
+
+		@include breakpoint('small') { height: 40px; }
+
+		#side-menu {
+			display: inline-block;
+
+			height: $icon_size_main;
+
+			#menu-items {
+				@include transition(left .25s);
+				display: inline-block;
+				position: relative;
+
+				top: -10px;
+				left: -3px;
+
+				@include breakpoint('medium') { left: -7px; }
+				@include breakpoint('small') { left: -310px; }
+
+				.menu-item {
+					font-family: $main_font;
+
+					@include transition(background-color .25s);
+					cursor: pointer;
+					display: inline-block;
+
+					margin-right: 1px;
+
+					padding: 5px 10px;
+					text-align: center;
+
+					background-color: $main_color;
+					text-shadow: 1px 1px 0px #222;
+
+					border-right: 1px solid $main_color_dark;
+					box-shadow: 0px -3px 0px $main_color_dark inset /* , 0px -4px 0px #222 inset */ ;
+
+					@include factor-property(min-width, 13);
+
+					&:hover { background-color: $main_color_dark; }
+
+					.text {
+						display: block;
+						@include font-size(factor(2));
+						position: relative;
+						top: -5px;
+					}
+
+					i {
+						cursor: pointer;
+						@include font-size(factor(4));
+					}
+				}
+			}
+
+			@include breakpoint('small') {
+				#menu-items {
+					display: block;
+					position: relative;
+
+					top: -4px;
+
+					&.show-mobile { left: 0px !important; }
+
+					.menu-item {
+						width: 100%;
+						padding: factor(2) factor(0);
+
+						.text {
+							display: inline-block;
+							@include font-size(factor(3));
+							position: relative;
+							top: -3px;
+							@include factor-property(margin-left, 1);
+						}
+					}
+				}
+			}
+
+			#expand-menu {
+				display: inline-block;
+
+				cursor: pointer;
+				*{cursor: pointer;}
+
+				#nav-logo {
+					display: inline-block;
+					background-color: #333;
+					padding: 0 factor(1);
+					padding-left: 20px;
+					img {
+						display: block;
+						height: $icon_size_main;
+					}
+					@include breakpoint('small') { padding-left: 0px; img { height: $icon_size_phone; }}
+				}
+
+				#expand-icon {
+					@include breakpoint('medium') {
+						display: inline-block;
+					}
+
+					@include transition(background-color .25s, color .25s, box-shadow .25s);
+
+					display: none;
+
+					position: relative;
+					overflow: hidden;
+
+					top: -0px;
+					left: -3px;
+
+					@include font-size(factor(6));
+
+					@include factor-property(padding-left, 3);
+					@include factor-property(padding-right, 3);
+
+					background-color: $main_color;
+					color: #eee;
+					box-shadow: 0px -3px 0px $main_color_dark inset;
+
+					height: $icon_size_main;
+
+					border-right: 1px solid $main_color_dark;
+
+					&.active {
+						background-color: $main_color_dark;
+						color: #fff;
+						box-shadow: 0px 0px 0px $main_color_dark inset;
+					}
+
+					i {
+						position: relative;
+						top: 8px;
+					}
+
+					@include breakpoint('small') {
+						height: $icon_size_phone;
+						width: $icon_size_phone;
+						left: -4px;
+						@include font-size(factor(3));
+						i { top: 4px; left: -8px; }
+					}
+				}
+			}
+		}
+
+		#nav-icons {
+			float: right;
+			position: relative;
+			display: inline-block;
+
+			.nav-icon {
+				.ac-bg-img__full-size, .ac-bg-img__placeholder { @include transition(background-size .15s); }
+				@include transition(color .25s, background-color .25s);
+
+				display: inline-block;
+				position: relative;
+
+				top: 0px;
+
+				@include factor-property(margin-left, 1);
+
+				cursor: pointer;
+				*{cursor: pointer;}
+
+				width: $icon_size_main;
+				height: $icon_size_main;
+
+				background-color: #333;
+
+				.square .square-icon {
+					width: $icon_size_main;
+					height: $icon_size_main;
+				}
+
+				&:hover {
+					.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 110% 110%; }
+					.icon {color: #333;}
+					.carat { .icon {color: #ddd;} }
+					background-color: #ddd;
+				}
+
+				&.single-icon {
+
+					i {
+						position: relative;
+						left: 7px;
+						top: -3px;
+
+						@include font-size(factor(8));
+						color: #eee;
+
+						&.ion-more {left: 10px;}
+					}
+
+					.mail-number {
+						float: right;
+						font-weight: bold;
+						display: inline-block;
+						position: relative;
+						color: #fff;
+						background-color: $main-color;
+
+						top: 45px;
+						right: 4px;
+
+						text-align: center;
+
+						@include size(20px);
+					}
+
+					.dropdown {
+						.dropdown-toggle { display: table; }
+						.dropdown-menu {
+							position: relative;
+							top: -10px;
+
+							li {
+								@include transition(color .25s, background-color .25s);
+								@include factor-property(width, 25);
+								margin-bottom: 3px;
+
+								&.divider { margin: 10px; height: 1px; line-height: 0px; }
+
+								span.value {
+									// @include factor-property(margin-right, 2);
+
+									background-color: $main_color;
+									color: #fff;
+
+									padding: 0px 6px;
+									padding-top: 1px;
+									padding-bottom: 3px;
+									border-radius: 20%;
+								}
+								i { @include transition(color .25s, background-color .25s); left: 0px; @include font-size(factor(2.5)); }
+							}
+						}
+						@include breakpoint('small') {
+							.dropdown-menu { top: 0px; }
+						}
+					}
+				}
+
+				&.logout { @include factor-property(margin-left, 5);}
+
+				.carat {
+					z-index: 10;
+
+					@include transition(top .25s);
+					position: relative;
+					display: inline-block;
+					float: right;
+
+					top: -26px;
+					right: 3px;
+					padding: 2px 7px;
+
+					color: #ddd;
+					background-color: #333;
+				}
+
+				@include breakpoint('small') {
+					width: $icon_size_phone;
+					height: $icon_size_phone;
+					@include factor-property(margin-left, 0.5);
+
+					.square .square-icon {
+						width: $icon_size_phone;
+						height: $icon_size_phone;
+					}
+
+					&.single-icon {
+						i {
+							left: 5px;
+							top: 1px;
+							@include font-size(factor(4));
+							&.ion-more {left: 5px;}
+						}
+
+						.mail-number {
+							top: -27px;
+							right: 3px;
+
+							width: 20px;
+							height: 24px;
+						}
+					}
+
+					&.logout { margin-left: 14px; }
+
+					.carat {
+						@include font-size(factor(1.5));
+						top: -21px;
+						right: 2px;
+						padding: 2px 4px;
+					}
+				}
+
+				.dropdown {
+					&.open { background-color: transparent; }
+					.dropdown-backdrop { display: none; }
+					.dropdown-menu {
+						font-weight: bold;
+						color: $main_color;
+						@include font-size(factor(2.6));
+
+						li {
+							@include factor-property(padding-left, 1.5);
+
+							i {
+								margin: 0px;
+								position: relative;
+								top: 2px;
+								color: $main_color !important;
+								@include factor-property(margin-right, 1);
+							}
+
+							&:hover {
+								background-color: $main_color;
+								color: #fff;
+								i {	color: #fff !important; }
+							}
+						}
+
+						&.go-right {
+							// text-align: right;
+							left: -119px;
+
+							@include factor-property(padding-left, 0);
+							@include factor-property(padding-right, 1.5);
+						}
+					}
+
+					@include breakpoint('small') {
+						.dropdown-menu {
+							left: -20px;
+							@include font-size(factor(3));
+							li { @include factor-property(line-height, 5); }
+							&.go-right { left: -150px; }
+						}
+					}
+				}
+
+				@include breakpoint('small') {
+					&.nav-mail-icon {
+						.dropdown-menu {
+							left: -162px;
+							top: -24px !important;
+							li { width: factor(33) !important; }
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@include breakpoint('medium') {
+	#menu-items { &.hide-mobile { display: none !important; }}
+	#nav-icons { &.hide-mobile { display: none !important; }}
+}

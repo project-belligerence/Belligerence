@@ -23,6 +23,25 @@ $column_logo_belligerence: 365px;
 
 $icon_size_tiny: factor(3);
 $icon_size_small: factor(4);
-$icon_size_medium: factor(6);
-$icon_size_large: factor(8);
-$icon_size_huge: factor(12);
+$icon_size_medium: factor(5);
+$icon_size_large: factor(6);
+$icon_size_huge: factor(8);
+
+.icon {
+	&.tiny { @include font-size($icon_size_tiny); }
+	&.small { @include font-size($icon_size_small); }
+	&.medium { @include font-size($icon_size_medium); }
+	&.large { @include font-size($icon_size_large); }
+	&.huge { @include font-size($icon_size_huge); }
+}
+
+/*
+	========================================
+					BUTTONS
+	========================================
+*/
+
+$button_font_size_tiny: factor(2);
+$button_font_size_small: factor(2);
+$button_font_size_medium: factor(3);
+$button_font_size_large: factor(5);

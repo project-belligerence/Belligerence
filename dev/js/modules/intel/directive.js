@@ -9,6 +9,8 @@
 		$scope.currentData = [];
 
 		$scope.currentPage = 1;
+		$scope.previousPage = $scope.currentPage;
+
 		$scope.perPage = 4;
 		$scope.totalItems = 1;
 
@@ -28,6 +30,8 @@
 				page: $scope.currentPage
 			};
 
+			$scope.currentData = [];
+
 			intelServices.getIntel(intelQuery).then(function(data) {
 				if (data) {
 					var timeWait = 0;
@@ -40,18 +44,40 @@
 						$scope.isMinPage = ($scope.currentPage === Math.ceil($scope.totalItems / $scope.perPage));
 						$scope.isMaxPage = ($scope.currentPage === 1);
 
+						$scope.previousPage = $scope.currentPage;
+
 						$timeout(function() { $scope.$broadcast('rebuild');	}, 0);
-					}, timeWait);
+					}, 250);
 
 				}
 			});
 		}
 
 		function movePage(d) {
-			var curPage = $scope.currentPage;
+			var curPage = $scope.currentPage,
+				intelContainer = $(".intel-container");
+
 			switch (d) {
-				case "n": {	$scope.currentPage = maxPage();	} break;
-				case "p": {	$scope.currentPage = minPage(); } break;
+				case "n": {
+					intelContainer.removeClass("anim-right");
+					intelContainer.addClass("anim-left");
+					$scope.currentPage = maxPage();
+				} break;
+				case "p": {
+					intelContainer.removeClass("anim-left");
+					intelContainer.addClass("anim-right");
+					$scope.currentPage = minPage();
+				} break;
+				case -1: {
+					if ($scope.previousPage > $scope.currentPage) {
+						intelContainer.removeClass("anim-left");
+						intelContainer.addClass("anim-right");
+					} else {
+						intelContainer.removeClass("anim-right");
+						intelContainer.addClass("anim-left");
+					}
+					refreshIntel();
+				}
 			}
 
 			if (curPage != $scope.currentPage) refreshIntel();
@@ -60,14 +86,46 @@
 		refreshIntel();
 	}
 
-	function IntelDirectiveFunction() {
+	function IntelDirectiveLink(scope, elem, attrs) {
+
+		var
+			intelElement = ($(elem[0])),
+			intelPagination = $("#intel-pagination"),
+			scrollHandler = function() {
+				var
+					windowWidth = $(window).innerWidth(),
+					windowPos = ($(this).scrollTop()),
+					intelTopOffset = (intelElement.offset().top),
+					intelHeight = document.getElementsByClassName('intel-container')[0].scrollHeight,
+
+					endPadding = ((windowPos <= 360) ? 250 : 600)
+				;
+
+				intelHeight = ((intelHeight > 2000) ? 2500 : 1400);
+
+				if (windowWidth <= 800) {
+					if ( (windowPos >= (intelTopOffset - 200)) && (windowPos <= (intelTopOffset + (intelHeight - endPadding)))  ) {
+						intelPagination.addClass("fixed");
+					} else {
+						intelPagination.removeClass("fixed");
+					}
+				}
+			}
+		;
+
+		$(window).scroll(scrollHandler);
+		scope.$on('$destroy', function() { $(window).off("scroll", scrollHandler); });
+	}
+
+	function IntelDirectiveFunction($timeout) {
 		return {
 			scope: {
 
 			},
 			restrict : "E",
 			templateUrl: 'directive/intel.ejs',
-			controller: IntelDirectiveFunctions
+			controller: IntelDirectiveFunctions,
+			link: IntelDirectiveLink
 		};
 	}
 

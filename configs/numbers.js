@@ -30,7 +30,7 @@
 				maxDiscount: 100
 			},
 			messages: {
-				maxTitleLength: 32,
+				maxTitleLength: 48,
 				maxBodyLength: 1024
 			},
 			stock: {
@@ -39,6 +39,10 @@
 			},
 			bans: {
 				reasonLength: 260
+			},
+			comments: {
+				titleLength: 21,
+				bodyLength: 144
 			},
 			intel: {
 				queryLimit: 4,

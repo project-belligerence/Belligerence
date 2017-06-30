@@ -8,7 +8,8 @@
 	;
 
 	exports.route = {
-		url: "/",
+		url: "",
+		routeName: "Frontpage",
 		templateUrl: ('partial/' + (moduleName.toLowerCase()) + '.ejs'),
 		controller: (moduleName.toLowerCase() + 'Controller'),
 		controllerAs: ('Ctrl' + moduleName)

@@ -1,0 +1,31 @@
+tags-input {
+	box-shadow: none;
+	border: none;
+	padding: 0;
+
+	.host { margin: 0; }
+
+	.tags {
+		.tag-item {
+			color: #fff;
+
+			.remove-button:hover {
+				cursor: pointer;
+				text-decoration: none;
+			}
+		}
+	}
+
+	&[disabled] .tags {
+		background-color: #eee;
+
+		.input {
+			background-color: #eee;
+		}
+	}
+}
+
+.input-group tags-input {
+	padding: 0;
+	display: table-cell;
+}

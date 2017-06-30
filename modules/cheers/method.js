@@ -5,6 +5,7 @@
 		PlayerModel = require('./../index.js').getModels().players,
 		CheersModel = require('./../index.js').getModels().cheers,
 		IntelModel = require('./../index.js').getModels().intel,
+		CommmentsModel = require('./../index.js').getModels().comments,
 		config = require('./../../config.js'),
 		API = require('./../../routes/api.js'),
 
@@ -23,7 +24,7 @@
 			folderName: require('path').basename(__dirname),
 			allowedSortValues: ['createdAt', 'sender', 'target', 'type'],
 			allowedPostValues: {
-				typeValues: ['intel']
+				typeValues: ['intel', 'comment']
 			},
 			generateWhereQuery:	function(req) {
 				var object = {};
@@ -67,6 +68,10 @@
 			case "intel": {
 				senderModel = PlayerModel;
 				targetModel = IntelModel;
+			} break;
+			case "comment": {
+				senderModel = PlayerModel;
+				targetModel = CommmentsModel;
 			} break;
 		}
 

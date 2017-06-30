@@ -13,6 +13,10 @@ $sub_color: #337ab7;
 $sub_color_light: lighten($sub_color, 10%);
 $sub_color_dark: darken($sub_color, 10%);
 
+$muted_color: #ddd;
+$muted_color_light: lighten($muted_color, 10%);
+$muted_color_dark: darken($muted_color, 10%);
+
 /* BACKGROUND COLORS */
 
 $main_background_color: #111;

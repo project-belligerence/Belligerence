@@ -1,0 +1,223 @@
+
+<div class="container-fluid" id="unit-page">
+	<div class="row">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12" id="player-page">
+					<div id="header" class="text-center">
+
+						<div ng-if="::CtrlPlayer.playerInfo.aliasField !== undefined">
+							<h2 class="alias" ng-bind="::CtrlPlayer.playerInfo.aliasField"></h2>
+							<i
+								ng-if="::(CtrlPlayer.playerInfo.playerPrivilege < 4)"
+								class="icon privilege-icon"
+								ng-class="::(CtrlPlayer.displayPrivilege(CtrlPlayer.playerInfo.playerPrivilege).icon)"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="{{::(CtrlPlayer.displayPrivilege(CtrlPlayer.playerInfo.playerPrivilege).name)}}"
+							></i>
+						</div>
+
+						<div class="contract" ng-if="::(CtrlPlayer.displayContract !== undefined)">
+							<i
+								class="icon"
+								ng-class="CtrlPlayer.displayContract(CtrlPlayer.playerInfo.contractType).icon"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Type of Contract"
+							></i>
+							<span ng-bind="::CtrlPlayer.displayContract(CtrlPlayer.playerInfo.contractType).name"></span>
+
+							<span ng-if="::CtrlPlayer.playerInfo.PMC !== undefined">
+								at
+								<a ng-href="outfit/{{::CtrlPlayer.playerInfo.PMC.hashField}}"><span ng-bind="::CtrlPlayer.playerInfo.PMC.nameField"></span></a>
+							</span>
+
+						</div>
+
+						<div class="unit-interactions player" ng-if="::(CtrlPlayer.selfInfo.playerPrivilege <= 99)" ng-cloak>
+							<ul class="interaction-list">
+								<li ng-if="!(CtrlPlayer.checkIfFriend())">
+									<a
+										ng-click="(CtrlPlayer.addAsFriend())"
+										class="section-button medium animated"
+										role="button"
+
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="{{::CtrlPlayer.getString('friends')}}"
+									>
+										<ul>
+											<li><i class="icon ion-person-add"></i></li>
+											<li>Befriend</li>
+										</ul>
+									</a>
+								</li>
+								<li ng-if="(CtrlPlayer.checkIfFriend() && !(CtrlPlayer.checkOwnProfile()))">
+									<a
+										ng-click="CtrlPlayer.removeAsFriend()"
+										class="section-button medium animated"
+										role="button"
+
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="Removes this Operator from your friends list."
+									>
+										<ul>
+											<li><i class="icon ion-minus"></i></li>
+											<li>Unfriend</li>
+										</ul>
+									</a>
+								</li>
+								<li>
+									<a
+										ng-click="CtrlPlayer.sendMessage()"
+										class="section-button medium animated"
+										role="button"
+
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="Sends a message to the Operator."
+									>
+										<ul>
+											<li><i class="icon ion-email"></i></li>
+											<li>Message</li>
+										</ul>
+									</a>
+								</li>
+								<li class="report">
+									<a
+										ng-click="CtrlPlayer.sendReport()"
+										class="section-button medium animated"
+										role="button"
+
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="Reports this Operator for rule violation."
+									>
+										<ul>
+											<li><i class="icon ion-alert-circled"></i></li>
+											<li>Report</li>
+										</ul>
+									</a>
+								</li>
+							</ul>
+						</div>
+
+						<div id="unit-avatar" class="player">
+							<div class="hexagon avatar-medium">
+								<div class="in1"><div class="in2">
+									<div class="big" ac-background-image background-image="images/avatars/players/main_{{CtrlPlayer.playerInfo.hashField}}.jpg">
+									</div>
+								</div></div>
+							</div>
+						</div>
+
+						<h3 class="bio" ng-bind="::CtrlPlayer.playerInfo.bioField"></h3>
+
+						<div class="static">
+							<ul>
+								<li ng-if="::CtrlPlayer.playerInfo.createdAt">
+									<i
+										class="icon ion-calendar"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="Member since"
+									></i>
+									<span ng-bind="::CtrlPlayer.playerInfo.createdAt | date"></span>
+								</li>
+								<li ng-if="::CtrlPlayer.playerInfo.locationField">
+									<i
+										class="icon ion-earth"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="Location"
+									></i>
+									<span ng-bind="::CtrlPlayer.playerInfo.locationField"></span>
+								</li>
+								<li ng-if="::CtrlPlayer.playerInfo.steamIDField">
+									<i
+										class="icon ion-steam"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="Steam ID"
+									></i>
+									<!-- <span ng-bind="::CtrlPlayer.playerInfo.steamIDField"></span> -->
+									<a target="_blank" ng-href="http://steamcommunity.com/profiles/{{::CtrlPlayer.playerInfo.steamIDField}}/">Profile <i class="icon ion-share"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="body">
+				<div class="row">
+					<div class="main-column col-md-4 col-sm-6 col-xs-12"
+						nf-if="
+							(::CtrlPlayer.playerInfo.currentFunds) !== undefined)||
+							(::CtrlPlayer.playerInfo.missionsWonNum !== undefined) ||
+							(::CtrlPlayer.playerInfo.missionsfailedNum !== undefined)
+						">
+						<div class="meta">
+							<i class="icon ion-stats-bars"></i>
+							<span>Stats</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Some stats over the Operator's performance."
+							></i>
+						</div>
+
+						<div class="stats text-center" ng-repeat="stat in ::CtrlPlayer.statsItems">
+							<div class="single-stat" ng-if="::CtrlPlayer.playerInfo[stat.value] !== undefined">
+								<i class="icon huge" ng-class="stat.icon"></i>
+								<div class="number" ng-bind="::CtrlPlayer.playerInfo[stat.value]"></div>
+								<div class="text" ng-bind="::stat.text"></div>
+							</div>
+						</div>
+
+<!-- 						<div ng-if="::CtrlPlayer.playerInfo.playerPrestige !== undefined" ng-bind="::CtrlPlayer.playerInfo.playerPrestige"></div>
+						<div ng-if="::CtrlPlayer.playerInfo.playerPrivilege !== undefined" ng-bind="::CtrlPlayer.playerInfo.playerPrivilege"></div>
+						<div ng-if="::CtrlPlayer.playerInfo.playertier !== undefined" ng-bind="::CtrlPlayer.playerInfo.playertier"></div> -->
+					</div>
+
+					<div class="main-column col-md-4 col-sm-6 col-xs-12" ng-if="::CtrlPlayer.playerInfo.tagsField !== undefined">
+						<div class="meta">
+							<i class="icon ion-pricetags"></i>
+							<span>Tags</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Tags that define this Operator."
+							></i>
+						</div>
+						<div class="tags" ng-repeat="tag in CtrlPlayer.playerInfo.tagsField">
+							<span ng-bind="::tag"></span>
+						</div>
+					</div>
+
+					<div class="main-column col-md-4 col-sm-6 col-xs-12"">
+						<div class="meta">
+							<i class="icon ion-chatbox-working"></i>
+							<span>Comments</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Comments made about this Operator."
+							></i>
+						</div>
+						<comments-directive
+							subject-type="player"
+							subject-hash="CtrlPlayer.playerInfo.hashField"
+							per-page=4
+						></comments-directive>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

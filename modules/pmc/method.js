@@ -200,6 +200,9 @@
 	}
 
 	function getPMCPlayersFunc(req, res, hash, callback) {
+		req.serverValues = {};
+		req.serverValues.contextLimit = 20;
+
 		PMCModel.findOne({where:{hashField: hash}}).then(function(entry) {
 			if(!API.methods.validate(req, res, [entry])) { return 0; }
 			var PlayerMethods = require('./../index.js').getMethods().players;
@@ -344,6 +347,9 @@
 	}
 
 	function putPMCFunc(req, res, hashField, callback) {
+
+		if (req.body.open_applications !== undefined) { req.body.open_applications = API.methods.boolToString(req.body.open_applications); }
+
 		if (!API.methods.validateParameter(req, res, [[hashField, 'string']])) { return 0; }
 
 		if (!API.methods.validateParameter(req, res, [
@@ -422,7 +428,7 @@
 					if (!API.methods.validate(req, res, [req.body.tierNames.length === 5])) { return 0; }
 
 					if (!API.methods.validateParameter(req, res, [
-						[req.body.tierNames, 'string', config.numbers.modules.pmc.tierLength]
+						[req.body.tierNames, 'string', [1, (config.numbers.modules.pmc.tierLength * 2)]]
 					])) { return 0; }
 
 					update.tierNameFields = req.body.tierNames;

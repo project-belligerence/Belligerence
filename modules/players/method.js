@@ -65,7 +65,9 @@
 			[[req.body.username, req.body.password], 'string']
 		], true)) { return 0; }
 
-		if (!API.methods.validateParameter(req, res, [[req.body.remember, 'boolean']])) { return 0; }
+		req.body.remember = API.methods.getBoolean(req.body.remember.toString());
+
+		if (!API.methods.validateParameter(req, res, [[req.body.remember.toString(), 'boolean']])) { return 0; }
 
 		PlayerModel.findOne({include: [PMCModel], where: {"usernameField": req.body.username}}).then(function(player) {
 
@@ -197,7 +199,7 @@
 				havingQuery = "> 0 ",
 				joinQuery = "LEFT JOIN (`pmc_table` PMC) ON (PMC.id = Pl.PMCId)",
 				filterMainTable =
-					"Pl.hashField as hashField, Pl.alias as aliasField, Pl.email as emailField, Pl.bio as bioField, Pl.location as locationField, " +
+					"Pl.hashField as hashField, Pl.createdAt as createdAt, Pl.alias as aliasField, Pl.email as emailField, Pl.bio as bioField, Pl.location as locationField, " +
 					"Pl.contract as contractType, Pl.missions_won as missionsWonNum, Pl.missions_failed as missionsfailedNum, " +
 					"Pl.tier as playertier, Pl.status as playerStatus, Pl.funds as currentFunds, Pl.tags as tagsField, " +
 					"Pl.prestige as playerPrestige, Pl.privilege as playerPrivilege, Pl.last_ip as lastIPField, " +
@@ -229,8 +231,9 @@
 			function(data) {
 				if (data.rows.length > 0) {
 					CommentsMethods.getEntityComments(req, res, QueryTable, data.rows[0].hashField, function(comments) {
-						console.log(comments);
-						if (req.query.SINGLE_MODE) { data.rows[0].comments = comments; }
+
+						// Comments must be fetched later for easier pagination.
+						// if (req.query.SINGLE_MODE) { data.rows[0].comments = comments; }
 						for (var i=0; i < data.rows.length; i++) { data.rows[i] = filterPlayerDetails(req, data.rows[i]); }
 						return done(data);
 					});
@@ -240,6 +243,7 @@
 	}
 
 	function getPlayer(req, res) {
+		if (!API.methods.validate(req, res, [req.params.Hash], config.messages().no_entry)) { return 0; }
 		req.query.SINGLE_MODE = true;
 		getPlayerFunc(req, res, req.params.Hash, function(data) {
 			API.methods.sendResponse(req, res, true, config.messages().return_entries, data);
@@ -456,7 +460,7 @@
 
 			player.update(update).then(function() {
 				PlayerModel.sync({force: false}).then(function() {
-					API.methods.sendResponse(req, res, true, config.messages().entry_updated(player.aliasField), player);
+					API.methods.sendResponse(req, res, true, config.messages().entry_updated(player.aliasField));
 				});
 			});
 
@@ -464,7 +468,7 @@
 	}
 
 	function getSelf(req, res) {
-		PlayerModel.findOne({where: {"hashField": req.playerInfo.hashField}}).then(function(player) {
+		PlayerModel.findOne({where: {"hashField": req.playerInfo.hashField}, include: {model: PMCModel, attributes: ['hashField']}}).then(function(player) {
 			if (!API.methods.validate(req, res, [player], config.messages().no_entry)) { return 0; }
 
 			API.methods.sendResponse(req, res, true, config.messages().return_entry, player);
@@ -659,7 +663,7 @@
 					;
 
 					pmc.removePlayer(player).then(function() {
-						player.update(newPlayerValues).then(function(player) {
+					player.update(newPlayerValues).then(function(player) {
 							PlayerModel.sync({force: false}).then(function() {
 								PMCModel.sync({force: false}).then(function() {
 									PlayerModel.findOne({where: {"hashField": playerHash}}).then(function(playerF) {

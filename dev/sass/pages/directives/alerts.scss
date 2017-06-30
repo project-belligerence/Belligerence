@@ -1,0 +1,83 @@
+
+#page-alerts-container {
+	position: fixed;
+
+	@include factor-property(top, 3);
+	left: 100%;
+	transform: translate(-100%, 0);
+
+	z-index: 9999;
+
+	@include breakpoint('small') { @include factor-property(top, 9); }
+
+	.move-down {
+		@include factor-property(margin-top, 8);
+	}
+
+	#page-alerts-messages { width: inherit;	}
+
+	#close-alerts {
+		position: absolute;
+		top: 10px;
+	}
+
+	.page-alerts {
+		text-align: center;
+		width: inherit;
+
+		@include factor-property(padding, 1);
+
+		@include factor-property(margin-bottom, 1);
+
+		@include prefix(box-shadow, 0 0 10px rgba(10,10,10,0.5));
+
+		.close {
+			@include font-size(factor(7));
+
+			position: relative;
+			top: -13px;
+			right: 7px;
+		}
+	}
+
+	.btn {
+		@include prefix(box-shadow, 0 0 10px rgba(10,10,10,0.5));
+		@include factor-property(margin-bottom, 3);
+
+		i {
+			@include factor-property(margin-right, 1);
+		}
+	}
+
+	.animation {
+		$delay_xfast: .25s;
+		$delay_fast: .5s;
+		$delay_slow: 1s;
+		$delay_xslow: 1.5s;
+
+		$animationIn: fadeInDown;
+		$animationOut: fadeOutDown;
+
+		$delay_in: $delay_slow;
+		$delay_out: $delay_fast;
+
+		$easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+		&.ng-leave {
+			-webkit-animation: $animationOut $delay_out both $easing;
+			-moz-animation: $animationOut $delay_out both $easing;
+			animation: $animationOut $delay_out both $easing;
+		}
+
+		&.ng-enter {
+			-webkit-animation: $animationIn $delay_in both $easing;
+			-moz-animation: $animationIn $delay_in both $easing;
+			animation: $animationIn $delay_in both $easing;
+		}
+
+		&.ng-leave-stagger, &.ng-enter-stagger {
+			transition-delay: ($delay_xfast / 5);
+			animation-delay: ($delay_xfast / 5);
+		}
+	}
+}

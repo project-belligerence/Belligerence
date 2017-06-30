@@ -21,7 +21,22 @@
 			devtool: debug ? "inline-sourcemap" : null,
 			entry: {
 				app: "./dev/js/app.js",
-				vendors: ['angular', 'angular-loading-bar', 'angular-animate', 'angular-ui-router']
+				vendors: [
+					'angular',
+					'angular-loading-bar',
+					'angular-animate',
+					'angular-ui-router',
+					'angular-cookies',
+					'angular-touch',
+					'angular-ui-router-default',
+					'ng-file-upload',
+					'ng-tags-input',
+					'angular-timeago',
+
+					'validator',
+					'babel-polyfill',
+					'oidc-client'
+				]
 			},
 			output: {
 				path: __dirname + "/public/js",
@@ -40,7 +55,10 @@
 				new webpack.ProvidePlugin({
 					$: "jquery",
 					jQuery: "jquery",
-					_: "lodash"
+					"window.jQuery":"jquery",
+					_: "lodash",
+					validator: "validator",
+					oidc: "oidc-client"
 				}),
 				new webpack.optimize.CommonsChunkPlugin("vendors", "[name].bundle.js", Infinity)
 				// new BundleAnalyzerPlugin()
@@ -49,7 +67,7 @@
   	;
 
 	buildConfig.entry.vendors.push('bootstrap/dist/js/bootstrap.min');
-	buildConfig.entry.vendors.push('bootstrap/dist/js/npm');
+	// buildConfig.entry.vendors.push('bootstrap/dist/js/npm');
 
   	buildConfig.entry.vendors.push('jquery/dist/jquery');
 

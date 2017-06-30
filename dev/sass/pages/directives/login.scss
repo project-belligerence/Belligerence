@@ -1,0 +1,165 @@
+
+.ng-login-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeInUp;
+	$animationOut: fadeOutLeft;
+
+	$delay_in: $delay_slow;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(1, -0.55, 0.265, 1.55);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+#fp-login-form {
+	margin-top: -5%;
+	@include factor-property(margin-bottom, 10);
+
+	@include breakpoint('medium') { margin-top: -15%; }
+
+	.input-group {
+		.input-group-addon { @include icon($icon_size_small); }
+	}
+
+	.body.check .box {
+		padding: 11px 11px;
+		i {left: 0px;}
+	}
+
+	#submitDiv {
+		margin-left: -14px;
+		@include breakpoint('tiny') { margin-left: -25px; }
+
+		button {
+			* { @include transition(all .25s); }
+
+			@include factor-property(width, 11);
+			&:active { transform: none; }
+			&:active > .button-icon { top: 29px; }
+
+			.button-icon {
+				position: absolute;
+				left: 35px;
+				top: 26px;
+
+				&.img {
+					position: relative;
+					left: -1px;
+					top: 2px;
+				}
+			}
+
+			.animation {
+				$delay_xfast: .25s;
+				$delay_fast: .5s;
+				$delay_slow: 1s;
+				$delay_xslow: 1.5s;
+
+				$animationIn: fadeIn;
+				$animationOut: fadeOut;
+
+				$delay_in: $delay_slow;
+				$delay_out: $delay_fast;
+
+				$easing: cubic-bezier(1, -0.55, 0.265, 1.55);
+
+				&.ng-leave {
+					-webkit-animation: $animationOut $delay_out both $easing;
+					-moz-animation: $animationOut $delay_out both $easing;
+					animation: $animationOut $delay_out both $easing;
+				}
+
+				&.ng-enter {
+					-webkit-animation: $animationIn $delay_in both $easing;
+					-moz-animation: $animationIn $delay_in both $easing;
+					animation: $animationIn $delay_in both $easing;
+				}
+			}
+		}
+	}
+
+	#loginInputSubmit {
+		@include factor-property(height, 16.3);
+		padding: 0 20px;
+	}
+}
+
+#fp-join-call {
+	#join-call-text {
+		margin-right: 77px;
+		@include breakpoint('medium') {
+			margin-bottom: 10px;
+			display: block;
+		}
+	}
+}
+
+#fp-warning-container {
+
+	@include factor-property(margin-top, 3);
+	@include factor-property(min-height, 11);
+
+	.warning-container {
+		position: absolute;
+		width: 100%;
+		max-width: 360px;
+	}
+
+	.animation {
+		$delay_xfast: .25s;
+		$delay_fast: .5s;
+		$delay_slow: 1s;
+		$delay_xslow: 1.5s;
+
+		$animationIn: fadeIn;
+		$animationOut: fadeOut;
+
+		$delay_in: $delay_slow;
+		$delay_out: $delay_fast;
+
+		$easing: cubic-bezier(1, -0.55, 0.265, 1.55);
+
+		&.ng-leave-active, &.ng-enter-active {
+			// position: absolute;
+			// width: 100%;
+			// max-width: 360px;
+		}
+
+		&.ng-leave {
+			-webkit-animation: $animationOut $delay_out both $easing;
+			-moz-animation: $animationOut $delay_out both $easing;
+			animation: $animationOut $delay_out both $easing;
+		}
+
+		&.ng-enter {
+			-webkit-animation: $animationIn $delay_in both $easing;
+			-moz-animation: $animationIn $delay_in both $easing;
+			animation: $animationIn $delay_in both $easing;
+		}
+	}
+}
+
+#fp-intro-container {
+	@include factor-property(margin-bottom, 15);
+}
+
+#fp-intel-container {
+	h2 { text-transform: uppercase; color: $main_text_color; }
+
+	@include factor-property(padding-top, 11);
+}

@@ -1,0 +1,133 @@
+
+<div id="nav-container">
+	<nav class="navbar navbar-fixed-top nav-menu-animation noselect">
+		<div class="container-fluid">
+			<div id="nav" class="row">
+
+				<div id="side-menu"> <!--  -->
+					<div id="expand-menu" ng-click="NavController.toggleNavMode()">
+						<div id="nav-logo">
+							<img src="images/belligerence-logo-small-inv.png" />
+						</div>
+						<div id="expand-icon">
+							<i class="ion-navicon-round"></i>
+						</div>
+					</div>
+
+					<div id="menu-items" class="hide-mobile fade-animation-fast" ng-if="NavController.displayIcons" ng-cloak>
+						<div class="menu-item" ng-repeat="menuItem in NavController.expandedMenuItems">
+							<i class="icon" ng-class="menuItem.icon"></i>
+							<span class="text" ng-bind="::menuItem.name"></span>
+						</div>
+					</div>
+				</div>
+
+				<ul class="fade-animation-fast" id="nav-icons" ng-if="(NavController.displayIcons) && (NavController.isLogged)" ng-cloak>
+					<li class="nav-icon">
+						<div class="dropdown">
+							<div class="dropdown-toggle" data-toggle="dropdown">
+								<div class="square">
+									<div class="square-icon" ac-background-image background-image="images/avatars/players/main_{{NavController.playerInfo.hashField}}.jpg"></div>
+								</div>
+								<div class="carat">
+									<i class="icon ion-ios-person"></i>
+									<i class="icon ion-arrow-down-b"></i>
+								</div>
+							</div>
+							<ul class="dropdown-menu">
+								<div ng-repeat="item in NavController.dropdownOptions.player">
+									<li ui-sref="{{::item.route}}" ng-if="!(item.separator)" ng-cloak>
+										<i class="icon" ng-class="item.icon"></i>
+										{{::item.text}}
+									</li>
+									<li role="separator" class="divider" ng-if="(item.separator)" ng-cloak></li>
+								</div>
+							</ul>
+						</div>
+					</li>
+					<li class="nav-icon" ng-if="(NavController.playerInfo.PMC != undefined)" ng-cloak>
+						<div class="dropdown">
+							<div class="dropdown-toggle" data-toggle="dropdown">
+								<div class="square">
+									<div class="square-icon" ac-background-image background-image="images/avatars/pmc/main_{{NavController.playerInfo.PMC.hashField}}.jpg"></div>
+								</div>
+								<div class="carat">
+									<i class="icon ion-ios-people"></i>
+									<i class="icon ion-arrow-down-b"></i>
+								</div>
+							</div>
+							<ul class="dropdown-menu">
+								<div ng-repeat="item in NavController.dropdownOptions.pmc">
+									<li ui-sref="{{::item.route}}" ng-if="!(item.separator)" ng-cloak>
+										<i class="icon" ng-class="item.icon"></i>
+										{{::item.text}}
+									</li>
+									<li role="separator" class="divider" ng-if="(item.separator)" ng-cloak></li>
+								</div>
+							</ul>
+						</div>
+					</li>
+					<li class="nav-icon single-icon nav-mail-icon">
+						<div class="dropdown">
+							<div class="dropdown-toggle" data-toggle="dropdown">
+								<i class="icon ion-email"></i>
+								<div class="mail-number">{{NavController.totalMessages}}</div>
+							</div>
+							<ul class="dropdown-menu">
+								<div ng-repeat="item in NavController.dropdownOptions.mail">
+
+									<a href="{{(item.url || '#')}}" ng-if="!(item.separator)" ng-cloak>
+										<li ng-click="item.doFunction()">
+											<i class="icon" ng-class="item.icon"></i>
+											<span ng-bind="::item.text"></span>
+
+											<div class="pull-right" ng-if="item.value !== undefined">
+												<span class="value" ng-class="{'invisible': (item.value <= 0)}" ng-bind="item.value"></span>
+											</div>
+										</li>
+									</a>
+
+									<li role="separator" class="divider" ng-if="(item.separator)" ng-cloak></li>
+								</div>
+							</ul>
+						</div>
+					</li>
+					<li class="nav-icon single-icon logout">
+						<div class="dropdown">
+							<div class="dropdown-toggle" data-toggle="dropdown">
+								<i class="icon ion-more"></i>
+							</div>
+							<ul class="dropdown-menu go-right">
+								<li ng-click="NavController.askLogout()">
+									<i class="icon ion-log-out"></i>
+									Sign out
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+				<ul class="fade-animation-fast" id="nav-icons" ng-if="(NavController.displayIcons) && !(NavController.isLogged)" ng-cloak>
+					<li class="nav-icon single-icon logout">
+						<div class="dropdown">
+							<div class="dropdown-toggle" data-toggle="dropdown">
+								<i class="icon ion-more"></i>
+							</div>
+							<ul class="dropdown-menu go-right">
+								<a href="signup">
+									<li>
+										<i class="icon ion-clipboard"></i>
+										Register
+									</li>
+								</a>
+								<li ng-click="NavController.askLogout()">
+									<i class="icon ion-log-in"></i>
+									Sign in
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>

@@ -1,0 +1,56 @@
+
+<div class="modal-window">
+	<div class="modal-header">
+		<i class="icon ion-paper-airplane"></i>
+		<h2 class="modal-title">Personal Message</h2>
+	</div>
+
+	<div class="modal-body">
+		<div class="modal-body" id="modal-body">
+			<div class="message-receiver">
+				To:
+				<div class="circle unit-avatar">
+					<div class="small"
+					ac-background-image background-image="images/avatars/players/thumb_{{ModalController.options.receiver.hash}}.jpg">
+					</div>
+				</div>
+				<span class="receiver" ng-bind="ModalController.options.receiver.alias"></span>
+			</div>
+
+			<form class="send-message">
+				<div class="form-group title">
+					<div class="input-group">
+						<input type="text" class="form-control" id="messageInputTitle" ng-model="ModalController.modalTitle" placeholder="Message title. (cannot be empty)">
+					</div>
+					<div class="characters-remaining">{{ (ModalController.maxTitleCharacters - ModalController.modalTitle.length) }} characters remaining.</div>
+				</div>
+				<div class="form-group message">
+					<div class="input-group">
+						<textarea type="text" class="form-control" id="messageInputBody" ng-model="ModalController.modalMessage" placeholder="Type your message here. (cannot be empty)"></textarea>
+					</div>
+					<div class="characters-remaining">{{ (ModalController.maxMessageCharacters - ModalController.modalMessage.length) }} characters remaining.</div>
+				</div>
+				<div class="form-error">
+					<div class="error-message flip-animation" ng-if="(ModalController.currentError.length > 0)">
+						<i class="icon ion-alert-circled"></i> {{ ModalController.currentError }}
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+		<a class="section-button medium muted" role="button" ng-click="closeModal(false)">
+			<ul>
+				<li><i class="icon ion-arrow-left-c"></i></li>
+				<li>Cancel</li>
+			</ul>
+		</a>
+		<a class="section-button medium" role="button" ng-click="closeModal(true)">
+			<ul>
+				<li><i class="icon ion-android-send"></i></li>
+				<li>Send!</li>
+			</ul>
+		</a>
+	</div>
+</div>

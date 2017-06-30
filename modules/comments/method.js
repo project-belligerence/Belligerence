@@ -14,6 +14,7 @@
 		moduleName = "",
 		mainModel = CommentsModel;
 
+	exports.getComments = getComments;
 	exports.postComment = postComment;
 	exports.deleteComment = deleteComment;
 	exports.getEntityComments = getEntityComments;
@@ -24,9 +25,9 @@
 	function queryValues(req) {
 		return {
 			folderName: require('path').basename(__dirname),
-			allowedSortValues: ['createdAt'],
+			allowedSortValues: ['createdAt', 'totalCheers'],
 			allowedPostValues: {
-				typeValues: ['item', 'upgrade', 'intel', 'players', 'pmc']
+				typeValues: ['item', 'upgrade', 'intel', 'player', 'pmc']
 			},
 			generateWhereQuery:	function(req) {
 				var object = {};
@@ -52,24 +53,74 @@
 		});
 	}
 
+	function getComments(req, res) {
+
+		var commentType = req.params.type,
+			commentSubject = req.params.subject;
+
+		if (!API.methods.validateParameter(req, res, [
+			[commentType, 'string', queryValues(req).allowedPostValues.typeValues],
+			[commentSubject, 'string']
+		])) { return 0; }
+
+		var subjectTable = (function(v) {
+			switch (v) {
+				case "item": { return "items_table"; }
+				case "upgrade": { return "upgrades_table"; }
+				case "intel": { return "intel_tables"; }
+				case "player": { return "players_table"; }
+				case "pmc": { return "pmc_table"; }
+			}
+		})(commentType);
+		if (!API.methods.validate(req, res, [subjectTable])) { return 0; }
+
+		getEntityComments(req, res, subjectTable, commentSubject, function(comments) {
+			API.methods.sendResponse(req, res, true, "Returning comments", comments);
+		});
+	}
+
 	function getEntityComments(req, res, table, hash, done) {
 		if (!API.methods.validateParameter(req, res, [[[table, hash], 'string']])) { return 0; }
 
-		var COMMENTS_FUNC_QUERY = {where: {}, order:[['createdAt', "ASC"]], offset: Math.max(((req.query.commentPage) || 0), 0), limit: Math.max((req.query.commentLimit || 99), 1)},
+		var COMMENTS_FUNC_QUERY = {where: {}, order:[[(req.query.commentSort || 'createdAt'), (req.query.commentOrder || 'ASC')]], page: Math.max(((req.query.commentPage) || 0), 0), limit: Math.max((req.query.commentLimit || 99), 1)};
 
-			commenterAttr = "cmt.hashField as commenterHash, cmt.alias as commenterAlias",
-			queryQ = "main.*, " + commenterAttr + " FROM (`comments_tables` main) ",
+			COMMENTS_FUNC_QUERY.offset = (COMMENTS_FUNC_QUERY.limit * COMMENTS_FUNC_QUERY.page);
+
+		var commenterAttr = "cmt.hashField as commenterHash, cmt.alias as commenterAlias, " +
+			"(SELECT COUNT(*) FROM `cheers_tables` WHERE cheers_tables.target = main.hashField) AS totalCheers",
+			queryQ = "main.*, " + commenterAttr + " FROM (`comments_tables` main)",
 			joinQ =
 				"LEFT JOIN (`players_table` cmt) ON (cmt.hashField = main.commenterField)" +
 				"LEFT JOIN (`" + table + "` sbj) ON (sbj.hashField = main.subjectField)",
 			whereQ = 'sbj.hashField = "' + hash + '"';
 
 		API.methods.generateRawQuery(req, res, [queryQ, "main"], "", joinQ, whereQ, COMMENTS_FUNC_QUERY, function(data) {
-			var _ = require('lodash');
-			for (var i in data.rows) {
-				data.rows[i] = _.pick(data.rows[i], ['title', 'body', 'commenterHash', 'commenterAlias', 'createdAt']);
-			}
-			return done(data);
+			var i,j, mainHashes = [],
+				foundModels = data.rows,
+				CheersModel = require('./../index.js').getModels().cheers;
+
+			for (i=0; i < foundModels.length; i++) {mainHashes.push(foundModels[i].hashField);}
+
+			CheersModel.findAll({ where: {"targetHash": mainHashes, "senderHash": req.playerInfo.hashField, "typeField": "comment"}}).then(function(cheered) {
+				var cheeredHashes = [];
+
+				for (i in cheered) {
+					var cheerValue = cheered[i].dataValues;
+					cheeredHashes.push(cheerValue.targetHash);
+				}
+
+				for (i=0; i < foundModels.length; i++) {
+					var comparedHash = foundModels[i].hashField,
+						fIndex = cheeredHashes.indexOf(comparedHash);
+					data.rows[i].isCheered = (fIndex > -1);
+				}
+
+				var _ = require('lodash');
+				for (var i in data.rows) {
+					data.rows[i] = _.pick(data.rows[i], ['title', 'body', 'commenterHash', 'commenterAlias', 'totalCheers', 'isCheered', 'createdAt', 'hashField']);
+				}
+				return done(data);
+			});
 		});
 	}
 
@@ -102,8 +153,8 @@
 	function postComment(req, res) {
 
 		if (!API.methods.validateParameter(req, res, [
-			[req.body.title, 'string', config.numbers.modules.intel.titleLength],
-			[req.body.body, 'string', config.numbers.modules.intel.bodyMaxLength],
+			[req.body.title, 'string', config.numbers.modules.comments.titleLength],
+			[req.body.body, 'string', config.numbers.modules.comments.bodyMaxLength],
 			[req.body.type, 'string', queryValues(req).allowedPostValues.typeValues],
 			[req.body.subject, 'string']
 		])) { return 0; }
@@ -113,7 +164,7 @@
 				case "item": { return ItemModel; }
 				case "upgrade": { return UpgradesModel; }
 				case "intel": { return IntelModel; }
-				case "players": { return PlayerModel; }
+				case "player": { return PlayerModel; }
 				case "pmc": { return PMCModel; }
 			}
 		})(req.body.type);

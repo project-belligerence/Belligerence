@@ -12,3 +12,343 @@
 		@include transition(all $delay);
 	}
 }
+
+.ng-view-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeInRight;
+	$animationOut: fadeOutLeft;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-move,
+	&.ng-enter,
+	&.ng-leave,
+	&.ng-move.ng-move-active,
+	&.ng-enter.ng-enter-active,
+	&.ng-leave.ng-leave-active {
+		position: relative;
+		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 5);
+		animation-delay: ($delay_xfast / 5);
+	}
+}
+
+.ng-view-animation-units {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeInRight;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-move, &.ng-enter, &.ng-leave,
+	&.ng-move.ng-move-active, &.ng-enter.ng-enter-active, &.ng-leave.ng-leave-active {
+		position: relative;
+		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 2);
+		animation-delay: ($delay_xfast / 2);
+	}
+}
+
+.fade-animation {
+	&.ng-enter, &.ng-leave {
+		$easing: cubic-bezier(0.18, 1.10, 0.265, 0.95);
+		$delay: 0.5s;
+
+		position: absolute;
+		left: 0;
+		right: 0;
+
+		@include transition(all $delay $easing);
+	}
+
+	&.ng-enter { opacity: 0; }
+	&.ng-enter-active { opacity: 1; }
+	&.ng-leave { opacity: 1; }
+	&.ng-leave-active { opacity: 0; }
+}
+
+.fade-animation-slow {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-move,
+	&.ng-enter,
+	&.ng-leave,
+	&.ng-move.ng-move-active,
+	&.ng-enter.ng-enter-active,
+	&.ng-leave.ng-leave-active {
+		position: relative;
+		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.fade-animation-fast {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+ui-view { @extend .fade-animation; }
+
+.slide-sides-fade {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave.ng-leave-active {
+		position: absolute;
+		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.flip-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: flipInX;
+	$animationOut: flipOutX;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave.ng-leave-active {
+		position: absolute;
+		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.flip-animation2 {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: flipInX;
+	$animationOut: flipOutX;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.post-comment-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.15);
+
+	&.ng-leave.ng-leave-active {
+		position: absolute;
+		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.post-comment-animation2 {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.15);
+
+	&.ng-leave.ng-leave-active, &.ng-enter.ng-enter-active {
+		position: absolute;
+		width: 100%;
+		z-index: 9999999999;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+}
+
+.nav-menu-animation {
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: .5s;
+	$delay_out: .5s;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.15);
+
+	&.ng-leave.ng-leave-active {
+		// position: absolute;
+		// width: 100%;
+		z-index: 9999999999;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}

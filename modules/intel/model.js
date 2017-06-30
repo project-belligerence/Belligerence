@@ -89,7 +89,7 @@
 					foundModelsHashes.push(foundModels[i].hashField);
 				}
 
-				return CheersModel.findAll({ where: {"targetHash": foundModelsHashes}}).then(function(cheers) {
+				return CheersModel.findAll({ where: {"targetHash": foundModelsHashes, "typeField": "intel"}}).then(function(cheers) {
 		 			for (var i=0; i < foundModels.length; i++) {
 		 				var modelCheers = [],
 		 					currentModel = foundModels[i];

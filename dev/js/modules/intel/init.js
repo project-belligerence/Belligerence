@@ -6,7 +6,7 @@
 	angular.module((moduleName + 'Module'), [])
 		.controller((moduleName.toLowerCase() + 'Controller'), require("./controller").function)
 		.factory((moduleName.toLowerCase() + 'Services'), require("./services").function)
-		.directive((moduleName.toLowerCase() + 'Directive'), require("./directive").function)
+		.directive((moduleName.toLowerCase() + 'Directive'), ["$timeout", require("./directive").function])
 	;
 
 	exports.route = {

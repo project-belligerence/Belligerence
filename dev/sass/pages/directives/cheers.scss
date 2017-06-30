@@ -1,15 +1,21 @@
 .cheers-button {
 
+	$bg_dark_color: darken($cheer_background_color, 30%);
+	$bg_dark_color_active: darken($cheer_background_color_active, 10%);
+
 	.ion-minus {
 		position: relative;
 		top: 2px;
 	}
 
 	ul {
+		&:active > li, &:focus > li { box-shadow: 0px 0px 0px 0px $bg_dark_color;	}
+
 		li {
 			color: $main_background_color;
 			background-color: $cheer_background_color;
 			margin-bottom: 0;
+			box-shadow: 0px 2px 0px 0px $bg_dark_color;
 		}
 
 		&:hover {
@@ -22,9 +28,12 @@
 
 	.active {
 		> ul {
+			&:active > li, &:focus > li { box-shadow: 0px 0px 0px 0px $bg_dark_color_active;	}
+
 			li {
 				color: $main_text_color;
 				background-color: $cheer_background_color_active;
+				box-shadow: 0px 2px 0px 0px $bg_dark_color_active;
 			}
 
 			&:hover {

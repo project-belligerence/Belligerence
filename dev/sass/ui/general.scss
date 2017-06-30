@@ -35,3 +35,30 @@ input {
 		@include factor-property(height, 7);
 	}
 }
+
+i {
+	cursor: default;
+}
+
+a {
+	color: $main_color;
+	border-bottom: 1px dashed #fff;
+
+	&:hover, &:focus {
+		color: $main_color_dark;
+	}
+	i {
+		cursor: pointer;
+	}
+}
+
+.no-view {
+	height: 500px;
+	text-align: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	img {
+		width: 150px;
+	}
+}

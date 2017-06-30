@@ -5,44 +5,20 @@
 #fp-upper-section {
 	@include factor-property(margin-bottom, 10);
 
-	.ng-login-animation {
-		$delay_xfast: .25s;
-		$delay_fast: .5s;
-		$delay_slow: 1s;
-		$delay_xslow: 1.5s;
-
-		$animationIn: fadeInUp;
-		$animationOut: fadeOutLeft;
-
-		$delay_in: $delay_slow;
-		$delay_out: $delay_xfast;
-
-		$easing: cubic-bezier(1, -0.55, 0.265, 1.55);
-
-		&.ng-leave {
-			-webkit-animation: $animationOut $delay_out both $easing;
-			-moz-animation: $animationOut $delay_out both $easing;
-			animation: $animationOut $delay_out both $easing;
-		}
-
-		&.ng-enter {
-			-webkit-animation: $animationIn $delay_in both $easing;
-			-moz-animation: $animationIn $delay_in both $easing;
-			animation: $animationIn $delay_in both $easing;
-		}
-	}
-
 	#belligerence-logo {
 		position: relative;
 
 		#logo-img {
-			width: 90%;
+			$size_normal: 250px;
+			$size_small: 170px;
+
+			width: $size_normal;
 			display: block;
 			margin-left: auto;
 			margin-right: auto;
 
-			@include breakpoint('tiny') { width: 80%; }
-			@include breakpoint('small') { width: 80%; }
+			@include breakpoint('tiny') { width: $size_small; }
+			@include breakpoint('small') { width: $size_small; }
 		}
 
 		.content {
@@ -82,48 +58,4 @@
 			}
 		}
 	}
-
-	#fp-login-form {
-
-		margin-top: 18%;
-		margin-bottom: 80px;
-
-		@include breakpoint('medium') { margin-top: 9%; }
-
-		.input-group {
-			.input-group-addon { @include icon($icon_size_small); }
-		}
-
-		#submitDiv {
-			margin-left: -14px;
-			@include breakpoint('tiny') { margin-left: -25px; }
-		}
-
-		#loginInputSubmit {
-			@include factor-property(height, 16.2);
-			padding: 0 20px;
-
-			i { @include icon($icon_size_medium); }
-		}
-	}
-
-	#fp-join-call {
-		#join-call-text {
-			margin-right: 77px;
-			@include breakpoint('medium') {
-				margin-bottom: 10px;
-				display: block;
-			}
-		}
-	}
-}
-
-#fp-intro-container {
-	@include factor-property(margin-bottom, 15);
-}
-
-#fp-intel-container {
-	h2 { text-transform: uppercase; color: $main_text_color; }
-
-	@include factor-property(padding-top, 11);
 }

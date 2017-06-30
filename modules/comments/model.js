@@ -19,11 +19,15 @@
 				},
 				commenterField: { // hashField
 					type: DataTypes.STRING,
-					fielld: 'commentator'
+					field: 'commenterField'
 				},
 				subjectField: { // hashField
 					type: DataTypes.STRING,
-					fielld: 'subject'
+					field: 'subjectField'
+				},
+				cheersDetails: { // Dummy field that contains the hashes of all users that have cheered the content.
+					type: DataTypes.STRING,
+					field: 'cheers'
 				},
 				hashField: {
 					type: DataTypes.STRING,

@@ -1,0 +1,52 @@
+
+<div id="signup-page" class="container-fluid">
+	<div class="row">
+		<div class="container">
+
+			<div id="signup-intro" class="fade-animation-fast" ng-if="(CtrlSignup.currentStep === 0)" ng-cloak>
+				<h2>There's a war out there.</h2>
+
+				<div class="block">
+					Thank you for your interest in the Belligerence® initiative.
+				</div>
+				<div class="block">
+					Established in 2028, our organization aims to provide stable and profitable employment to entrepreneurs of the security sector, respecting the individuality and freedom of its members.
+				</div>
+				<div class="block">
+					After the global crisis which followed the fall of Greater Israel, the ensuing apocalyptic economic scenario forced many countries into complete bankrupcy, and its now unemployed citizens were then forced to find ways to make ends meet. Thus began the boom of the private defense industry, which after many legal battles fought over the years, is now a fully fledged recognized part of many international protocols.
+				</div>
+				<div class="block">
+					We hope you will join us in a bold and exciting adventure, and secure the future you deserve.
+				</div>
+			</div>
+
+			<div id="signup-intro" class="fade-animation-fast" ng-if="(CtrlSignup.currentStep === 1)" ng-cloak>
+				<h2>VEFIFICATION</h2>
+
+				<div class="block">
+					Before we get started, we must verify some of your credentials and documentation.
+				</div>
+				<div class="block">
+					Please log in with your Steam account.
+				</div>
+			</div>
+
+			<div id="signup-buttons">
+				<a class="section-button muted big" role="button" ng-click="CtrlSignup.changeStep(-1)"
+				ng-if="(CtrlSignup.currentStep > 0) || (CtrlSignup.currentStep === -1)" ng-cloak>
+					<ul>
+						<li class="icon"><i class="icon ion-chevron-left"></i></li>
+						<li>BACK</li>
+					</ul>
+				</a>
+				<a class="section-button big" role="button" ng-click="CtrlSignup.changeStep(1)" ng-if="(CtrlSignup.currentStep < 5)" ng-cloak>
+					<ul>
+						<li class="icon"><i class="icon ion-chevron-right"></i></li>
+						<li>CONTINUE</li>
+					</ul>
+				</a>
+			</div>
+
+		</div>
+	</div>
+</div>

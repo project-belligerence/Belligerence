@@ -22,6 +22,8 @@
 	exports.getSentPlayer = getSentPlayer;
 	exports.getSentPMC = getSentPMC;
 	exports.getReceivedPlayer = getReceivedPlayer;
+	exports.getReceivedPlayerFunc = getReceivedPlayerFunc;
+	exports.getReceivedPMCFunc = getReceivedPMCFunc;
 	exports.getReceivedPMC = getReceivedPMC;
 	exports.deleteEntry = deleteEntry;
 
@@ -192,7 +194,7 @@
 		if (!API.methods.validate(req, res, [(Object.keys(targets).length > 0)])) { return 0; }
 
 		mainModel.findAll(query.value).then(function(entries) {
-			if (!API.methods.validate(req, res, [(entries.length <= 0)], config.messages().duplicate_entry)) { return 0; }
+			if (!API.methods.validate(req, res, [(entries.length <= 0)], config.messages().modules.invites.invite_exists)) { return 0; }
 
 			models.pointA.findOne({where: targets.value.point_a}).then(function(object_A) {
 			models.pointB.findOne({where: targets.value.point_b}).then(function(object_B) {
@@ -215,7 +217,7 @@
 					if (query.value.where.point_d) update.pointD = query.value.where.point_d[0];
 
 					mainModel.sync({force: false}).then(function() {
-						mainModel.create(update).then(function(new_entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, new_entry); });
+						mainModel.create(update).then(function(new_entry) { API.methods.sendResponse(req, res, true, config.messages().modules.invites.invite_created, new_entry); });
 					});
 				});
 			});
@@ -371,6 +373,10 @@
 		});
 	}
 
+	function getReceivedPlayerFunc(req, res, cb) {
+		return getInvitesFunc(req, res, "player", ["b"], cb);
+	}
+
 	function getSentPMC(req, res) {
 		getInvitesFunc(req, res, "pmc", ["a"], function(entries) {
 			API.methods.sendResponse(req, res, true, config.messages().return_entries, entries);
@@ -381,6 +387,10 @@
 		getInvitesFunc(req, res, "pmc", ["b"], function(entries) {
 			API.methods.sendResponse(req, res, true, config.messages().return_entries, entries);
 		});
+	}
+
+	function getReceivedPMCFunc(req, res, cb) {
+		return getInvitesFunc(req, res, "pmc", ["b"], cb);
 	}
 
 	function get(req, res) {

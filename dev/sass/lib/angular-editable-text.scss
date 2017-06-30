@@ -1,0 +1,28 @@
+
+.gg-editable-text {
+	.original-text {
+		&:hover, .gg-editable-text.editing { cursor: pointer; }
+	}
+
+	input { border:dashed #ccc 1px; }
+
+	textarea, input {
+		background: inherit;
+		color: inherit;
+		font: inherit;
+		border: inherit;
+		width: 100%;
+		padding: inherit;
+		margin: 0;
+		height:inherit;
+		-webkit-font-smoothing: inherit;
+		line-height:inherit;
+		display: inline-block;
+		text-decoration: inherit;
+
+		&:focus { outline: 0; }
+	}
+
+	span { text-decoration: inherit; }
+
+}

@@ -1,0 +1,302 @@
+
+<div id="avatar-container" class="pmc-view" ng-class="{'long': (CtrlDashboard.longAvatarView)}">
+	<div class="slide-sides-fade" ng-if="(CtrlDashboard.uploadAvatarView == 'view')" ng-swipe-left="CtrlDashboard.viewAvatarUpload('edit')">
+
+		<div class="meta text-center">
+			<span>Outfit Emblem</span>
+			<i
+				class="icon ion-help-circled helper small"
+				popover-trigger="'mouseenter'"
+				popover-class="tooltip"
+				uib-popover="Choose your Outfit Emblem. Mobile users can swipe left/right to switch screens."
+			></i>
+		</div>
+
+		<div id="unit-avatar" class="pmc">
+			<div class="hexagon avatar-large">
+				<div class="in1"><div class="in2">
+
+					<div class="big" ac-background-image background-image="images/avatars/pmc/main_{{CtrlDashboard.pmcInfo.hashField}}.jpg">
+					</div>
+
+					<a class="btn btn-default swap-view" ng-click="CtrlDashboard.viewAvatarUpload('edit')">
+						<i class="icon medium ion-arrow-swap"></i>
+					</a>
+
+				</div></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="slide-sides-fade" ng-if="(CtrlDashboard.uploadAvatarView == 'edit')" id="editing-view" ng-swipe-right="CtrlDashboard.viewAvatarUpload('view')">
+
+		<div id="buttons">
+			<a
+				class="section-button medium animated" role="button"
+
+				ngf-select
+				ngf-drop
+
+				ng-model="CtrlDashboard.filePMC"
+
+				ngf-max-size="3MB"
+			>
+				<ul>
+					<li><i class="icon ion-ios-camera"></i></li>
+					<li>Select picture</li>
+				</ul>
+			</a>
+
+			<a
+				class="section-button medium animated" role="button"
+
+				ng-click="CtrlDashboard.uploadAvatarPMC(croppedDataUrl, CtrlDashboard.filePMC)"
+				ng-if="(croppedDataUrl.length > 100)"
+			>
+				<ul>
+					<li><i class="icon ion-upload"></i></li>
+					<li>Upload</li>
+				</ul>
+			</a>
+
+			<a class="pull-right btn btn-default" ng-click="CtrlDashboard.viewAvatarUpload('view')">
+				<i class="icon tiny ion-close"></i>
+			</a>
+		</div>
+
+		<div class="row" id="avatar-upload-form">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-9 col-sm-7">
+						<form name="avatarPictureForm" enctype="multipart/form-data">
+							<div ngf-drop ng-model="CtrlDashboard.filePMC" ngf-pattern="image/*" class="crop-area">
+
+								<div class="upload-text">
+									<i class="icon medium ion-arrow-down-a"></i><br>
+									Or just drag and drop/paste your picture here.
+								</div>
+
+								<img-crop
+									ng-init="croppedDataUrl=''"
+
+									image="CtrlDashboard.filePMC | ngfDataUrl"
+
+									area-type="square"
+
+									result-image="croppedDataUrl"
+									result-image-size="350"
+								>
+								</img-crop>
+
+							</div>
+						</form>
+					</div>
+
+					<div class="col-md-3 col-sm-5">
+						<h3>Preview:</h3>
+						<div id="preview-image"><img ng-src="{{croppedDataUrl}}" /></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="editable">
+
+	<div class="meta text-center">
+		<span>Name</span>
+		<i
+			class="icon ion-help-circled helper small"
+			popover-trigger="'mouseenter'"
+			popover-class="tooltip"
+			uib-popover="Name your Outfit (Max. of 32 characters)"
+		></i>
+	</div>
+
+	<h2
+		class="name text-center"
+		editable-text="CtrlDashboard.pmcInfo.display_name"
+		on-change="CtrlDashboard.editFieldPMC('displayname', value)"
+	></h2>
+
+	<div class="static text-center">
+		<ul>
+			<li>
+				<i
+					class="icon ion-calendar"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Creation date"
+				></i>
+				<span ng-bind="::CtrlDashboard.pmcInfo.createdAt | date"></span>
+			</li>
+			<li>
+				<i
+					class="icon ion-ios-people"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Members"
+				></i>
+				<span ng-bind="::CtrlDashboard.pmcInfo.totalPlayers"></span> / <span ng-bind="::CtrlDashboard.pmcInfo.size"></span>
+			</li>
+			<li>
+				<i
+					class="icon ion-star"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Prestige points"
+				></i>
+				<span ng-bind="::CtrlDashboard.pmcInfo.prestige"></span>
+			</li>
+		</ul>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="editable-field">
+						<div class="meta">
+							<span>Motto</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="What sort of motto describes your Outfit? (Max. of 128 characters)"
+							></i>
+						</div>
+						<blockquote>
+							<div
+								editable-text="CtrlDashboard.pmcInfo.motto"
+								on-change="CtrlDashboard.editFieldPMC('motto', value)"
+							></div>
+						</blockquote>
+					</div>
+
+					<div class="editable-field">
+						<div class="meta">
+							<span>About</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Describe your Outfit. (Max. of 255 characters)"
+							></i>
+						</div>
+						<blockquote>
+							<div
+								editable-text="(CtrlDashboard.pmcInfo.bio || 'No description.')"
+								on-change="CtrlDashboard.editFieldPMC('bio', value)"
+							></div>
+						</blockquote>
+					</div>
+
+					<div class="editable-field">
+						<div class="meta">
+							<span>Tags</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Choose a few terms that define your Outfit. (Max. of 5 tags)"
+							></i>
+						</div>
+
+						<tags-input
+							ng-model="CtrlDashboard.pmcInfo.tags"
+							id="player-tags"
+
+							add-on-blur="false"
+
+							min-tags="1"
+							max-tags="5"
+
+							on-tag-adding="CtrlDashboard.addingTagPMC($tag)"
+							on-tag-removing="CtrlDashboard.removingTagPMC($tag)"
+						>
+							<auto-complete
+								source="CtrlDashboard.suggestedTags($query)"
+								min-length="1"
+								max-results-to-show="5"
+							></auto-complete>
+						</tags-input>
+
+						Example of tags:
+						<ul class="tags-example">
+							<li ng-repeat="tag in ['Tactical', 'Casual', 'Teamwork']" ng-click="CtrlDashboard.addTagPMC(tag)">{{tag}}</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="editable-field">
+						<div class="meta">
+							<span>Location</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Where is your Outfit located? (Max. of 32 characters)"
+							></i>
+						</div>
+
+						<div
+							editable-text="CtrlDashboard.pmcInfo.location"
+							on-change="CtrlDashboard.editFieldPMC('location', value)"
+						></div>
+					</div>
+
+					<div class="editable-field">
+						<div class="meta">
+							<span>Member titles</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Describe titles for your members. (Max. of 32 characters)"
+							></i>
+						</div>
+
+						<div class="tier-item" ng-repeat="tier in CtrlDashboard.pmcInfo.tier_names">
+							<div class="tier-meta">
+								Tier <span class="number">{{ $index }}</span>
+								<i class="icon ion-arrow-right-b"></i>
+							</div>
+							<div
+								editable-text="tier"
+								on-change="CtrlDashboard.editPMCTierNames($index, value)"
+							></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<form class="editable-field">
+		<div class="form-group">
+			<div class="extra-input">
+				<input
+					type="checkbox" id="input-1"
+					ng-change="CtrlDashboard.changeValuePMC('open_applications')"
+					ng-model="(CtrlDashboard.optionValues.open_applications)"
+				>
+				<label class="input-label" for="input-1">
+					<div class="body check">
+						<div class="box"><i class="icon ion-checkmark small"></i></div>
+						<span>Open for applications?</span>
+					</div>
+				</label>
+				<i
+					class="icon ion-help-circled helper small"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Allow unemployed Operators to apply to join your Outfit."
+				></i>
+			</div>
+		</div>
+	</form>
+
+</div>

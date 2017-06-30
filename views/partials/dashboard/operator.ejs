@@ -1,0 +1,274 @@
+
+<div id="avatar-container" class="player-view" ng-class="{'long': (CtrlDashboard.longAvatarView)}">
+	<div class="slide-sides-fade" ng-if="(CtrlDashboard.uploadAvatarView == 'view')" ng-swipe-left="CtrlDashboard.viewAvatarUpload('edit')">
+
+		<div class="meta text-center">
+			<span>Avatar</span>
+			<i
+				class="icon ion-help-circled helper small"
+				popover-trigger="'mouseenter'"
+				popover-class="tooltip"
+				uib-popover="Choose your profile picture. Mobile users can swipe left/right to switch screens."
+			></i>
+		</div>
+
+		<div id="unit-avatar" class="player">
+			<div class="hexagon avatar-medium">
+				<div class="in1"><div class="in2">
+
+					<div class="big" ac-background-image background-image="images/avatars/players/main_{{CtrlDashboard.playerInfo.hashField}}.jpg">
+					</div>
+
+					<a class="btn btn-default swap-view" ng-click="CtrlDashboard.viewAvatarUpload('edit')">
+						<i class="icon medium ion-arrow-swap"></i>
+					</a>
+
+				</div></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="slide-sides-fade" ng-if="(CtrlDashboard.uploadAvatarView == 'edit')" id="editing-view" ng-swipe-right="CtrlDashboard.viewAvatarUpload('view')">
+
+		<div id="buttons">
+			<a
+				class="section-button medium animated" role="button"
+
+				ngf-select
+				ngf-drop
+
+				ng-model="CtrlDashboard.file"
+
+				ngf-pattern="'image/*'"
+				ngf-accept="'image/*'"
+				ngf-max-size="3MB"
+			>
+				<ul>
+					<li><i class="icon ion-ios-camera"></i></li>
+					<li>Select picture</li>
+				</ul>
+			</a>
+
+			<a
+				class="section-button medium animated" role="button"
+
+				ng-click="CtrlDashboard.uploadAvatar(croppedDataUrl, CtrlDashboard.file)"
+				ng-if="(croppedDataUrl.length > 100)"
+			>
+				<ul>
+					<li><i class="icon ion-upload"></i></li>
+					<li>Upload</li>
+				</ul>
+			</a>
+
+			<a class="pull-right btn btn-default" ng-click="CtrlDashboard.viewAvatarUpload('view')">
+				<i class="icon tiny ion-close"></i>
+			</a>
+		</div>
+
+		<div class="row" id="avatar-upload-form">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-9 col-sm-7">
+						<form name="avatarPictureForm" enctype="multipart/form-data">
+							<div ngf-drop ng-model="CtrlDashboard.file" ngf-pattern="image/*" class="crop-area">
+
+								<div class="upload-text">
+									<i class="icon medium ion-arrow-down-a"></i><br>
+									Or just drag and drop/paste your picture here.
+								</div>
+
+								<img-crop
+									image="CtrlDashboard.file | ngfDataUrl"
+									result-image="croppedDataUrl" ng-init="croppedDataUrl=''"
+									area-type="square"
+									result-image-size="350"
+								>
+								</img-crop>
+
+							</div>
+						</form>
+					</div>
+
+					<div class="col-md-3 col-sm-5">
+						<h3>Preview:</h3>
+						<div id="preview-image"><img ng-src="{{croppedDataUrl}}" /></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="editable">
+
+	<div class="meta text-center">
+		<span>Name</span>
+		<i
+			class="icon ion-help-circled helper small"
+			popover-trigger="'mouseenter'"
+			popover-class="tooltip"
+			uib-popover="What are you called? (Max. of 32 characters)"
+		></i>
+	</div>
+
+	<h2
+		class="name text-center"
+		editable-text="CtrlDashboard.playerInfo.aliasField"
+		on-change="CtrlDashboard.editField('alias', value)"
+	></h2>
+
+	<div class="static text-center">
+		<ul>
+			<li>
+				<i
+					class="icon"
+					ng-class="CtrlDashboard.displayContract(CtrlDashboard.playerInfo.contractType).icon"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Type of Contract"
+				></i>
+				<span ng-bind="::CtrlDashboard.displayContract(CtrlDashboard.playerInfo.contractType).name"></span>
+			</li>
+			<li>
+				<i
+					class="icon ion-calendar"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Member since"
+				></i>
+				<span ng-bind="::CtrlDashboard.playerInfo.createdAt | date"></span>
+			</li>
+			<li>
+				<i
+					class="icon ion-steam"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Steam ID"
+				></i>
+				<span ng-bind="::CtrlDashboard.playerInfo.steamIDField"></span>
+			</li>
+		</ul>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="editable-field">
+						<div class="meta">
+							<span>About</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Tell us about yourself. (Max. of 255 characters)"
+							></i>
+						</div>
+						<blockquote>
+							<div
+								editable-text="CtrlDashboard.playerInfo.bioField"
+								on-change="CtrlDashboard.editField('bio', value)"
+							></div>
+						</blockquote>
+					</div>
+
+					<div class="editable-field">
+						<div class="meta">
+							<span>Location</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Where are you located? (Max. of 32 characters)"
+							></i>
+						</div>
+
+						<div
+							editable-text="CtrlDashboard.playerInfo.locationField"
+							on-change="CtrlDashboard.editField('location', value)"
+						></div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="editable-field">
+						<div class="meta">
+							<span>E-mail</span>
+							<i
+								class="icon ion-help-circled helper small"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="Your e-mail will not be displayed for all by default. (Max. of 32 characters)"
+							></i>
+						</div>
+
+						<div
+							editable-text="CtrlDashboard.playerInfo.emailField"
+							on-change="CtrlDashboard.editField('email', value)"
+						></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="editable-field">
+		<div class="meta">
+			<span>Tags</span>
+			<i
+				class="icon ion-help-circled helper small"
+				popover-trigger="'mouseenter'"
+				popover-class="tooltip"
+				uib-popover="Choose a few terms that define you as an individual. (Max. of 5 tags)"
+			></i>
+		</div>
+
+		<tags-input
+			ng-model="CtrlDashboard.playerInfo.tagsField"
+			id="player-tags"
+
+			add-on-blur="false"
+
+			min-tags="1"
+			max-tags="5"
+
+			on-tag-adding="CtrlDashboard.addingTag($tag)"
+			on-tag-removing="CtrlDashboard.removingTag($tag)"
+		>
+			<auto-complete
+				source="CtrlDashboard.suggestedTags($query)"
+				min-length="1"
+				max-results-to-show="5"
+			></auto-complete>
+		</tags-input>
+
+		Example of tags:
+		<ul class="tags-example">
+			<li ng-repeat="tag in ['Newbie', 'Relaxed', 'Serious']" ng-click="CtrlDashboard.addTag(tag)">{{tag}}</li>
+		</ul>
+	</div>
+
+<!-- 	<form>
+		<div class="form-group">
+			<div class="input-group">
+
+				<div class="extra-input noselect">
+					<input
+						type="checkbox" id="input-1"
+						ng-change="CtrlDashboard.changeValue('value1')"
+						ng-model="CtrlDashboard.optionValues.value1"
+					>
+					<label class="input-label" for="input-1">
+						<div class="body check">
+							<div class="box"><i class="icon ion-checkmark small"></i></div>
+							<span>Do the thing?</span>
+						</div>
+					</label>
+				</div>
+
+			</div>
+		</div>
+	</form> -->
+</div>

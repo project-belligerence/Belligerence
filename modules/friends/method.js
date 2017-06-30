@@ -23,6 +23,8 @@
 	exports.getFriendsPMCFunc = getFriendsPMCFunc;
 	exports.getFriendsAllFunc = getFriendsAllFunc;
 
+	exports.removeFriend = removeFriend;
+
 	exports.queryValues = queryValues;
 
 	function queryValues(req) {
@@ -43,6 +45,21 @@
 		mainModel.findAndCountAll(API.methods.generatePaginatedQuery(req, res, queryValues(req))).then(function(entries) {
 			if (!API.methods.validate(req, res, [entries], config.messages().no_entries)) { return 0; }
 			API.methods.sendResponse(req, res, true, config.messages().return_entries, entries);
+		});
+	}
+
+	function removeFriend(req, res) {
+		mainModel.findOne({
+			where: {
+				friendAHash: [req.playerInfo.hashField, req.body.friend_hash],
+				friendBHash: [req.playerInfo.hashField, req.body.friend_hash],
+				friendType: "player"
+			}
+		}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
+			entry.destroy().then(function() {
+				API.methods.sendResponse(req, res, true, config.messages().modules.friends.friend_removed, "");
+			});
 		});
 	}
 

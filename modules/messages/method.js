@@ -16,6 +16,7 @@
 	exports.getSent = getSent;
 	exports.getReceived = getReceived;
 	exports.put = put;
+	exports.countReceived = countReceived;
 
 	function queryValues(req) {
 		return {
@@ -109,6 +110,20 @@
 		});
 	}
 
+	function countReceived(req, res) {
+		var queryValuesDone = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
+
+			queryValuesDoneMessage = queryValuesDone.where.object,
+			queryValuesDonePlayer = queryValuesDone.where.objectPlayer;
+
+		return mainModel.count({
+			include: [
+				{ model: PlayerModel, as: 'Receiver', attributes: ['aliasField', 'hashField'], where: { 'hashField': req.playerInfo.hashField } }
+			],
+			where: {'readField': 0}
+		});
+	}
+
 	function getSent(req, res) {
 
 		req.query.PARAM_SENT = true;
@@ -188,7 +203,7 @@
 
 					entry.setReceiver(receiver).then(function() {
 						entry.setSender(sender).then(function() {
-							API.methods.sendResponse(req, res, true, config.messages().new_entry);
+							API.methods.sendResponse(req, res, true, config.messages().modules.messages.new_message);
 						});
 					});
 				});

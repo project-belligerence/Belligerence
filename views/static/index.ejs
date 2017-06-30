@@ -5,9 +5,18 @@
 		<% include ../components/singletons/styles %>
 	</head>
 	<body>
-		<div id="placeholderNav" style="margin-bottom: 200px"></div>
-		<ui-view autoscroll="true"></ui-view>
-		<% include ../components/singletons/dev %>
-		<% include ../components/singletons/js %>
+		<div id="page-top" style="padding-top: 100px;">
+
+			<ui-view autoscroll="false">
+				<% include ../components/no-view %>
+			</ui-view>
+
+			<nav-directive></nav-directive>
+
+			<alerts-directive></alerts-directive>
+
+			<% include ../components/singletons/dev %>
+			<% include ../components/singletons/js %>
+		</div>
 	</body>
 </html>

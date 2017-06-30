@@ -1,0 +1,169 @@
+
+/* ==============================
+
+	MODAL WINDOW
+		.modal
+
+================================= */
+
+.modal-backdrop {
+	background-color: #000;
+
+	width: 100%;
+	height: 100%;
+
+	opacity: 0;
+
+	&.in { opacity: 0.7; }
+}
+
+.modal {
+	.modal-content {
+		margin-top: 20%;
+
+		.modal-window {
+			.modal-header {
+				background-color: $main_color;
+				color: $main_text_color;
+				border-radius: 0px;
+				@include font-size(factor(4));
+				@include factor-property(padding-left, 4);
+
+				i {
+					@include font-size(factor(4));
+					@include factor-property(margin-right, 1);
+				}
+
+				h2 {
+					@include font-size(factor(4));
+					color: $main_text_color;
+					display: inline-block;
+				}
+			}
+
+			.modal-body {
+				@include font-size(factor(3));
+				color: $main_background_color;
+
+				.message-receiver {
+					position: relative;
+					top: -25px;
+
+					.receiver {
+						padding: factor(0.5) factor(1);
+						@include factor-property(margin-left, 1);
+						font-family: $main_font;
+						background-color: $main_color;
+						color: #fff;
+					}
+					.unit-avatar {
+						@include factor-property(margin-left, 2);
+						display: inline-block;
+						position: relative;
+
+						top: 27px;
+					}
+				}
+
+				.send-message {
+
+					blockquote { border-left: 5px solid $main_color; }
+
+					.report-reason {
+						@include factor-property(margin-top, 2);
+						display: inline-block;
+
+						.dropdown {
+							@include factor-property(margin-left, 1);
+							display: inline-block;
+
+							button {
+								@include font-size(factor(2.5));
+								box-shadow: none;
+								color: $main_text_color;
+
+								&:active, &:focus {
+									box-shadow: none; transform: translateY(0px);
+									background-color: $main_color_dark;
+								}
+							}
+						}
+					}
+
+					.form-error {
+						height: 30px;
+						color: $main_color;
+
+						i {
+							@include factor-property(margin-right, 1);
+						}
+					}
+
+					.form-group {
+						@include factor-property(margin-bottom, 3);
+						&.title {
+							.form-control {
+								font-weight: bold;
+								@include font-size(factor(3));
+								padding: 0;
+								border-bottom: solid 1px #777;
+							}
+						}
+						.characters-remaining { @include font-size(factor(2)); }
+
+						.input-group {
+							display: inline-block;
+							width: 100%;
+						}
+						.form-control {
+							@include font-size(factor(2.5));
+							&:focus {
+								box-shadow: 0px 0px #000;
+							}
+						}
+					}
+				}
+			}
+
+			.modal-footer {
+				border-radius: 0px;
+
+				a {
+					@include factor-property(margin-left, 1);
+				}
+			}
+
+			@include breakpoint('small') {
+
+				.modal-header {
+					padding: factor(0.5) factor(2);
+
+					.icon { @include font-size(factor(3)) }
+					h2.modal-title { @include font-size(factor(2.5));	}
+				}
+
+				.section-button {
+					&.medium {
+						li {
+							padding: factor(0.5) factor(1);
+							@include factor-property(margin-bottom, 2);
+						}
+
+						@include font-size($button_font_size_small);
+					}
+				}
+
+				.receiver {
+					@include factor-property(margin-top, 4);
+					display: inline-block;
+					text-align: center;
+				}
+
+				#messageInputBody {
+					@include factor-property(height, 20);
+				}
+			}
+
+		}
+	}
+}

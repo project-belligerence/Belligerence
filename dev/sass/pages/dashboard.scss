@@ -1,0 +1,401 @@
+
+#db-container {
+	overflow-x: hidden;
+	@include factor-property(min-height, 70);
+
+	#bar-container {
+		z-index: 999;
+
+		position: fixed;
+		bottom: 0;
+		left: 0;
+
+		width: inherit;
+		overflow-x: scroll;
+
+		background-color: #222;
+
+		#small-bar {
+
+			font-family: $main_font;
+			text-transform: uppercase;
+
+			width: 710px;
+
+			@include factor-property(padding-bottom, 1.5);
+
+			li {
+				display: inline-block;
+				color: #333;
+
+				margin-right: 1px;
+
+				&:last-child { margin-right: 0px; }
+
+				a {
+					@include factor-property(height, 10);
+					@include font-size(factor(2));
+
+					padding-right: 20px;
+					padding-left: 20px;
+
+					i {
+						@include font-size(factor(3));
+					}
+					span {
+						display: block;
+					}
+				}
+			}
+		}
+	}
+
+	#db-sidebar {
+		#db-sidebar-ul {
+
+			font-family: $main_font;
+			text-transform: uppercase;
+
+			position: fixed;
+
+			li {
+				margin-bottom: 3px;
+
+				a {
+					@include font-size(factor(2));
+
+					.icon {
+						@include font-size(factor(4));
+						@include factor-property(margin-right, 2);
+						@include factor-property(margin-left, 1);
+					}
+
+					width: 160px;
+					@include factor-property(padding, 2);
+
+					text-align: left;
+
+					.text {
+						position: relative;
+						top: -5px;
+					}
+				}
+			}
+
+			@include breakpoint('medium') {
+				@include factor-property(top, 14);
+
+				li {
+					a {
+						@include factor-property(padding, 0.2);
+						padding-top: 5px;
+
+						.icon {
+							@include factor-property(margin-left, 2);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.no-view {
+		position: absolute;
+		margin-top: 150px;
+		height: 300px;
+		z-index: -1;
+		img { width: 50px; }
+	}
+
+	#db-content {
+		@include font-size(factor(3));
+		p { width: 95%; }
+
+		.meta {
+			@include factor-property(margin-bottom, 2);
+			@include factor-property(padding, 2);
+
+			background-color: $main_color;
+			color: #ddd;
+
+			display: block;
+
+			span {
+				font-family: $main_font;
+				text-transform: uppercase;
+			}
+
+			// If it all fails move it back to a span
+			// span {}
+
+			&.small {
+				@include factor-property(padding, 1);
+			}
+		}
+
+		.editable {
+			h2 {
+				&.name { text-align: center; }
+
+				@include transition(all 0.25s);
+
+				text-shadow: 0px 0px 0px $main_color_light;
+				color: $main_color;
+
+				margin: 0 0 30px 0;
+
+				&:hover {
+					text-shadow: 0px 0px 10px $main_color_light;
+					color: #ddd;
+				}
+
+				&.gg-editable-text {
+					&.editing {
+						@include factor-property(padding, 2);
+						background-color: #eee;
+
+						&:hover { color: $main_color; }
+					}
+				}
+			}
+
+			.text-center { .gg-editable-text textarea, input { text-align: center; } }
+
+			.editable-field {
+				@include factor-property(margin-bottom, 6);
+
+				.gg-editable-text {
+					display: inline;
+					@include transition(all 0.25s);
+
+					&:hover { color: $main_color; }
+
+					&.editing {
+						@include factor-property(padding, 2);
+
+						background-color: #eee;
+						color: $main_color;
+					}
+				}
+
+				.meta span {
+					@include factor-property(padding-left, 1);
+				}
+
+				.tier-item {
+					@include factor-property(margin-bottom, 2);
+
+					.gg-editable-text {
+						&.editing {
+							display: inline-block;
+							width: 70%;
+						}
+					}
+
+					.tier-meta {
+						@include font-size(factor(3));
+						@include factor-property(margin-bottom, 1);
+						@include factor-property(margin-right, 2);
+
+						display: inline-block;
+
+						color: $main_text_color;
+
+						.number {
+							@include factor-property(margin-right, 1);
+							@include font-size(factor(4));
+							color: $main_color;
+						}
+					}
+				}
+			}
+
+			.static {
+				@include font-size(factor(3.5));
+				@include factor-property(margin-bottom, 5);
+
+				i { @include factor-property(margin-right, 1); }
+
+				ul {
+					li {
+						display: inline-block;
+						@include factor-property(margin-right, 3);
+						@include factor-property(margin-bottom, 1);
+					}
+				}
+			}
+
+			.tags-example {
+				display: inline-block;
+				@include factor-property(margin-top, 1);
+				li {
+					@include factor-property(height, 5);
+					@include transition(all 0.25s);
+					@include factor-property(margin-right, 1);
+					display: inline-block;
+
+					cursor: pointer;
+					border-bottom: 1px solid $main_color;
+
+					&:hover { border-bottom: 3px solid $main_color; }
+				}
+			}
+		}
+
+		#dashboard-view {
+
+			#avatar-container {
+				@include factor-property(margin-bottom, 3);
+				@include transition(min-height 0.5s);
+
+				.meta { @include factor-property(margin-bottom, 3);	}
+
+				&.player-view {
+					min-height: 300px;
+					&.long { min-height: 420px; }
+				}
+
+				&.pmc-view {
+					min-height: 435px;
+					&.long { min-height: 425px; }
+				}
+
+				.hexagon.avatar-medium .big:hover > .swap-view, .hexagon.avatar-large .big:hover > .swap-view {
+					top: -60%;
+					display: none;
+				}
+
+				.crop-area {
+					@include transition(border 0.25s);
+					overflow: hidden;
+					width: auto;
+					height: 350px;
+
+					// box-shadow: 0px 0px 30px black;
+					border: 7px dashed #ddd;
+
+					&:hover { border: 7px dashed $main_color; }
+
+					img-crop {
+						position: relative;
+						top: -140px;
+					}
+				}
+
+				#unit-avatar {
+					position: relative;
+
+					&:hover .swap-view { top: -140px; }
+					&.pmc { &:hover .swap-view { top: -210px; } }
+					&.pmc .swap-view { @include breakpoint('medium') { top: -210px; } }
+
+					.swap-view {
+						@include transition(top 0.25s);
+
+						position: relative;
+
+						top: 0px;
+						left: 43%;
+
+						@include breakpoint('medium') { top: -140px; }
+
+						z-index: 999;
+					}
+				}
+
+				#editing-view {
+
+					#buttons {
+						@include factor-property(margin-bottom, 2);
+
+						a.section-button {
+							@include factor-property(margin-right, 1);
+
+							@include breakpoint('medium') { @include factor-property(margin-bottom, 1); }
+						}
+					}
+
+					#preview-image {
+						img {
+							width: auto;
+							height: 200px;
+							box-shadow: 0px 0px 30px black;
+						}
+					}
+
+					#avatar-upload-form {
+						.upload-text {
+							position: relative;
+							text-align: center;
+
+							width: 250px;
+
+							left: 50%;
+							top: 50px;
+							@include prefix(transform, translate(-50%, 50px));
+						}
+					}
+				}
+			}
+
+			#stats-container {
+				@include factor-property(margin-top, 10);
+				@include factor-property(padding-bottom, 50);
+
+				.single-stat {
+					@include factor-property(margin-bottom, 10);
+
+					h2 { @include font-size(factor(4));	}
+
+					.number {
+						font-family: $main_font;
+						@include font-size(factor(7));
+
+						$animationIn: fadeInUp;
+						$animationOut: fadeOutUp;
+
+						$delay_in: 0.25s;
+						$delay_out: 0.25s;
+
+						$easing: cubic-bezier(0.90, -0.55, 0.265, 0.55);
+
+						-webkit-animation: $animationIn $delay_in both $easing;
+						-moz-animation: $animationIn $delay_in both $easing;
+						animation: $animationIn $delay_in both $easing;
+
+						&.animate {
+							-webkit-animation: $animationOut $delay_out both $easing;
+							-moz-animation: $animationOut $delay_out both $easing;
+							animation: $animationOut $delay_out both $easing;
+						}
+					}
+				}
+			}
+
+			#allies-container {
+				.meta.main { @include factor-property(margin-bottom, 7); }
+
+				#tabs {
+					a {
+						li {
+							@include breakpoint('medium') {
+								@include factor-property(width, 16);
+								@include font-size(factor(2.5));
+								i {	@include font-size(factor(4)); }
+								padding: factor(2) factor(2);
+							}
+							@include breakpoint('small') {
+								@include factor-property(width, 12);
+								@include font-size(factor(2));
+								i {	@include font-size(factor(3)); }
+								padding: factor(2) factor(2);
+								margin-right: 0px;
+							}
+
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,17 @@
+
+
+<h2>Stats</h2>
+
+<div class="container" id="stats-container">
+	<div class="row">
+		<div class="col-md-10">
+			<div class="col-md-3 col-sm-3" ng-repeat="stat in CtrlDashboard.statsItems">
+				<div class="single-stat text-center">
+					<i class="icon huge" ng-class="stat.icon"></i>
+					<div class="number">{{CtrlDashboard.playerInfo[stat.value]}}</div>
+					<h2>{{stat.text}}</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

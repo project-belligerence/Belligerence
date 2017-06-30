@@ -35,6 +35,19 @@
 		},
 		modules: {
 			stores: {}
+		},
+
+		response_status: {
+			generic_error: 400,
+			generic_success: 200,
+
+			forbidden: 403,
+
+			sub_code: {
+				banned: 10,
+				no_token: 11,
+				bad_token: 12
+			}
 		}
 	};
 })();

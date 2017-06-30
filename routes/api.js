@@ -6,7 +6,6 @@
 	var	config = require('../config.js'),
 		PlayerModel = require('./../modules/index.js').getModels().players,
 		PMCModel = require('./../modules/index.js').getModels().pmc,
-		API = require('../routes/api.js'),
 		jwt = require('jsonwebtoken'),
 
 		sentMessage, sentResponse;
@@ -48,6 +47,7 @@
 		removeIndexFromArray: removeIndexFromArray,
 		generateRawQuery: generateRawQuery,
 		getBoolean: getBoolean,
+		boolToString: boolToString,
 		generatePaginatedQuery: generatePaginatedQuery
 	};
 
@@ -57,7 +57,9 @@
 		if (token) {
 			jwt.verify(token, config.db.secretKey, function(err, decoded) {
 				if (err) {
-					res.status(403).json(new config.methods.generateResponse(err.message, '', false));
+					var r_status = config.enums.response_status;
+					return sendResponse(req, res, false, err.message, '', r_status.forbidden, r_status.sub_code.bad_token);
+					// res.status(403).json(new config.methods.generateResponse(err.message, '', false));
 				} else {
 					req.decoded = decoded;
 					PlayerModel.findOne({
@@ -90,7 +92,9 @@
 		if (token) {
 			jwt.verify(token, config.db.secretKey, function(err, decoded) {
 				if (err) {
-					res.status(403).json(new config.methods.generateResponse(err.message, '', false));
+					var r_status = config.enums.response_status;
+					return sendResponse(req, res, false, err.message, '', r_status.forbidden, r_status.sub_code.bad_token);
+					// res.status(403).json(new config.methods.generateResponse(err.message, '', false));
 				} else {
 					req.decoded = decoded;
 					PlayerModel.findOne({
@@ -108,7 +112,8 @@
 				}
 			});
 		} else {
-			res.status(403).json(new config.methods.generateResponse('No token provided.', '', false));
+			var r_status = config.enums.response_status;
+			return sendResponse(req, res, false, 'No token provided.', '', r_status.forbidden, r_status.sub_code.no_token);
 		}
 	}
 
@@ -124,7 +129,8 @@
 							reason: entries[i].reasonField,
 							expiration: entries[i].expirationDate
 						};
-						return API.methods.sendResponse(req, res, false, config.messages().banned, banObject);
+						var r_status = config.enums.response_status;
+						return sendResponse(req, res, false, config.messages().banned, banObject, r_status.forbidden, r_status.sub_code.banned);
 					}
 					return next();
 				}
@@ -186,7 +192,7 @@
 			objectQuery[validateProperty] = entries[0];
 
 			thisModel.findOne({where: objectQuery}).then(function(entry) {
-				if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(entries[0]))) { return 0; }
+				if (!validate(req, res, [entry], config.messages().entry_not_found(entries[0]))) { return 0; }
 
 				entries.splice(0, 1);
 				return validateEntriesRecursive(req, res, modelFolder, validateProperty, entries, done);
@@ -316,15 +322,14 @@
 
 	function getType(obj) { return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase(); }
 
-	function sendResponse(req, res, success, message, data, code) {
+	function sendResponse(req, res, success, message, data, status, code) {
 		var	response;
 
-		if (data)
-		{ response = new config.methods.generateResponse(message, data); }
-		else { response = new config.methods.generateResponse(message, '', (success || false)); }
+		if (data) { response = new config.methods.generateResponse(message, data, (success === undefined ? true : success), (code || 200)); }
+		else { response = new config.methods.generateResponse(message, '', (success === undefined ? false : success), (code || 400)); }
 
 		doLog(req, message);
-		res.status(code ? code : 200).json(response);
+		res.status(status ? status : config.enums.response_status.generic_success).json(response);
 	}
 
 	function doLog(req, text, file, folder) {
@@ -383,6 +388,8 @@
 			default: { return -1; } break;
 		}
 	}
+
+	function boolToString(v) { if (typeof(v) == "boolean") { return v.toString(); } else { return v; } }
 
 	function validateParameter(req, res, params, strict, middleware) {
 		var rVal = [true],

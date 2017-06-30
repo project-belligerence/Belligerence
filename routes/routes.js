@@ -35,8 +35,10 @@
 
 	function renderIndex(req, res) { res.render(config.folders.static + '/' + 'index'); }
 	function renderStatic(req, res) { res.render(config.folders.static + req.params.static); }
-	function renderPartial(req, res) {	res.render(config.folders.partials + '/' + req.params.partial); }
+	function renderPartial(req, res) { res.render(config.folders.partials + '/' + req.params.partial); }
+	function renderDashboard(req, res) { res.render(config.folders.partials + '/dashboard/' + req.params.partial); }
 	function renderDirective(req, res) { res.render(config.folders.directives + '/' + req.params.directive); }
+	function renderModal(req, res) { res.render(config.folders.partials + '/' + 'modals/' + req.params.modal); }
 
 	function setup(app, express) {
 
@@ -203,6 +205,7 @@
 				.get('/getSelf', Players.getSelf)
 				.put('/updateSelf', Players.putPlayerSelf)
 				.get('/getFriendsSelf', Friends.getFriendsPlayerRead)
+				.post('/removeFriend', Friends.removeFriend)
 
 				.get('/getSettingsSelf', PlayerSettings.getSettingSelf)
 				.put('/updateSettingsSelf', PlayerSettings.updateSettingSelf)
@@ -304,6 +307,9 @@
 				.get('/getAllPMC', PMC.getAllPMC)
 				.get('/getPMCPlayers/:Hash', PMC.getPMCPlayers)
 
+				/* Comments */
+				.get('/getComments/:type/:subject', CommentsMethods.getComments)
+
 			.use(API.methods.authenticateToken)
 			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.user))
 			.use(API.methods.getBannedStatus)
@@ -317,6 +323,7 @@
 
 				/* Messages */
 				.post('/sendMessage', Messages.post)
+				.get('/countMessagesInvitesReceived', GeneralMethods.countMessagesInvitesReceived)
 
 				/* Items */
 				.post('/buyItem', GeneralMethods.buyItem)
@@ -443,7 +450,9 @@
 		// DEFAULT ROUTES
 		app.get('/', renderIndex);
 		app.get('/partial/:partial', renderPartial);
+		app.get('/dashboard/:partial', renderDashboard);
 		app.get('/directive/:directive', renderDirective);
+		app.get('/modals/:modal', renderModal);
 
 		// MOUNT API ROUTES
 		app.use(bodyParser.urlencoded({extended: true}));

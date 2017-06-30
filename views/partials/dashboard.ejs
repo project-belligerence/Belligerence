@@ -1,0 +1,59 @@
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="container-fluid" id="db-container">
+			<div class="row">
+
+				<div class="col-md-2 col-sm-3 hidden-xs" id="db-sidebar">
+					<ul id="db-sidebar-ul">
+						<li ng-repeat="item in CtrlDashboard.sideBarItems" ng-click="CtrlDashboard.changeActiveView($index)">
+							<a
+								class="btn btn-muted"
+								ng-class="{'active': CtrlDashboard.activeView === item.text }"
+							>
+								<i class="icon" ng-class="item.icon"></i>
+								<span class="text" ng-bind="::item.text"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="col-xs-12 visible-xs">
+					<div id="bar-container">
+						<ul id="small-bar">
+							<li ng-repeat="item in CtrlDashboard.sideBarItems" ng-click="CtrlDashboard.changeActiveView($index)">
+								<a
+									class="btn btn-muted"
+									ng-class="{'active': CtrlDashboard.activeView === item.text }"
+								>
+									<i class="icon" ng-class="item.icon"></i>
+									<span class="text" ng-bind="::item.text"></span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-md-8 col-sm-8 col-xs-12 col-md-offset-1">
+
+					<div class="no-view">
+						<div class="fade-animation-slow" ng-if="!(CtrlDashboard.displayView)">
+							<img src="svg-loaders/grid.svg" />
+						</div>
+					</div>
+
+					<div id="db-content">
+<!-- 						<a class="btn" href="/">Back to the frontpage</a>
+						<div style="margin-bottom: 50px"></div> -->
+						<div class="fade-animation-slow" ng-if="(CtrlDashboard.displayView)">
+							<div id="dashboard-view" ng-html="CtrlDashboard.currentViewHTML"></div>
+							<div style="margin-bottom: 250px"></div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

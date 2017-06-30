@@ -27,7 +27,7 @@
 			allowedSortValues: ['createdAt'],
 			allowedPostValues: {
 				contentValues: ['player', 'pmc', 'intel', 'item', 'store', 'upgrade', 'comment'],
-				typeValues: ['rules', 'illegal', 'bug']
+				typeValues: ['harassment', 'rules', 'illegal', 'bug']
 			},
 			generateWhereQuery:	function(req) {
 				var object = {};
@@ -68,7 +68,7 @@
 
 	function postReport(req, res) {
 		if (!API.methods.validateParameter(req, res, [
-			[req.body.reason, 'string', config.numbers.modules.intel.titleLength],
+			[req.body.reason, 'string', 144],
 			[req.body.type, 'string', queryValues(req).allowedPostValues.typeValues],
 			[req.body.content, 'string', queryValues(req).allowedPostValues.contentValues],
 			[req.body.reported, 'string']
@@ -105,7 +105,7 @@
 					};
 
 					mainModel.create(object).then(function(entry) {
-						API.methods.sendResponse(req, res, true, config.messages().new_entry, 'entry');
+						API.methods.sendResponse(req, res, true, "The report has been filed.", 'entry');
 					});
 				});
 			});

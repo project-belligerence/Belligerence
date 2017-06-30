@@ -1,0 +1,128 @@
+
+<div class="comments-container">
+	<div class="row"  ng-if="(CommentsController.selfInfo.playerPrivilege <= 99)" ng-cloak>
+		<div class="col-xs-12 col-sm-12">
+			<div class="post-comment" ng-class="{'long': (displayPostComment > 0)}">
+				<div class="post-comment-animation" ng-if="(displayPostComment === 0)">
+					<a ng-click="togglePostComment()" class="btn default">Leave a comment</a>
+				</div>
+				<div class="post-comment-animation" ng-if="(displayPostComment === 2)">
+					<div class="circle unit-avatar">
+						<div class="small" ac-background-image background-image="images/avatars/players/thumb_{{::CommentsController.selfInfo.hashField}}.jpg"></div>
+					</div>
+					<form class="comment-form">
+						<div class="form-group">
+							<div class="input-group">
+								<input type="text" class="form-control" id="commentInputTitle" ng-model="CommentsController.commentTitle" placeholder="Comment title.">
+							</div>
+							<div class="characters-remaining">{{(maxTitleCharacters - CommentsController.commentTitle.length)}} characters remaining.</div>
+							<div class="input-group">
+								<textarea rows=3 type="text" class="form-control" id="commentInputBody" ng-model="CommentsController.commentBody" placeholder="Type your comment here. (cannot be empty)"></textarea>
+							</div>
+							<div class="characters-remaining">{{(maxMessageCharacters - CommentsController.commentBody.length) }} characters remaining.</div>
+						</div>
+						<div class="form-group message"></div>
+						<div class="form-error">
+							<div class="error-message flip-animation2" ng-if="(currentPostError.length > 0)">
+								<i class="icon ion-alert-circled"></i> {{ currentPostError }}
+							</div>
+						</div>
+					</form>
+					<a ng-click="togglePostComment()" class="btn btn-muted">Close</a>
+					<a ng-click="postComment()" class="btn default">Submit</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<div class="comments-header">
+				<div class="comments-amount"><i class="icon ion-chatbubbles"></i><strong><span ng-bind="commentsCount"></span></strong></div>
+
+				<div class="dropdown">
+					<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+						Sort by	<i class="icon" ng-class="currentIcon"></i>
+					</button>
+					<ul class="dropdown-menu">
+						<li ng-click="changeSort(item)" ng-repeat="item in ::sortingMethods">
+							<a href="#" ng-click="scope = item.value">
+								<i class="icon" ng-class="::item.icon"></i>
+								<span ng-bind="::item.name"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<a class="btn default" ng-click="changeOrder()"><i class="icon" ng-class="orderName"></i></a>
+
+				<div class="comments-pagination">
+					<ul
+						uib-pagination
+
+						class="text-center tiny"
+
+						ng-change="refreshComments()"
+
+						first-text="&laquo;"
+						last-text="&raquo;"
+						next-text="&#9656;"
+						previous-text="&#9666;"
+
+						force-ellipses="true"
+						rotate="true"
+
+						total-items="commentsCount"
+						items-per-page="perPage"
+						ng-model="page"
+						max-size="1"
+
+						boundary-links="false"
+						boundary-link-numbers="true"
+					></ul>
+				</div>
+			</div>
+			<div class="comments">
+				<div class="comment ng-view-animation" ng-repeat="comment in commentsList">
+					<div class="comment-header">
+						<a ng-href="operator/{{comment.commenterHash}}">
+							<div class="unit-avatar circle">
+								<div class="tiny" ac-background-image background-image="images/avatars/players/thumb_{{::comment.commenterHash}}.jpg">
+								</div>
+							</div>
+						<span class="alias" ng-bind="::comment.commenterAlias"></span></a> &#xb7;
+						<time-ago class="comment-time" from-time='{{::comment.createdAt}}'></time-ago>
+					</div>
+
+					<div class="comment-body">
+						<div class="comment-title">
+							<span ng-if="::comment.title" class="title" ng-bind="::comment.title"></span>
+							<cheers-directive
+								initial-cheers="{{ comment.totalCheers }}"
+								initial-cheered="{{ comment.isCheered }}"
+								cheer-target="{{ comment.hashField }}"
+								cheer-type="comment"
+								button-size="tiny"
+								show-text="false"
+
+								class="comment-cheers"
+							></cheers-directive>
+						</div>
+						<div class="body" ng-bind="::comment.body"></div>
+
+						<a
+							class="comment-delete section-button tiny animated"
+							role="button"
+							ng-click="deleteComment(comment.hashField)"
+							ng-if="::(checkPermission(comment.hashField, comment.commenterHash))"
+							ng-cloak
+						>
+							<ul>
+								<li><i class="icon ion-trash-a"></i></li>
+								<li ng-cloak>Delete</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

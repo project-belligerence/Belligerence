@@ -4,6 +4,8 @@
 	var PMCModel = require('./../index.js').getModels().pmc,
 		PlayerModel = require('./../index.js').getModels().players,
 		Transactions = require('./../index.js').getMethods().transactions,
+		Messages = require('./../index.js').getMethods().messages,
+		Invites = require('./../index.js').getMethods().invites,
 		config = require('./../../config.js'),
 		API = require('./../../routes/api.js');
 
@@ -16,6 +18,31 @@
 	exports.toggleUpgradeProminence = toggleUpgradeProminence;
 	exports.paySystemActionMultiplied = paySystemActionMultiplied;
 	exports.setUpgradeVisibilityAll = setUpgradeVisibilityAll;
+
+	exports.countMessagesInvitesReceived = countMessagesInvitesReceived;
+
+	function countMessagesInvitesReceived(req, res) {
+		var hasPMC = req.playerInfo.PMC, totalNum = {};
+
+		Messages.countReceived(req, res).then(function(data) {
+			totalNum.messages = data;
+
+			Invites.getReceivedPlayerFunc(req, res, function(invitesPlayer) {
+				totalNum.receivedPlayer = invitesPlayer.count;
+
+				if (hasPMC) {
+					Invites.getReceivedPMCFunc(req, res, function(invitesPMC) {
+						totalNum.receivedPMC = invitesPMC.count;
+
+						API.methods.sendResponse(req, res, true, "", totalNum);
+					});
+				} else {
+					API.methods.sendResponse(req, res, true, "", totalNum);
+				}
+			});
+
+		});
+	}
 
 	function returnEntityAction(req, property) {
 		return (config.properties.actionCost[property] + (API.methods.getMainEntity(req).entityTypeName));

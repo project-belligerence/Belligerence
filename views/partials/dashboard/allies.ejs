@@ -1,0 +1,82 @@
+
+<div id="allies-container" class="fade-animation-slow">
+	<div id="tabs">
+		<ul class="noselect">
+			<a ng-click="CtrlDashboard.changeActiveTab('friends')" ng-class="{'active': CtrlDashboard.activeTab === 'friends'}">
+				<li><i class="icon ion-person-stalker"></i>Personal Friends</li>
+			</a>
+			<a ng-click="CtrlDashboard.changeActiveTab('units')" ng-class="{'active': CtrlDashboard.activeTab === 'units'}">
+				<li><i class="icon ion-ios-people"></i>Outfit Units</li>
+			</a>
+			<a ng-click="CtrlDashboard.changeActiveTab('outfits')" ng-class="{'active': CtrlDashboard.activeTab === 'outfits'}">
+				<li><i class="icon ion-star"></i>Allied Outfits</li>
+			</a>
+		</ul>
+	</div>
+
+	<div id="allies-content-container" class="fade-animation-slow" ng-if="(CtrlDashboard.displayTab)" ng-cloak>
+
+		<div class="fade-animation-slow" ng-if="(CtrlDashboard.activeTab === 'friends')" ng-cloak>
+			<div class="meta main text-center">
+				<span>Personal Friends</span>
+				<i
+					class="icon ion-help-circled helper small"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Friendly Operators that may not necessarily be direct allies."
+				></i>
+			</div>
+
+			<units-directive
+				interaction-options="CtrlDashboard.unitsRadialOptionsFriends"
+				player-info="CtrlDashboard.playerInfo"
+				pmc-info="CtrlDashboard.pmcInfo"
+				units-list="CtrlDashboard.friendsList"
+				friends-list="CtrlDashboard.friendsList"
+				display-mode="friends"
+			></units-directive>
+		</div>
+
+		<div class="fade-animation-slow" ng-if="(CtrlDashboard.activeTab === 'units')" ng-cloak>
+			<div class="meta main text-center">
+				<span>Outfit Units</span>
+				<i
+					class="icon ion-help-circled helper small"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="These are the units that currently belong to your Outfit."
+				></i>
+			</div>
+
+			<units-directive
+				interaction-options="CtrlDashboard.unitsRadialOptions"
+				player-info="CtrlDashboard.playerInfo"
+				pmc-info="CtrlDashboard.pmcInfo"
+				units-list="CtrlDashboard.unitsInfo"
+				friends-list="CtrlDashboard.friendsList"
+				display-mode="ranked"
+			></units-directive>
+		</div>
+
+		<div class="fade-animation-slow" ng-if="(CtrlDashboard.activeTab === 'outfits')" ng-cloak>
+			<div class="meta main text-center">
+				<span>Allied Outfits</span>
+				<i
+					class="icon ion-help-circled helper small"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="These are the units that currently belong to your Outfit."
+				></i>
+			</div>
+
+			<units-directive
+				interaction-options="CtrlDashboard.unitsRadialOptionsPMCFriends"
+				player-info="CtrlDashboard.playerInfo"
+				pmc-info="CtrlDashboard.pmcInfo"
+				units-list="CtrlDashboard.friendsPMCList"
+				friends-list="CtrlDashboard.friendsList"
+				display-mode="pmc-friends"
+			></units-directive>
+		</div>
+	</div>
+</div>

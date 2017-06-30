@@ -1,0 +1,26 @@
+
+<div class="modal-window">
+	<div class="modal-header">
+		<i class="icon" ng-class="ModalController.options.header.icon" ng-if="ModalController.options.header" ng-cloak></i>
+		<h2 class="modal-title" ng-bind="::ModalController.options.header.text"></h2>
+	</div>
+
+	<div class="modal-body">
+		<div class="modal-body" id="modal-body" ng-bind="::ModalController.options.body.text"></div>
+	</div>
+
+    <div class="modal-footer">
+		<a class="section-button medium muted" role="button" ng-click="closeModal(false)">
+			<ul>
+				<li ng-if="ModalController.options.choices.no.icon"><i class="icon" ng-class="ModalController.options.choices.no.icon"></i></li>
+				<li ng-if="ModalController.options.choices.no.text" ng-bind="::ModalController.options.choices.no.text"></li>
+			</ul>
+		</a>
+		<a class="section-button medium" role="button" ng-click="closeModal(true)">
+			<ul>
+				<li ng-if="ModalController.options.choices.yes.icon"><i class="icon" ng-class="ModalController.options.choices.yes.icon"></i></li>
+				<li ng-if="ModalController.options.choices.yes.text" ng-bind="::ModalController.options.choices.yes.text"></li>
+			</ul>
+		</a>
+	</div>
+</div>

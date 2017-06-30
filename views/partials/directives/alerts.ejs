@@ -1,0 +1,32 @@
+
+<div class="anm-all container">
+	<div class="row">
+		<div class="col-xs-12 col-sm-10" id="page-alerts-container">
+			<a class="animation btn" ng-click="resetAlerts()" ng-if="(showClose)" id="close-alerts">
+				<i class="icon ion-close-round"></i>
+				Close All Alerts
+			</a>
+			<div id="page-alerts-messages">
+				<div
+					class="page-alerts animation"
+					uib-alert
+					ng-repeat="alert in alerts"
+					dismiss-on-timeout="5000"
+					ng-class="'alert-' + (alert.type || 'warning')"
+					close="closeAlert($index)">
+						<i
+							class="icon"
+							ng-class="
+								{
+									'ion-checkmark-round': (alert.type == 'success'),
+									'ion-information': (alert.type == 'info'),
+									'ion-alert': (alert.type == 'warning'),
+									'ion-alert-circled': (alert.type == 'danger')
+								}"
+							></i>
+						{{alert.msg}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

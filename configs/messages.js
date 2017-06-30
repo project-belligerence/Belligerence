@@ -3,7 +3,7 @@
 
 	module.exports = {
 		banned: 'YOU ARE BANNED.',
-		bad_permission: 'You do not have the necessary permissions to execute this task.',
+		bad_permission: 'Insufficient permissions to execute this task.',
 		authorized: 'Authentication successful.',
 		invalid_params: 'Invalid or no parameters specified.',
 		no_results: 'No results were found.',
@@ -60,10 +60,12 @@
 				own_pmc: 'You can\'t be friends with your own PMC.',
 				own_self: 'You can\'t be friends with yourself!',
 				already_friends: 'You are already friends with this player.',
-				already_friends_pmc: 'Your PMC is already friends with this PMC.'
+				already_friends_pmc: 'Your PMC is already friends with this PMC.',
+				friend_removed: 'The Operator has been removed from your friends list.'
 			},
 			messages: {
-				message_to_self: "You wouldn't want to send a message to yourself."
+				message_to_self: "You wouldn't want to send a message to yourself.",
+				new_message: "The message has been sent successfully!"
 			},
 			items: {
 				not_owned: 'This item is not owned.'
@@ -76,7 +78,9 @@
 				request_playerPMC: 'Player requests membership with PMC.',
 				invite_playerPMC: 'PMC invites player to join their ranks.',
 				friends_player: 'Player invites another player to be their friend.',
-				friends_PMC: 'PMC is inviting another PMC to be their allies.'
+				friends_PMC: 'PMC is inviting another PMC to be their allies.',
+				invite_created: 'The invitation was sent successfully.',
+				invite_exists: 'This invitation has already been sent.'
 			},
 			economy: {
 				no_funds: 'Insufficient funds.',

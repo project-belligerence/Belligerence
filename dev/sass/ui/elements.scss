@@ -10,7 +10,7 @@
 	border: 0;
 	border-radius: 0;
 
-	@include transition(all .25s);
+	@include transition(all .15s, background-color .3s);
 
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none;   /* Chrome/Safari/Opera */
@@ -21,9 +21,16 @@
 	background-color: $main_button_background_color;
 	color: $main_text_color;
 
+	$bg_dark_color: darken($main_button_background_color, 20%);
+
+	box-shadow: 0px 2px 0px 0px $bg_dark_color;
+
+	&:active { transform: translateY(2px); }
+
 	@include hafStates((
-		(background-color, ($main_button_background_color_hover,$main_button_background_color_active,$main_button_background_color_focus)),
-		(color, (inherit, inherit, inherit))
+		(background-color, ($main_button_background_color_hover, $main_button_background_color_active, $main_button_background_color_focus)),
+		(color, (inherit, inherit, inherit)),
+		(box-shadow, (0px 2px 0px 0px $bg_dark_color, 0px 0px 0px 0px $bg_dark_color, 0px 0px -2px 0px $bg_dark_color))
 	));
 
 	&.btn-default {
@@ -39,6 +46,98 @@
 			(background-color, ($main_button_background_color_hover,$main_button_background_color_active,$main_button_background_color_focus)),
 		));
 	}
+
+	&.btn-muted {
+		$main_color: $muted_color;
+		$main_color_light: $muted_color_light;
+		$main_color_dark: $muted_color_dark;
+
+		background-color: $muted_color_light;
+		box-shadow: 0px 2px 0px 0px $main_color_dark;
+		color: $main_background_color;
+
+		@include hafStates((
+			(background-color, ($main_color_dark, $main_color_dark, $main_color_dark)),
+			(color, ($main_background_color, $main_background_color, $main_background_color)),
+			(box-shadow, (0px 2px 0px 0px $main_color, 0px 0px 0px 0px $main_color, 0px 0px -2px 0px $main_color))
+		));
+
+		&:active { transform: translateY(2px); }
+
+		&.active {
+			color: $main_text_color;
+			background-color: $main_button_background_color;
+			box-shadow: 0px 2px 0px 0px $bg_dark_color;
+
+			@include hafStates((
+				(background-color, ($main_button_background_color_hover,$main_button_background_color_active,$main_button_background_color_focus)),
+				(box-shadow, (0px 2px 0px 0px $bg_dark_color, 0px 0px 0px 0px $bg_dark_color, 0px 0px -2px 0px $bg_dark_color))
+			));
+		}
+	}
+}
+
+/* ==============================
+
+	STYLED INPUTS
+		.extra-input
+
+   ============================== */
+
+.extra-input {
+
+	* { @include transition(all .15s); }
+	label {	padding: 0;	margin: 0; font-weight: 400; cursor: pointer; }
+	input[type=checkbox] {
+		display: none;
+
+		&:checked {
+			& ~ label .body {
+
+				&.check {
+					color: $main_color;
+
+					.box {
+						background-color: $main_color;
+						i {
+							top: 3px;
+							@include opacity(1);
+							color: #eee;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.body {
+		@include font-size(factor(3));
+
+		&.check {
+			&:hover .box { background-color: $main_color_dark; }
+			.box {
+				display: inline;
+				overflow: hidden;
+
+				margin-right: 10px;
+				padding: 6px;
+
+				background-color: #eee;
+
+				i {
+					position: relative;
+					top: 15px;
+					@include opacity(0);
+
+					color: #222;
+				}
+			}
+		}
+
+		&.toggle {
+
+		}
+	}
 }
 
 /* ============================= */
@@ -50,7 +149,7 @@
 
    ============================== */
 
-$section_button_padding: 10px 15px;
+$section_button_padding: 7px 14px;
 $section_button_margin_right: 0px;
 
 $cheer_background_color: #ddd;
@@ -60,23 +159,61 @@ $cheer_background_color_active: $main_color_dark;
 	font-family: $main_font;
 	display: inline-block;
 	cursor: pointer;
+	border-bottom: none;
 
-	height: 38px;
+	* { @include prefix(user-select, none); }
+	* { @include transition(all .10s); }
 
-	* { @include transition(all .25s); }
-
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none;   /* Chrome/Safari/Opera */
-	-khtml-user-select: none;    /* Konqueror */
-	-moz-user-select: none;      /* Firefox */
-	-ms-user-select: none;       /* Internet Explorer/Edge */
+	$bg_dark_color: darken($main_button_background_color, 10%);
 
 	@include hafStates(((color, ($main_text_color, $main_text_color, $main_text_color)),));
+
+	&.disabled {
+		*{cursor: default;}
+		$main_color: $muted_color_dark;
+		$main_color_light: $muted_color_dark;
+		$main_color_dark: $muted_color_dark;
+
+		ul {
+			li {
+				background-color: $main_color;
+				box-shadow: 0px 0px 0px 0px $main_color_dark;
+				color: #444;
+			}
+
+			&:hover > li { background-color: $main_color_light;	}
+			&:active> li { box-shadow: 0px 0px 0px 0px $main_color_dark; transform: translateY(0px); }
+		}
+	}
+
+	&.muted {
+		$main_color: $muted_color;
+		$main_color_light: $muted_color_light;
+		$main_color_dark: $muted_color_dark;
+
+		ul {
+			li {
+				background-color: $main_color;
+				box-shadow: 0px 2px 0px 0px $main_color_dark;
+				color: $main_background_color;
+			}
+
+			&:hover > li { background-color: $main_color_light;	}
+			&:active> li { box-shadow: 0px 0px 0px 0px $main_color_dark; }
+		}
+	}
 
 	ul {
 		&:hover > li { background-color: $main_color_light; }
 
+		&:active > li {
+			box-shadow: 0px 0px 0px 0px $bg_dark_color;
+			transform: translateY(2px);
+		}
+
 		li {
+			box-shadow: 0px 2px 0px 0px $bg_dark_color;
+
 			color: $main_text_color;
 			background-color: $main_color;
 			display: inline-block;
@@ -86,9 +223,14 @@ $cheer_background_color_active: $main_color_dark;
 		}
 	}
 
+	&.tiny {
+		@include font-size($button_font_size_tiny);
+		> ul li { padding: 3px 5px; }
+	}
+
 	&.small {
 		@include font-size($button_font_size_small);
-		> ul li { padding: 5px 10px; }
+		> ul li { padding: 6px 10px; }
 	}
 	&.medium { @include font-size($button_font_size_medium); }
 	&.big { @include font-size($button_font_size_large); }
@@ -137,11 +279,7 @@ $cheer_background_color_active: $main_color_dark;
 .hexagon {
 	overflow: hidden;
 	visibility: hidden;
-	-webkit-transform: rotate(120deg);
-	   -moz-transform: rotate(120deg);
-		-ms-transform: rotate(120deg);
-		 -o-transform: rotate(120deg);
-			transform: rotate(120deg);
+	@include prefix(transform, rotate(120deg), webkit moz ms o);
 
 	.in1 {
 		overflow: hidden;
@@ -154,16 +292,14 @@ $cheer_background_color_active: $main_color_dark;
 		z-index: -100;
 		width: 100%;
 		height: 100%;
-		background-repeat: no-repeat;
-		background-position: 50%;
-		background: url('http://placekitten.com/250/250') 50% 50%;
-		background: #eee;
+		overflow: hidden;
 		visibility: visible;
 		@include prefix(transform, rotate(-60deg), webkit moz ms o);
+
+		background-color: #fff;
 	}
 
 	&.bg {
-		.in2 { background: url('http://placekitten.com/500/500') 50% 50%; }
 		i {
 			color: #fff !important;
 			@include prefix(text-shadow, 0 0 10px #000);
@@ -175,6 +311,23 @@ $cheer_background_color_active: $main_color_dark;
 		height: 200px;
 		margin: 0 0 0 -80px;
 	}
+
+	&.avatar-medium {
+		width: 400px;
+		height: 215px;
+
+		.big { height: inherit; }
+		.in2 { background-color: rgba(0,0,0,0); }
+	}
+
+	&.avatar-large {
+		width: 300px;
+		height: 350px;
+
+		.big { height: inherit; }
+		.in2 { background-color: rgba(0,0,0,0); }
+	}
+
 	&.dodecagon {
 		width: 200px;
 		height: 200px;
@@ -182,7 +335,50 @@ $cheer_background_color_active: $main_color_dark;
 	}
 }
 
-/* ============================= */
+/* ==============================
+
+	CIRCLE
+		.circle
+
+================================= */
+
+.circle {
+	display: inline;
+
+	.ac-bg-img__full-size, .ac-bg-img__placeholder {
+		background-size: 100%;
+		border-radius: 100%;
+
+		border: 2px solid white;
+		box-shadow: 0px 0px 15px rgba(0,0,0,0.5) inset;
+	}
+
+	.tiny { width: 30px; height: 30px; }
+	.small { width: 70px; height: 70px; }
+	.medium { width: 150px; height: 150px; }
+	.large { width: 200px; height: 200px; }
+	.big { width: 300px; height: 300px; }
+}
+
+/* ==============================
+
+	SQUARE
+		.square
+
+================================= */
+
+.square {
+	display: inline;
+
+	.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 100% 100%; }
+
+	.tiny { width: 30px; height: 30px; }
+	.tiny2 { width: 50px; height: 50px; }
+	.small { width: 70px; height: 70px; }
+	.medium { width: 150px; height: 150px; }
+	.big { width: 300px; height: 300px; }
+}
+
 
 /* ==============================
 
@@ -193,10 +389,14 @@ $cheer_background_color_active: $main_color_dark;
 ================================= */
 
 .tooltip {
+	color: $main_text_color;
 	background-color: $main_color;
 	border-radius: 0px;
 
-	margin-top: -5px !important;
+	font-family: $sub_font;
+	text-align: center;
+
+	margin-top: -10px !important;
 
 	.arrow::after { border-top-color: $main_color !important; }
 	&.in {
@@ -206,3 +406,378 @@ $cheer_background_color_active: $main_color_dark;
 }
 
 /* ============================= */
+
+/* ==============================
+
+	ALERTS
+		.alert
+
+================================= */
+
+.alert {
+	border: 0;
+	border-radius: 0px;
+
+	.close-alert {
+		position: relative;
+
+		@include font-size(factor(6));
+		@include factor-property(margin-right, 1);
+		@include factor-property(top, -1);
+	}
+
+	i {
+		@include font-size(factor(3));
+		@include factor-property(margin-right, 2);
+	}
+}
+
+/* ==============================
+
+	HELPER ICONS
+		.helper
+
+================================= */
+
+.icon.helper {
+	display: inline-block;
+	position: relative;
+
+	cursor: help;
+
+	@include factor-property(margin-left, 1);
+
+	@include breakpoint('small') { @include factor-property(margin-left, 4); }
+
+	&.tiny { top: 1px; }
+	&.small { top: 0px; }
+}
+
+/* ============================== */
+
+/* ==============================
+
+	TAGS INPUT
+		tags-input
+
+================================= */
+
+tags-input {
+	* { border-bottom: none; }
+	.input {
+		width: 300px !important;
+		border: 0;
+		color: #222;
+		@include factor-property(padding, 1.3);
+	}
+
+	&[disabled] .tags { .tag-item {	background: darken($main_color, 10%); } }
+
+	.tags {
+		@include factor-property(margin-top, 3);
+
+		.tag-item {
+			* { @include transition(all .2s); }
+			display: inline-block;
+			cursor: default;
+			color: #fff;
+			background: $main_color;
+
+			padding: 0 15px 0px 15px;
+
+			@include factor-property(margin-right, 1);
+			@include factor-property(margin-bottom, 1);
+
+			span {
+				position: relative;
+				top: -4px;
+			}
+
+			$animationIn: fadeInUp;
+			$animationOut: fadeOutUp;
+
+			$delay_in: 1s;
+			$delay_out: .5s;
+
+			$easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+			&.ng-leave {
+				-webkit-animation: $animationOut $delay_out both $easing;
+				-moz-animation: $animationOut $delay_out both $easing;
+				animation: $animationOut $delay_out both $easing;
+			}
+
+			&.ng-enter {
+				-webkit-animation: $animationIn $delay_in both $easing;
+				-moz-animation: $animationIn $delay_in both $easing;
+				animation: $animationIn $delay_in both $easing;
+			}
+
+			.remove-button {
+				@include factor-property(margin-left, 1);
+				@include font-size(factor(5));
+				color: #ddd;
+				&:hover { color: #aaa; }
+
+				position: relative;
+				top: -2px;
+			}
+		}
+
+		.tag-item.selected {
+			color: #fff;
+			background: darken($main_color, 15%);
+		}
+	}
+
+	.autocomplete {
+		position: absolute;
+		z-index: 999;
+
+		* { @include transition(background-color .2s); }
+
+		border-radius: 4px;
+
+		display: inline-block;
+
+		$animationIn: fadeInLeft;
+		$animationOut: fadeOutRight;
+
+		$delay_in: 1s;
+		$delay_out: .5s;
+
+		$easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+		&.ng-leave {
+			-webkit-animation: $animationOut $delay_out both $easing;
+			-moz-animation: $animationOut $delay_out both $easing;
+			animation: $animationOut $delay_out both $easing;
+		}
+
+		&.ng-enter {
+			-webkit-animation: $animationIn $delay_in both $easing;
+			-moz-animation: $animationIn $delay_in both $easing;
+			animation: $animationIn $delay_in both $easing;
+		}
+
+		.suggestion-item {
+
+			color: #222;
+			background-color: #ddd;
+
+			cursor: pointer;
+			@include factor-property(padding, 1.3);
+
+			&.selected {
+				background-color: $main_color;
+				color: #ddd;
+			}
+
+			& em {
+				font-style: normal;
+				font-weight: bold;
+			}
+		}
+	}
+}
+
+/* ==============================
+
+	DROPDOWN MENU
+		.dropdown
+
+================================= */
+
+.dropdown {
+	&.open { background-color: $main_color_dark; }
+
+	i { @include factor-property(margin-left, 0.5);}
+
+	.dropdown-menu {
+		border-radius: 0px;
+		left: -1px;
+
+		li {
+			i {
+				color: $main_color;
+				@include font-size(factor(3));
+				@include factor-property(margin-right, 1);
+			}
+		}
+	}
+}
+
+/* ===============================
+
+	PAGINATION
+		.pagination
+
+================================== */
+
+.pagination {
+	&.tiny {
+		li {
+			&.pagination-first, &.pagination-last, &.pagination-next, &.pagination-prev {
+				a {
+					@include font-size(factor(3));
+					@include factor-property(height, 2.8);
+					@include factor-property(width, 3);
+
+					padding-bottom: 7px;
+
+					line-height: 0.01px;
+				}
+			}
+		}
+
+		a {
+			@include font-size(factor(2.5));
+			margin-right: 3px;
+			@include factor-property(height, 3);
+			@include factor-property(width, 3);
+
+			line-height: 0.01px;
+		}
+	}
+
+	&.small {
+		li {
+			&.pagination-first, &.pagination-last, &.pagination-next, &.pagination-prev {
+				a {
+					@include font-size(factor(3));
+					@include factor-property(padding-top, 0.4);
+					@include factor-property(height, 4.8);
+					@include factor-property(width, 5);
+				}
+			}
+		}
+
+		a {
+			@include font-size(factor(3));
+			margin-right: 10px;
+			@include factor-property(padding-top, 0.5);
+			@include factor-property(height, 5);
+			@include factor-property(width, 5);
+		}
+	}
+
+	li {
+		border-radius: 0px;
+
+		&.pagination-first, &.pagination-last, &.pagination-next, &.pagination-prev {
+			a {
+				font-family: $sub_font;
+				@include font-size(factor(7));
+				@include factor-property(padding-top, 2);
+
+				@include breakpoint('small') {
+					@include font-size(factor(5));
+					@include factor-property(padding-top, 0.8);
+				}
+			}
+		}
+
+		a {
+			font-family: $main_font;
+			@include font-size(factor(5));
+
+			background-color: white;
+			color: $main_color;
+			border: none;
+
+			margin-right: 10px;
+
+			@include breakpoint('tiny') { margin-right: 1px; }
+
+			padding: 0;
+			line-height: 30px;
+
+			@include factor-property(padding-top, 1.8);
+
+			@include factor-property(height, 8);
+			@include factor-property(width, 8);
+
+			border-top-left-radius: 0px !important;
+			border-bottom-left-radius: 0px !important;
+
+			@include breakpoint('small') {
+
+				@include font-size(factor(4));
+
+				@include factor-property(padding-top, 0.7);
+				@include factor-property(height, 5.7);
+				@include factor-property(width, 5.7);
+			}
+		}
+
+		&.active {
+			> a {
+				color: white;
+				background-color: $main_color_dark;
+			}
+
+			&:hover {
+				> a, a:focus {
+					color: white;
+					background-color: $main_color_dark;
+				}
+			}
+		}
+
+		&:hover {
+			> a {
+				color: $main_color_dark;
+			}
+		}
+	}
+}
+
+/* ===============================
+
+	TABS
+		.tabs
+
+================================== */
+
+#tabs {
+	text-align: center;
+	@include factor-property(margin-top, 2);
+	@include factor-property(margin-bottom, 8);
+
+	ul {
+		a {
+			*{cursor: pointer;}
+			border-bottom: none;
+
+			&:hover li { background-color: $main_color_dark; }
+
+			&.active {
+				*{cursor: default;}
+
+				li {
+					background-color: #ddd;
+					color: $main_color;
+				}
+			}
+
+			li {
+				@include transition(background-color, .25s);
+				display: inline-block;
+
+				font-family: $main_font;
+				@include font-size(factor(3));
+
+				color: #ddd;
+				background-color: $main_color;
+
+				padding: factor(2) factor(3);
+				@include factor-property(margin-right, 2);
+
+				i {
+					@include font-size(factor(5));
+					display: block;
+				}
+			}
+		}
+	}
+}

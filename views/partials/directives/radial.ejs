@@ -1,0 +1,18 @@
+
+<ul class="radial-menu noselect">
+	<li
+		class="radial-item" ng-repeat="item in newList"
+
+		data-item-id="{{$index}}"
+		ng-click="buttonInteraction($index)"
+
+		uib-popover="{{item.tooltip}}"
+		popover-popup-delay="500"
+		popover-trigger="'mouseenter'"
+		popover-class="tooltip"
+	>
+		<i class="icon" ng-class="item.icon" ng-if="item.icon"></i>
+		<span class="content" ng-if="item.content" ng-bind="::item.content"></span>
+	</li>
+</ul>
+<div class="close-radial noselect"><i class="icon ion-close"></i></div>
