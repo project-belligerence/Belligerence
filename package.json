@@ -84,5 +84,5 @@
     "webpack-bundle-analyzer": "^1.5.3"
   },
   "author": "Ian",
-  "license": "WTFUW"
+  "license": "MIT"
 }
