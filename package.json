@@ -4,7 +4,8 @@
   "description": "A game where PMCs, Soldiers and Freelancers fight for money.",
   "main": "app.js",
   "scripts": {
-    "start": "grunt && webpack -w",
+    "start": "node app.js",
+    "heroku-postbuild": "webpack -p",
     "test": "npm run test-models && npm run test-integration",
     "test-models": "mocha modules/*/*.test.js",
     "test-integration": "mocha test/integration/*.test.js"
