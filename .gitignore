@@ -36,6 +36,7 @@ $RECYCLE.BIN/
 /bower_components
 /logs
 /uploads
+/build
 
 # Go away npm
 package-lock.json
