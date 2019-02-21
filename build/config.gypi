@@ -25,7 +25,7 @@
     "node_use_openssl": "true",
     "node_use_perfctr": "true",
     "node_use_systemtap": "false",
-    "python": "c:\\python27\\python.exe",
+    "python": "c:\\python\\python.exe",
     "target_arch": "x64",
     "v8_enable_gdbjit": 0,
     "v8_no_strict_aliasing": 1,
