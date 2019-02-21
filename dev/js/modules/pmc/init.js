@@ -17,12 +17,14 @@
 		controllerAs: ('Ctrl' + moduleName),
 		resolve: {
 			pmcInfo: ['generalServices', '$stateParams',
-				function (generalServices, $stateParams) { return generalServices.getPMC($stateParams.pmcHash); }],
+				function (generalServices, $stateParams) {
+					var qObj = { qIncludeUpgrades: true, qVisible: true };
+					return generalServices.getPMC($stateParams.pmcHash, qObj);
+				}],
 			pmcUnits: ['generalServices', '$stateParams',
 				function (generalServices, $stateParams) { return generalServices.getPMCPlayers($stateParams.pmcHash); }],
 			selfInfo: ['playerServices', function (playerServices) {return playerServices.getSelf();}],
-			selfFriends: ['playerServices', function (playerServices) {return playerServices.getFriendsSelf();}],
-			selfPMCFriends: ['pmcServices', function (pmcServices) {return pmcServices.getFriendsSelf();}]
+			selfFriends: ['playerServices', function (playerServices) {return playerServices.getFriendsSelf();}]
 		}
 	};
 })();

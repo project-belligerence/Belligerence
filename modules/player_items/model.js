@@ -13,15 +13,27 @@
 					type: DataTypes.STRING,
 					field: 'item'
 				},
+				itemClassname: {
+					type: DataTypes.STRING,
+					field: 'item_classname'
+				},
+				itemType: {
+					type: DataTypes.STRING,
+					field: 'item_type'
+				},
+				itemClass: {
+					type: DataTypes.STRING,
+					field: 'item_class'
+				},
 				amountField: {
 					type: DataTypes.INTEGER,
 					field: 'amount',
 					defaultValue: 0
 				},
-				deployedField: {
-					type: DataTypes.BOOLEAN,
-					field: 'deployed',
-					defaultValue: false
+				deployedAmount: {
+					type: DataTypes.INTEGER,
+					field: 'deployed_amount',
+					defaultValue: 0
 				}
 			}
 		);

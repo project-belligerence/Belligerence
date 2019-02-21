@@ -1,0 +1,360 @@
+<div class="container-fluid top-spacer" id="units-fluid-container">
+	<div class="container-fluid">
+		<div class="row" id="units-page-top">
+			<div class="col-md-12">
+				<h2>Operator list</h2>
+				<h3>Search for individuals currently under our contract.</h3>
+				<hr />
+			</div>
+		</div>
+		<div class="row" id="units-page-filters">
+			<div class="col-md-12">
+				<div class="filter-containers" ng-class="{'long': (CtrlUnitsOperators.filterValues.display)}">
+					<a class="section-button muted medium animated" role="button" ng-click="CtrlUnitsOperators.toggleFilter()">
+						<ul>
+							<li><i class="icon ion-funnel"></i></li>
+							<li>{{(CtrlUnitsOperators.filterValues.display ? "Hide filters" : "Show filters")}}</li>
+						</ul>
+					</a>
+					<a class="section-button search warning medium intel-filter-animation" role="button" ng-click="CtrlUnitsOperators.updateFilters()"
+					ng-if="(CtrlUnitsOperators.filterValues.display)" ng-cloak>
+						<ul>
+							<li><i class="icon ion-search"></i></li>
+							<li>Apply</li>
+						</ul>
+					</a>
+
+					<a class="section-button reset danger medium hidden-sm hidden-xs intel-filter-animation" role="button" ng-dblclick="CtrlUnitsOperators.resetFilters(true)"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					popover-append-to-body="true"
+					popover-popup-delay="500"
+					uib-popover="Double-click to reset filters"
+					ng-if="(CtrlUnitsOperators.filterValues.display)" ng-cloak>
+						<ul>
+							<li><i class="icon ion-trash-a"></i></li>
+							<li>Reset</li>
+						</ul>
+					</a>
+
+					<a class="section-button reset danger medium intel-filter-animation hidden-lg hidden-md" role="button" ng-click="CtrlUnitsOperators.resetFilters(true)"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					popover-append-to-body="true"
+					popover-popup-delay="500"
+					uib-popover="Double-click to reset filters"
+					ng-if="(CtrlUnitsOperators.filterValues.display)" ng-cloak>
+						<ul>
+							<li><i class="icon ion-trash-a"></i></li>
+							<li>Reset</li>
+						</ul>
+					</a>
+
+					<div class="unit-filters intel-filter-animation" ng-if="CtrlUnitsOperators.filterValues.display">
+						<div>
+							<form class="text-filters" ng-submit="refreshIntel()">
+								<div class="form-group title">
+									<div class="input-group">
+										<input
+											type="text"
+											class="form-control"
+											ng-model="CtrlUnitsOperators.filterValues.inputs.alias"
+											name="filterInputsAlias"
+											placeholder="Alias"
+										/>
+									</div>
+								</div>
+								<div class="form-group body">
+									<div class="input-group">
+										<input
+											type="text"
+											class="form-control"
+											ng-model="CtrlUnitsOperators.filterValues.inputs.description"
+											name="filterInputsDescription"
+											placeholder="Description"
+										/>
+									</div>
+								</div>
+								<div class="dropdown-section">
+									<div class="dropdown">
+										<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+											<span ng-bind="CtrlUnitsOperators.regionNames[CtrlUnitsOperators.filterValues.inputs.location]"></span>
+										</button>
+										<ul class="dropdown-menu">
+											<li ng-click="CtrlUnitsOperators.filterValues.inputs.location = $index" ng-repeat="item in (CtrlUnitsOperators.regionNames) track by $index">
+												<a href="#" ng-click="scope = item">
+													<span ng-bind="::(CtrlUnitsOperators.regionNames[$index])"></span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<input type="submit" id="submit" value="Submit"/ style="display:none;">
+							</form>
+
+							<div class="dropdown-section">
+								<div class="dropdown">
+									<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+										<i class="icon" ng-class="CtrlUnitsOperators.filterValues.dropdownValue.contract[CtrlUnitsOperators.filterValues.inputs.contract].icon"></i> <span ng-bind="CtrlUnitsOperators.filterValues.dropdownValue.contract[CtrlUnitsOperators.filterValues.inputs.contract].name"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li ng-click="CtrlUnitsOperators.changeDropdownValue('contract', $index)" ng-repeat="item in ::(CtrlUnitsOperators.filterValues.dropdownValue.contract) track by $index">
+											<a href="#" ng-click="scope = item.value">
+												<i class="icon" ng-class="::item.icon"></i>
+												<span ng-bind="::item.name"></span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+
+							<div class="prestige-filter" ng-if="(CtrlUnitsOperators.filterValues.inputs.contract == 2)">
+								<div class="input-slider">
+									<span class="slider-label noselect">Required prestige</span>
+									<rzslider rz-slider-model="CtrlUnitsOperators.filterValues.inputs.prestige.min" rz-slider-high="CtrlUnitsOperators.filterValues.inputs.prestige.max" rz-slider-options="CtrlUnitsOperators.sliderOptions"></rzslider>
+								</div>
+							</div>
+
+							<form class="checkbox-form" ng-if="(CtrlUnitsOperators.filterValues.inputs.contract == 1)">
+								<div class="form-group">
+									<div class="input-group">
+										<div class="extra-input noselect">
+											<input
+												type="checkbox" id="inputUnemployed"
+												ng-model="CtrlUnitsOperators.filterValues.inputs.unemployedOnly"
+											>
+											<label class="input-label" for="inputUnemployed">
+												<div class="body check">
+													<div class="box"><i class="icon ion-checkmark small"></i></div>
+													<div class="label-text">Unemployed only</div>
+												</div>
+											</label>
+										</div>
+									</div>
+								</div>
+							</form>
+							<div class="dropdown-section">
+								<div class="dropdown">
+									<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+										Sort by <i class="icon" ng-class="CtrlUnitsOperators.filterValues.dropdownValue.sortValues[CtrlUnitsOperators.filterValues.inputs.sortValues].icon"></i>
+									</button>
+									<ul class="dropdown-menu">
+										<li ng-click="CtrlUnitsOperators.changeDropdownValue('sortValues', $index)" ng-repeat="item in ::(CtrlUnitsOperators.filterValues.dropdownValue.sortValues) track by $index">
+											<a href="#" ng-click="scope = item.value">
+												<i class="icon" ng-class="::item.icon"></i>
+												<span ng-bind="::item.name"></span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<a class="btn btn-default medium order" ng-click="CtrlUnitsOperators.changeFilterOrder()">
+								<i style="margin-right: 3px;" class="icon" ng-class="(CtrlUnitsOperators.filterValues.inputs.order === 'ASC') ? 'ion-arrow-up-b' : 'ion-arrow-down-b'"></i>
+								<span ng-bind="(CtrlUnitsOperators.filterValues.inputs.order === 'ASC') ? 'Ascending' : 'Descending'"></span>
+							</a>
+						</div>
+					</div>
+					<div class="unit-filters intel-filter-animation" ng-if="CtrlUnitsOperators.filterValues.display" ng-cloak>
+						<tags-input
+							ng-model="CtrlUnitsOperators.filterValues.inputs.tags"
+							class="unit-tags"
+
+							add-on-blur="false"
+
+							min-tags="1"
+							max-tags="5"
+
+							on-tag-adding="CtrlUnitsOperators.addingTag($tag)"
+						>
+							<auto-complete
+								source="CtrlUnitsOperators.suggestedTags($query)"
+								min-length="1"
+								max-results-to-show="5"
+							></auto-complete>
+						</tags-input>
+						<div class="max-tags">
+							<span ng-bind="(CtrlUnitsOperators.filterValues.inputs.tags.length)"></span> / <span ng-bind="::(CtrlUnitsOperators.filterValues.inputs.tagsMax)"></span>
+						</div>
+					</div>
+				</div>
+				<hr />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 fade-animation-fast" ng-show="(CtrlUnitsOperators.loading)">
+				<div class="spinner">
+					<div class="fade-animation-fast">
+						<img src="svg-loaders/grid.svg" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12" id="units-page-units">
+				<div id="units-page-operators" ng-swipe-right="CtrlUnitsOperators.movePage('p')" ng-swipe-left="CtrlUnitsOperators.movePage('n')">
+					<div class="operator-card card-animation-stagger" ng-repeat="playerData in CtrlUnitsOperators.currentPlayers track by playerData.hashField" last-repeat last-repeat-function="CtrlUnitsOperators.doMasonry()" ng-if="!(CtrlUnitsOperators.loading) && (CtrlUnitsOperators.currentPlayers.length > 0)">
+						<div class="operator-card-width col-xs-12 col-sm-6 col-md-4 col-lg-3">
+							<div class="operator-card-unit" ng-style="{'background-image': CtrlUnitsOperators.generatePMCBG(playerData)}" ng-class="{'employed': playerData.PMC}">
+								<div class="top">
+									<img src="images/belligerence-logo-small-inv.png" id="logo-img" />
+									<div
+										ng-if="::(!(angular.isUndefinedOrNull(playerData.playerPrestige)) && (playerData.contractType == 2))"
+										class="prestige"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-append-to-body="true"
+										popover-popup-delay="500"
+										uib-popover="Prestige rank"
+									>
+										<i class="icon ion-android-star" ng-repeat="thing in ::CtrlUnitsOperators.numberToArray(playerData.playerPrestige) track by $index"></i>
+									</div>
+									<div
+										ng-if="::!(angular.isUndefinedOrNull(playerData.createdAt))"
+										class="card-date"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-popup-delay="500"
+										uib-popover="Join date"
+									><span ng-bind="::(playerData.createdAt | date:'MM/dd/yyyy')"></span></div>
+								</div>
+								<div class="content">
+									<div class="info">
+										<a class="alias" ng-href="operator/{{::playerData.hashField}}" >
+											<div ng-bind="::playerData.aliasField"></div>
+										</a>
+										<a class="outfit"
+											ng-href="outfit/{{::playerData.PMC.hashField}}"
+											ng-if="::(playerData.PMC !== undefined)" ng-cloak>
+											<i
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											uib-popover="Outfit"
+											popover-popup-delay="500"
+											class="icon ion-ios-people"></i>
+											<span ng-bind="::playerData.PMC.nameField"></span>
+										</a>
+										<div class="location"
+											ng-if="::(playerData.locationField !== undefined)"
+											ng-click="CtrlUnitsOperators.setLocationFilter(playerData.locationField)"
+										ng-cloak>
+											<i
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											uib-popover="Location"
+											popover-popup-delay="500"
+											class="icon ion-earth"></i>
+											<div ng-bind="::(CtrlUnitsOperators.regionNames[playerData.locationField])"></div>
+										</div>
+										<div class="contract" ng-if="::(playerData.contractType !== undefined)" ng-cloak>
+											<div
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											uib-popover="{{(CtrlUnitsOperators.displayContract(playerData.contractType).name)}}"
+											popover-popup-delay="500"
+											class="class-stamp" ng-class="::(CtrlUnitsOperators.displayContract(playerData.contractType).name).toLowerCase()"></div>
+										</div>
+										<div class="comments" ng-if="::(playerData.totalComments !== undefined)">
+											<i
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												popover-popup-delay="500"
+												uib-popover="Comments"
+												class="icon ion-chatbubble-working"></i>
+											<span ng-bind="::playerData.totalComments"></span>
+										</div>
+									</div>
+									<div class="body">
+										<a>
+											<div id="card-avatar-container">
+												<div id="card-avatar">
+													<upgrades-directive unit="playerData" mode="player-card"></upgrades-directive>
+													<a ng-href="operator/{{::playerData.hashField}}">
+														<div class="hexagon avatar-medium">
+															<div class="in1"><div class="in2">
+																<div class="card-avatar-render medium" ac-background-image background-image="images/avatars/players/main_{{::playerData.hashField}}.jpg"></div>
+															</div></div>
+														</div>
+													</a>
+												</div>
+											</div>
+										</a>
+										<div
+											class="is-friend"
+											ng-if="::(CtrlUnitsOperators.inArray(playerData.hashField, CtrlUnitsOperators.selfFriendsHashes))"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-placement="bottom"
+											popover-popup-delay="500"
+											uib-popover="This Operator is your friend."
+											ng-cloak>
+											<i class="icon ion-android-person"></i>
+										</div>
+									</div>
+								</div>
+								<div class="bio" ng-if="::(playerData.bioField !== undefined)" ng-cloak>
+									<span ng-bind="::(playerData.bioField)"></span>
+								</div>
+								<div class="tags" ng-if="::((playerData.tagsField.length) > 0)" ng-cloak>
+									<ul>
+										<i class="icon ion-pricetags"></i>
+										<li ng-repeat="playerTag in playerData.tagsField">
+											<a type="button" class="btn btn-default tiny" ng-click="::(CtrlUnitsOperators.addingTag({text: playerTag}, true))">
+												<span ng-bind="::playerTag"></span>
+											</a>
+										</li>
+									</ul>
+								</div>
+								<div class="steam">
+									<a ng-if="::(playerData.steamIDField !== undefined)" ng-href="http://steamcommunity.com/profiles/{{::playerData.steamIDField}}"
+									 ng-cloak>
+										<span class="steam-id" ng-bind="::(playerData.steamIDField)"></span>
+									</a>
+									<span ng-if="::(playerData.steamIDField === undefined)" class="steam-id">????????????????</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="no-results" ng-if="!(CtrlUnitsOperators.loading) && (CtrlUnitsOperators.currentPlayers.length === 0)" ng-cloak>
+						<h2>No results.</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" id="pagination-container">
+			<div class="col-md-12 text-center intel-filter-animation" ng-if="CtrlUnitsOperators.showPagination" ng-cloak>
+				<nav aria-label="Page navigation">
+					<ul
+						uib-pagination
+
+						id="intel-pagination"
+						class="pagination"
+
+						ng-change="CtrlUnitsOperators.movePage('a')"
+
+						first-text="&laquo;"
+						last-text="&raquo;"
+						next-text="&#9656;"
+						previous-text="&#9666;"
+
+						force-ellipses="true"
+						rotate="true"
+
+						total-items="CtrlUnitsOperators.currentCount"
+						items-per-page="CtrlUnitsOperators.perPage"
+						ng-model="CtrlUnitsOperators.stateParams.page"
+						max-size="1"
+
+						boundary-links="false"
+						boundary-link-numbers="true"
+					></ul>
+					<form ng-submit="CtrlUnitsOperators.submitPageChange()">
+						<div class="form-group">
+							<input type="text" id="page-input" ng-change="CtrlUnitsOperators.inputPageChange()" class="form-control" ng-model="CtrlUnitsOperators.stateParams.page">
+						</div>
+						<input type="submit" style="display:none;" />
+					</form>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

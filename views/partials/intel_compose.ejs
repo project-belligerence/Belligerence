@@ -1,0 +1,239 @@
+<div class="container-fluid top-spacer" id="page-intel-container">
+	<div class="container" id="compose-intel-container">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>New Intel</h2>
+				<h3>Share information that might be of use in the Battlefield.</h3>
+				<hr/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="submit-form col-md-7">
+				<div id="unit-avatar" class="player">
+					<div class="hexagon avatar-medium intel">
+						<div class="in1"><div class="in2"
+							ng-class="{'has-picture': (CtrlIntelCompose.usingPicture)}"
+							ng-style="{'background-color': (CtrlIntelCompose.formValues.backgroundType.value === 'color' ? CtrlIntelCompose.customColor : '#fff')}"
+							>
+
+							<i class="icon" ng-class="CtrlIntelCompose.formValues.typeField.icon" ng-style="{'color': (CtrlIntelCompose.formValues.backgroundType.value === 'color' ? CtrlIntelCompose.customIconColor : '#fff')}"></i>
+
+							<img class="fade-animation-fast custom-picture" ng-src="{{CtrlIntelCompose.croppedDataUrl}}"/ ng-if="(CtrlIntelCompose.formValues.backgroundType.value === 'uploaded-picture')" ng-cloak>
+
+							<img class="fade-animation-fast operator-picture" ng-src="images/avatars/players/main_{{CtrlIntelCompose.playerInfo.hashField}}.jpg"/ ng-if="(CtrlIntelCompose.formValues.backgroundType.value === 'operator-picture')" ng-cloak>
+
+							<img class="fade-animation-fast outfit-picture" ng-src="images/avatars/pmc/main_{{CtrlIntelCompose.playerInfo.PMC.hashField}}.jpg"/ ng-if="(CtrlIntelCompose.formValues.backgroundType.value === 'outfit-picture') && (CtrlIntelCompose.hasPMC)" ng-cloak>
+
+						</div></div>
+					</div>
+				</div>
+				<form>
+					<div class="dropdown-menus">
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Type</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelCompose.formValues.typeField.icon"></i> <span ng-bind="CtrlIntelCompose.formValues.typeField.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelCompose.changeTypeField($index)" ng-repeat="item in ::CtrlIntelCompose.dropdownMenu.types track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Background</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelCompose.formValues.backgroundType.icon"></i> <span ng-bind="CtrlIntelCompose.formValues.backgroundType.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelCompose.changeBackgroundType($index)" ng-repeat="item in ::CtrlIntelCompose.dropdownMenu.background track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+								<div class="color-picker fade-animation-fast"
+								ng-if="(CtrlIntelCompose.formValues.backgroundType.value === 'color')" ng-cloak>
+									<a type="button" class="btn btn-default medium" ng-model="CtrlIntelCompose.customColor" colorpicker>
+										<i class="icon ion-paintbrush"></i>
+									</a>
+									<a type="button" class="btn btn-default medium" ng-model="CtrlIntelCompose.customIconColor" colorpicker>
+											<i class="icon" ng-class="CtrlIntelCompose.formValues.typeField.icon"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+
+					<div class="visible-sm-block visible-xs-block">
+						<div id="avatar-upload-container" class="inward-upload fade-animation-fast col-md-5" ng-if="(CtrlIntelCompose.formValues.backgroundType.value === 'uploaded-picture')" ng-cloak>
+							<div id="avatar-upload-form-container"
+								class="fade-animation-fast">
+								<a
+									class="section-button medium animated" role="button"
+
+									ngf-select
+									ngf-drop
+
+									ng-model="CtrlIntelCompose.currentUploadedAvatar"
+
+									ngf-pattern="'image/*'"
+									ngf-accept="'image/*'"
+									ngf-max-size="3MB"
+								>
+									<ul>
+										<li><i class="icon ion-ios-camera"></i></li>
+										<li>Select picture</li>
+									</ul>
+								</a>
+
+								<div id="avatar-upload-form">
+									<form name="avatarPictureForm" enctype="multipart/form-data">
+										<div ngf-drop ng-model="CtrlIntelCompose.currentUploadedAvatar" ngf-pattern="image/*" class="crop-area">
+
+											<div class="upload-text">
+												<i class="icon medium ion-arrow-down-a"></i><br>
+												Or just drag and drop/paste your picture here.
+											</div>
+
+											<img-crop
+												image="CtrlIntelCompose.currentUploadedAvatar | ngfDataUrl"
+												area-type="square"
+												result-image="CtrlIntelCompose.croppedDataUrl"
+												result-image-size="350"
+											>
+											</img-crop>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				<form>
+					<div class="form-group">
+						<label for="titleField"><h3>Title</h3></label>
+						<input type="text" class="form-control" id="titleField" ng-model="CtrlIntelCompose.formValues.titleField">
+						<span class="remaining-characters"
+							ng-class="{'good': !(CtrlIntelCompose.checkCharactersRemaining(CtrlIntelCompose.formValues.titleField.length, CtrlIntelCompose.validatorFields.titleField.validation[0].params.max).status), 'bad': (CtrlIntelCompose.checkCharactersRemaining(CtrlIntelCompose.formValues.titleField.length, CtrlIntelCompose.validatorFields.titleField.validation[0].params.max).status) }">
+							{{ CtrlIntelCompose.checkCharactersRemaining(CtrlIntelCompose.formValues.titleField.length, CtrlIntelCompose.validatorFields.titleField.validation[0].params.max).current }}
+						</span>
+						characters left.
+					</div>
+
+					<div class="form-group">
+						<label for="bodyField"><h3>Body</h3></label>
+						<textarea class="form-control" rows="5" id="bodyField" ng-model="CtrlIntelCompose.formValues.bodyField"></textarea>
+						<span class="remaining-characters"
+							ng-class="{'good': !(CtrlIntelCompose.checkCharactersRemaining(CtrlIntelCompose.formValues.bodyField.length, CtrlIntelCompose.validatorFields.bodyField.validation[0].params.max).status), 'bad': (CtrlIntelCompose.checkCharactersRemaining(CtrlIntelCompose.formValues.bodyField.length, CtrlIntelCompose.validatorFields.bodyField.validation[0].params.max).status) }">
+							{{ CtrlIntelCompose.checkCharactersRemaining(CtrlIntelCompose.formValues.bodyField.length, CtrlIntelCompose.validatorFields.bodyField.validation[0].params.max).current }}
+						</span>
+						characters left.
+					</div>
+
+					<div class="dropdown-menus">
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Visibility</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelCompose.formValues.visibilityField.icon"></i> <span ng-bind="CtrlIntelCompose.formValues.visibilityField.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelCompose.changeVisibilityType($index)" ng-repeat="item in ::CtrlIntelCompose.dropdownMenu.visibility track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Post As</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelCompose.formValues.postedAs.icon"></i> <span ng-bind="CtrlIntelCompose.formValues.postedAs.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelCompose.changePostedAsMethod($index)" ng-repeat="item in ::CtrlIntelCompose.dropdownMenu.postedAs track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<hr/>
+
+					<div class="submit-section">
+						<h2>Cost: <span class="cost"><span ng-bind="CtrlIntelCompose.intelPrice | currency:'D$ '"></span></span></h2>
+
+						<a class="section-button medium animated pull-right" role="button" type="submit" ng-click="CtrlIntelCompose.submitIntelForm()">
+							<ul>
+								<li><i class="icon ion-checkmark"></i></li>
+								<li>Submit Intel</li>
+							</ul>
+						</a>
+					</div>
+				</form>
+			</div>
+			<div class="visible-lg-block visible-md-block">
+				<div id="avatar-upload-container" class="fade-animation-fast col-md-5" ng-if="(CtrlIntelCompose.formValues.backgroundType.value === 'uploaded-picture')" ng-cloak>
+					<div id="avatar-upload-form-container"
+						class="fade-animation-fast">
+						<a
+							class="section-button medium animated" role="button"
+
+							ngf-select
+							ngf-drop
+
+							ng-model="CtrlIntelCompose.currentUploadedAvatar"
+
+							ngf-pattern="'image/*'"
+							ngf-accept="'image/*'"
+							ngf-max-size="3MB"
+						>
+							<ul>
+								<li><i class="icon ion-ios-camera"></i></li>
+								<li>Select picture</li>
+							</ul>
+						</a>
+
+						<div id="avatar-upload-form">
+							<form name="avatarPictureForm" enctype="multipart/form-data">
+								<div ngf-drop ng-model="CtrlIntelCompose.currentUploadedAvatar" ngf-pattern="image/*" class="crop-area">
+
+									<div class="upload-text">
+										<i class="icon medium ion-arrow-down-a"></i><br>
+										Or just drag and drop/paste your picture here.
+									</div>
+
+									<img-crop
+										image="CtrlIntelCompose.currentUploadedAvatar | ngfDataUrl"
+										area-type="square"
+										result-image="CtrlIntelCompose.croppedDataUrl"
+										result-image-size="350"
+									>
+									</img-crop>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

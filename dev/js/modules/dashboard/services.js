@@ -1,20 +1,30 @@
 (function() {
 	'use strict';
 
-	DashboardServicesFunction.$inject = ["$timeout", "$q", "$templateRequest", "apiServices", "alertsServices", "Upload"];
+	DashboardServicesFunction.$inject = [
+		"$rootScope", "$timeout", "$q", "$templateRequest",
+		"apiServices", "generalServices",
+		"playerServices", "pmcServices",
+		"alertsServices", "uiServices", "fundsServices",
+		"Upload"
+	];
 
-	function DashboardServicesFunction($timeout, $q, $templateRequest, apiServices, alertsServices, Upload) {
+	function DashboardServicesFunction($rootScope, $timeout, $q, $templateRequest, apiServices, generalServices, playerServices, pmcServices, alertsServices, uiServices, fundsServices, Upload) {
 
 		var methods = {
 			loadNewView: loadNewView,
 			menuItem: menuItem,
 			statsItem: statsItem,
-			callThemOut: callThemOut,
 			editFieldPlayer: editFieldPlayer,
 			editPMCTierNames: editPMCTierNames,
 			editFieldPMC: editFieldPMC,
 			uploadAvatar: uploadAvatar,
-			uploadPMCAvatar: uploadPMCAvatar
+			modalRedeemCode: modalRedeemCode,
+			uploadPMCAvatar: uploadPMCAvatar,
+			askClaimNetworth: askClaimNetworth,
+			resetSideAlignment: resetSideAlignment,
+			upgradePMCSize: upgradePMCSize,
+			upgradePrestigeRank: upgradePrestigeRank
 		};
 
 		var validationForm = {
@@ -23,7 +33,7 @@
 			displayname: [ { library: validator, func: 'isLength', params: { min: 3, max: 32} } ],
 			motto: [ { library: validator, func: 'isLength', params: { min: 3, max: 128} } ],
 			bio: [ { library: validator, func: 'isLength', params: { min: 1, max: 255} } ],
-			location: [ { library: validator, func: 'isLength', params: { min: 1, max: 32} } ],
+			location: [],
 			email:  [ { library: validator, func: 'isLength', params: { min: 1, max: 32} },
 		 			  { library: validator, func: 'isEmail', params: {} }
 				 	]
@@ -48,7 +58,7 @@
 		}
 
 		function uploadAvatar(dataUrl, name, _cb) {
-			function resolveUpload(response) { $timeout(function () { return _cb(response.data); }, 0);	}
+			function resolveUpload(response) { $timeout(function () { $rootScope.$broadcast("navbar:refreshDirective"); return _cb(response.data); }, 0);	}
 			function eventStep(evt) { /* $scope.progress = parseInt(100.0 * evt.loaded / evt.total); */ }
 
 			Upload.upload({
@@ -59,7 +69,7 @@
 		}
 
 		function uploadPMCAvatar(dataUrl, name, _cb) {
-			function resolveUpload(response) { $timeout(function () { return _cb(response.data); }, 0);	}
+			function resolveUpload(response) { $rootScope.$broadcast("navbar:refreshDirective"); $timeout(function () { return _cb(response.data); }, 0);	}
 			function eventStep(evt) { /* $scope.progress = parseInt(100.0 * evt.loaded / evt.total); */ }
 
 			Upload.upload({
@@ -128,10 +138,109 @@
 			return dfd.promise;
 		}
 
-		function callThemOut() {
-			return $timeout(function() {
-				return "This is working, cool.";
-			}, 0);
+		function askClaimNetworth(amount) {
+			var modalOptions = {
+					header: { text: 'Claim Personal Networth', icon: "ion-android-drafts" },
+					body: {	text: 'Do you want to claim your entire personal networth and transfer it to your funds?' },
+					choices: {
+						yes: { text: 'Confirm', icon: 'ion-checkmark' },
+						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
+					}
+				},newModal = uiServices.createModal('GenericYesNo', modalOptions);
+			return newModal.result.then(function(choice) {
+				if (choice) {
+					return playerServices.postClaimNetworth().then(function(data) {
+						if (data) {
+							fundsServices.showChangedFunds(amount);
+							alertsServices.addNewAlert("success", data.data.message);
+							return data.data.data;
+						} else { return false; }
+					});
+				} else { return false; }
+			});
+		}
+
+		function modalRedeemCode() {
+			var newModal = uiServices.createModal('RedeemCode', {});
+			return newModal.result.then(function(choice) {
+				if (choice) {
+					if (choice.fundsField > 0) { fundsServices.showChangedFunds(choice.fundsField); }
+				}
+				return choice;
+			});
+		}
+
+		function resetSideAlignment(amount) {
+			var modalOptions = {
+					header: { text: 'Reset Side Alignment', icon: "ion-refresh" },
+					body: {	text: 'Do you want to reset your Side Alignment back to neutrality?' },
+					choices: {
+						yes: { text: 'Confirm', icon: 'ion-checkmark' },
+						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
+					}
+				},newModal = uiServices.createModal('GenericYesNo', modalOptions);
+			return newModal.result.then(function(choice) {
+				if (choice) {
+					return generalServices.resetSideAlignment().then(function(data) {
+						if (data) {
+							if (!(data.success || data.data.success)) return false;
+							alertsServices.addNewAlert("success", data.data.message);
+							$rootScope.$broadcast("navbar:setEntitySide", 0);
+							return true;
+						} else { return false; }
+					});
+				} else { return false; }
+			});
+		}
+
+		function upgradePMCSize(amount) {
+			var modalOptions = {
+					header: { text: 'Increase Outfit Size', icon: "ion-person-add" },
+					body: {	text: "Do you want to increase the Outfit's unit limit by one?" },
+					choices: {
+						yes: { text: 'Confirm', icon: 'ion-plus', class: "success" },
+						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
+					}, cost: amount
+				}, newModal = uiServices.createModal('GenericYesNo', modalOptions);
+
+			return newModal.result.then(function(choice) {
+				if (choice) {
+					return pmcServices.upgradePMCSize().then(function(data) {
+						if (data.data.success) {
+							if (data.data.data.valid) {
+								alertsServices.addNewAlert("success", data.data.message);
+								fundsServices.showChangedFunds(data.data.data.neededFunds, "subtract");
+								return data.data.data;
+							} else { return false; }
+						} else { return false; }
+					});
+				} else { return false; }
+			});
+		}
+
+		function upgradePrestigeRank(amount) {
+			var modalOptions = {
+					header: { text: 'Upgrade Prestige Rank?', icon: "ion-star" },
+					body: {	text: "Do you want to increase your Prestige Rank by one level?" },
+					choices: {
+						yes: { text: 'Confirm', icon: 'ion-plus', class: "success" },
+						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
+					}, cost: amount
+				}, newModal = uiServices.createModal('GenericYesNo', modalOptions);
+
+			return newModal.result.then(function(choice) {
+				if (choice) {
+					return generalServices.upgradePrestigeRank().then(function(data) {
+						if (data.data.success) {
+							if (data.data.data.valid) {
+								alertsServices.addNewAlert("success", data.data.message);
+								fundsServices.showChangedFunds(data.data.data.neededFunds, "subtract");
+								return data.data.data;
+							} else { return false; }
+						} else { return false; }
+					});
+				} else { return false; }
+			});
 		}
 
 		return methods;

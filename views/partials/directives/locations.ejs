@@ -1,0 +1,52 @@
+
+<span ng-init="Directive = CtrlDirectiveLocations;"></span>
+
+<div class="location-directive" ng-if="(Directive.displayDirective())" ng-cloak>
+	<div ng-repeat="location in Directive.objectList track by $index" ng-class="::(Directive.getNormalColumnSize())" ng-init="location = Directive.initObject(location);">
+		<div class="row">
+			<div class="location-object" ng-class="::(Directive.applyControlledClass(location.ownerField))">
+				<div class="top">
+					<div class="importance">
+						<i class="icon ion-alert-circled"></i>
+						<span ng-bind="::(location.importanceField)"></span>
+					</div>
+					<div class="name" ng-bind="::(location.nameField)"></div>
+				</div>
+				<div class="col-md-12 middle">
+					<div class="left">
+						<div class="info">
+							<div class="map_name" ng-bind="::(location.Map.nameField)"></div>
+							<div class="grid" ng-bind="::(Directive.displayGridRef(location.gridRef))"></div>
+						</div>
+						<div class="properties">
+							<div class="interactable">
+								<div class="prop-icon" ng-if="::(location.insertableField)">
+									<i
+										class="icon ion-log-in help"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="You may insert from this Location."
+									></i>
+								</div>
+								<div class="prop-icon" ng-if="::(location.extractableField)">
+									<i
+										class="icon ion-log-out help"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										uib-popover="You may extract from this Location."
+									></i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="right">
+						<div class="location-icon"">
+							<img src="/images/icons/{{::(Directive.getLocationTypeIcon(location.typeField))}}.png" />
+						</div>
+						<div class="type" ng-bind="::(Directive.locationTypes[location.typeField].text)"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

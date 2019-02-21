@@ -1,0 +1,891 @@
+
+#single-upgrade-container {
+	@include factor-property(margin-top, 20);
+	@include factor-property(padding-bottom, 20);
+
+	@include breakpoint("small") { @include factor-property(margin-top, 10); }
+
+	h2 { margin: 0px; }
+	hr { border-top: 1px solid #333; }
+
+	#single-upgrade-top {
+		#top-image {
+			.image-container {
+				width: 350px;
+				@include breakpoint("medium") { width: 250px; }
+
+				.upgrade-image {
+					width: inherit;
+				}
+
+				&.completed {
+					@include prefix(animation, pulse-drop-shadow-main-2 ($duration_time_slow / 2) ease-in-out infinite);
+				}
+
+				.rank-level {
+					position: relative;
+					top: -30px;
+					background-color: #fff;
+
+					.rank-list {
+						text-align: center;
+						display: flex;
+						justify-content: space-evenly;
+
+						@include breakpoint("medium") { height: 40px; }
+
+						.rank {
+							.icon {
+								@include font-size(factor(7));
+								color: #333;
+
+								@include breakpoint("medium") {
+									@include font-size(factor(5));
+									position: relative;
+									top: -3px;
+								}
+
+								&.ion-android-checkbox-blank { color: $main_color; }
+							}
+						}
+					}
+				}
+			}
+		}
+
+		#top-description {
+			.top-name {
+				@include font-size(factor(7));
+				color: white;
+				font-weight: 800;
+				background: url("/images/honeybg_red.png") repeat 100%;
+				padding: factor(2);
+				display: inline-block;
+			}
+
+			.top-sub-section {
+				@include factor-property(margin-top, 1);
+				@include font-size(factor(3));
+				font-weight: 800;
+				font-family: $main_font;
+
+				i {
+					@include factor-property(margin-right, 1);
+					position: relative;
+					top: 1px;
+				}
+
+				.top-kind {
+					display: inline-block;
+					i { @include font-size(factor(4)); }
+				}
+
+				.separator {
+					display: inline-block;
+
+					.dot {
+						margin: 0 factor(2);
+						position: relative;
+						top: -7px;
+					}
+
+					.top-type {
+						display: inline-block;
+
+						&.warning {
+							color: #111;
+							padding: 3px factor(1.5);
+							@include prefix(animation, pulse-background-color-warning $duration_time_fast ease-in-out infinite);
+						}
+					}
+				}
+			}
+
+			.top-flavortext {
+				@include font-size(factor(3));
+				letter-spacing: -1px;
+				margin: factor(3) 0;
+			}
+
+			#top-related-upgrades {
+				.related-text {
+					@include font-size(factor(3));
+					letter-spacing: -2px;
+
+					@include factor-property(margin-bottom, 3);
+				}
+
+				.related-upgrade-text {
+					@include font-size(factor(3));
+					background: url("/images/cardbg.png") repeat 100%;
+					padding: factor(1) factor(2);
+					display: block;
+					font-weight: 800;
+					text-shadow: 0px 0px 3px #000, 0px 0px 3px #333;
+
+					&.required { background: url("/images/honeybg_green.png") repeat 100%; }
+
+					&.blacklisted {
+						color: #333;
+						text-shadow: none;
+						background: url("/images/cardbg.png") repeat 100%;
+					}
+
+					@include breakpoint("small") {
+						@include factor-property(margin-top, 3);
+					}
+				}
+
+				.related-container {
+					@include factor-property(margin-top, 2);
+
+					.single-upgrade {
+						cursor: pointer;
+						margin: factor(1.5);
+						margin-left: 0px;
+						float: left;
+						display: inline-block;
+						border: none;
+
+						img { display: inline-block; width: 64px; }
+
+						.related-name {
+							width: 64px;
+							text-align: center;
+							position: relative;
+							background-color: $main_color;
+							letter-spacing: -1px;
+							line-height: 15px;
+							padding: factor(1) 0;
+							top: -18px;
+						}
+
+						.rank-container {
+							position: absolute;
+
+							.upgrade-rank {
+								color: #fff;
+								font-weight: 800;
+								letter-spacing: -2px;
+								text-align: center;
+								background-color: $success_color;
+								display: inline-block;
+								padding: 2px factor(1);
+								position: relative;
+
+								top: -18px;
+								right: -15px;
+
+								&.warning {
+									color: #111;
+									@include prefix(animation, pulse-background-color-warning $duration_time_fast ease-in-out infinite);
+								}
+
+								&.failed {
+									@include prefix(animation, pulse-background-color-black $duration_time_fast ease-in-out infinite);
+									color: #fff;
+								}
+							}
+						}
+					}
+				}
+			}
+
+		}
+	}
+
+	#single-upgrade-bottom {
+		@include factor-property(margin-top, 10);
+
+		.current-rank, .next-rank {
+			h2 {
+				@include factor-property(padding-left, 2);
+				border-left: 5px solid $main_color;
+				color: #fff;
+			}
+			h3 {
+				@include factor-property(padding, 2);
+				color: #333;
+				background: url("/images/cardbg_light.png") repeat 100%;
+			}
+		}
+
+		.current-rank {
+			@include factor-property(margin-bottom, 5);
+			h2 { border-left: 5px solid #ccc; color: #ccc; }
+		}
+
+		.purchase-section {
+			@include factor-property(margin-right, 2);
+			@include font-size(factor(5));
+			font-family: $main_font;
+			float: right;
+
+			.final-cost-label {
+				text-transform: uppercase;
+				letter-spacing: -3px;
+				@include factor-property(padding-left, 1);
+				@include factor-property(margin-bottom, 2);
+				background: url("/images/honeybg_red.png") repeat 100%;
+				@include font-size(factor(4.5));
+			}
+
+			.upgrade-cost .icon, .funds-container .icon, .remaining-funds-container .icon {
+				background: url("/images/honeybg_red.png") repeat 100%;
+				padding: 3px 10px;
+				@include font-size(factor(4));
+			}
+
+			.upgrade-cost {
+				@include factor-property(margin-bottom, 2);
+				.current-cost {
+					letter-spacing: -4px;
+					display: inline-block;
+					@include font-size(factor(5));
+				}
+				.ion-flash { padding: 2px factor(2.2); }
+			}
+
+			.funds-container {
+				.current-funds {
+					letter-spacing: -4px;
+					display: inline-block;
+					margin-left: 0px;
+					@include font-size(factor(5));
+				}
+			}
+
+			.remaining-funds-container {
+				.remaining-funds {
+					letter-spacing: -2px;
+					display: inline-block;
+				}
+				.ion-arrow-swap { padding: 3px factor(2); }
+			}
+
+			hr {margin: 10px 0px;}
+
+			@include breakpoint("small") {
+				float: left;
+
+				@include font-size(factor(3));
+				.final-cost-label { @include font-size(factor(3.5)); }
+				.upgrade-cost .current-cost, .funds-container .current-funds { @include font-size(factor(4)); }
+				.remaining-funds-container .remaining-funds { @include font-size(factor(4)); }
+			}
+		}
+	}
+}
+
+#tree-selector {
+	z-index: 99;
+	position: fixed;
+	@include factor-property(top, 13.5);
+	@include factor-property(left, 2);
+
+	.dropdown-section {
+		.dropdown {
+			.btn {
+				@include factor-property(max-width, 20);
+				padding: factor(2);
+
+				img { width: 64px; }
+
+				.current-upgrade {
+					word-break: break-word;
+					white-space: normal;
+					font-family: $main_font;
+					letter-spacing: -1px;
+					@include font-size(factor(2.5));
+					text-align: center;
+					padding: factor(2) 0px;
+					padding-bottom: 0px;
+				}
+			}
+
+			.dropdown-menu {
+				.upgrade-choice {
+					padding: 5px 10px;
+
+					img {
+						@include prefix(filter, drop-shadow(0px 0px 1px #333));
+						margin-right: 5px;
+						width: 32px;
+					}
+
+					&:hover img { @include prefix(filter, drop-shadow(0px 0px 1px #000)); }
+				}
+			}
+		}
+	}
+
+	@include breakpoint("small") {
+		@include factor-property(left, 0);
+		@include factor-property(top, 6);
+
+		display: inline-block;
+		width: 100%;
+
+		.dropdown-section {
+			width: 100%;
+			display: inline-block;
+
+			.dropdown .btn {
+				width: 100%;
+				max-width: none;
+				padding: 2px;
+
+				img {
+					display: inline-block;
+					width: 44px;
+				}
+
+				.current-upgrade {
+					display: inline-block;
+				}
+			}
+		}
+	}
+}
+
+#mobile-navigation {
+
+	z-index: 95;
+	position: fixed;
+	bottom: 0px;
+	left: 10px;
+
+	display: none;
+
+	@include breakpoint("medium") { display: inline-block; }
+
+	#direction-pad {
+		@include size(100px);
+		border-radius: 30px;
+
+		z-index: 99;
+
+		position: relative;
+		left: 10px;
+		bottom: 10px;
+
+		background-color: $main_color;
+		box-shadow: 0 0 5px #555;
+
+		#direction-container {
+			position: absolute;
+			left: 42px;
+			top: 30px;
+
+			.direction {
+				position: absolute;
+				@include font-size(factor(4));
+
+				i { cursor: pointer; }
+
+				$size_width: 27px;
+				$size_height: 27px;
+
+				&.nw { top: -$size_height; left: -$size_width; @include prefix(transform, rotate(320deg));	}
+				&.n { top: -($size_height + 5); left: 0px; }
+				&.ne { top: -$size_height; left: $size_width; @include prefix(transform, rotate(45deg)); }
+				&.e { top: 0px; left: $size_width; @include prefix(transform, rotate(90deg)); }
+				&.se { top: $size_height; left: $size_width; @include prefix(transform, rotate(135deg)); }
+				&.s { top: ($size_height + 5); left: 0px; @include prefix(transform, rotate(180deg)); }
+				&.sw { top: $size_height; left: -$size_width; @include prefix(transform, rotate(215deg)); }
+				&.w { top: 0px; left: -$size_width; @include prefix(transform, rotate(270deg)); }
+			}
+		}
+	}
+
+	#zoom-input {
+		float: right;
+		position: absolute;
+		left: 130px;
+		bottom: 17px;
+
+		.zoom {
+			@include transition(background-color .25s, color .25s);
+
+			padding: 1px 7px;
+			cursor: pointer;
+			@include factor-property(margin-bottom, 1);
+			@include font-size(factor(3));
+			@include size(30px);
+			background-color: $main_color;
+			box-shadow: 0 0 5px #555;
+
+			i { cursor: pointer; }
+
+			&:hover {
+				background-color: white;
+				color: $main_color;
+			}
+		}
+	}
+}
+
+#upgrade-short-view {
+	z-index: 99;
+	position: fixed;
+	@include factor-property(top, 13.5);
+	@include factor-property(right, 2);
+	height: 100%;
+
+	@include breakpoint("small") { @include factor-property(top, 16); }
+
+	.view-container {
+		position: absolute;
+		right: 0;
+		box-shadow: 0px 0px 10px #000;
+		color: #ccc;
+		width: 400px;
+		background: url("/images/cardbg_inverted.png") repeat 100%;
+		@include factor-property(padding, 3);
+
+		@include breakpoint("medium") {
+			height: 68%;
+			overflow-y: auto;
+			width: 290px;
+		}
+
+		.close-button {
+			float: right;
+			position: relative;
+			top: -21px;
+			left: -14px;
+			.btn-default { position: absolute; }
+		}
+
+		.upgrade-image-top {
+
+			&.completed { @include prefix(animation, pulse-drop-shadow-main-3 ($duration_time_slow / 2) ease-in-out infinite); }
+
+			.upgrade-image {
+				img {
+					display: block;
+					margin-right: auto;
+					margin-left: auto;
+					width: 80px;
+				}
+			}
+
+			.rank-level {
+				position: relative;
+				top: -10px;
+				background-color: #fff;
+				width: 50%;
+				margin-left: auto;
+				margin-right: auto;
+
+				.rank-list {
+					text-align: center;
+					display: flex;
+					justify-content: space-evenly;
+
+					.rank {
+						.icon {
+							@include font-size(factor(2));
+							color: #333;
+
+							&.ion-android-checkbox-blank { color: $main_color; }
+						}
+					}
+				}
+			}
+		}
+
+		.anchor-container {
+			&:hover {
+				.upgrade-name {
+					background: url("/images/cardbg_light.png") repeat 100%;
+					color: $main_color;
+				}
+			}
+		}
+
+		.upgrade-name-container {
+			display: block;
+			text-align: center;
+			@include factor-property(margin-bottom, 3);
+
+			.upgrade-name {
+				@include transition(background .2s, color .2s);
+				@include font-size(factor(2.5));
+				padding: factor(1);
+				color: white;
+				font-weight: 800;
+				background: url("/images/honeybg_red.png") repeat 100%;
+				display: inline-block;
+			}
+		}
+
+		.upgrade-description {
+			@include factor-property(margin-left, 1);
+			width: 90%;
+
+			.title {
+				@include factor-property(padding-left, 1);
+				@include factor-property(margin-bottom, 1);
+				border-left: 5px solid #ccc; color: #ccc;
+				font-family: $main_font;
+			}
+
+			.text {
+				background: url("/images/cardbg_light.png") repeat 100%;
+
+				@include font-size(factor(2));
+				@include factor-property(padding, 1);
+				letter-spacing: -1px;
+				line-height: 17px;
+				font-weight: 800;
+				color: #111;
+			}
+		}
+
+		.upgrade-details {
+			text-align: center;
+			font-family: $main_font;
+			font-weight: 800;
+			@include font-size(factor(2.5));
+
+			.upgrade-kind {
+				display: inline-block;
+				@include factor-property(margin-right, 1);
+				text-align: center;
+			}
+
+			.separator {
+				display: inline-block;
+
+				.upgrade-type {
+					display: inline-block;
+
+					&.warning {
+						color: #111;
+						padding: 3px factor(1.5);
+						@include prefix(animation, pulse-background-color-warning $duration_time_fast ease-in-out infinite);
+					}
+				}
+			}
+		}
+
+		.upgrade-related-upgrades {
+
+			.related-row {
+				@include breakpoint("medium"){ @include factor-property(padding-bottom, 2); }
+				@include breakpoint("small"){ padding-bottom: 0; }
+			}
+
+			.related-text {
+				@include font-size(factor(2));
+				letter-spacing: -2px;
+
+				@include factor-property(margin-bottom, 3);
+			}
+
+			.related-upgrade-text {
+				@include font-size(factor(2));
+				background: url("/images/cardbg.png") repeat 100%;
+				padding: 3px factor(1);
+				display: block;
+				font-weight: 800;
+				text-shadow: 0px 0px 3px #000, 0px 0px 3px #333;
+
+				&.required { background: url("/images/honeybg_green.png") repeat 100%; }
+
+				&.blacklisted {
+					color: #333;
+					text-shadow: none;
+					background: url("/images/cardbg.png") repeat 100%;
+				}
+			}
+
+			.related-container {
+				.single-upgrade {
+					margin: factor(1.5);
+					margin-left: 0px;
+					float: left;
+					display: inline-block;
+					border: none;
+
+					cursor: pointer;
+
+					img { display: inline-block; width: 32px; }
+
+					.rank-container {
+						position: absolute;
+
+						.upgrade-rank {
+							color: #fff;
+							font-weight: 800;
+							letter-spacing: -2px;
+							text-align: center;
+							background-color: $success_color;
+							display: inline-block;
+							padding: 0px factor(1);
+							position: relative;
+
+							top: -5px;
+
+							&.warning {
+								color: #111;
+								@include prefix(animation, pulse-background-color-warning $duration_time_fast ease-in-out infinite);
+							}
+
+							&.failed {
+								@include prefix(animation, pulse-background-color-black $duration_time_fast ease-in-out infinite);
+								color: #fff;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.upgrade-ranks {
+			@include factor-property(margin-bottom, 2);
+
+			.current-rank, .next-rank {
+				.title {
+					@include factor-property(padding-left, 1);
+					@include factor-property(margin-bottom, 1);
+
+					font-family: $main_font;
+					@include font-size(factor(2));
+					border-left: 5px solid $main_color;
+					color: #fff;
+				}
+
+				.text {
+					width: 90%;
+					@include factor-property(padding, 1);
+					letter-spacing: -1px;
+					line-height: 17px;
+					@include font-size(factor(1.8));
+					font-weight: 800;
+					color: #111;
+					background: url("/images/cardbg_light.png") repeat 100%;
+				}
+			}
+
+			.current-rank {
+				@include factor-property(margin-bottom, 1);
+				.title { border-left: 5px solid #ccc; color: #ccc; }
+			}
+		}
+
+		.purchase-section {
+			@include factor-property(margin-top, 4);
+			@include factor-property(margin-right, 2);
+			@include font-size(factor(2));
+			font-family: $main_font;
+			display: inline-block;
+			width: 100%;
+
+			letter-spacing: -1px;
+
+			.final-cost-label {
+				display: inline-block;
+				text-transform: uppercase;
+				padding: 4px factor(1);
+				@include factor-property(margin-bottom, 2);
+				background: url("/images/honeybg_red.png") repeat 100%;
+				@include font-size(factor(2));
+			}
+
+			.upgrade-cost .icon, .funds-container .icon, .remaining-funds-container .icon {
+				background: url("/images/honeybg_red.png") repeat 100%;
+				padding: 3px 5px;
+				@include font-size(factor(2));
+				@include factor-property(margin-right, 1);
+			}
+
+			.upgrade-cost {
+				@include factor-property(margin-bottom, 2);
+
+				.current-cost {
+					display: inline-block;
+					@include font-size(factor(2));
+				}
+				.ion-flash { padding: 2px 8px; }
+			}
+
+			.funds-container {
+				.current-funds {
+					display: inline-block;
+					margin-left: 0px;
+					@include font-size(factor(2));
+				}
+			}
+
+			.remaining-funds-container {
+				.remaining-funds { display: inline-block; }
+				.ion-arrow-swap { padding: 3px 6px; }
+			}
+
+			.upgrade-interactions {
+				@include factor-property(margin-left, 1);
+
+				.section-button {
+					&.bottom {
+						position: relative;
+						bottom: -32px;
+					}
+				}
+
+				@include breakpoint("small") {
+					display: inline-block;
+					width: 130px;
+				}
+			}
+
+			hr {margin: 10px 0px;}
+		}
+
+		.bottom-interaction {
+			@include factor-property(margin-top, 2);
+			display: inline-block;
+			width: 100%;
+
+			.center-button {
+				display: block;
+				width: 110px;
+				margin-left: auto;
+				margin-right: auto;
+
+				.section-button {
+					float: right;
+				}
+			}
+		}
+	}
+}
+
+#vignette-overlay {
+	position: fixed;
+
+	height: 100%;
+	width: 100%;
+	background: radial-gradient(transparent 10%, #333 100%);
+
+	#upgrades-main-page {
+		position: fixed;
+
+		height: 100%;
+		width: 100%;
+
+		cursor: -moz-grab;
+		cursor: -webkit-grab;
+		cursor: grab;
+
+		&.is-dragging {
+			cursor: -moz-grabbing;
+			cursor: -webkit-grabbing;
+			cursor: grabbing;
+		}
+
+		#upgrades-zoom-area {
+			@include transition(transform .35s cubic-bezier(0.455, 0.03, 0.515, 0.955));
+			@include prefix(transform, scale(1, 1));
+
+			transform-origin: 0px 0px;
+
+			#upgrades-translate-area {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+
+				&.transition-class { @include transition(transform 1s cubic-bezier(0.165, 0.84, 0.44, 1)); }
+
+				#upgrades-render {
+
+					.connecting-line {
+						@include prefix(filter, grayscale(100%));
+
+						background: url("/images/node_connection.gif");
+						position: absolute;
+						top: 0px;
+						left: 0px;
+
+						z-index: -1;
+
+						@include prefix(transform-origin, 0% 50%);
+
+						&.locked { @include prefix(filter, opacity(30%) grayscale(100%)); }
+
+						&.good-rank { @include prefix(filter, opacity(100%) grayscale(0%)); }
+						&.bad-rank { @include prefix(filter, opacity(100%) grayscale(70%)); }
+					}
+
+					.single-upgrade {
+						@include prefix(filter, grayscale(80%) drop-shadow(0px 0px 5px #666));
+						@include transition(background-image .25s, filter .25s);
+						@include size(128px);
+						position: absolute;
+						top: 0;
+						left: 0;
+						cursor: pointer;
+						border-bottom: 0px solid rgba(0,0,0,0);
+
+						background-image: url("/images/upgrade-bg.png"), url("/images/upgrade-bg-light.png");
+						background-size: 100%;
+
+						&:hover { background-image: url("/images/upgrade-bg-light.png"); }
+
+						&.locked { @include opacity(0.5); }
+						&.bad-requirement { @include prefix(filter, saturate(0%) drop-shadow(0px 0px 2px #333)); }
+						&.bad-blacklisted { @include prefix(filter, invert(100%) grayscale(100%) drop-shadow(0px 0px 5px #333)); }
+
+						&.bad-rank { @include prefix(filter, saturate(100%) drop-shadow(0px 0px 2px #333)); }
+						&.good-rank { @include prefix(filter, drop-shadow(0px 0px 5px #000)); }
+
+						.upgrade-icon {
+							background-size: 100%;
+							@include size(128px);
+						}
+
+						.upgrade-text {
+							position: relative;
+							display: inline-block;
+							top: -15px;
+							left: -35px;
+							width: 200px;
+							font-family: $main_font;
+							background-color: white;
+							padding: 5px;
+							font-weight: 800;
+							color: $main_color;
+							@include font-size(factor(3));
+							letter-spacing: -2px;
+							line-height: 25px;
+							text-align: center;
+						}
+
+						.rank-tier-container {
+							position: relative;
+							top: -17px;
+							padding: 1px 0px;
+							background-color: #fff;
+							text-align: center;
+							display: flex;
+							justify-content: space-evenly;
+
+							.rank-tier-single {
+								.icon {
+									cursor: pointer;
+									@include font-size(factor(2.5));
+									color: #333;
+
+									&.ion-android-checkbox-blank {
+										color: $main_color;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

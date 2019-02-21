@@ -1,0 +1,334 @@
+<div class="container-fluid top-spacer" id="units-fluid-container">
+	<div class="container-fluid">
+		<div class="row" id="units-page-top">
+			<div class="col-md-12">
+				<h2>Outfits list</h2>
+				<h3>Search for the Outfits affiliated with our system.</h3>
+				<hr />
+			</div>
+		</div>
+		<div class="row" id="units-page-filters">
+			<div class="col-md-12">
+				<div class="filter-containers" ng-class="{'long': (CtrlUnitsOutfits.filterValues.display)}">
+					<a class="section-button muted medium animated" role="button" ng-click="CtrlUnitsOutfits.toggleFilter()">
+						<ul>
+							<li><i class="icon ion-funnel"></i></li>
+							<li>{{(CtrlUnitsOutfits.filterValues.display ? "Hide filters" : "Show filters")}}</li>
+						</ul>
+					</a>
+					<a class="section-button search warning medium intel-filter-animation" role="button" ng-click="CtrlUnitsOutfits.updateFilters()"
+					ng-if="(CtrlUnitsOutfits.filterValues.display)" ng-cloak>
+						<ul>
+							<li><i class="icon ion-search"></i></li>
+							<li>Apply</li>
+						</ul>
+					</a>
+
+					<a class="section-button reset danger medium hidden-sm hidden-xs intel-filter-animation" role="button" ng-dblclick="CtrlUnitsOutfits.resetFilters(true)"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					popover-append-to-body="true"
+					popover-popup-delay="500"
+					uib-popover="Double-click to reset filters"
+					ng-if="(CtrlUnitsOutfits.filterValues.display)" ng-cloak>
+						<ul>
+							<li><i class="icon ion-trash-a"></i></li>
+							<li>Reset</li>
+						</ul>
+					</a>
+
+					<a class="section-button reset danger medium intel-filter-animation hidden-lg hidden-md" role="button" ng-click="CtrlUnitsOutfits.resetFilters(true)"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					popover-append-to-body="true"
+					popover-popup-delay="500"
+					uib-popover="Double-click to reset filters"
+					ng-if="(CtrlUnitsOutfits.filterValues.display)" ng-cloak>
+						<ul>
+							<li><i class="icon ion-trash-a"></i></li>
+							<li>Reset</li>
+						</ul>
+					</a>
+
+					<div class="unit-filters intel-filter-animation" ng-if="CtrlUnitsOutfits.filterValues.display">
+						<div>
+							<form class="text-filters" ng-submit="refreshIntel()">
+								<div class="form-group title">
+									<div class="input-group">
+										<input
+											type="text"
+											class="form-control"
+											ng-model="CtrlUnitsOutfits.filterValues.inputs.name"
+											name="filterInputsName"
+											placeholder="Name"
+										/>
+									</div>
+								</div>
+								<div class="dropdown-section">
+									<div class="dropdown">
+										<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+											<span ng-bind="CtrlUnitsOutfits.regionNames[CtrlUnitsOutfits.filterValues.inputs.location]"></span>
+										</button>
+										<ul class="dropdown-menu">
+											<li ng-click="CtrlUnitsOutfits.filterValues.inputs.location = $index" ng-repeat="item in (CtrlUnitsOutfits.regionNames) track by $index">
+												<a href="#" ng-click="scope = item">
+													<span ng-bind="::(CtrlUnitsOutfits.regionNames[$index])"></span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<input type="submit" id="submit" value="Submit"/ style="display:none;">
+							</form>
+
+							<div class="prestige-filter">
+								<div class="input-slider">
+									<span class="slider-label noselect">Required prestige</span>
+									<rzslider rz-slider-model="CtrlUnitsOutfits.filterValues.inputs.prestige.min" rz-slider-high="CtrlUnitsOutfits.filterValues.inputs.prestige.max" rz-slider-options="CtrlUnitsOutfits.sliderOptions"></rzslider>
+								</div>
+							</div>
+
+							<form class="checkbox-form">
+								<div class="form-group">
+									<div class="input-group">
+										<div class="extra-input noselect">
+											<input
+												type="checkbox" id="inputOpen"
+												ng-model="CtrlUnitsOutfits.filterValues.inputs.open"
+											>
+											<label class="input-label" for="inputOpen">
+												<div class="body check">
+													<div class="box"><i class="icon ion-checkmark small"></i></div>
+													<div class="label-text">Open for applications</div>
+												</div>
+											</label>
+										</div>
+									</div>
+								</div>
+							</form>
+							<div class="dropdown-section">
+								<div class="dropdown">
+									<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+										Sort by <i class="icon" ng-class="CtrlUnitsOutfits.filterValues.dropdownValue.sortValues[CtrlUnitsOutfits.filterValues.inputs.sortValues].icon"></i>
+									</button>
+									<ul class="dropdown-menu">
+										<li ng-click="CtrlUnitsOutfits.changeDropdownValue('sortValues', $index)" ng-repeat="item in ::(CtrlUnitsOutfits.filterValues.dropdownValue.sortValues) track by $index">
+											<a href="#" ng-click="scope = item.value">
+												<i class="icon" ng-class="::item.icon"></i>
+												<span ng-bind="::item.name"></span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<a class="btn btn-default medium order" ng-click="CtrlUnitsOutfits.changeFilterOrder()">
+								<i style="margin-right: 3px;" class="icon" ng-class="(CtrlUnitsOutfits.filterValues.inputs.order === 'ASC') ? 'ion-arrow-up-b' : 'ion-arrow-down-b'"></i>
+								<span ng-bind="(CtrlUnitsOutfits.filterValues.inputs.order === 'ASC') ? 'Ascending' : 'Descending'"></span>
+							</a>
+						</div>
+					</div>
+					<div class="unit-filters intel-filter-animation" ng-if="CtrlUnitsOutfits.filterValues.display" ng-cloak>
+						<tags-input
+							ng-model="CtrlUnitsOutfits.filterValues.inputs.tags"
+							class="unit-tags"
+
+							add-on-blur="false"
+
+							min-tags="1"
+							max-tags="5"
+
+							on-tag-adding="CtrlUnitsOutfits.addingTag($tag)"
+						>
+							<auto-complete
+								source="CtrlUnitsOutfits.suggestedTags($query)"
+								min-length="1"
+								max-results-to-show="5"
+							></auto-complete>
+						</tags-input>
+						<div class="max-tags">
+							<span ng-bind="(CtrlUnitsOutfits.filterValues.inputs.tags.length)"></span> / <span ng-bind="::(CtrlUnitsOutfits.filterValues.inputs.tagsMax)"></span>
+						</div>
+					</div>
+				</div>
+				<hr />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 fade-animation-fast" ng-show="(CtrlUnitsOutfits.loading)">
+				<div class="spinner">
+					<div class="fade-animation-fast">
+						<img src="svg-loaders/grid.svg" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12" id="units-page-units">
+				<div id="units-page-outfits" ng-swipe-right="CtrlUnitsOutfits.movePage('p')" ng-swipe-left="CtrlUnitsOutfits.movePage('n')">
+					<div class="outfit-card outfits-animation-stagger" ng-repeat="outfitData in CtrlUnitsOutfits.currentOutfits track by outfitData.hashField" last-repeat last-repeat-function="CtrlUnitsOutfits.doMasonry()" ng-if="!(CtrlUnitsOutfits.loading) && (CtrlUnitsOutfits.currentOutfits.length > 0)">
+						<div class="outfit-card-width col-xs-12 col-sm-6 col-md-4 col-lg-3">
+
+								<div class="prestige"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-placement="top"
+									popover-popup-delay="500"
+									uib-popover="Outfit prestige rank.">
+
+									<i ng-if="::(outfitData.location !== undefined)" class="icon ion-star" ng-repeat="thing in ::CtrlUnitsOutfits.numberToArray(outfitData.prestige) track by $index"></i>
+									<i ng-if="::(outfitData.location === undefined)" class="icon ion-help"></i>
+								</div>
+
+								<div class="outfit-card-unit" ng-style="{'background-image': CtrlUnitsOutfits.generatePMCBG()}">
+									<a ng-href="outfit/{{::outfitData.hashField}}">
+										<div class="display_name" ng-if="::!(angular.isUndefinedOrNull(outfitData.display_name))" ng-cloak>
+											<div><span ng-bind="::outfitData.display_name"></span></div>
+										</div>
+										<div class="body">
+											<div id="card-avatar-container">
+												<div id="card-avatar">
+													<upgrades-directive unit="outfitData" mode="outfit-card"></upgrades-directive>
+													<div class="hexagon avatar-medium">
+														<div class="in1"><div class="in2">
+															<div class="card-avatar-render medium" ac-background-image background-image="images/avatars/pmc/main_{{::outfitData.hashField}}.jpg"></div>
+														</div></div>
+													</div>
+													<div
+														class="is-friend"
+														ng-if="(CtrlUnitsOutfits.inArray(outfitData.hashField, CtrlUnitsOutfits.selfPMCFriendsHashes))"
+														ng-cloak>
+															<i
+																class="icon ion-person-stalker"
+																popover-trigger="'mouseenter'"
+																popover-class="tooltip"
+																popover-placement="bottom"
+																popover-popup-delay="500"
+																uib-popover="Your Outfits are allied."
+															></i>
+													</div>
+													<div
+														class="is-friend"
+														ng-if="::((CtrlUnitsOutfits.selfInfo.PMC) ? (CtrlUnitsOutfits.selfInfo.PMC.hashField === outfitData.hashField) : (false))"
+														ng-cloak>
+															<i
+																class="icon ion-android-radio-button-on"
+																popover-trigger="'mouseenter'"
+																popover-class="tooltip"
+																popover-placement="bottom"
+																popover-popup-delay="500"
+																uib-popover="You are part of this Outfit."
+															></i>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="date" ng-if="::!((outfitData.createdAt === undefined) || (outfitData.createdAt === null))" ng-cloak>
+											Since <span ng-bind="::(outfitData.createdAt | date)"></span>
+										</div>
+										<div class="motto" ng-if="::!((outfitData.motto === undefined) || (outfitData.motto === null))" ng-cloak>
+											<span ng-bind="::(outfitData.motto)"></span>
+										</div>
+										<div class="info">
+											<div class="location"
+												ng-click="CtrlUnitsOutfits.setLocationFilter(outfitData.location)"
+												ng-if="::(outfitData.location !== undefined)" ng-cloak>
+												<i
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												uib-popover="Location"
+												popover-popup-delay="500"
+												class="icon ion-earth"></i>
+												<span ng-bind="::(CtrlUnitsOutfits.regionNames[outfitData.location])">
+												</span>
+											</div>
+
+											<div class="current-players">
+												<i
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													popover-popup-delay="500"
+													uib-popover="Current units"
+													class="icon ion-ios-people"></i>
+												<span ng-bind="(outfitData.totalPlayers || '?')"></span> / <span ng-bind="(outfitData.size || '?')"></span>
+											</div>
+
+											<div class="comments" ng-if="::(outfitData.totalComments !== undefined)" ng-cloak>
+												<i
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													popover-popup-delay="500"
+													uib-popover="Comments"
+													class="icon ion-chatbubble-working"></i>
+												<span ng-bind="::outfitData.totalComments"></span>
+											</div>
+										</div>
+									</a>
+
+									<div class="tags" ng-if="::((outfitData.tags.length) > 0)" ng-cloak>
+										<ul>
+											<i
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-popup-delay="500"
+											uib-popover="Tags"
+											class="icon ion-pricetags"></i>
+											<li ng-repeat="outfitTag in outfitData.tags">
+												<a type="button" class="btn btn-default tiny" ng-click="::(CtrlUnitsOutfits.addingTag({text: outfitTag}, true))">
+													<span ng-bind="::outfitTag"></span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="open-applications" ng-if="CtrlUnitsOutfits.isOpenApplications(outfitData)" ng-cloak>
+									<i class="icon ion-person-add"></i>
+									This Outfit is looking for new members.
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="no-results" ng-if="!(CtrlUnitsOutfits.loading) && (CtrlUnitsOutfits.currentOutfits.length === 0)" ng-cloak>
+						<h2>No results.</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" id="pagination-container">
+			<div class="col-md-12 text-center intel-filter-animation" ng-if="CtrlUnitsOutfits.showPagination" ng-cloak>
+				<nav aria-label="Page navigation">
+					<ul
+						uib-pagination
+
+						id="intel-pagination"
+						class="pagination"
+
+						ng-change="CtrlUnitsOutfits.movePage('a')"
+
+						first-text="&laquo;"
+						last-text="&raquo;"
+						next-text="&#9656;"
+						previous-text="&#9666;"
+
+						force-ellipses="true"
+						rotate="true"
+
+						total-items="CtrlUnitsOutfits.currentCount"
+						items-per-page="CtrlUnitsOutfits.perPage"
+						ng-model="CtrlUnitsOutfits.stateParams.page"
+						max-size="1"
+
+						boundary-links="false"
+						boundary-link-numbers="true"
+					></ul>
+					<form ng-submit="CtrlUnitsOutfits.submitPageChange()">
+						<div class="form-group">
+							<input type="text" id="page-input" ng-change="CtrlUnitsOutfits.inputPageChange()" class="form-control" ng-model="CtrlUnitsOutfits.stateParams.page">
+						</div>
+						<input type="submit" style="display:none;" />
+					</form>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

@@ -1,0 +1,277 @@
+<div class="container-fluid top-spacer" id="page-intel-container">
+	<div class="container" id="compose-intel-container">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Editing Intel</h2>
+				<hr/>
+			</div>
+		</div>
+		<div class="row">
+			<div class="submit-form col-md-7">
+				<div id="unit-avatar" class="player">
+					<div class="hexagon avatar-medium intel">
+						<div class="in1"><div class="in2"
+							ng-class="{'has-picture': (CtrlIntelEdit.usingPicture)}"
+							ng-style="{'background-color': (CtrlIntelEdit.formValues.backgroundType.value === 'color' ? CtrlIntelEdit.customColor : '#fff')}"
+							>
+
+							<i class="icon" ng-class="CtrlIntelEdit.formValues.typeField.icon" ng-style="{'color': (CtrlIntelEdit.formValues.backgroundType.value === 'color' ? CtrlIntelEdit.customIconColor : '#fff')}"></i>
+
+							<img class="fade-animation-fast custom-picture" ng-src="{{CtrlIntelEdit.croppedDataUrl}}"/ ng-if="(CtrlIntelEdit.formValues.backgroundType.value === 'uploaded-picture')" ng-cloak>
+
+							<img class="fade-animation-fast operator-picture" ng-src="images/avatars/players/main_{{CtrlIntelEdit.playerInfo.hashField}}.jpg"/ ng-if="(CtrlIntelEdit.formValues.backgroundType.value === 'operator-picture')" ng-cloak>
+
+							<img class="fade-animation-fast outfit-picture" ng-src="images/avatars/pmc/main_{{CtrlIntelEdit.playerInfo.PMC.hashField}}.jpg"/ ng-if="(CtrlIntelEdit.formValues.backgroundType.value === 'outfit-picture') && (CtrlIntelEdit.hasPMC)" ng-cloak>
+
+						</div></div>
+					</div>
+				</div>
+				<form>
+					<div class="dropdown-menus">
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Type</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelEdit.formValues.typeField.icon"></i> <span ng-bind="CtrlIntelEdit.formValues.typeField.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelEdit.changeTypeField($index)" ng-repeat="item in ::CtrlIntelEdit.dropdownMenu.types track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Background</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelEdit.formValues.backgroundType.icon"></i> <span ng-bind="CtrlIntelEdit.formValues.backgroundType.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelEdit.changeBackgroundType($index)" ng-repeat="item in ::CtrlIntelEdit.dropdownMenu.background track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+								<div class="lock-picture fade-animation-fast"
+								ng-if="(CtrlIntelEdit.formValues.backgroundType.value === 'uploaded-picture') && (CtrlIntelEdit.allowForceOriginal)" ng-cloak>
+									<div class="extra-input noselect">
+										<input type="checkbox" id="lock-picture" ng-change="CtrlIntelEdit.doLockPicture()" ng-model="CtrlIntelEdit.lockPicture">
+										<label class="input-label" for="lock-picture">
+											<div class="body check">
+												<div class="box"><i class="icon ion-checkmark small"></i></div>
+													<span>Keep original</span>
+												</div>
+										</label>
+									</div>
+								</div>
+								<div class="color-picker fade-animation-fast"
+								ng-if="(CtrlIntelEdit.formValues.backgroundType.value === 'color')" ng-cloak>
+									<a type="button" class="btn btn-default medium" ng-model="CtrlIntelEdit.customColor" colorpicker>
+										<i class="icon ion-paintbrush"></i>
+									</a>
+									<a type="button" class="btn btn-default medium" ng-model="CtrlIntelEdit.customIconColor" colorpicker>
+											<i class="icon" ng-class="CtrlIntelEdit.formValues.typeField.icon"></i>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+
+				<div class="visible-sm-block visible-xs-block">
+					<div id="avatar-upload-container" class="inward-upload fade-animation-fast col-md-5" ng-if="(CtrlIntelEdit.formValues.backgroundType.value === 'uploaded-picture')" ng-cloak>
+						<div id="avatar-upload-form-container"
+							class="fade-animation-fast">
+							<a
+								class="section-button medium animated" role="button"
+
+								ngf-select
+								ngf-drop
+
+								ng-model="CtrlIntelEdit.currentUploadedAvatar"
+								ng-disabled="CtrlIntelEdit.lockPicture"
+
+								ngf-pattern="'image/*'"
+								ngf-accept="'image/*'"
+								ngf-max-size="3MB"
+
+								ng-class="{'muted': CtrlIntelEdit.lockPicture}"
+							>
+								<ul>
+									<li><i class="icon ion-ios-camera"></i></li>
+									<li>Select picture</li>
+								</ul>
+							</a>
+
+							<div id="avatar-upload-form">
+								<form name="avatarPictureForm" enctype="multipart/form-data">
+									<div
+										ngf-drop
+										ng-model="CtrlIntelEdit.currentUploadedAvatar"
+										ngf-pattern="image/*"
+										class="crop-area"
+										ng-disabled="CtrlIntelEdit.lockPicture"
+										ng-class="{'blocked': CtrlIntelEdit.lockPicture}"
+									>
+
+										<div class="upload-text">
+											<i class="icon medium ion-arrow-down-a"></i><br>
+											Or just drag and drop/paste your picture here.
+										</div>
+
+										<img-crop
+											image="CtrlIntelEdit.currentUploadedAvatar | ngfDataUrl"
+											area-type="square"
+											result-image="CtrlIntelEdit.croppedDataUrl"
+											result-image-size="350"
+											area-min-size="(CtrlIntelEdit.lockPicture ? 350 : 50)"
+										>
+										</img-crop>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<form>
+					<div class="form-group">
+						<label for="titleField"><h3>Title</h3></label>
+						<input type="text" class="form-control" id="titleField" ng-model="CtrlIntelEdit.formValues.titleField">
+						<span class="remaining-characters"
+							ng-class="{'good': !(CtrlIntelEdit.checkCharactersRemaining(CtrlIntelEdit.formValues.titleField.length, CtrlIntelEdit.validatorFields.titleField.validation[0].params.max).status), 'bad': (CtrlIntelEdit.checkCharactersRemaining(CtrlIntelEdit.formValues.titleField.length, CtrlIntelEdit.validatorFields.titleField.validation[0].params.max).status) }">
+							{{ CtrlIntelEdit.checkCharactersRemaining(CtrlIntelEdit.formValues.titleField.length, CtrlIntelEdit.validatorFields.titleField.validation[0].params.max).current }}
+						</span>
+						characters left.
+					</div>
+
+					<div class="form-group">
+						<label for="bodyField"><h3>Body</h3></label>
+						<textarea class="form-control" rows="5" id="bodyField" ng-model="CtrlIntelEdit.formValues.bodyField"></textarea>
+						<span class="remaining-characters"
+							ng-class="{'good': !(CtrlIntelEdit.checkCharactersRemaining(CtrlIntelEdit.formValues.bodyField.length, CtrlIntelEdit.validatorFields.bodyField.validation[0].params.max).status), 'bad': (CtrlIntelEdit.checkCharactersRemaining(CtrlIntelEdit.formValues.bodyField.length, CtrlIntelEdit.validatorFields.bodyField.validation[0].params.max).status) }">
+							{{ CtrlIntelEdit.checkCharactersRemaining(CtrlIntelEdit.formValues.bodyField.length, CtrlIntelEdit.validatorFields.bodyField.validation[0].params.max).current }}
+						</span>
+						characters left.
+					</div>
+
+					<div class="dropdown-menus">
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Visibility</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelEdit.formValues.visibilityField.icon"></i> <span ng-bind="CtrlIntelEdit.formValues.visibilityField.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelEdit.changeVisibilityType($index)" ng-repeat="item in ::CtrlIntelEdit.dropdownMenu.visibility track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="form-group inline-group">
+							<label for="bodyField"><h3>Post As</h3></label>
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<i class="icon" ng-class="CtrlIntelEdit.formValues.postedAs.icon"></i> <span ng-bind="CtrlIntelEdit.formValues.postedAs.type"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlIntelEdit.changePostedAsMethod($index)" ng-repeat="item in ::CtrlIntelEdit.dropdownMenu.postedAs track by $index">
+										<a href="#" ng-click="scope = item.type">
+											<i class="icon" ng-class="::item.icon"></i>
+											<span ng-bind="::item.type"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<hr/>
+
+					<div class="submit-section">
+						<h2>Cost: <span class="cost"><span ng-bind="CtrlIntelEdit.intelPrice | currency:'D$ '"></span></span></h2>
+
+						<a class="section-button medium warning pull-right" role="button" type="submit" ng-click="CtrlIntelEdit.submitIntelForm()">
+							<ul>
+								<li><i class="icon ion-checkmark"></i></li>
+								<li>Confirm Edit</li>
+							</ul>
+						</a>
+					</div>
+				</form>
+			</div>
+			<div class="visible-lg-block visible-md-block">
+				<div id="avatar-upload-container" class="fade-animation-fast col-md-5" ng-if="(CtrlIntelEdit.formValues.backgroundType.value === 'uploaded-picture')" ng-cloak>
+					<div id="avatar-upload-form-container"
+						class="fade-animation-fast">
+						<a
+							class="section-button medium animated" role="button"
+
+							ngf-select
+							ngf-drop
+
+							ng-model="CtrlIntelEdit.currentUploadedAvatar"
+							ng-disabled="CtrlIntelEdit.lockPicture"
+
+							ngf-pattern="'image/*'"
+							ngf-accept="'image/*'"
+							ngf-max-size="3MB"
+
+							ng-class="{'muted': CtrlIntelEdit.lockPicture}"
+						>
+							<ul>
+								<li><i class="icon ion-ios-camera"></i></li>
+								<li>Select picture</li>
+							</ul>
+						</a>
+
+						<div id="avatar-upload-form">
+							<form name="avatarPictureForm" enctype="multipart/form-data">
+								<div
+									ngf-drop
+
+									ng-model="CtrlIntelEdit.currentUploadedAvatar"
+									ng-disabled="CtrlIntelEdit.lockPicture"
+
+									ngf-pattern="'image/*'"
+									ngf-accept="'image/*'"
+									ngf-max-size="3MB"
+
+									class="crop-area"
+									ng-class="{'blocked': CtrlIntelEdit.lockPicture}"
+								>
+
+									<div class="upload-text">
+										<i class="icon medium ion-arrow-down-a"></i><br>
+										Or just drag and drop/paste your picture here.
+									</div>
+
+									<img-crop
+										image="CtrlIntelEdit.currentUploadedAvatar | ngfDataUrl"
+										area-type="square"
+										result-image="CtrlIntelEdit.croppedDataUrl"
+										result-image-size="350"
+										area-min-size="(CtrlIntelEdit.lockPicture ? 350 : 50)"
+									>
+									</img-crop>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

@@ -1,0 +1,141 @@
+<div id="footer-container" class="footer-bar-animation" ng-if="(FooterController.displayBar)">
+	<span ng-init="Directive = FooterController;"></span>
+
+	<div class="container-fluid footer-bar">
+		<div class="container">
+			<div class="col-md-12">
+				<div class="row">
+
+					<div class="col-md-2 col-sm-3 col-xs-12">
+						<div class="row">
+							<div class="logo-container">
+								<img src="images/belligerence-logo-small-inv.png" class="logo-belligerence-footer" />
+								<div class="logo-text">
+									Belligerence
+								</div>
+								<div class="logo-sub-text">
+									War's in business
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-9 col-sm-9">
+						<div class="row">
+
+							<div class="col-md-5 col-sm-7">
+								<div class="row">
+
+									<div class="column-section-container">
+
+										<div class="column-section" ng-repeat="sectionItem in ::Directive.uiData.menus.interactive track by $index">
+											<div class="section" ng-repeat="menuItem in ::sectionItem track by $index">
+
+												<div class="section-title" ng-class="::(menuItem.class)">
+													<a ui-sref="{{::(Directive.getUIRoute(menuItem))}}" ng-if="::(menuItem.route)">
+														<i class="icon" ng-class="::(menuItem.icon)" ng-if="::(menuItem.icon)"></i>
+														<span class="title" ng-bind="::(menuItem.name)"></span>
+													</a>
+													<div ng-if="::(!menuItem.route)">
+														<i class="icon" ng-class="::(menuItem.icon)" ng-if="::(menuItem.icon)"></i>
+														<div class="title" ng-bind="::(menuItem.name)"></div>
+													</div>
+												</div>
+
+												<ul class="section-list" ng-if="::(menuItem.menu)">
+													<li ng-repeat="subItem in ::menuItem.menu track by $index"
+														class="section-item" ng-class="::(subItem.class)"
+													>
+														<a ui-sref="{{(Directive.getUIRoute(subItem))}}">
+															<i class="icon" ng-class="::(subItem.icon)" ng-if="::(subItem.icon)"></i>
+															<span class="title" ng-bind="::(subItem.name)"></span>
+														</a>
+													</li>
+												</ul>
+
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="col-md-3 col-sm-4">
+								<div class="row">
+
+									<div class="column-section-container">
+
+										<div class="column-section" ng-repeat="sectionItem in ::Directive.uiData.menus.content track by $index">
+											<div class="section" ng-repeat="menuItem in ::sectionItem track by $index">
+
+												<div class="section-title" ng-class="::(menuItem.class)">
+													<a ui-sref="{{::(Directive.getUIRoute(menuItem))}}" ng-if="::(menuItem.route)">
+														<i class="icon" ng-class="::(menuItem.icon)" ng-if="::(menuItem.icon)"></i>
+														<span class="title" ng-bind="::(menuItem.name)"></span>
+													</a>
+													<div ng-if="::(!menuItem.route)">
+														<i class="icon" ng-class="::(menuItem.icon)" ng-if="::(menuItem.icon)"></i>
+														<div class="title" ng-bind="::(menuItem.name)"></div>
+													</div>
+												</div>
+
+												<ul class="section-list" ng-if="::(menuItem.menu)">
+													<li ng-repeat="subItem in ::menuItem.menu track by $index"
+														class="section-item" ng-class="::(subItem.class)"
+													>
+														<a ui-sref="{{(Directive.getUIRoute(subItem))}}">
+															<i class="icon" ng-class="::(subItem.icon)" ng-if="::(subItem.icon)"></i>
+															<span class="title" ng-bind="::(subItem.name)"></span>
+														</a>
+													</li>
+												</ul>
+
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="col-md-4 col-sm-12">
+								<div class="row">
+
+									<div class="column-section-container">
+
+										<div class="column-section no-margin">
+											<div class="section">
+
+												<div class="section-title" ng-class="::(menuItem.class)">
+													<div class="title">About</div>
+												</div>
+
+												<p class="section-about">
+													A one-man-project, BELLIGERENCE is built out a complex system of mechanics, drive by players and content managers alike. Currently, it is being tested and refined thanks to the support of the community - Please share any feedback and report whatever bugs you may come across.
+												</p>
+
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="row">
+					<div class="column-section-container">
+						<div class="disclaimer-line">
+							<p>
+								<strong>BELLIGERENCE</strong> is not affiliated with <a target=_blank href="http://www.arma3.com/">ArmA 3 &trade;</a> or <a  target=_blank href="http://www.bistudio.com/">Bohemia Interactive</a> - ArmA 3&trade; and Bohemia Interactive&#174; are trademarks or registered trademarks of Bohemia Interactive a.s - All Rights Reserved.<br/>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

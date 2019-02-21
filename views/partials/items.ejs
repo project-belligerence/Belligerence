@@ -1,0 +1,247 @@
+<div class="container-fluid top-spacer" id="item-list-container">
+	<div ng-if="CtrlItems.displayPage">
+		<div class="col-md-12">
+			<div class="row">
+				<h2>Items</h2>
+				<h3>Filter and search for all available Items.</h3>
+				<hr />
+				<div class="row filters">
+					<div class="col-md-12">
+						<div class="filter-containers">
+
+							<div class="top-filters">
+
+								<form class="form-inline main-filters" ng-submit="CtrlItems.reloadQueryState()">
+									<div class="form-group">
+										<a class="section-button search muted medium"
+											role="button"
+											ng-click="CtrlItems.toggleDisplayFilter()"
+										>
+											<ul>
+												<li><i class="icon ion-search"></i></li>
+												<li ng-bind="((CtrlItems.displayFilter === true) ? 'Hide filters' : 'Display filters')"></li>
+											</ul>
+										</a>
+									</div>
+									<div class="form-group">
+										<a class="section-button search warning medium"
+											role="button"
+											ng-click="CtrlItems.reloadQueryState()"
+										>
+											<ul>
+												<li><i class="icon ion-search"></i></li>
+												<li>Apply</li>
+											</ul>
+										</a>
+									</div>
+									<div class="form-group">
+
+										<div class="dropdown-section">
+											<div class="dropdown">
+												<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+													Sort by:
+													<strong ng-bind="CtrlItems.filterValues.sortList[CtrlItems.qSortIndex].text"></strong>
+												</button>
+												<ul class="dropdown-menu">
+													<li ng-click="CtrlItems.qSortIndex = $index" ng-repeat="item in (CtrlItems.filterValues.sortList) track by $index">
+														<a href="#" ng-click="scope = item">
+															<span ng-bind="(item.text)"></span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<a class="btn btn-default medium order" ng-click="CtrlItems.changeFilterOrder()">
+											<i style="margin-right: 3px;" class="icon" ng-class="(CtrlItems.basicQuery.order === 'ASC') ? 'ion-arrow-up-b' : 'ion-arrow-down-b'"></i>
+											<span ng-bind="(CtrlItems.basicQuery.order === 'ASC') ? 'Ascending' : 'Descending'"></span>
+										</a>
+									</div>
+								</form>
+							</div>
+
+							<hr />
+
+							<div class="bottom-filters" ng-class="{'displaying': CtrlItems.displayFilter}">
+
+								<form class="form-inline main-filters" ng-submit="CtrlItems.reloadQueryState()">
+									<div class="form-group" ng-repeat="queryItem in CtrlItems.queryValues track by $index">
+										<div class="single-filter">
+
+											<input type="text" class="form-control" placeholder="{{::(queryItem.name)}}" ng-if="::(queryItem.type === 'text')" ng-model="queryItem.model" ng-cloak>
+
+											<div class="slider" ng-if="::(queryItem.type === 'slider')" ng-cloak>
+												<span class="slider-label noselect" ng-bind="::(queryItem.name)">
+												</span>
+												<rzslider rz-slider-model="queryItem.model.min" rz-slider-high="queryItem.model.max" rz-slider-options="CtrlItems.filterValues[queryItem.ref]">
+												</rzslider>
+											</div>
+
+											<div class="dropdown-section" ng-if="::(queryItem.type === 'dropdown')" ng-cloak>
+												<div class="dropdown">
+													<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+														<span ng-bind="::(queryItem.label)"></span> <strong ng-bind="CtrlItems.filterValues[queryItem.ref][queryItem.model].text"></strong>
+													</button>
+													<ul class="dropdown-menu">
+														<li ng-click="queryItem.model = $index" ng-repeat="item in ::(CtrlItems.filterValues[queryItem.ref]) track by $index">
+															<a href="#" ng-click="scope = item">
+																<span ng-bind="::(item.text)"></span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+									<div class="form-group">
+
+										<div class="single-filter">
+
+											<div class="dropdown-section">
+												<div class="dropdown">
+													<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+														Content:
+														<strong ng-if="(CtrlItems.qContent.model === undefined)">All</strong>
+														<strong ng-bind="CtrlItems.filterValues.content[CtrlItems.qContent.model].text" ng-if="(CtrlItems.qContent.model !== undefined)"></strong>
+													</button>
+													<ul class="dropdown-menu">
+														<li ng-click="CtrlItems.qContent.model = undefined">
+															<a href="#"><span>All</span></a>
+														</li>
+														<li ng-click="CtrlItems.qContent.model = $index" ng-repeat="item in ::(CtrlItems.filterValues.content) track by $index">
+															<a href="#" ng-click="scope = item">
+																<span ng-bind="::(item.text)"></span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+
+									<div class="form-group">
+
+										<div class="single-filter">
+
+											<div class="dropdown-section">
+												<div class="dropdown">
+													<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+														Type:
+														<strong ng-if="(CtrlItems.qType.model === undefined)">All</strong>
+														<strong ng-bind="CtrlItems.filterValues.types[CtrlItems.qType.model].name" ng-if="(CtrlItems.qType.model !== undefined)"></strong>
+													</button>
+													<ul class="dropdown-menu">
+														<li ng-click="CtrlItems.changeTypeDropDown(-1)">
+															<a href="#"><span>All</span></a>
+														</li>
+														<li ng-click="CtrlItems.changeTypeDropDown($index)" ng-repeat="item in ::(CtrlItems.filterValues.types) track by $index">
+															<a href="#" ng-click="scope = item">
+																<span ng-bind="::(item.name)"></span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+
+									<div class="form-group">
+
+										<div class="single-filter">
+
+											<div class="dropdown-section">
+												<div class="dropdown">
+													<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+														Class:
+														<strong ng-if="!(CtrlItems.qClass.model)">All</strong>
+														<strong ng-bind="CtrlItems.filterValues.class[CtrlItems.qClass.model].name" ng-if="(CtrlItems.qClass.model)"></strong>
+													</button>
+													<ul class="dropdown-menu">
+														<li ng-click="CtrlItems.qClass.model = null">
+															<a href="#"><span>All</span></a>
+														</li>
+														<li ng-click="CtrlItems.qClass.model = key" ng-repeat="(key, item) in (CtrlItems.filterValues.class) track by $index">
+															<a href="#" ng-click="scope = item">
+																<span ng-bind="(item.name)"></span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+
+									<div class="form-group" ng-repeat="queryItem in CtrlItems.queryValuesDetails track by $index" ng-if="queryItem.model" ng-cloak>
+										<div class="single-filter">
+											<input
+												type="text" class="form-control"
+												placeholder="{{(queryItem.name)}}"
+												ng-model="queryItem.model"
+											ng-cloak>
+										</div>
+									</div>
+
+									<input type="submit" id="submit" value="Submit"/ style="display:none;">
+								</form>
+
+								<hr />
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="items-list-directive-container" class="col-md-12">
+			<div class="row intel-filter-animation" ng-if="CtrlItems.displayItems" ng-cloak>
+				<items-directive
+					item-list="CtrlItems.itemData"
+					display-mode="query"
+				></items-directive>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="row" id="pagination-container">
+				<div class="text-center intel-filter-animation" ng-if="CtrlItems.showPagination" ng-cloak>
+					<nav aria-label="Page navigation">
+						<ul
+							uib-pagination
+
+							id="items-pagination"
+							class="pagination"
+
+							ng-change="CtrlItems.movePage('a')"
+
+							first-text="&laquo;"
+							last-text="&raquo;"
+							next-text="&#9656;"
+							previous-text="&#9666;"
+
+							force-ellipses="true"
+							rotate="true"
+
+							total-items="CtrlItems.itemListCount"
+							items-per-page="CtrlItems.filterValues.perPage"
+							ng-model="CtrlItems.basicQuery.page"
+							max-size="1"
+
+							boundary-links="false"
+							boundary-link-numbers="true"
+						></ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

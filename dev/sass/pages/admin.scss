@@ -1,0 +1,597 @@
+
+#admin-page {
+	@include factor-property(padding-bottom, 30);
+	@include factor-property(min-height, 100);
+
+	#content-return-button { }
+
+	#content {
+		#new-key-form {
+			@include factor-property(margin-top, 7);
+
+			.form-group {
+				@include factor-property(margin-top, 1);
+				vertical-align: top;
+				input { @include size(125px, 45px); }
+				&.desc input { @include size(250px, 45px); }
+
+				.extra-input {
+					width: 100%;
+					.box {
+						padding: 10px;
+						padding-top: 9px;
+					}
+					.label-text {
+						vertical-align: top;
+						display: inline-block;
+						width: 150px;
+						position: relative;
+						top: -3px;
+						left: -5px;
+						line-height: 25px;
+					}
+				}
+			}
+
+			.new-key-btn {
+				@include factor-property(margin-top, 1);
+				display: block;
+				@include breakpoint("small") { margin-left: 0; }
+			}
+		}
+
+		#access-key-table {
+			tr:hover { background-color: $main_color_dark; }
+			td {
+				cursor: pointer;
+				&.hash, &.desc {
+					max-width: 250px;
+					word-break: break-all;
+				}
+			}
+		}
+	}
+
+	.table-responsive {
+		@include factor-property(margin-top, 3);
+		.section-button {
+			@include factor-property(margin-bottom, 3);
+		}
+		.table {
+			tbody {
+				overflow-y: hidden;
+
+				tr {
+					@include transition(background-color .25s);
+
+					&.notavailable {
+						color: #aaa;
+						background-color: darken($main_color, 20%);
+					}
+					td {
+						min-width: 65px;
+						vertical-align: middle;
+						input {
+							padding: 0px 3px;
+							height: 30px; width: 40px;
+						}
+
+						.td-class {
+							display: inline-block;
+							input { display: inline-block; }
+						}
+
+						.checkbox-form.edit {
+							.form-group { margin-bottom: -5px; }
+							.body {
+								width: 55px;
+								.box {
+									background-color: white;
+									i { color: $main_color; }
+								}
+							}
+						}
+					}
+				}
+			}
+			.picture {
+				@include size(40px);
+				.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 40px; }
+			}
+		}
+	}
+
+	#content-render {
+
+		.filter-containers {
+
+			.filter-order {
+				display: inline-block;
+				@include factor-property(margin-left, 2);
+
+				position: relative;
+				top: -3px;
+
+				@include breakpoint("small") {
+					@include factor-property(margin-left, 0);
+					@include factor-property(margin-top, 2);
+
+					.dropdown-section {
+						@include factor-property(margin-bottom, 1);
+					}
+				}
+			}
+
+			.dropdown-section {
+				display: inline-block;
+			}
+
+			.filters {
+				@include factor-property(margin-top, 3);
+
+				.filter-input {
+					display: inline-block;
+					@include factor-property(margin-right, 1);
+
+					.dropdown-section, .dropdowncheck {
+						position: relative;
+						top: -36px;
+					}
+					.dropdowncheck {
+						@include breakpoint("small") { top: 0px; }
+					}
+
+					.btn.medium {
+						padding-top: 7px;
+						padding-bottom: 10px;
+					}
+
+					.dropdown-section {
+						display: inline-block;
+						left: -3px;
+
+						.dropdown {
+							.dropdown-toggle { padding: 9px 10px; }
+						}
+					}
+
+					.input-slider {
+						text-align: center;
+						display: inline-block;
+						position: relative;
+						top: -5px;
+						width: 250px;
+
+						&:hover .slider-label { color: $main_color; }
+
+						@include breakpoint("small") { top: 0px; padding: 15px 0px; }
+					}
+
+					.checkbox-form.edit {
+						position: relative;
+						top: 2px;
+						margin: factor(1) factor(0.5);
+						margin-right: factor(2);
+						display: inline-block;
+						.box { padding: 12px; }
+						.label-text {
+							position: relative;
+							@include font-size(factor(2));
+							display: inline-block;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#single-content-render {
+		.content-edit {
+
+			.single-faction {
+				@include factor-property(margin-top, 3);
+
+				&.double {
+					.faction-icon { width: 100%; }
+					.faction-name .text {
+						@include font-size(factor(3));
+						letter-spacing: -1px;
+
+						&.opfor { background-color: $opfor_color; }
+						&.blufor { background-color: $blufor_color; }
+						&.indfor { background-color: $indfor_color; }
+						&.neutral { background-color: #fff; }
+					}
+				}
+
+				h4 {
+					background-color: $main_color;
+					@include factor-property(padding, 1);
+					@include factor-property(margin-top, 2);
+				}
+
+				.checkbox-form.edit .form-group {
+					width: 100%;
+					height: 19px;
+
+					.ion-checkmark { left: 3px; }
+					.label-text {
+						@include transition(background-color .25s);
+						color: #333;
+						font-weight: 800;
+						padding: 3px factor(1);
+						background-color: white;
+						display: inline-block;
+
+						&:hover { background-color: #ccc; }
+					}
+				}
+
+				.faction-icon {
+					$glow_color: #aaa;
+					$glow_size: 5px;
+
+					margin-left: auto;
+					margin-right: auto;
+					@include size(200px);
+					@include prefix(filter, drop-shadow(0px 0px 5px #000));
+					.ac-bg-img__full-size, .ac-bg-img__placeholder {
+						background-size: 100%;
+						@include prefix(filter, grayscale(100%) drop-shadow(0px 0px 0px $glow_color));
+					}
+
+					&.leader .ac-bg-img__full-size, .ac-bg-img__placeholder { @include prefix(filter, grayscale(100%) drop-shadow(0px 0px $glow_size $glow_color)); }
+					&.active .ac-bg-img__full-size, .ac-bg-img__placeholder { @include prefix(filter, grayscale(0%) drop-shadow(0px 0px 0px $glow_color)); }
+					&.active.leader .ac-bg-img__full-size, .ac-bg-img__placeholder { @include prefix(filter, grayscale(0%) drop-shadow(0px 0px $glow_size $glow_color)); }
+
+					.delete-button {
+						float: right;
+						@include size(0px);
+
+						.delete-btn {
+							z-index: 999;
+							position: relative;
+							top: 20px;
+							right: 42px;
+
+							@include breakpoint("medium") { top: 55px; right: 42px; }
+							@include breakpoint("small") { top: 50px; right: 42px; }
+						}
+					}
+
+					.interest-flag {
+						top: 15px;
+						left: 15px;
+						position: relative;
+						z-index: 8;
+						@include font-size(factor(8));
+						text-shadow: 0px 0px 5px #000, 0px 0px 10px #000;
+
+						@include breakpoint("medium") { top: 40px; }
+						@include breakpoint("small") { top: 45px; }
+					}
+
+					.active-faction {
+						z-index: 8;
+						position: absolute;
+						bottom: 23px;
+						left: 10px;
+						.box, .label-text { box-shadow: 0px 0px 5px #000; }
+						@include breakpoint("medium") { bottom: 55px; }
+						@include breakpoint("small") { bottom: 50px; }
+					}
+				}
+
+				.info-field {
+					display: inline-block;
+
+					.icon {
+						position: relative;
+						top: 7px;
+						@include factor-property(padding, 1);
+						@include font-size(factor(5));
+						display: inline-block;
+					}
+					input {
+						font-weight: 800;
+						letter-spacing: -2px;
+						@include font-size(factor(3));
+						display: inline-block;
+						width: 130px;
+						@include breakpoint("small") { width: 80%; }
+					}
+				}
+
+				.faction-name {
+					@include transition(top .2s cubic-bezier(0.785, 0.135, 0.15, 0.86));
+					margin-left: auto;
+					margin-right: auto;
+					width: 100%;
+					position: relative;
+					top: -5px;
+
+					.text {
+						text-align: center;
+						background-color: $main_color;
+						padding: factor(0.9) factor(2);
+						color: white;
+						font-family: $main_font;
+						@include font-size(factor(3));
+						letter-spacing: -1px;
+						text-shadow: 0px 0px 3px #000, 0px 0px 5px #000, 0px 0px 10px #000;
+					}
+				}
+
+				.input-slider {
+					@include factor-property(margin-top, 3);
+					margin-right: auto;
+					margin-left: auto;
+					width: 100%;
+
+					&.half {
+						margin-left: 10px;
+						display: inline-block;
+						width: auto;
+						@include breakpoint("medium") { width: 100%; }
+					}
+
+					.slider-label { @include font-size(factor(2.5)); text-align: center; }
+
+					.rzslider {
+						margin: 20px 0 15px 0;
+						font-family: $main_font;
+						@include font-size(factor(2));
+						.rz-bubble { bottom: 16px; }
+						.rz-pointer {
+							top: -8px;
+							@include size(factor(3));
+							&::after { top: 7px; left: 6px; }
+						}
+					}
+				}
+			}
+
+			.single-property {
+				@include factor-property(margin-top, 3);
+
+				.property-text {
+					display: inline-block;
+					@include factor-property(margin-left, 1);
+					@include font-size(factor(3));
+					position: relative;
+					top: -17px;
+					background-color: white;
+					color: $main_color;
+					padding: factor(1) factor(2);
+					font-weight: 800;
+					letter-spacing: -1px;
+
+					&.single {
+						@include factor-property(margin-top, 3);
+						@include factor-property(margin-left, 0);
+					}
+
+					&.type {
+						color: white;
+						background-color: $main_color;
+					}
+				}
+
+				.property-icon {
+					display: inline-block;
+					margin-left: auto;
+					margin-right: auto;
+					@include size(50px);
+					@include prefix(filter, drop-shadow(0px 0px 5px #000));
+					.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 100%; }
+					z-index: 99;
+
+					&.flag {
+						height: 50px;
+						width: 90px;
+					}
+				}
+
+				&.stack {
+					margin: factor(1);
+					display: inline-block;
+
+					.property-text {
+						@include font-size(factor(2));
+						letter-spacing: 0px;
+						padding: factor(0.5) factor(1);
+						top: -13px;
+					}
+					.property-icon { @include size(35px); }
+
+					.delete-button {
+						@include size(0px);
+						.delete-btn {
+							z-index: 999;
+							position: relative;
+							top: -30px;
+							left: -10px;
+							border-radius: 10px;
+						}
+					}
+				}
+			}
+
+			.single-upgrade {
+				@include factor-property(margin-top, 3);
+
+				&.double {
+					.upgrade-icon {
+						@include size(150px);
+					}
+					.upgrade-name .text {
+						@include font-size(factor(2));
+						letter-spacing: -1px;
+					}
+				}
+
+				&:hover {}
+
+				.upgrade-icon {
+					margin-left: auto;
+					margin-right: auto;
+					@include size(200px);
+					@include prefix(filter, drop-shadow(0px 0px 5px #000));
+					.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 100%; }
+					z-index: 99;
+
+					.delete-button {
+						float: right;
+						@include size(0px);
+						.delete-btn {
+							z-index: 999;
+							position: relative;
+							top: 3px;
+							right: 46px;
+						}
+					}
+				}
+
+				.upgrade-name {
+					@include transition(top .2s cubic-bezier(0.785, 0.135, 0.15, 0.86));
+					margin-left: auto;
+					margin-right: auto;
+					width: 80%;
+					position: relative;
+					top: -5px;
+
+					.text {
+						text-align: center;
+						background-color: $main_color;
+						padding: factor(0.9) factor(2);
+						color: white;
+						font-family: $main_font;
+						@include font-size(factor(3));
+						letter-spacing: -1px;
+						text-shadow: 0px 0px 3px #000, 0px 0px 5px #000, 0px 0px 10px #000;
+					}
+
+					&.black {
+						.text {
+							background-color: #333;
+							color: white;
+						}
+					}
+				}
+
+				.upgrade-rank {
+
+				}
+
+				.input-slider {
+					@include factor-property(margin-top, 2);
+					margin-right: auto;
+					margin-left: auto;
+					width: 80%;
+
+					.slider-label { text-align: center;	}
+
+					.rzslider {
+						font-family: $main_font;
+						@include font-size(factor(3));
+						.rz-bubble { bottom: 16px; }
+					}
+				}
+			}
+
+			.content-label {
+				line-height: 40px;
+				border-left: 7px solid $main_color;
+				@include factor-property(padding-left, 2);
+			}
+
+			.input-filter {
+				i {
+					background-color: $main_color;
+					color: white;
+					padding: 8px 14px;
+					position: relative;
+					top: 4px;
+					@include font-size(factor(4));
+					line-height: 0px;
+				}
+
+				input {
+					width: 300px;
+					display: inline-block;
+
+					@include breakpoint("small") {
+						width: 200px;
+					}
+				}
+			}
+
+			.form-group {
+				width: 31%;
+				display: inline-block;
+				@include factor-property(margin-right, 2);
+				vertical-align: top;
+
+				input { @include font-size(factor(3)); }
+
+				&.textareaClass {
+					width: 95%;
+				}
+
+				&.galleryClass {
+					.main-picture {
+						position: relative;
+						width: 100%;
+						.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 100%; }
+
+						height: 360px;
+
+						@include breakpoint("medium") {	height: 230px; }
+						@include breakpoint("tiny") { height: 270px; }
+					}
+				}
+
+				.checkbox-form.edit {
+					.box {
+						position: absolute;
+						top: 0px;
+						width: 50px;
+						.icon { margin-left: 8px; }
+					}
+				}
+
+				.dropdown { display: inline-block; }
+
+				.remaining-characters {
+					float: left;
+
+					.characters {
+						@include font-size(factor(3));
+						&.good { color: green; }
+						&.bad { color: $main_color; }
+					}
+				}
+
+				@include breakpoint("small") { width: 100%; }
+			}
+			.section-button {
+				@include factor-property(margin-top, 4);
+				@include factor-property(margin-bottom, 5);
+			}
+		}
+
+		#avatar-upload-container {
+			margin-left: auto;
+			margin-right: auto;
+			width: 50%;
+			@include factor-property(margin-top, 1);
+			@include factor-property(margin-bottom, 2);
+
+			@include breakpoint("small") { width: 100%; }
+		}
+
+		.live-content {
+			margin: factor(3) 0px;
+		}
+	}
+}

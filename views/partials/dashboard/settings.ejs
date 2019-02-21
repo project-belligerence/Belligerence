@@ -1,5 +1,68 @@
+<div class="editable" id="settings-container">
+	<div class="meta text-center">
+		<span>Allowed devices</span>
+		<i
+			class="icon ion-help-circled helper small"
+			popover-trigger="'mouseenter'"
+			popover-class="tooltip"
+			uib-popover="What devices are allowed to access your account."
+		></i>
+	</div>
 
+	<div class="col-md-6 col-sm-12">
+		<div class="row">
+			<div class="devices">
+				<span class="devices-text">Allowed devices:</span>
+				<ul class="devices-list">
+					<li class="device-object" ng-repeat="machine in CtrlDashboard.currentSettings.validMachines track by $index">
+						<span ng-bind="::machine"></span>
+						<i ng-click="CtrlDashboard.removeAllowedMachine(machine)" class="icon ion-close"></i>
+					</li>
+				</ul>
+			</div>
 
-<input type="text" ng-model="CtrlDashboard.myText">
+			<div>
+			Current device:
+			<a class="section-button small animated" role="button"
+				ng-click="CtrlDashboard.addAllowedMachine(CtrlDashboard.currentMachine)"
+				popover-trigger="'mouseenter'"
+				popover-class="tooltip"
+				uib-popover="Add the current device to the list."
+			>
+				<ul>
+					<li><i class="icon ion-monitor"></i></li>
+					<li ng-bind="::(CtrlDashboard.currentMachine)"></li>
+				</ul>
+			</a>
+			</div>
+		</div>
+	</div>
 
-<div>{{ CtrlDashboard.myText }}</div>
+	<div class="col-md-6 col-sm-12">
+		<div class="row">
+			<form class="editable-field">
+				<div class="form-group">
+					<div class="extra-input">
+						<input
+							type="checkbox" id="input-1"
+							ng-change="CtrlDashboard.toggleDeviceLocking()"
+							ng-model="(CtrlDashboard.currentSettings.requireMachineValidation)"
+						>
+						<label class="input-label" for="input-1">
+							<div class="body check">
+								<div class="box"><i class="icon ion-checkmark small"></i></div>
+								<span class="checkbox-text">Enable Device Protection</span>
+							</div>
+						</label>
+						<i
+							class="icon ion-help-circled helper small"
+							popover-trigger="'mouseenter'"
+							popover-class="tooltip"
+							uib-popover="This option blocks anyone signing-in from any device not authorized in this list."
+						></i>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

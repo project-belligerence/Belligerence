@@ -1,0 +1,183 @@
+<div class="row">
+	<hr />
+</div>
+<div class="row expand-height-animation" ng-hide="(CtrlAdmin.contentSubController.pageState === 'null') || (CtrlAdmin.contentSubController.pageState === 'main')" ng-cloak>
+	<a ng-if="(CtrlAdmin.contentSubController.pageState !== 'main')" ng-click="CtrlAdmin.clearEdit(); CtrlAdmin.contentSubController.changeContentState('main')" class="section-button small animated" role="button">
+		<ul>
+			<li><i class="icon ion-arrow-return-left"></i></li>
+			<li>Report/Bans Menu</li>
+		</ul>
+	</a>
+</div>
+<div class="fade-animation-fast" ng-if="(CtrlAdmin.contentSubController.pageState !== 'null')" ng-cloak>
+	<div class="row">
+
+		<h2 ng-bind="CtrlAdmin.contentSubController.subViews[CtrlAdmin.contentSubController.pageState].name_plural"></h2>
+
+		<div class="actions fade-animation-fast col-md-3 col-sm-5 col-xs-12 noselect" ng-repeat="menuItem in CtrlAdmin.contentSubController.subViews" ng-click="(CtrlAdmin.contentSubController.changeContentState(menuItem.id))" ng-if="((menuItem.id !== 'main') && (CtrlAdmin.contentSubController.pageState === 'main'))" ng-cloak>
+			<div class="row">
+				<i class="icon" ng-class="::(menuItem.icon)"></i>
+				<div class="title" ng-bind="::(menuItem.name_plural)"></div>
+				<hr />
+				<div class="description" ng-bind="::(menuItem.description)"></div>
+			</div>
+		</div>
+
+		<div class="" ng-if="(CtrlAdmin.contentSubController.pageState === 'reports')" ng-cloak>
+			<div class="table-responsive">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Reported</th>
+							<th>Content</th>
+							<th>Issuer</th>
+							<th>Reason</th>
+							<th>Complaint</th>
+							<th>Filed at</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="comment-animation" ng-repeat="report in CtrlAdmin.contentSubController.contentData track by $index" ng-init="rowValues = CtrlAdmin.contentSubController.getReportContentInfo(report); resolveData = CtrlAdmin.contentSubController.getReportData(report.contentField)">
+							<td>
+								<a ng-href="{{rowValues.url}}">
+									<div class="picture" ac-background-image background-image="{{rowValues.image}}"></div>
+								</a>
+							</td>
+							<td ng-bind="::(rowValues.text)"></td>
+							<td>
+								<a ng-href="operator/{{::(report.issuerHash)}}">
+									<div class="picture" ac-background-image background-image="images/avatars/players/thumb_{{::report.issuerHash}}.jpg"></div>
+								</a>
+							</td>
+							<td ng-bind="::(CtrlAdmin.contentSubController.getReportTypeInfo(report).text)"></td>
+							<td ng-bind="::(report.reasonField)"></td>
+							<td><time-ago from-time='{{::report.createdAt}}'></time-ago></td>
+							<td>
+								<a ng-click="CtrlAdmin.contentSubController.enforceReport(report, rowValues.removeMethod)" class="section-button small animated" ng-class="::(resolveData.btn)" role="button">
+									<ul>
+										<li><i class="icon" ng-class="::(resolveData.icon)"></i></li>
+										<li ng-bind="::(resolveData.text)"></li>
+									</ul>
+								</a>
+								<a ng-click="CtrlAdmin.contentSubController.deleteReport(report)" class="section-button muted small animated" role="button">
+									<ul>
+										<li><i class="icon ion-trash-a"></i></li>
+										<li>Ignore</li>
+									</ul>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="row" id="pagination-container">
+				<div class="col-md-12 text-center intel-filter-animation" ng-if="CtrlAdmin.contentSubController.showPagination" ng-cloak>
+					<nav aria-label="Page navigation">
+						<ul
+							uib-pagination
+
+							id="intel-pagination"
+							class="pagination"
+
+							ng-change="CtrlAdmin.contentSubController.movePage('a')"
+
+							first-text="&laquo;"
+							last-text="&raquo;"
+							next-text="&#9656;"
+							previous-text="&#9666;"
+
+							force-ellipses="true"
+							rotate="true"
+
+							total-items="CtrlAdmin.contentSubController.queryParams.totalItems"
+							items-per-page="CtrlAdmin.contentSubController.queryParams.perPage"
+							ng-model="CtrlAdmin.contentSubController.queryValues.page"
+							max-size="1"
+
+							boundary-links="false"
+							boundary-link-numbers="true"
+						></ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="" ng-if="(CtrlAdmin.contentSubController.pageState === 'bans')" ng-cloak>
+			<div class="table-responsive">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Banned</th>
+							<th>Issuer</th>
+							<th>Reason</th>
+							<th>Expiration Date</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="comment-animation" ng-repeat="ban in CtrlAdmin.contentSubController.contentData track by $index">
+							<td>
+								<a ng-href="operator/{{ban.bannedHash}}">
+									<div class="picture" ac-background-image background-image="images/avatars/players/thumb_{{ban.bannedHash}}.jpg""></div>
+								</a>
+							</td>
+							<td>
+								<a ng-href="operator/{{ban.issuerHash}}">
+									<div class="picture" ac-background-image background-image="images/avatars/players/thumb_{{ban.issuerHash}}.jpg""></div>
+								</a>
+							</td>
+							<td ng-bind="::(ban.reasonField)"></td>
+							<td><time-ago from-time='{{::ban.expirationDate}}'></time-ago></td>
+							<td>
+								<a ng-click="CtrlAdmin.contentSubController.askBanPlayer(ban.bannedHash, [ban.reasonField, ban.expirationDate])" class="section-button warning small animated" role="button">
+									<ul>
+										<li><i class="icon ion-edit"></i></li>
+										<li>Edit</li>
+									</ul>
+								</a>
+								<a ng-click="CtrlAdmin.contentSubController.liftBan(ban)" class="section-button muted small animated" role="button">
+									<ul>
+										<li><i class="icon ion-trash-a"></i></li>
+										<li>Terminate</li>
+									</ul>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="row" id="pagination-container">
+				<div class="col-md-12 text-center intel-filter-animation" ng-if="CtrlAdmin.contentSubController.showPagination" ng-cloak>
+					<nav aria-label="Page navigation">
+						<ul
+							uib-pagination
+
+							id="intel-pagination"
+							class="pagination"
+
+							ng-change="CtrlAdmin.contentSubController.movePage('a')"
+
+							first-text="&laquo;"
+							last-text="&raquo;"
+							next-text="&#9656;"
+							previous-text="&#9666;"
+
+							force-ellipses="true"
+							rotate="true"
+
+							total-items="CtrlAdmin.contentSubController.queryParams.totalItems"
+							items-per-page="CtrlAdmin.contentSubController.queryParams.perPage"
+							ng-model="CtrlAdmin.contentSubController.queryValues.page"
+							max-size="1"
+
+							boundary-links="false"
+							boundary-link-numbers="true"
+						></ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

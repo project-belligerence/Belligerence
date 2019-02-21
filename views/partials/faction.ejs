@@ -1,0 +1,273 @@
+<div class="container-fluid top-spacer generic-object single" id="single-faction-container" ng-init="Controller = CtrlSingleFaction;">
+	<div class="container">
+		<div class="fade-animation-slow" ng-if="(Controller.showObject)" ng-cloak>
+
+			<div class="header">
+				<div class="col-md-12">
+					<div class="row pull-left">
+						<a ng-click="Controller.askReportObject(Controller.objectInfo)" class="section-button warning muted" role="button">
+							<ul>
+								<li><i class="icon ion-alert-circled"></i></li>
+								<li>Report {{::(Controller.objectSettings.name)}}</li>
+							</ul>
+						</a>
+					</div>
+					<div class="row pull-right" ng-if="(Controller.selfInfo.playerPrivilege <= 1)" ng-cloak>
+						<a ng-href="admin?menu=content&section={{::(Controller.objectSettings.name).toLowerCase()}}&editHash={{::(Controller.objectInfo[Controller.objectSettings.hash_property])}}" class="section-button warning small" role="button">
+							<ul>
+								<li><i class="icon ion-edit"></i></li>
+								<li>Edit {{::(Controller.objectSettings.name)}}</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="body">
+				<div class="row display-object" ng-class="::(Controller.applyControlledClass(Controller.objectInfo.sideField))">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="col-md-4 col-sm-5 picture">
+								<div class="visible-xs-block object-details">
+									<div class="top">
+										<h2 ng-bind="::(Controller.objectInfo.nameField)"></h2>
+										<hr />
+									</div>
+								</div>
+
+								<div class="sidebar object-details">
+									<img
+										class="picture-img"
+										src="images/modules/{{::Controller.objectSettings.image_folder}}/main_{{::(Controller.objectInfo[Controller.objectSettings.image_property])}}.{{::(Controller.objectSettings.image_extension)}}"
+										width="100%"
+									/>
+
+									<div class="assets">
+										<div class="label">
+											<div class="description">Field Assets</div>
+											<i
+												class="icon ion-help help"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												uib-popover="General military assets owned by the Faction."
+											></i>
+										</div>
+										<uib-progressbar
+											class="progress"
+											max="::(Controller.objectInfo.assetsField)"
+											value="::(Controller.objectInfo.currentAssetsField)"
+											type="{{::(Controller.getAssetBarColor())}}"
+										>
+											<i class="icon ion-ios-box"></i> <i><span ng-bind="::(Controller.objectInfo.currentAssetsField)"></span> / <span ng-bind="::(Controller.objectInfo.assetsField)"></span></i>
+										</uib-progressbar>
+									</div>
+
+									<div class="interests" ng-if="::(Controller.displayAreasInterest())">
+										<div class="label">
+											<div class="description">Areas of Interest</div>
+											<i
+												class="icon ion-help help"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												uib-popover="These Maps might be subjected to intervention from the Faction."
+											></i>
+										</div>
+										<a href="/map/{{::(map.class)}}" class="map" ng-repeat="map in Controller.areasOfInterest track by $index">
+											<span ng-bind="::(map.text)"></span>
+										</a>
+									</div>
+
+									<div class="upgrades" ng-if="::(Controller.displayUpgrades())">
+										<div class="label">
+											<div class="description">Related Upgrades</div>
+										</div>
+										<div class="col-md-12">
+											<div class="row">
+												<div class="col-md-6 upgrade-list">
+													<div class="row">
+														<h3>Required:</h3>
+
+														<div
+															class="single-upgrade"
+															popover-trigger="'mouseenter'"
+															popover-class="tooltip"
+															popover-popup-delay="500"
+															popover-append-to-body="true"
+															uib-popover="{{::(upgrade.nameField)}}"
+															ng-repeat="upgrade in Controller.objectInfo.requiredUpgrades track by $index"
+															ng-init="requiredStatus = Controller.checkSingleUpgrade(upgrade, 1);"
+														>
+															<a href="upgrade/{{::upgrade.hashField}}">
+																<img class="upgrade-icon" ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+
+																<div class="rank-container">
+																	<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+																		<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+																	</div>
+																</div>
+															</a>
+														</div>
+													</div>
+												</div>
+												<div class="col-md-6 upgrade-list">
+													<div class="row">
+														<h3>Conflicting:</h3>
+
+														<div
+															class="single-upgrade"
+															popover-trigger="'mouseenter'"
+															popover-class="tooltip"
+															popover-popup-delay="500"
+															popover-append-to-body="true"
+															uib-popover="{{::(upgrade.nameField)}}"
+															ng-repeat="upgrade in Controller.objectInfo.blacklistedUpgrades track by $index"
+															ng-init="requiredStatus = Controller.checkSingleUpgrade(upgrade, 2);"
+														>
+															<a href="upgrade/{{::upgrade.hashField}}">
+																<img class="upgrade-icon" ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+
+																<div class="rank-container">
+																	<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+																		<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+																	</div>
+																</div>
+															</a>
+
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="col-md-8 col-sm-7 object-details">
+								<div class="top visible-lg-block visible-md-block visible-sm-block">
+									<h2 ng-bind="::(Controller.objectInfo.nameField)"></h2>
+									<hr />
+								</div>
+
+								<div class="body">
+
+									<div class="single-property">
+										<div class="property long" ng-bind="::(Controller.objectInfo.descriptionField)" ></div>
+									</div>
+
+									<div class="modifiers">
+										<div class="label">
+											<div class="description">Attributes</div>
+										</div>
+										<div class="modifiers-container">
+											<div
+												class="modifier-object"
+												ng-repeat="modifier in Controller.objectSettings.modifierProperties track by $index"
+											>
+												<i
+													class="icon"
+													ng-class="::(modifier.icon)"
+													popover-trigger="'mouseenter'"
+													popover-popup-delay="350"
+													popover-class="tooltip"
+													uib-popover="{{::((modifier.label) + ': ' + (modifier.tooltip))}}"
+												></i><div class="value" ng-bind="::(modifier.filter(Controller.objectInfo[modifier.model_property]))"
+											></div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="visible-lg-block visible-md-block visible-sm-block col-md-12 bottom-properties">
+									<div class="row object-details">
+										<div class="body">
+											<div class="single-property" ng-cloak ng-repeat="property in Controller.objectSettings.simpleProperties track by $index">
+												<div class="label">
+													<div class="description" ng-bind="::(property.label)"></div>
+													<i
+														class="icon ion-help help"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="{{::(property.tooltip)}}"
+													></i>
+												</div>
+												<a
+													ng-if="::(property.query_property)"
+													ng-href="{{::(Controller.generateLink(property.query_property, property.model_property))}}"
+												>
+													<div class="property" ng-bind="::(Controller.displayProperty(property))"></div>
+												</a>
+												<div
+													class="property"
+													ng-if="::(!(property.query_property))"
+													ng-bind="::(Controller.displayProperty(property))">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="visible-xs-block col-md-12 bottom-properties">
+						<div class="object-details">
+							<div class="body">
+								<div class="single-property" ng-cloak ng-repeat="property in Controller.objectSettings.simpleProperties track by $index">
+									<div class="label">
+										<div class="description" ng-bind="::(property.label)"></div>
+										<i
+											class="icon ion-help help"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											uib-popover="{{::(property.tooltip)}}"
+										></i>
+									</div>
+									<a
+										ng-if="::(property.query_property)"
+										ng-href="{{::(Controller.generateLink(property.query_property, property.model_property))}}"
+									>
+										<div class="property" ng-bind="::(Controller.displayProperty(property))"></div>
+									</a>
+									<div
+										class="property"
+										ng-if="::(!(property.query_property))"
+										ng-bind="::(Controller.displayProperty(property))">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="related-sections">
+
+				<ul class="selector-list">
+					<li class="selector" ng-repeat="selector in Controller.objectSettings.relatedSections track by $index" ng-click="Controller.changeSection(selector.id)" ng-class="{ 'selected': (Controller.objectSettings.activeSection === selector.id) }">
+						<i class="icon" ng-class="::(selector.icon)"></i>
+						<div class="text" ng-bind="selector.name"></div>
+					</li>
+				</ul>
+
+				<div class="display-section fade-animation-slow" ng-if="(Controller.displaySection)" ng-cloak>
+
+					<h3 ng-bind="::(Controller.objectSettings.relatedSections[Controller.objectSettings.activeSection].description)">
+					</h3>
+
+					<hr/>
+
+					<div class="section conflcits-container fade-animation-slow" ng-if="::(Controller.objectSettings.activeSection === 'conflict')" ng-cloak>
+						<conflicts-directive
+							object-list="Controller.sectionData"
+							column-size="6"
+						></conflicts-directive>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

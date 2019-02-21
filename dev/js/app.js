@@ -1,8 +1,7 @@
-(function() {
+	(function() {
 	'use strict';
 
 	var events = require("./events"),
-
 		mainApp = angular.module('mainApp', [
 		'ui.router',
 		'ui.router.default',
@@ -14,34 +13,57 @@
 		'ngScrollbar',
 		'ngCookies',
 		'ngTouch',
+		'ngWebSocket',
 		'ngFileUpload',
 		'ngImgCrop',
 		'ngTagsInput',
 		'angularCircularNavigation',
 		'yaru22.angular-timeago',
+		'colorpicker.module',
+		'rzModule',
 
 		'appModules',
 
 		'appUIRoutes'
-
 	])
 		.controller('AppMainCtrl', AppMainControllerFunction)
 		.run(events.stateChangeStartEvent)
 		.run(events.stateChangeSuccessEvent)
 	;
 
-	AppMainControllerFunction.$inject = ["$scope"];
+	AppMainControllerFunction.$inject = ["$rootScope", "$scope", "timeAgoSettings"];
 
-	function AppMainControllerFunction($scope) {
+	function AppMainControllerFunction($rootScope, $scope, timeAgoSettings) {
 		var vm = this,
-			defaultName = "Belligerence";
+			defaultName = "BELLIGERENCE";
 
+		timeAgoSettings.allowFuture = true;
 		vm.appName = defaultName;
 
-		$scope.$on("updatePageTitle", function(event, params) {
-			console.log("Update event:", params);
-			vm.appName = (params ? (params + " | " + defaultName) : defaultName);
-		});
+		vm.windowData = { view: "", number: 0, detail: "" };
+
+		$scope.$on("updatePageTitle", updateTitle);
+		$scope.$on("updatePageTitleNumber", updateTitleNumber);
+
+		function updateTitle(event, params) {
+			if (params) (vm.windowData.view = (params || ""));
+			commitWindowName();
+		}
+
+		function updateTitleNumber(event, params) {
+			if (params) {
+				if (!angular.isUndefinedOrNull(params.number)) vm.windowData.number = params.number;
+				if (!angular.isUndefinedOrNull(params.detail)) vm.windowData.detail = params.detail;
+			}
+			commitWindowName();
+		}
+
+		function commitWindowName() {
+			var viewName = vm.windowData.view,
+				m = ((vm.windowData.detail !== "") ? vm.windowData.detail : ""),
+				n = ((vm.windowData.number > 0) ? ("(" + vm.windowData.number + ")" + m + " ") : "");
+			vm.appName = (n + m + (viewName ? (viewName + " | " + defaultName) : defaultName));
+		}
 	}
 
 	require("./modules");

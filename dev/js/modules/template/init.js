@@ -1,18 +1,24 @@
 (function() {
 	'use strict';
 
-	var moduleName = 'Template';
+	var moduleName = 'Template',
+		moduleLower = moduleName.toLowerCase();
 
 	angular.module((moduleName + 'Module'), [])
-		.controller((moduleName.toLowerCase() + 'Controller'), require("./controller").function)
-		.factory((moduleName.toLowerCase() + 'Services'), require("./services").function)
-		.directive((moduleName.toLowerCase() + 'Directive'), require("./directive").function)
+		.controller((moduleLower + 'Controller'), require("./controller").function)
+		.factory((moduleLower + 'Services'), require("./services").function)
+		.directive((moduleLower + 'Directive'), require("./directive").function)
 	;
 
 	exports.route = {
-		url: "/",
+		name: moduleName.toLowerCase(),
+		routeName: "Template Page",
+		url: "outfit/:pmcHash",
 		templateUrl: ('partial/' + (moduleName.toLowerCase()) + '.ejs'),
 		controller: (moduleName.toLowerCase() + 'Controller'),
-		controllerAs: ('Ctrl' + moduleName)
+		controllerAs: ('Ctrl' + moduleName),
+		resolve: {
+			selfInfo: ['playerServices', function (playerServices) {return playerServices.getSelf();}]
+		}
 	};
 })();

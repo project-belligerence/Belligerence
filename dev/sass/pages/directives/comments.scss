@@ -1,64 +1,188 @@
 
 .comments-container {
-	*{@include transition(background-color .25s);}
+	*{ @include transition(background-color .25s); }
 	width: 100%;
 
-	.comments-header {
-		border-bottom: 1px solid #333;
+	&.single-column {
 
-		@include factor-property(padding-bottom, 2);
-
-		.comments-amount {
-			display: inline-block;
-			@include font-size(factor(2));
-
-			padding: factor(0.90) factor(2);
-
-			position: relative;
-			top: 1px;
-
-			background-color: $main_color;
-
-			i {
-				@include factor-property(margin-right, 1);
-			}
-		}
-
-		.dropdown {
-			display: inline-block;
-		}
-
-		.comments-pagination {
-			float: right;
-			position: relative;
-			top: -15px;
-
-			@include breakpoint('small') {
-
-				position: inherit;
-
-				margin: 0;
-				padding: 0;
-
+		.comments-header {
+			.comments-pagination {
 				float: none;
-				margin-top: 20px;
-
-				text-align: center;
-
-				.pagination {
-					margin: 0;
-				}
+				display: block;
+				@include factor-property(margin-top, 1);
 			}
 		}
 	}
-	.post-comment {
-		@include transition(min-height .25s cubic-bezier(0.785, 0.135, 0.15, 0.86));
-		min-height: 50px;
-		border-bottom: 1px solid #333;
-		@include factor-property(padding-bottom, 2);
-		@include factor-property(margin-bottom, 2);
 
-		&.long { min-height: 250px; }
+	.blocked-comments {
+		@include factor-property(margin-top, 10);
+		text-align: center;
+		color: #111;
+		@include font-size(factor(4));
+
+		.icon {
+			display: inline-block;
+			line-height: 0;
+			padding: factor(1) factor(2);
+			color: #fff;
+			background: url("/images/honeybg_red.png") repeat 100%;
+		}
+		.text {
+			font-family: $main_font;
+			text-transform: uppercase;
+			display: inline-block;
+			letter-spacing: -2px;
+			font-weight: 800;
+			padding: factor(1);
+			line-height: 1;
+			background: url("/images/cardbg_dark.png") repeat 100%;
+		}
+
+		@include breakpoint("small") {
+			@include font-size(factor(3));
+		}
+	}
+
+	.parent-comment { padding: 0; padding-left: 5px; }
+
+	.comments-header {
+		vertical-align: top;
+		border-bottom: 1px solid #333;
+		@include factor-property(padding-bottom, 1);
+
+		.post-comment-button {
+			vertical-align: top;
+			@include factor-property(margin-right, 1);
+
+			ul li {
+				padding: factor(.75) factor(1.5);
+			}
+		}
+
+		.comments-amount {
+			vertical-align: top;
+			display: inline-block;
+			@include font-size(factor(2.5));
+
+			padding: factor(.55) factor(1.5);
+
+			background-color: $main_color;
+			i { @include factor-property(margin-right, 1); }
+		}
+
+		.dropdown {
+			vertical-align: top;
+			display: inline-block;
+
+			button { @include font-size(factor(2)); padding-bottom: 7px; }
+			.dropdown-menu a { padding: 3px 10px; }
+		}
+
+		.comment-order {
+			vertical-align: top;
+			@include font-size(factor(2));
+			padding-bottom: 7px;
+		}
+
+		.comments-pagination {
+			vertical-align: top;
+			float: right;
+			height: 1px;
+			display: inline-block;
+
+			.pagination {
+				margin: 0;
+			}
+
+			li {
+				cursor: pointer;
+				background-color: #fff;
+				@include size(factor(5));
+				display: inline-block;
+				line-height: 0;
+
+				height: 33px;
+
+				@include factor-property(margin-right, 0.5);
+
+				&.active {
+					background-color: $main_color;
+					a {	color: #fff; font-weight: 800; }
+				}
+
+				&:hover {
+					background-color: $main_color;
+					a { color: #fff; }
+				}
+
+				a {
+					@include size(factor(5));
+					cursor: pointer;
+					@include font-size(factor(3));
+					background-color: transparent;
+					line-height: 35px;
+
+					margin: 0;
+					padding: 0;
+
+					display: inline-block;
+
+					&:active { background-color: transparent; }
+					&:focus { background-color: transparent; }
+					&:hover { background-color: transparent; }
+				}
+
+				&.pagination-prev, &.pagination-next {
+					a {	@include font-size(factor(7)); }
+				}
+			}
+
+			@include breakpoint("medium") {
+				width: 100%;
+				@include factor-property(margin-top, 1);
+				float: none;
+				display: inline-block;
+				text-align: center;
+				top: 0px;
+
+				height: 35px;
+
+				li {
+					@include size(30px);
+					&.active { font-weight: 800; }
+					a { @include size(30px); line-height: 33px; }
+				}
+				.pagination { margin: 0; }
+			}
+		}
+
+		@include breakpoint("small") {
+			.post-comment-button { @include factor-property(margin-bottom, 1); }
+		}
+	}
+
+	.post-comment {
+		$ease: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+		@include transition(
+			min-height .25s $ease, padding-bottom .25s $ease, margin-bottom .25s $ease
+		);
+		min-height: 1px;
+		border-bottom: 0px solid #333;
+
+		padding-bottom: 0;
+		margin-bottom: 0;
+
+		&.long {
+			min-height: 250px;
+			border-bottom: 1px solid #333;
+			@include factor-property(padding-bottom, 2);
+			@include factor-property(margin-bottom, 2);
+
+			@include breakpoint("small") {
+				padding: 0 factor(2);
+			}
+		}
 
 		.comment-form {
 			.input-group {
@@ -85,25 +209,22 @@
 			&.circle .ac-bg-img__full-size, .ac-bg-img__placeholder { border: 1px solid white; }
 		}
 
-		form textarea {width: 100%;}
+		form textarea { width: 100%; }
 	}
 
 	.comments {
-		@include factor-property(min-height, 50);
+		@include factor-property(min-height, 60);
+		overflow-y: hidden;
 
 		.comment {
+			width: 100%;
 			@include factor-property(margin-top, 3);
-			@include factor-property(padding-bottom, 1);
-
-			border-bottom: 1px solid #333;
+			@include factor-property(padding-right, 2);
 
 			.comment-header {
 				@include factor-property(margin-bottom, 3);
-				// display: inline-block;
 
-				a {
-					border: none;
-				}
+				a {	border: none; }
 
 				.alias {
 					@include factor-property(padding, 1);
@@ -119,18 +240,33 @@
 					float: left;
 					@include factor-property(margin-right, 1);
 					position: relative;
-					top: -5px;
 
 					&.circle .ac-bg-img__full-size, .ac-bg-img__placeholder { border: 0px solid white; box-shadow: none; }
 				}
 
 				.comment-time {
+					display: inline-block;
+					@include factor-property(margin-left, 1);
 					font-style: italic;
-					@include font-size(factor(1.5));
+					@include font-size(factor(2));
+					i { @include font-size(factor(3)); position: relative; top: 3px; }
+
+					@include breakpoint("tiny") {
+						@include font-size(factor(2));
+					}
 				}
 			}
+
 			.comment-body {
-				@include factor-property(margin-bottom, 1);
+				@include prefix(filter, drop-shadow(0px 0px 10px #000));
+
+				position: relative;
+				top: -10px;
+				background-color: #fff;
+				border-radius: 5px;
+				color: #111;
+
+				padding: factor(2) factor(2);
 
 				.comment-title {
 					display: inline-block;
@@ -142,24 +278,36 @@
 						font-weight: bold;
 					}
 				}
+				.triangle-isosceles {
+					@include transition(border-color .15s);
+					position: relative;
+					top: -28px;
+					left: -5px;
+					height: 0px;
+
+					&:after {
+						left: 0px;
+						top: 0px;
+						border-width: 0px 7px 15px 7px;
+					}
+				}
+			}
+			.comment-bottom {
+				.comment-cheers {
+					display: inline-block;
+					.cheers-button {
+						ul li {
+							text-align: center;
+							@include factor-property(width, 4);
+							padding: 3px 4px;
+						}
+					}
+				}
+				.comment-delete {
+					@include factor-property(margin-left, 1);
+				}
 			}
 		}
-
-		.comment-delete { @include factor-property(margin-top, 2); }
 	}
 
-}
-
-.comment-cheers {
-	float: right;
-	margin-left: 7px;
-
-	.cheers-button {
-		ul li {
-			text-align: center;
-			width: 21px;
-			padding: 2px 4px;
-			//&.cheers-amount { padding: 2px 7px !important; }
-		}
-	}
 }

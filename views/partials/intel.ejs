@@ -1,0 +1,169 @@
+
+<div class="container-fluid main-color-background" id="page-intel-container">
+	<div class="row">
+		<div class="container">
+			<div class="intel-container col-sm-12 fade-animation-fast" id="single-intel-container" ng-if="(CtrlIntel.singleMode)" ng-cloak>
+				<div class="row">
+					<div class="intel-list col-md-8 col-sm-12">
+						<div class="row">
+							<div class="fade-animation-fast" ng-if="!(CtrlIntel.loadingIntel)" ng-cloak>
+
+								<div id="single-intel" class="box">
+									<div class="hexagon-container">
+										<div
+											class="hexagon"
+											uib-popover="{{::CtrlIntel.intelData.intelDetails.type}}"
+											popover-popup-delay="250"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip intel-tooltip"
+										>
+											<div class="in1">
+												<div class="in2"
+													ng-class="{'has-picture': !(CtrlIntel.intelData.backgroundType === 'color')}"
+													ng-style="::CtrlIntel.genIconColors(CtrlIntel.intelData).hexagon"
+												>
+
+												<i
+													ng-class="::(CtrlIntel.intelData.intelDetails.icon)"
+													ng-style="::CtrlIntel.genIconColors(CtrlIntel.intelData).icon"
+												></i>
+
+												<img
+													ng-if="::(CtrlIntel.intelData.backgroundType !== 'color')"
+													ng-src="{{::CtrlIntel.genBackgroundPicture(CtrlIntel.intelData)}}"
+												ng-cloak>
+
+											</div></div>
+										</div>
+									</div>
+
+									<div class="title">
+										<h3><span ng-bind="::CtrlIntel.intelData.titleField"></span></h3>
+									</div>
+
+									<div class="intel-info">
+										<div class="date">
+											<i class="icon ion-ios-calendar-outline"></i>
+											<div class="text" ng-bind="::(CtrlIntel.intelData.createdAt | date)"></div>
+										</div>
+
+										<div class="poster">
+											Posted by
+											<a ng-href="{{::CtrlIntel.intelData.posterUrl}}">
+												<i class="icon" ng-class="{
+													'ion-person': (CtrlIntel.intelData.displayAs === 'player'),
+													'ion-ios-people': (CtrlIntel.intelData.displayAs === 'pmc'),
+													'ion-help-circled': (CtrlIntel.intelData.displayAs === 'anonymous')
+												}"></i>
+												<strong><span ng-bind="::(CtrlIntel.intelData.posterDetails.alias)"></span></strong>
+											</a>
+										</div>
+									</div>
+
+									<div class="intel-body">
+										<p><span ng-bind="::(CtrlIntel.intelData.bodyField)"></span></p>
+									</div>
+
+									<div class="bottom">
+										<cheers-directive
+											initial-cheers="{{ CtrlIntel.intelData.cheersDetails.amount }}"
+											initial-cheered="{{ CtrlIntel.intelData.cheersDetails.cheered }}"
+											cheer-target="{{ CtrlIntel.intelData.hashField }}"
+											cheer-type="intel"
+											class="pull-left"
+											button-size="medium"
+										></cheers-directive>
+
+										<a
+											ng-click="CtrlIntel.reportIntel()"
+											class="section-button muted medium animated pull-right"
+											role="button"
+
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											uib-popover="Report this Intel"
+										>
+											<ul>
+												<li><i class="icon ion-alert-circled"></i></li>
+												<li>Report</li>
+											</ul>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-8 extra-options" ng-if="((CtrlIntel.getPermissions(CtrlIntel.playerInfo, CtrlIntel.intelData)) && !(CtrlIntel.loadingIntel))" ng-cloak>
+						<div class="row">
+							<hr/>
+							<a ui-sref="app.private.intel-edit({intelHash: CtrlIntel.intelData.hashField})" class="section-button warning medium pull-left" role="button">
+								<ul>
+									<li><i class="icon ion-edit"></i></li>
+									<li>Edit</li>
+								</ul>
+							</a>
+							<a class="section-button muted medium pull-right" role="button" ng-click="CtrlIntel.askDeleteIntel()">
+								<ul>
+									<li><i class="icon ion-trash-a"></i></li>
+									<li>Delete</li>
+								</ul>
+							</a>
+						</div>
+					</div>
+					<div class="spinner col-sm-8" ng-if="(CtrlIntel.loadingIntel)" ng-cloak>
+						<div class="fade-animation-fast">
+							<img src="svg-loaders/grid.svg" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="intel-directive" class="col-sm-12" ng-if="(!CtrlIntel.singleMode)" ng-cloak>
+				<div>
+					<h2>Intel</h2>
+					<h3>Info about the current state of affairs.</h3>
+				</div>
+
+				<a href="intel/compose" class="section-button success medium animated" role="button">
+					<ul>
+						<li><i class="icon ion-plus"></i></li>
+						<li>Post new Intel</li>
+					</ul>
+				</a>
+
+<!-- 					<a style="margin-left: 5px;" class="section-button muted medium animated" role="button" ng-click="CtrlIntel.mockMoneySpent(20000)">
+					<ul>
+						<li><i class="icon ion-cash"></i></li>
+						<li>+++</li>
+					</ul>
+				</a>
+				<a style="margin-left: 5px;" class="section-button muted medium animated" role="button" ng-click="CtrlIntel.mockMoneySpent(-5000)">
+					<ul>
+						<li><i class="icon ion-cash"></i></li>
+						<li>---</li>
+					</ul>
+				</a> -->
+
+				<hr/>
+				<intel-directive></intel-directive>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="comments" class="container-fluid" ng-if="::(CtrlIntel.singleMode)" ng-cloak>
+	<div class="row" ng-if="!(CtrlIntel.loadingIntel)" ng-cloak>
+		<div class="container">
+			<div id="comments-container" class="col-sm-8">
+				<div class="row">
+					<comments-directive
+						subject-type="intel"
+						subject-hash="CtrlIntel.intelData.hashField"
+						per-page=4
+					></comments-directive>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

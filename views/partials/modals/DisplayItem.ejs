@@ -1,0 +1,115 @@
+
+<div class="modal-window item-display" ng-init="currentItem = (ModalController.itemDetails);">
+
+	<div class="modal-header short">
+		<i class="icon ion-cube"></i>
+		<h2 style="text-transform: uppercase;">
+			<span ng-bind="::(ModalController.itemTypes[currentItem.typeField].name)"></span>
+		</h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
+	</div>
+
+	<div class="modal-body">
+
+		<div class="row display-items">
+
+			<div class="col-md-12">
+
+				<div class="row">
+
+					<div class="col-md-5 col-sm-5 picture">
+						<div class="visible-xs-block item-details">
+							<div class="top">
+								<h2 ng-bind="::(currentItem.nameField)"></h2>
+								<div class="classes" ng-bind="::(ModalController.itemClasses[currentItem.classField].name)"></div>
+								<hr />
+							</div>
+						</div>
+						<img src="images/modules/items/main_{{::(currentItem.hashField)}}.jpg" width="100%">
+						<div class="classname" ng-bind="::(currentItem.classnameField)"></div>
+						<div class="content-container">
+							<i class="icon ion-at"></i>
+							<div class="content" ng-bind="::(ModalController.contentData[currentItem.contentField]).text"></div>
+						</div>
+					</div>
+
+					<div class="col-md-7 col-sm-7 item-details">
+
+						<div class="top visible-lg-block visible-md-block visible-sm-block">
+							<h2 ng-bind="::(currentItem.nameField)"></h2>
+							<div class="classes" ng-bind="::(ModalController.itemClasses[currentItem.classField].name)"></div>
+							<hr />
+						</div>
+
+						<div class="body">
+
+							<div class="single-property">
+								<div class="description">Production Year:</div>
+								<div class="property" ng-bind="::(currentItem.productionYear)"></div>
+							</div>
+
+							<div class="single-property">
+								<div class="description">Description:</div>
+								<div class="property long" ng-bind="::(currentItem.descriptionField)" ></div>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<div class="col-md-12 bottom-properties">
+				<div class="item-details">
+					<div class="body">
+						<div class="single-property" ng-if="::(currentItem.detailField1)" ng-cloak>
+							<div class="description" ng-bind="::(ModalController.itemTypes[currentItem.typeField].details[0])"></div>
+							<div class="property" ng-bind="::(currentItem.detailField1)"></div>
+						</div>
+						<div class="single-property" ng-if="::(currentItem.detailField2)" ng-cloak>
+							<div class="description" ng-bind="::(ModalController.itemTypes[currentItem.typeField].details[1])"></div>
+							<div class="property" ng-bind="::(currentItem.detailField2)"></div>
+						</div>
+						<div class="single-property" ng-if="::(currentItem.detailField3)" ng-cloak>
+							<div class="description" ng-bind="::(ModalController.itemTypes[currentItem.typeField].details[2])"></div>
+							<div class="property" ng-bind="::(currentItem.detailField3)"></div>
+						</div>
+						<div class="single-property" ng-if="::(currentItem.detailField4)" ng-cloak>
+							<div class="description" ng-bind="::(ModalController.itemTypes[currentItem.typeField].details[3])"></div>
+							<div class="property" ng-bind="::(currentItem.detailField4)"></div>
+						</div>
+						<div class="single-property" ng-if="::(currentItem.detailField5)" ng-cloak>
+							<div class="description" ng-bind="::(ModalController.itemTypes[currentItem.typeField].details[4])"></div>
+							<div class="property" ng-bind="::(currentItem.detailField5)"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+		<div class="col-md-12">
+			<div class="row">
+				<a ng-href="https://en.wikipedia.org/wiki/{{::(currentItem.infoField)}}"  class="section-button small muted" role="button">
+					<ul>
+						<li><i class="icon ion-ios-world-outline"></i></li>
+						<li>Wikipedia</li>
+					</ul>
+				</a>
+				<a ng-href="market/buy?itemFilter={{::(currentItem.hashField)}}"  class="section-button small success" role="button">
+					<ul>
+						<li><i class="icon ion-android-cart"></i></li>
+						<li>Find in Stores</li>
+					</ul>
+				</a>
+			</div>
+		</div>
+	</div>
+
+</div>

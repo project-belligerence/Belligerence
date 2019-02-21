@@ -16,6 +16,7 @@
 	exports.putSelfPMC = putSelfPMC;
 	exports.proDemoteMember = proDemoteMember;
 	exports.transferPMCOwnership = transferPMCOwnership;
+	exports.transferPMCOwnershipFunc= transferPMCOwnershipFunc;
 	exports.putPMC = putPMC;
 	exports.getPMCPlayers = getPMCPlayers;
 	exports.getSelfPMCPlayers = getSelfPMCPlayers;
@@ -25,13 +26,19 @@
 	exports.upgradePMCSize = upgradePMCSize;
 	exports.startPMC = startPMC;
 	exports.getVisibility = getVisibility;
+	exports.getPMCTiers = getPMCTiers;
+	exports.getPMCSizeCost = getPMCSizeCost;
 
 	function queryValues(req) {
+		var GeneralMethods = require('./../index.js').getMethods().general_methods,
+			_ = require("lodash");
+
 		return {
 			folderName: require('path').basename(__dirname),
-			allowedSortValues: ['createdAt', 'totalPlayers', 'totalComments', 'display_name', 'location', 'open_applications'],
+			allowedSortValues: ['createdAt', 'totalPlayers', 'totalComments', 'display_name', 'location', 'prestige', 'size'],
 			allowedPostValues: {
-				privateFieldsValues: ["freelancers", "ownPMC", "allPMC", "friends-PMC", "everyone", "nobody"]
+				privateFieldsValues: ["freelancers", "ownPMC", "allPMC", "friends-PMC", "everyone", "nobody"],
+				locationValues: _.range(GeneralMethods.getRegionsFunc().length)
 			},
 			generateWhereQuery:	function(req) {
 				var object = {};
@@ -40,11 +47,12 @@
 					if (req.query.qName) { object.display_name = { $like: "%" + req.query.qName + "%" }; }
 					if (req.query.qLocation) { object.location = { $like: "%" + req.query.qLocation + "%" }; }
 					if (req.query.qTags) { object.tags = { $dliteral: API.methods.generateRegexp("tags", req.query.qTags) }; }
-					if (req.query.qOpen) { object.open_applications = { $like: "%" + req.query.qOpen + "%" }; }
-					if (req.query.qPlayers) { object.having = { $having: "totalPlayers BETWEEN " + (Math.max((req.query.qPlayers.min || 1), 1)) + " AND " + (req.query.qPlayers.max || 999)}; }
-					else { object.having = { $having: "totalPlayers > 0" }; }
+					if ((req.query.qPrestigeMin) || (req.query.qPrestigeMax)) { object.prestige = { $between: [(parseInt(req.query.qPrestigeMin) || 0), (parseInt(req.query.qPrestigeMax) || 9999999)]}; }
+					if (req.query.qOpen) { object.open_applications = { $like: "%" + req.query.qOpen + "%" }; object.having = { $having: "(totalPlayers < size) AND (totalPlayers > 0)" }; }
+					else {
+						if (!req.query.GET_PROPERTY) { object.having = { $having: "totalPlayers > 0" }; }
+					}
 				}
-
 				return object;
 			}
 		};
@@ -57,7 +65,7 @@
 
 		switch(settings) {
 			case "freelancers": {
-				allowRead = (!(req.playerInfo.PMC));
+				allowRead = (req.playerInfo.contractType === 2);
 			} break;
 			case "ownPMC": {
 				if (req.playerInfo.PMC) {
@@ -68,7 +76,7 @@
 				allowRead = (req.playerInfo.PMCId || false);
 			} break;
 			case "friends-PMC": {
-				friendList = req.playerInfo.friendsList.pmc.rows;
+				friendList = req.playerInfo.friendsList;
 				for (var j in friendList) {
 					if ((friendList[j].friendAHash === (pmc_values.hashField)) || (friendList[j].friendBHash === (pmc_values.hashField))) { allowRead = true; }
 				}
@@ -80,16 +88,15 @@
 				allowRead = false;
 			} break;
 		}
+		if (req.playerInfo.PMC) { if (req.playerInfo.PMC.hashField == pmc_values.hashField) { allowRead = true; } }
 
 		return allowRead;
 	}
 
 	function filterPMC(req, pmc) {
-
 		var _ = require('lodash');
 
 		for (var i in pmc.rows) {
-
 			var
 				allowRead = false,
 				pmc_values = pmc.rows[i],
@@ -100,7 +107,7 @@
 				pmc_values.bio = API.methods.limitString(pmc_values.bio, config.numbers.modules.intel.bodyLength, config.specialStrings.abbreviator);
 			}
 
-			allowRead = getVisibility(req, pmc_values.privateVisibility, pmc);
+			allowRead = getVisibility(req, pmc_values.private_visibility, pmc);
 
 			req.query.ADMIN_MODE = (API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.admin));
 
@@ -111,13 +118,28 @@
 			pmc_values.tags = API.methods.getPseudoArray(pmc_values.tags);
 			pmc_values.colors = API.methods.getPseudoArray(pmc_values.colors);
 
-			if ((!req.query.ADMIN_MODE) && !((pmc_values.hashField === (req.playerInfo.PMC ? req.playerInfo.PMC.hashField : '123') && (isPMCMod)))) {
+			pmc_values.hideComments = false;
+			pmc_values.blockComments = false;
+			pmc_values.blockInvites = false;
+			pmc_values.blockUpgrades = false;
+			pmc_values.hideUnits = false;
+
+			if (!(req.query.ADMIN_MODE) && (pmc_values.hashField !== (req.playerInfo.PMC ? req.playerInfo.PMC.hashField : '123'))) {
 				if (allowRead === false) {
 					pmc_values = _.omit(pmc_values, pmc_values.private_fields);
 
-					if (_.indexOf(pmc_values.privateFields, 'hideComments') > -1) {
+					if (_.indexOf(pmc_values.private_fields, 'hideComments') > -1) {
 						pmc_values = _.omit(pmc_values, 'comments');
+						pmc_values = _.omit(pmc_values, 'totalComments');
+						pmc_values.hideComments = true;
 					}
+
+					pmc_values.blockComments = (_.indexOf(pmc_values.private_fields, 'blockComments') > -1);
+					pmc_values.blockInvites = (_.indexOf(pmc_values.private_fields, 'blockInvites') > -1);
+					pmc_values.blockUpgrades = (_.indexOf(pmc_values.private_fields, 'blockUpgrades') > -1);
+					pmc_values.hideUnits = (_.indexOf(pmc_values.private_fields, 'hideUnits') > -1);
+
+					if (pmc_values.blockUpgrades) delete pmc_values.owned_upgrades;
 				}
 				pmc_values = _.omit(pmc_values, PMCModel.blacklistProperties('query', 'user'));
 			}
@@ -128,24 +150,25 @@
 	}
 
 	function getPMCFunc(req, res, hash, callback) {
-
 		var FriendsMethods = require('./../index.js').getMethods().friends,
-			CommentsMethods = require('./../index.js').getMethods().comments;
+			cachedSort = (req.query.sort || "createdAt");
+		req.query.sort = "createdAt";
 
-		FriendsMethods.getFriendsAllFunc(req, res, function(friendsList) {
-			req.playerInfo.friendsList = friendsList;
+		FriendsMethods.getFriendsPMCReadFunc(req, res, function(friendsList) {
+			req.playerInfo.friendsList = friendsList.rows;
+			req.query.sort = cachedSort;
 
 			var QueryTable = "pmc_table",
 				newQuery = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
 				queryWhere = (hash === "1") ? "1" : ("pmc_table.hashField = '" + hash + "'"),
-				havingQuery = "> 0 ",
 				filterMainTable = "*, ",
 				filterCount = 	"(SELECT COUNT(players_table.hashField) FROM `players_table` WHERE players_table.PMCId = pmc_table.id) AS totalPlayers " +
 								", (SELECT COUNT(*) FROM `comments_tables`" +
 							 	"WHERE comments_tables.subjectField = " + QueryTable + ".hashField" +
 								") AS totalComments",
-
 				filterQuery = req.query.COUNT_ONLY ? filterCount : (filterMainTable + filterCount);
+
+				filterQuery = req.query.GET_TIERS ? "`tier_names`" : filterQuery;
 
 			API.methods.generateRawQuery(req, res,
 				QueryTable,
@@ -155,18 +178,26 @@
 				newQuery,
 			function(data) {
 				if (data.rows.length > 0) {
-					CommentsMethods.getEntityComments(req, res, "pmc_table", data.rows[0].hashField, function(comments) {
-						if (req.query.SINGLE_MODE) { data.rows[0].comments = comments; }
+					var UpgradesMethods = require('.//../index.js').getMethods().upgrades;
 
-						API.methods.sendResponse(req, res, true, "", filterPMC(req, data));
+					UpgradesMethods.handleAssociatedUpgrades(req, res, data.rows).then(function(handledUpgrades) {
+						if (req.query.SINGLE_MODE) {
+							var CommentsMethods = require('./../index.js').getMethods().comments;
+							CommentsMethods.getEntityComments(req, res, "pmc_table", data.rows[0].hashField, function(comments) {
+								data.rows[0].comments = comments;
+								return callback(filterPMC(req, data));
+							});
+						} else { return callback(filterPMC(req, data)); }
 					});
-				} else { API.methods.sendResponse(req, res, true, "", data); }
+				} else { return callback(filterPMC(req, data)); }
 			});
 		});
 	}
 
 	function getAllPMC(req, res) {
 		req.query.ALL_PMC_MODE = true;
+		req.serverValues = {};
+		req.serverValues.contextLimit = 8;
 		getPMCFunc(req, res, "1", function(entries){
 			API.methods.sendResponse(req, res, true, config.messages().return_entry, entries);
 		});
@@ -192,6 +223,15 @@
 		});
 	}
 
+	function getPMCTiers(req, res) {
+		req.query.GET_PROPERTY = true;
+		req.query.GET_TIERS = true;
+
+		getPMCFunc(req, res, req.params.Hash, function(tiers) {
+			API.methods.sendResponse(req, res, true, config.messages().return_entries, tiers);
+		});
+	}
+
 	function getSelfPMCPlayers(req, res) {
 		var entity = API.methods.getMainEntity(req);
 		getPMCPlayersFunc(req, res, entity.entityHash, function(players) {
@@ -214,7 +254,6 @@
 	}
 
 	function startPMC(req, res) {
-
 		var entity = API.methods.getMainEntity(req);
 
 		if(!API.methods.validate(req, res, [!(entity.hasPMC)], config.messages().modules.pmc.self_in_pmc)) { return 0; }
@@ -226,9 +265,8 @@
 
 		if (!API.methods.validateParameter(req, res, [
 			[req.body.bio, 'string', config.numbers.modules.players.bioLength],
-			[[req.body.location], 'string'],
+			[req.body.location, 'number', queryValues(req).allowedPostValues.locationValues],
 			[req.body.visibility, 'string', queryValues(req).allowedPostValues.privateFieldsValues],
-			[[req.body.colors], 'array'],
 			[req.body.open_applications, 'boolean']
 		])) { return 0; }
 
@@ -245,33 +283,6 @@
 				filteredProperties = []
 			;
 
-			// THESE MAY BE REMOVED DEPENDING ON THE FRONT-END SOLUTION
-			// 		LIKE FOR EXAMPLE IF I JUST UPDATE THE ENTIRE ARRAY MODIFIED BY THE FRONT END
-			if (req.body.add_tags) {
-				if (!API.methods.validateParameter(req, res, [[[req.body.add_tags], 'array']])) { return 0; }
-				if (!API.methods.validateParameter(req, res, [[req.body.add_tags, 'string', config.numbers.general.tagsLength]])) { return 0; }
-
-				filteredTagProperties = (_.union(currentTagProperties, req.body.add_tags));
-				if (!API.methods.validate(req, res, [(filteredTagProperties .length <= config.numbers.general.tagsLimit)], config.messages().modules.tags.tooMany)) { return 0; }
-			}
-
-			if (req.body.properties) {
-				if (!API.methods.validateParameter(req, res, [[[req.body.properties], 'array']])) { return 0; }
-				if (!API.methods.validateParameter(req, res, [[req.body.properties, PMCModel.whitelistProperties('query', 'user')]])) { return 0; }
-
-				filteredProperties = API.methods.sharedArrayFromArray(_.uniq(_.union(currentProperties, req.body.properties)), validPublicProperties);
-			}
-
-			if (req.body.tierNames) {
-				if (!API.methods.validate(req, res, [req.body.tierNames.length === 5])) { return 0; }
-
-				if (!API.methods.validateParameter(req, res, [
-					[req.body.tierNames, 'string', config.numbers.modules.pmc.tierLength]
-				])) { return 0; }
-
-				update.tierNameFields = req.body.tierNames;
-			}
-
 			if (req.body.displayname) update.displaynameField = req.body.displayname;
 			if (req.body.motto) update.mottoField = req.body.motto;
 			if (req.body.bio) update.bioField = req.body.bio;
@@ -281,26 +292,22 @@
 			if (req.body.open_applications) update.openForApplications = req.body.open_applications;
 			if (req.body.colors) update.colorsField = req.body.colors;
 
-			if ((req.body.add_tags) || (req.body.remove_tags)) update.tagsField = filteredTagProperties;
-			if ((req.body.properties) || (req.body.remove_properties)) update.privateFields = filteredProperties;
+			update.tierNameFields = ['CEO','Commander', 'Officer', 'Sargeant', 'Soldier'];
 
 			update.privateFields = PMCModel.blacklistProperties('creation', 'user');
 
 			PMCModel.sync({force: false}).then(function() {
-				PMCModel.findOne({where:{'displaynameField': req.body.displayname}}).then(function(entry) {
-					if (!API.methods.validate(req, res, [!entry], config.messages().entry_exists(req.body.displayname))) { return 0; }
+				PMCModel.create(update).then(function(entry) {
+					if (!API.methods.validate(req, res, [entry], "ERROR")) { return 0; }
 
-					PMCModel.create(update).then(function(entry) {
-						if (!API.methods.validate(req, res, [entry], "ERROR")) { return 0; }
-
-						entry.addPlayer(player).then(function() {
-							player.update({
-								playerTier: config.privileges().tiers.owner,
-								currentFunds: 0,
-								contractType: config.enums.contract.COMMANDER
-							}).then(function(nPlayer) {
-								API.methods.sendResponse(req, res, true, config.messages().new_entry, entry);
-							});
+					entry.addPlayer(player).then(function() {
+						player.update({
+							playerTier: config.privileges().tiers.owner,
+							currentFunds: 0,
+							contractType: config.enums.contract.COMMANDER,
+							playerPrestige: 0
+						}).then(function(nPlayer) {
+							API.methods.sendResponse(req, res, true, config.messages().new_entry, entry);
 						});
 					});
 				});
@@ -311,7 +318,6 @@
 	function newPMC(req, res) {
 
 		if(!API.methods.validate(req, res, [req.body.displayname])) { return 0; }
-
 		if(!API.methods.validate(req, res, [((!req.playerInfo.PMCId) || (req.playerInfo.playerPrivilege <= config.privileges().tiers.admin))], 'You are already part of a PMC.')) { return 0; }
 
 		var update = {};
@@ -324,10 +330,8 @@
 		if (req.body.colors) update.colorsField = req.body.colors;
 
 		PMCModel.sync({force: false}).then(function() {
-			PMCModel.findOne({where:{'displaynameField': req.body.displayname}}).then(function(entry) {
-				if (!API.methods.validate(req, res, [!entry], config.messages().entry_exists(req.body.displayname))) { return 0; }
-
-				PMCModel.create(update).then(function(entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, entry); });
+			PMCModel.create(update).then(function(entry) {
+				API.methods.sendResponse(req, res, true, config.messages().new_entry, entry);
 			});
 		});
 	}
@@ -347,7 +351,6 @@
 	}
 
 	function putPMCFunc(req, res, hashField, callback) {
-
 		if (req.body.open_applications !== undefined) { req.body.open_applications = API.methods.boolToString(req.body.open_applications); }
 
 		if (!API.methods.validateParameter(req, res, [[hashField, 'string']])) { return 0; }
@@ -356,7 +359,7 @@
 			[req.body.displayname, 'string', config.numbers.modules.pmc.displaynameLength],
 			[req.body.motto, 'string', config.numbers.modules.pmc.mottoLength],
 			[req.body.bio, 'string', config.numbers.modules.players.bioLength],
-			[[req.body.location], 'string'],
+			[req.body.location, 'number', queryValues(req).allowedPostValues.locationValues],
 			[req.body.visibility, 'string', queryValues(req).allowedPostValues.privateFieldsValues],
 			[[req.body.colors], 'array'],
 			[req.body.open_applications, 'boolean']
@@ -377,8 +380,6 @@
 					filteredProperties = entry.privateFields
 				;
 
-				// THESE MAY BE REMOVED DEPENDING ON THE FRONT-END SOLUTION
-				// 		LIKE FOR EXAMPLE IF I JUST UPDATE THE ENTIRE ARRAY MODIFIED BY THE FRONT END
 				if (req.body.add_tags) {
 					if (!API.methods.validateParameter(req, res, [[[req.body.add_tags], 'array']])) { return 0; }
 					if (!API.methods.validateParameter(req, res, [[req.body.add_tags, 'string', config.numbers.general.tagsLength]])) { return 0; }
@@ -387,27 +388,9 @@
 					if (!API.methods.validate(req, res, [(filteredTagProperties .length <= config.numbers.general.tagsLimit)], config.messages().modules.tags.tooMany)) { return 0; }
 				}
 
-				if (req.body.remove_tags) {
-					if (!API.methods.validateParameter(req, res, [[[req.body.remove_tags], 'array']])) { return 0; }
-					if (!API.methods.validateParameter(req, res, [[req.body.remove_tags, 'string', config.numbers.general.tagsLength]])) { return 0; }
-
-					filteredTagProperties = API.methods.excludeArrayFromArray(filteredTagProperties, req.body.remove_tags);
-				}
-
-				// THESE MAY BE REMOVED DEPENDING ON THE FRONT-END SOLUTION
-				// 		LIKE FOR EXAMPLE IF I JUST UPDATE THE ENTIRE ARRAY MODIFIED BY THE FRONT END
 				if (req.body.properties) {
-					if (!API.methods.validateParameter(req, res, [[[req.body.properties], 'array']])) { return 0; }
 					if (!API.methods.validateParameter(req, res, [[req.body.properties, PMCModel.whitelistProperties('query', 'user')]])) { return 0; }
-
-					filteredProperties = API.methods.sharedArrayFromArray(_.uniq(_.union(currentProperties, req.body.properties)), validPublicProperties);
-				}
-
-				if (req.body.remove_properties) {
-					if (!API.methods.validateParameter(req, res, [[[req.body.remove_properties], 'array']])) { return 0; }
-					if (!API.methods.validateParameter(req, res, [[req.body.remove_properties, PMCModel.whitelistProperties('query', 'user')]])) { return 0; }
-
-					filteredProperties = API.methods.excludeArrayFromArray(filteredProperties, req.body.remove_properties);
+					filteredProperties = _.uniq(req.body.properties, validPublicProperties);
 				}
 
 				var update = {};
@@ -497,22 +480,37 @@
 	}
 
 	function transferPMCOwnership(req, res) {
+		transferPMCOwnershipFunc(req, res, req.body.member, function(ownerAlias){
+			API.methods.sendResponse(req, res, true, config.messages().modules.pmc.now_leader(ownerAlias));
+		});
+	}
+
+	function transferPMCOwnershipFunc(req, res, memberHash, callback) {
 		var entity = API.methods.getMainEntity(req);
 
-		if (!API.methods.validateParameter(req, res, [[req.body.member, 'string']])) { return 0; }
-		if (!API.methods.validate(req, res, [req.body.member !== req.playerInfo.hashField])) { return 0; }
+		if (!API.methods.validateParameter(req, res, [[memberHash, 'string']])) { return 0; }
+		if (!API.methods.validate(req, res, [memberHash !== req.playerInfo.hashField])) { return 0; }
 
 		PlayerModel.findOne({where: {hashField: req.playerInfo.hashField}}).then(function(caller) {
 			if (!API.methods.validate(req, res, [caller])) { return 0; }
-			PlayerModel.findOne({where: {hashField: req.body.member, PMCId: caller.PMCId}}).then(function(member) {
+			PlayerModel.findOne({where: {hashField: memberHash, PMCId: caller.PMCId}}).then(function(member) {
 				if (!API.methods.validate(req, res, [member])) { return 0; }
 
 				if (!API.methods.validate(req, res, [member.PMCId === caller.PMCId], config.messages().bad_permission)) { return 0; }
-				if (!API.methods.validate(req, res, [member.playerTier === config.privileges().tiers.admin], config.messages().modules.pmc.higher_tier_req)) { return 0; }
+				// if (!API.methods.validate(req, res, [member.playerTier === config.privileges().tiers.admin], config.messages().modules.pmc.higher_tier_req)) { return 0; }
 
-				member.update({playerTier: config.privileges().tiers.owner}).then(function() {
-					caller.update({playerTier: config.privileges().tiers.admin}).then(function() {
-						API.methods.sendResponse(req, res, true, config.messages().modules.pmc.now_leader(member.aliasField));
+				var memberUpdate = {
+					playerTier: config.privileges().tiers.owner,
+					contractType: config.enums.contract.COMMANDER
+				},
+					callerUpdate = {
+					playerTier: config.privileges().tiers.admin,
+					contractType: config.enums.contract.SOLDIER
+				};
+
+				member.update(memberUpdate).then(function() {
+					caller.update(callerUpdate).then(function() {
+						return callback(member.aliasField);
 					});
 				});
 			});
@@ -533,7 +531,7 @@
 					newPMCValues = {
 						openForApplications: false,
 						currentFunds: 0,
-						sizeTier: -1,
+						sizeTier: 0,
 						PMCPrestige: 0
 					}
 				;
@@ -553,19 +551,37 @@
 	function upgradePMCSize(req, res) {
 		var entity = API.methods.getMainEntity(req);
 
-		PMCModel.findOne({where:{'hashField': entity.entityHash}}).then(function(entry) {
+		PMCModel.findOne({where:{ id: entity.entityId }}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry])) { return 0; }
 
-			var currentPMCSize = entry.sizeTier,
-				GeneralMethods = require('./../index.js').getMethods().general_methods;
+			var GeneralMethods = require('./../index.js').getMethods().general_methods,
+				ActionsCostMethod = require('./../index.js').getMethods().actions_cost,
+				currentPMCSize = entry.sizeTier,
+				upgradeMultiplier = config.numbers.modules.pmc.rankUpMultiplier,
+				finalMultiValue = (currentPMCSize * upgradeMultiplier);
 
-			GeneralMethods.paySystemActionMultiplied(req, res, 'upgradeSize', currentPMCSize, function(success) {
-				var update = {};
-				update.sizeTier = (currentPMCSize + 1);
-
-				entry.update(update).then(function(pmc) {
-					API.methods.sendResponse(req, res, true, config.messages().modules.pmc.size_up);
+			GeneralMethods.paySystemActionMultiplied(req, res, 'upgradeSize', finalMultiValue, function(success) {
+				entry.update({ sizeTier: (currentPMCSize + 1) }).then(function(pmc) {
+					API.methods.sendResponse(req, res, true, config.messages().modules.pmc.size_up, success);
 				});
+			});
+		});
+	}
+
+	function getPMCSizeCost(req, res) {
+		var entity = API.methods.getMainEntity(req);
+
+		PMCModel.findOne({where:{ id: entity.entityId }}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry])) { return 0; }
+
+			var GeneralMethods = require('./../index.js').getMethods().general_methods,
+				ActionsCostMethod = require('./../index.js').getMethods().actions_cost,
+				currentPMCSize = entry.sizeTier,
+				upgradeMultiplier = config.numbers.modules.pmc.rankUpMultiplier,
+				finalMultiValue = (currentPMCSize * upgradeMultiplier);
+
+			ActionsCostMethod.getPropertyFunc(req, res, GeneralMethods.returnEntityAction(req, 'upgradeSize'), function(cost) {
+				API.methods.sendResponse(req, res, true, "", (cost * finalMultiValue));
 			});
 		});
 	}

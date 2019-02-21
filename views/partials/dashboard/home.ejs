@@ -1,0 +1,324 @@
+<div id="home-container">
+	<span ng-init="conditions = CtrlDashboard.conditionsInfo;"></span>
+
+	<div class="meta">
+		<span>Profiles</span>
+	</div>
+
+	<div class="info-card player">
+		<div class="card-label">
+			<i class="icon ion-ios-person"></i>
+			<span class="text">Operator</span>
+		</div>
+
+		<div class="info-content">
+			<div class="image-section">
+				<div class="image"
+					ac-background-image
+					background-image="images/avatars/players/main_{{::(CtrlDashboard.playerInfo.hashField)}}.jpg"
+				></div>
+			</div>
+			<div class="info-content-section">
+				<div class="name-container">
+					<div class="title" ng-bind="::(CtrlDashboard.playerInfo.aliasField)"></div>
+				</div>
+				<div class="contract-container border-bottom">
+					<i
+						class="icon white"
+						ng-class="::(CtrlDashboard.displayContract(CtrlDashboard.playerInfo.contractType).icon)"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Your contractor class."
+					></i>
+					<div class="sub-title small" ng-bind="::(CtrlDashboard.displayContract(CtrlDashboard.playerInfo.contractType).name)"></div>
+				</div>
+
+				<div class="actions-container">
+					<a
+						class="btn btn-default small left"
+						type="button"
+						ui-sref="app.public.player({'playerHash': CtrlDashboard.playerInfo.hashField })"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="View your profile."
+					>
+						<i class="icon ion-document-text" ></i>
+					</a>
+					<a
+						class="btn btn-default small left"
+						type="button"
+						ui-sref="app.private.dashboard({'page':'operator'})"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Edit your personal details."
+					>
+						<i class="icon ion-edit" ></i>
+					</a>
+					<a
+						class="btn btn-warning small right"
+						type="button"
+						ui-sref="app.private.bureaucracy-operator"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Bureaucratic actions."
+					>
+						<i class="icon ion-clipboard"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="info-section">
+			<div class="single-info">
+				<div class="info-title">
+					<span class="title">Personal networth</span>
+					<i
+						class="icon ion-help-circled help"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Your networth is an accumulated value from completed missions which can be withdrawn at any later date."
+					></i>
+				</div>
+				<div class="info-value no-space">
+					<span class="sub-value bold">D$</span> <span class="main-value medium" ng-bind="(CtrlDashboard.playerInfo.networthField | number)"></span>
+					<a
+						class="btn btn-warning small"
+						ng-click="CtrlDashboard.askClaimNetworth()"
+						type="button"
+						a-disabled="(CtrlDashboard.playerInfo.networthField <= 0)"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Claim your total networth."
+					>
+						<i class="icon ion-android-drafts"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="info-card outfit" ng-if="::(conditions.hasPMC)" ng-cloak>
+		<div class="card-label">
+			<i class="icon ion-ios-people"></i>
+			<span class="text">Outfit</span>
+		</div>
+
+		<div class="info-content">
+			<div class="image-section">
+				<div class="image"
+					ac-background-image
+					background-image="images/avatars/pmc/main_{{::(CtrlDashboard.playerInfo.PMC.hashField)}}.jpg"
+				></div>
+			</div>
+			<div class="info-content-section">
+				<div class="name-container">
+					<div class="title" ng-bind="::(CtrlDashboard.playerInfo.PMC.display_name)"></div>
+				</div>
+				<div class="contract-container border-bottom">
+					<div class="sub-title small">TIER <span ng-bind="::(CtrlDashboard.playerInfo.playerTier)"></span></div> -
+					<div class="sub-title small" ng-bind="::(CtrlDashboard.viewData.tierName)"></div>
+				</div>
+
+				<div class="actions-container">
+					<a
+						class="btn btn-default small left"
+						type="button"
+						ui-sref="app.public.pmc({'pmcHash': CtrlDashboard.playerInfo.PMC.hashField })"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="View the Outfit's profile."
+					>
+						<i class="icon ion-document-text" ></i>
+					</a>
+					<a
+						class="btn btn-default small left"
+						type="button"
+						ui-sref="app.private.dashboard({'page':'outfit'})"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Edit the Outfit details."
+					>
+						<i class="icon ion-edit" ></i>
+					</a>
+					<a
+						class="btn btn-warning small right"
+						type="button"
+						ui-sref="app.private.bureaucracy-outfit"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Outfit Bureaucratic actions."
+					>
+						<i class="icon ion-clipboard"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="info-section">
+			<div class="single-info">
+				<div class="info-title">
+					<span class="title">Unit Capacity</span>
+					<i
+						class="icon ion-help-circled help"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="The amount of members currently active and supported in the Outfit."
+					></i>
+				</div>
+				<div class="info-value no-space">
+					<span class="main-value medium" ng-bind="::(CtrlDashboard.playerInfo.PMC.totalPlayers)"></span>
+					<span class="main-value tight black">/</span>
+					<span class="main-value medium" ng-bind="(CtrlDashboard.playerInfo.PMC.size)">
+					</span>
+					<a  class="btn btn-default small"
+						type="button"
+						a-disabled="!(CtrlDashboard.hasFunds(CtrlDashboard.viewData.outfitUpgradeCost))"
+						ng-click="CtrlDashboard.upgradePMCSize()"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Increase the member limit by 1."
+					>
+						<i class="icon ion-plus center"></i>
+					</a>
+
+					<div class="inline-spacer">
+						<span class="sub-value bold">D$</span> <span class="main-value medium size-2" ng-bind="(CtrlDashboard.viewData.outfitUpgradeCost | number)"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="info-card stats">
+
+		<div class="card-label">
+			<i class="icon" ng-class="::(CtrlDashboard.viewData.UI.infoIcon)"></i>
+			<span class="text" ng-bind="::(CtrlDashboard.viewData.UI.infoEntity + ' Info')"></span>
+		</div>
+
+		<div class="info-section no-margin">
+			<div class="single-info">
+				<div class="info-title no-margin">
+					<span class="title">Prestige Rank</span>
+					<i
+						class="icon ion-help-circled help"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="{{::(CtrlDashboard.viewData.UI.tooltip.prestige)}}"
+					></i>
+				</div>
+				<div class="prestige-rank-container">
+					<div class="info-value margin-low-top">
+						<ul class="star-container">
+							<li ng-repeat="star in CtrlDashboard.numberToArray(5) track by $index">
+								<i class="icon ion-star" ng-class="({'filled': (($index + 1) <= CtrlDashboard.getEntityProperties('prestige')) })"></i>
+							</li>
+						</ul>
+						<a  class="btn btn-success small aligned" type="button"
+							ng-click="CtrlDashboard.upgradePrestigeRank()"
+							a-disabled="!(CtrlDashboard.hasFunds(CtrlDashboard.viewData.prestigeRankUpCost))"
+							popover-trigger="'mouseenter'"
+							popover-class="tooltip"
+							uib-popover="Increase the Prestige Rank."
+						>
+							<i class="icon ion-chevron-up center" ></i>
+						</a>
+					</div>
+					<div class="info-value upgrade-cost align-right">
+						<span class="sub-value bold size-2">D$</span> <span class="main-value medium size-3" ng-bind="(CtrlDashboard.viewData.prestigeRankUpCost | number)"></span>
+					</div>
+				</div>
+			</div>
+			<div class="single-info">
+				<div class="info-title">
+					<span class="title">Funds</span>
+					<i  class="icon ion-help-circled help"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="{{::(CtrlDashboard.viewData.UI.tooltip.funds)}}"
+					></i>
+				</div>
+				<div class="info-value">
+					<span class="sub-value big bold low-center">D$</span> <span class="main-value success bg big" ng-bind="(CtrlDashboard.getEntityProperties('funds') | number)"></span>
+				</div>
+			</div>
+			<div class="single-info">
+				<div class="info-title">
+					<span class="title">Side Alignment</span>
+					<i  class="icon ion-help-circled help"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="{{::(CtrlDashboard.viewData.UI.tooltip.side)}}"
+					></i>
+				</div>
+				<div class="info-value" ng-class="(CtrlDashboard.applyControlledClass(CtrlDashboard.getEntityProperties('side')))">
+					<span class="main-value bg big" ng-bind="(CtrlDashboard.getSideName(CtrlDashboard.getEntityProperties('side')))"></span>
+					<a  class="btn btn-warning small aligned"
+						type="button"
+						a-disabled="(CtrlDashboard.getEntityProperties('side') === 0)"
+						ng-click="CtrlDashboard.resetSideAlignment()"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Reset the side alignment."
+					>
+						<i class="icon ion-refresh"></i>
+					</a>
+				</div>
+			</div>
+			<div class="single-info">
+				<div class="info-title mission">
+					<span class="title">Mission Results</span>
+					<i  class="icon ion-help-circled help"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Missions completed and failed."
+					></i>
+				</div>
+				<div class="mission-value win"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Missions completed."
+				>
+					<div class="mission-icon">
+						<i class="icon ion-checkmark"></i>
+					</div>
+					<div class="main-value" ng-bind="::(CtrlDashboard.getEntityProperties('missionsWon'))">
+					</div>
+				</div>
+				<div class="mission-value fail"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Missions failed."
+				>
+					<div class="mission-icon">
+						<i class="icon ion-close"></i>
+					</div>
+					<div class="main-value" ng-bind="::(CtrlDashboard.getEntityProperties('missionsFailed'))">
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="recommended-actions-container">
+
+		<div class="meta">
+			<span>Shortcuts</span>
+		</div>
+
+		<div class="actions col-md-2 col-sm-4 col-xs-12 noselect" ng-repeat="menuItem in CtrlDashboard.viewData.suggestedActions" ng-if="::(menuItem.display)" ng-class="::[{'muted': !(menuItem.enable)}, (menuItem.class)]">
+			<div
+				ng-click="(menuItem.fn ? menuItem.fn() : CtrlBureaucracyOutfit.changeState(menuItem.state))"
+				a-disabled="!(menuItem.enable)"
+				ui-sref="{{::(menuItem.route || 'app.private.dashboard')}}"
+			>
+				<i class="icon" ng-class="::(menuItem.icon)"></i>
+				<div class="title" ng-bind="::(menuItem.title)"></div>
+				<hr />
+				<div class="description" ng-bind="::(menuItem.description)"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

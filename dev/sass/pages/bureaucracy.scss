@@ -1,0 +1,34 @@
+
+#bureaucracy-page {
+	@include factor-property(padding-bottom, 20);
+	#back-button { @include factor-property(margin-bottom, 5); }
+	#class-change {
+		#class-selection-choices {
+			@include factor-property(padding-bottom, 15);
+		}
+
+		.current {
+			text-align: center;
+			.current-text { @include font-size(factor(3)); }
+
+			.name {
+				@include font-size(factor(5));
+				font-family: $main_font;
+				color: $main_color;
+				display: inline-block;
+			}
+
+			.icon {
+				display: inline-block;
+				@include font-size(factor(7));
+				font-family: $main_font;
+				color: $main_color;
+				@include factor-property(margin-right, 1);
+			}
+
+			.prestige {
+				.icon { @include font-size(factor(4)); }
+			}
+		}
+	}
+}

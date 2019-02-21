@@ -34,7 +34,7 @@
 						'modules/**/*.js',
 						'dev/js/**/*.js',
 						config.files.app,
-						config.files.config
+						config.folders.config + '/**/*.js',
 					],
 					tasks: ['jshint']
 				},
@@ -48,10 +48,11 @@
 					files: [
 						'app.js',
 						'config.js',
+						config.folders.config + '/**/*.js',
 						'routes/**/*.js',
 						'modules/**/*.js'
 					],
-					tasks: [ 'express:web' ],
+					tasks: ['express:web'],
 					options: {
 						nospawn: true,
 						atBegin: true
@@ -60,6 +61,7 @@
 
 				livereload: {
 					files: [
+						config.folders.views,
 						config.folders.views + '/**/*.ejs',
 						config.folders.public + '/js/**/*.js',
 						config.folders.public + '/styles/**/*.css'
@@ -73,7 +75,7 @@
 					'routes/**/*.js',
 					'test/**/*.js',
 					'modules/**/*.js',
-					'configs/*.js',
+					config.folders.config + '/**/*.js',
 					config.folders.dev + '/js/**/*js',
 					config.files.app,
 					config.files.config,

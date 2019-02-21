@@ -1,229 +1,309 @@
-
-<div class="container-fluid" id="unit-page">
+<div class="container-fluid top-spacer" id="unit-page">
 	<div class="row">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-12" id="pmc-page">
-					<div id="header" class="text-center">
-						<div class="header-name">
-							<div ng-if="::CtrlPMC.pmcInfo.display_name !== undefined">
-								<h2 class="alias" ng-bind="::CtrlPMC.pmcInfo.display_name"></h2>
-								<i
-									ng-if="::(CtrlPMC.pmcInfo.playerPrivilege < 4)"
-									class="icon privilege-icon"
-									ng-class="::(CtrlPMC.displayPrivilege(CtrlPMC.pmcInfo.playerPrivilege).icon)"
-									popover-trigger="'mouseenter'"
-									popover-class="tooltip"
-									uib-popover="{{::(CtrlPMC.displayPrivilege(CtrlPMC.pmcInfo.playerPrivilege).name)}}"
-								></i>
-							</div>
+				<div class="col-md-12" id="player-page">
+					<div class="row">
 
-							<div class="motto" ng-if="::CtrlPMC.pmcInfo.motto !== undefined">
-								"<span ng-bind="::CtrlPMC.pmcInfo.motto"></span>"
-							</div>
-						</div>
+						<div id="left-body" class="col-md-5 col-sm-5">
+							<div class="row">
 
-						<div class="unit-interactions pmc" ng-if="::(CtrlPMC.selfInfo.playerPrivilege <= 99)" ng-cloak>
-							<ul class="interaction-list">
-								<li>
-									<a
-										a-disabled="!(CtrlPMC.canAskFriend())"
-										ng-click="CtrlPMC.askAlly()"
-										class="section-button medium animated"
-										role="button"
+								<div id="header" class="text-center">
 
+									<h2 class="alias" ng-class="::(CtrlPMC.applyControlledClass(CtrlPMC.pmcInfo.side))" ng-bind="::(CtrlPMC.gV('display_name'))"></h2>
+									<i
+										ng-if="::(CtrlPMC.pmcInfo.playerPrivilege < 4)"
+										class="icon privilege-icon"
+										ng-class="::(CtrlPMC.displayPrivilege(CtrlPMC.pmcInfo.playerPrivilege).icon)"
 										popover-trigger="'mouseenter'"
 										popover-class="tooltip"
-										uib-popover="{{::CtrlPMC.getString('friends')}}"
-									>
-										<ul>
-											<li><i class="icon ion-network"></i></li>
-											<li>Ally</li>
-										</ul>
-									</a>
-								</li>
-								<li>
-									<a
-										a-disabled="!(CtrlPMC.canApply())"
-										ng-click="CtrlPMC.askJoinPMC()"
-										class="section-button medium animated"
-										role="button"
+										uib-popover="{{::(CtrlPMC.displayPrivilege(CtrlPMC.pmcInfo.playerPrivilege).name)}}"
+									></i>
 
-										popover-trigger="'mouseenter'"
-										popover-class="tooltip"
-										uib-popover="{{::CtrlPMC.getString('apply')}}"
-									>
-										<ul>
-											<li><i class="icon ion-clipboard"></i></li>
-											<li>Apply</li>
-										</ul>
-									</a>
-								</li>
-								<li class="report">
-									<a
-										ng-click="CtrlPMC.sendReport()"
-										class="section-button medium animated"
-										role="button"
-
-										popover-trigger="'mouseenter'"
-										popover-class="tooltip"
-										uib-popover="Reports this Outfit for a rule violation."
-									>
-										<ul>
-											<li><i class="icon ion-alert-circled"></i></li>
-											<li>Report</li>
-										</ul>
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div id="unit-avatar" class="player">
-							<div class="hexagon avatar-large">
-								<div class="in1"><div class="in2">
-									<div class="big" ac-background-image background-image="images/avatars/pmc/main_{{CtrlPMC.pmcInfo.hashField}}.jpg">
+									<div class="motto">
+										"<span ng-bind="::(CtrlPMC.gV('motto'))"></span>"
 									</div>
-								</div></div>
+
+									<div id="avatar-container">
+
+										<div class="unit-interactions pmc" ng-if="::(CtrlPMC.selfInfo.playerPrivilege <= 99)" ng-cloak>
+											<ul class="interaction-list">
+												<li class="interaction-button" ng-if="(!(CtrlPMC.pmcInfo.blockInvites) && !(CtrlPMC.checkIfFriend()) && (CtrlPMC.selfInfo.PMCId))" ng-cloak>
+													<a
+														a-disabled="!(CtrlPMC.enableAlliance)"
+														ng-click="CtrlPMC.askAlly()"
+														class="section-button small animated"
+														role="button"
+
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="{{CtrlPMC.getString('friends')}}"
+													>
+														<ul>
+															<li><i class="icon ion-network"></i></li>
+															<li>Ally</li>
+														</ul>
+													</a>
+												</li>
+												<li class="interaction-button" ng-if="(CtrlPMC.checkIfFriend() && (CtrlPMC.selfInfo.PMCId))" ng-cloak>
+													<a
+														ng-click="CtrlPMC.askRemoveAlly()"
+														class="section-button small animated"
+														role="button"
+
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="Dissolves the Alliance between the Outfits."
+													>
+														<ul>
+															<li><i class="icon ion-minus"></i></li>
+															<li>End Alliance</li>
+														</ul>
+													</a>
+												</li>
+												<li class="interaction-button" ng-if="!(CtrlPMC.pmcInfo.blockInvites)" ng-cloak>
+													<a
+														a-disabled="!(CtrlPMC.enableApplication)"
+														ng-click="CtrlPMC.askJoinPMC()"
+														class="section-button small animated"
+														role="button"
+
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="{{CtrlPMC.getString('apply')}}"
+													>
+														<ul>
+															<li><i class="icon ion-clipboard"></i></li>
+															<li>Apply</li>
+														</ul>
+													</a>
+												</li>
+												<li class="report interaction-button">
+													<a
+														ng-click="CtrlPMC.sendReport()"
+														class="section-button small warning animated"
+														role="button"
+
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="Reports this Outfit for a rule violation."
+													>
+														<ul>
+															<li><i class="icon ion-alert-circled"></i></li>
+															<li>Report</li>
+														</ul>
+													</a>
+												</li>
+											</ul>
+										</div>
+
+										<div id="unit-avatar" class="outfit">
+											<div class="hexagon avatar-large rotate">
+												<div class="in1"><div class="in2">
+													<div class="big" ac-background-image background-image="images/avatars/pmc/main_{{::(CtrlPMC.pmcInfo.hashField)}}.jpg">
+													</div>
+												</div></div>
+											</div>
+										</div>
+									</div>
+
+									<div class="prestige-container outfit" ng-cloak>
+										<div class="prestige"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-placement="bottom"
+											uib-popover="{{::('Prestige ' + (CtrlPMC.eV('prestige') ? 'Rank' : 'Unknown'))}}"
+										>
+											<i class="icon ion-star" ng-if="::(CtrlPMC.eV('prestige'))" ng-repeat="star in CtrlPMC.numberToArray(CtrlPMC.pmcInfo.prestige) track by $index"></i>
+											<i class="icon ion-help-circled" ng-if="::(!CtrlPMC.eV('prestige'))"></i>
+										</div>
+									</div>
+
+								</div>
+
+								<div id="unit-info" class="margin-top">
+
+									<div class="static">
+										<ul>
+											<li>
+												<i
+													class="icon ion-calendar"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													uib-popover="Member since"
+												></i>
+												<span ng-if="::(CtrlPMC.eV('createdAt'))" ng-bind="::CtrlPMC.gV('createdAt') | date"></span>
+											</li>
+											<li>
+												<i
+													class="icon ion-earth"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													uib-popover="Region"
+												></i>
+												<span ng-if="::(CtrlPMC.eV('location'))" ng-bind="(CtrlPMC.regionNames[CtrlPMC.pmcInfo.location])"></span>
+												<span ng-if="::(!CtrlPMC.eV('location'))" ng-bind="::(CtrlPMC.gV('location'))"></span>
+											</li>
+											<li>
+												<i
+													class="icon ion-ios-people"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													uib-popover="Members"
+												></i>
+												<span ng-bind="::(CtrlPMC.gV('totalPlayers'))"></span> / <span ng-bind="::(CtrlPMC.gV('size'))"></span>
+											</li>
+										</ul>
+									</div>
+
+									<div class="col-md-12">
+										<div class="row">
+
+											<div class="col-md-12">
+												<div class="row">
+													<div class="tag-column">
+														<div ng-if="::(CtrlPMC.eV('tags'))" ui-sref="app.public.view-outfits({ tags: tag })" class="tags" ng-repeat="tag in CtrlPMC.pmcInfo.tags">
+															<i class="icon ion-ios-pricetag"></i>
+															<span ng-bind="::(tag)"></span>
+														</div>
+														<div class="no-tags" ng-if="::(!CtrlPMC.eV('tags'))">
+															<i class="icon ion-pricetag"></i>
+															<span class="text">Unknown Tags</span>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-md-12">
+												<div class="row">
+													<div class="stats-container">
+														<div class="stats text-center" ng-repeat="stat in ::(CtrlPMC.statsItems)">
+															<div class="single-stat">
+																<i class="icon huge" ng-class="stat.icon"></i>
+																<div class="number" ng-bind="::(CtrlPMC.gV([stat.value]))"></div>
+																<div class="text" ng-bind="::(stat.text)"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+
 							</div>
 						</div>
 
-						<h3 class="bio" ng-bind="::CtrlPMC.pmcInfo.bio"></h3>
+						<div id="body" class="col-md-7 col-sm-7">
+							<div class="row">
 
-						<div class="static">
-							<ul>
-								<li ng-if="::CtrlPMC.pmcInfo.createdAt">
-									<i
-										class="icon ion-calendar"
-										popover-trigger="'mouseenter'"
-										popover-class="tooltip"
-										uib-popover="Member since"
-									></i>
-									<span ng-bind="::CtrlPMC.pmcInfo.createdAt | date"></span>
-								</li>
-								<li ng-if="::CtrlPMC.pmcInfo.location">
-									<i
-										class="icon ion-earth"
-										popover-trigger="'mouseenter'"
-										popover-class="tooltip"
-										uib-popover="Location"
-									></i>
-									<span ng-bind="::CtrlPMC.pmcInfo.location"></span>
-								</li>
-								<li ng-if="::CtrlPMC.pmcInfo.totalPlayers">
-									<i
-										class="icon ion-ios-people"
-										popover-trigger="'mouseenter'"
-										popover-class="tooltip"
-										uib-popover="Members"
-									></i>
-									<span ng-bind="::CtrlPMC.pmcInfo.totalPlayers"></span> / <span ng-bind="::CtrlPMC.pmcInfo.size"></span>
-								</li>
-								<li ng-if="::CtrlPMC.pmcInfo.prestige">
-									<i
-										class="icon ion-star"
-										popover-trigger="'mouseenter'"
-										popover-class="tooltip"
-										uib-popover="Prestige points"
-									></i>
-									<span ng-bind="::CtrlPMC.pmcInfo.prestige"></span>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
+								<div class="main-column col-md-12">
+									<div class="row">
+										<h3 class="bio outfit" ng-bind="::(CtrlPMC.gV('bio'))"></h3>
+									</div>
+								</div>
 
-			<div id="tabs">
-				<ul class="noselect">
-					<a ng-click="CtrlPMC.setTab(1)" ng-class="{'active': CtrlPMC.currentTab === 1}">
-						<li><i class="icon ion-information"></i>Info</li>
-					</a>
-					<a ng-click="CtrlPMC.setTab(2)" ng-class="{'active': CtrlPMC.currentTab === 2}">
-						<li><i class="icon ion-person-stalker"></i>Units</li>
-					</a>
-				</ul>
-			</div>
+								<div id="tabs">
+									<ul class="noselect">
+										<a ng-click="CtrlPMC.setTab(1)" ng-class="{'active': CtrlPMC.currentTab === 1}">
+											<li><i class="icon ion-information"></i>Info</li>
+										</a>
+										<a ng-click="CtrlPMC.setTab(2)" a-disabled="(CtrlPMC.pmcInfo.hideUnits)" ng-class="{'active': CtrlPMC.currentTab === 2}">
+											<li><i class="icon ion-person-stalker"></i>Units</li>
+										</a>
+									</ul>
+								</div>
 
-			<div id="body">
-				<div class="row fade-animation-fast" ng-if="(CtrlPMC.currentTab === 1)" ng-cloak>
-					<div class="main-column col-md-4 col-sm-6 col-xs-12"
-						nf-if="
-							(::CtrlPMC.pmcInfo.currentFunds) !== undefined)||
-							(::CtrlPMC.pmcInfo.missionsWonNum !== undefined) ||
-							(::CtrlPMC.pmcInfo.missionsfailedNum !== undefined)
-						">
-						<div class="meta">
-							<i class="icon ion-stats-bars"></i>
-							<span>Stats</span>
-							<i
-								class="icon ion-help-circled helper small"
-								popover-trigger="'mouseenter'"
-								popover-class="tooltip"
-								uib-popover="Some stats over the Outfit's performance."
-							></i>
-						</div>
+								<div id="outfit-section" class="fade-animation-fast" ng-if="(CtrlPMC.currentTab === 2)" ng-cloak>
+									<units-directive
+										interaction-options="CtrlPMC.unitsRadialOptions"
+										player-info="CtrlPMC.selfInfo"
+										pmc-info="CtrlPMC.pmcInfo"
+										units-list="CtrlPMC.pmcUnits"
+										friends-list="CtrlPMC.selfFriends"
+									></units-directive>
+								</div>
 
-						<div class="stats text-center" ng-repeat="stat in ::CtrlPMC.statsItems">
-							<div class="single-stat" ng-if="::CtrlPMC.pmcInfo[stat.value] !== undefined">
-								<i class="icon huge" ng-class="stat.icon"></i>
-								<div class="number" ng-bind="::CtrlPMC.pmcInfo[stat.value]"></div>
-								<div class="text" ng-bind="::stat.text"></div>
+								<div class="fade-animation-fast" ng-if="(CtrlPMC.currentTab === 1)" ng-cloak>
+									<div class="main-column col-md-12">
+										<div class="row">
+											<div class="meta-bar">
+												<i class="icon ion-flash"></i>
+												<span>Outfit Upgrades</span>
+												<i
+													class="icon ion-help-circled helper small"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													popover-placement="bottom"
+													uib-popover="The Upgrades featured by this Outfit."
+												></i>
+											</div>
+
+											<ul class="upgrade-list main-upgrades full tight">
+												<li
+													class="single-upgrade fade-animation-fast-stagger"
+													ng-class="::(CtrlPMC.prominenceClass(upgrade))"
+													ng-repeat="upgrade in CtrlPMC.pmcInfo.owned_upgrades | orderBy:'-owned_upgrade.prominentField' track by $index"
+												>
+													<div class="upgrade-object-container">
+														<img class="upgrade-img" ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" />
+														<div class="rank-container">
+															<div class="rank" ng-class="::(CtrlPMC.rankComplete(upgrade))">
+																<span class="current" ng-bind="::(upgrade.owned_upgrade.rankField)"></span>/<span ng-bind="::(upgrade.maxTier)"></span>
+															</div>
+														</div>
+														<a href="upgrade/{{::(upgrade.hashField)}}">
+															<div class="name-container">
+																<div class="name" ng-bind="::(upgrade.nameField)"></div>
+															</div>
+														</a>
+													</div>
+												</li>
+												<li
+													class="single-upgrade empty fade-animation-fast-stagger"
+													ng-repeat="rank in CtrlPMC.numberToArray((5 - CtrlPMC.pmcInfo.owned_upgrades.length)) track by $index"
+												>
+													<div class="upgrade-object-container blank">
+														<div class="blank-upgrade"></div>
+														<div class="question" ng-if="::(CtrlPMC.pmcInfo.blockUpgrades)">?</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+
+									<div class="main-column col-md-12">
+										<div class="row">
+											<div class="meta-bar">
+												<i class="icon ion-chatbox-working"></i>
+												<span>Comments</span>
+												<i
+													class="icon ion-help-circled helper small"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													uib-popover="Comments made about this Outfit."
+												></i>
+											</div>
+											<comments-directive
+												subject-type="pmc"
+												subject-hash="CtrlPMC.pmcInfo.hashField"
+												per-page=4
+												allow-comments="!(CtrlPMC.pmcInfo.blockComments)"
+												show-comments="!(CtrlPMC.pmcInfo.hideComments)"
+											></comments-directive>
+										</div>
+									</div>
+								</div>
+
 							</div>
 						</div>
-
-						<div ng-if="::CtrlPMC.pmcInfo.playerPrestige !== undefined" ng-bind="::CtrlPMC.pmcInfo.playerPrestige"></div>
-						<div ng-if="::CtrlPMC.pmcInfo.playerPrivilege !== undefined" ng-bind="::CtrlPMC.pmcInfo.playerPrivilege"></div>
-						<div ng-if="::CtrlPMC.pmcInfo.playertier !== undefined" ng-bind="::CtrlPMC.pmcInfo.playertier"></div>
-					</div>
-
-					<div class="main-column col-md-4 col-sm-6 col-xs-12" ng-if="::CtrlPMC.pmcInfo.tags !== undefined">
-						<div class="meta">
-							<i class="icon ion-pricetags"></i>
-							<span>Tags</span>
-							<i
-								class="icon ion-help-circled helper small"
-								popover-trigger="'mouseenter'"
-								popover-class="tooltip"
-								uib-popover="Tags that define this Outfit."
-							></i>
-						</div>
-						<div class="tags" ng-repeat="tag in CtrlPMC.pmcInfo.tags">
-							<span ng-bind="::tag"></span>
-						</div>
-					</div>
-
-					<div class="main-column col-md-4 col-sm-6 col-xs-12"">
-						<div class="meta">
-							<i class="icon ion-chatbox-working"></i>
-							<span>Comments</span>
-							<i
-								class="icon ion-help-circled helper small"
-								popover-trigger="'mouseenter'"
-								popover-class="tooltip"
-								uib-popover="Comments made about this Outfit."
-							></i>
-						</div>
-						<comments-directive
-							subject-type="pmc"
-							subject-hash="CtrlPMC.pmcInfo.hashField"
-							per-page=4
-						></comments-directive>
 					</div>
 				</div>
-
-				<div class="row fade-animation-fast" ng-if="(CtrlPMC.currentTab === 2)" ng-cloak>
-					<div class="col-xs-12">
-						<units-directive
-							interaction-options="CtrlPMC.unitsRadialOptions"
-							player-info="CtrlPMC.selfInfo"
-							pmc-info="CtrlPMC.pmcInfo"
-							units-list="CtrlPMC.pmcUnits"
-							friends-list="CtrlPMC.selfFriends"
-						></units-directive>
-					</div>
-				</div>
-
 			</div>
 		</div>
 	</div>
 </div>
+
+<footer-directive></footer-directive>

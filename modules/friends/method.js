@@ -5,6 +5,7 @@
 	var PMCModel = require('./../index.js').getModels().pmc,
 		PlayerModel = require('./../index.js').getModels().players,
 		FriendsModel = require('./../index.js').getModels().friends,
+		UpgradesMethods = require('.//../index.js').getMethods().upgrades,
 		config = require('./../../config.js'),
 		API = require('./../../routes/api.js'),
 
@@ -23,7 +24,10 @@
 	exports.getFriendsPMCFunc = getFriendsPMCFunc;
 	exports.getFriendsAllFunc = getFriendsAllFunc;
 
+	exports.getFriendsPMCReadFunc = getFriendsPMCReadFunc;
+
 	exports.removeFriend = removeFriend;
+	exports.removeAlliance = removeAlliance;
 
 	exports.queryValues = queryValues;
 
@@ -63,9 +67,25 @@
 		});
 	}
 
+	function removeAlliance(req, res) {
+		if (!API.methods.validate(req, res, [req.playerInfo.PMC, "You are not in an Outfit."])) { return 0; }
+
+		mainModel.findOne({
+			where: {
+				friendAHash: [req.playerInfo.PMC.hashField, req.body.friend_hash],
+				friendBHash: [req.playerInfo.PMC.hashField, req.body.friend_hash],
+				friendType: "pmc"
+			}
+		}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
+			entry.destroy().then(function() {
+				API.methods.sendResponse(req, res, true, config.messages().modules.friends.alliance_removed, "");
+			});
+		});
+	}
+
 	function getFriendsPlayerReadFunc(req, res, callback) {
 		var FRIENDS_LIST_FUNC_QUERY = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
-		//var FRIENDS_LIST_FUNC_QUERY = {where: {}, order:[['createdAt', "ASC"]], offset:0, limit:0},
 			queryTable = 'friends_tables',
 			queryType = 'player',
 			filterValue = req.playerInfo.hashField;
@@ -76,28 +96,49 @@
 				"IF(PA.hashField = '" + filterValue + "', null, PA.alias) AS friend_A_Alias, " +
 				"IF(PB.hashField = '" + filterValue + "', null, PB.hashField) AS friend_B_Hash, " +
 				"IF(PB.hashField = '" + filterValue + "', null, PB.alias) AS friend_B_Alias, " +
+				"IF(PA.hashField = '" + filterValue + "', null, PA.side) AS friend_A_Side, " +
+				"IF(PB.hashField = '" + filterValue + "', null, PB.side) AS friend_B_Side, " +
+				"IF(PA.hashField = '" + filterValue + "', null, PA.PMCId) AS PMC_A, " +
+				"IF(PB.hashField = '" + filterValue + "', null, PB.PMCId) AS PMC_B, " +
+
+				"IF(PA.hashField = '" + filterValue + "', null, PMCA.hashField) AS PMCA_Hash, " +
+				"IF(PB.hashField = '" + filterValue + "', null, PMCB.hashField) AS PMCB_Hash, " +
+				"IF(PA.hashField = '" + filterValue + "', null, PMCA.side) AS PMCA_Side, " +
+				"IF(PB.hashField = '" + filterValue + "', null, PMCB.side) AS PMCB_Side, " +
+
 				"friends_tables.createdAt AS friends_since",
-			"INNER JOIN `players_table` AS PA ON friends_tables.friend_a = PA.hashField INNER JOIN `players_table` AS PB ON friends_tables.friend_b = PB.hashField",
+			"INNER JOIN `players_table` AS PA ON friends_tables.friend_a = PA.hashField INNER JOIN `players_table` AS PB ON friends_tables.friend_b = PB.hashField " +
+			"LEFT JOIN `pmc_table` AS PMCA ON PA.PMCId = PMCA.id LEFT JOIN `pmc_table` AS PMCB ON PB.PMCId = PMCB.id",
 			"friends_tables.type = '" + queryType + "' AND (" + "PA.hashField = '" + filterValue + "' OR PB.hashField = '" + filterValue + "')",
 			FRIENDS_LIST_FUNC_QUERY,
 		function(data) {
-			var _ = require('lodash'),
-				newRet = [];
+			var _ = require('lodash'), newRet = [];
+			req.query.qIncludeUpgrades = true;
+
 			for (var i=0; i < data.rows.length; i++) { data.rows[i] = _.omitBy(data.rows[i], _.isNull);	}
 			for (var i=0; i < data.rows.length; i++) {
-				newRet[i] = {
+				var PMCHash = (data.rows[i].PMCA_Hash || data.rows[i].PMCB_Hash),
+					PMCSide = (data.rows[i].PMCA_Side || data.rows[i].PMCB_Side),
+					friendSide = (data.rows[i].friend_A_Side || data.rows[i].friend_B_Side);
+
+				newRet.push({
 					friendAlias: (data.rows[i].friend_B_Alias || data.rows[i].friend_A_Alias),
+					hashField: (data.rows[i].friend_B_Hash || data.rows[i].friend_A_Hash),
 					friendHash: (data.rows[i].friend_B_Hash || data.rows[i].friend_A_Hash),
+					friendSide: (PMCSide || friendSide),
 					friendSince: data.rows[i].friends_since
-				};
+				});
+				if (PMCHash) newRet[i].PMC = { hashField: PMCHash };
 			}
-			data.rows = newRet;
-			return callback(data);
+
+			UpgradesMethods.handleAssociatedUpgrades(req, res, newRet).then(function(handledUpgrades) {
+				data.rows = newRet;
+				return callback(data);
+			});
 		});
 	}
 
 	function getFriendsPlayerFunc(req, res, callback) {
-		//var FRIENDS_LIST_FUNC_QUERY = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
 		var FRIENDS_LIST_FUNC_QUERY = {where: {}, order:[['createdAt', "ASC"]], offset:0, limit:0},
 		filterValue = (req.playerInfo.hashField);
 
@@ -111,7 +152,6 @@
 
 	function getFriendsPMCReadFunc(req, res, callback) {
 		var FRIENDS_LIST_FUNC_QUERY = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
-		//var FRIENDS_LIST_FUNC_QUERY = {where: {}, order:[['createdAt', "ASC"]], offset:0, limit:0},
 			queryTable = 'friends_tables',
 			queryType = 'pmc',
 			filterValue = req.playerInfo.PMC ? req.playerInfo.PMC.hashField : '123';
@@ -122,28 +162,34 @@
 				"IF(PA.hashField = '" + filterValue + "', null, PA.display_name) AS friend_A_Alias, " +
 				"IF(PB.hashField = '" + filterValue + "', null, PB.hashField) AS friend_B_Hash, " +
 				"IF(PB.hashField = '" + filterValue + "', null, PB.display_name) AS friend_B_Alias, " +
+				"IF(PA.hashField = '" + filterValue + "', null, PA.side) AS friend_A_Side, " +
+				"IF(PB.hashField = '" + filterValue + "', null, PB.side) AS friend_B_Side, " +
 				"friends_tables.createdAt AS friends_since",
 			"INNER JOIN `pmc_table` AS PA ON friends_tables.friend_a = PA.hashField INNER JOIN `pmc_table` AS PB ON friends_tables.friend_b = PB.hashField",
 			"friends_tables.type = '" + queryType + "' AND (" + "PA.hashField = '" + filterValue + "' OR PB.hashField = '" + filterValue + "')",
 			FRIENDS_LIST_FUNC_QUERY,
 		function(data) {
-			var _ = require('lodash'),
-				newRet = [];
+			var _ = require('lodash'), newRet = [];
+			req.query.qIncludeUpgrades = true;
+
 			for (var i=0; i < data.rows.length; i++) { data.rows[i] = _.omitBy(data.rows[i], _.isNull);	}
 			for (var i=0; i < data.rows.length; i++) {
 				newRet[i] = {
 					friendAlias: (data.rows[i].friend_B_Alias || data.rows[i].friend_A_Alias),
 					friendHash: (data.rows[i].friend_B_Hash || data.rows[i].friend_A_Hash),
-					friendSince: data.rows[i].friends_since
+					friendSide: (data.rows[i].friend_A_Side || data.rows[i].friend_B_Side),
+					friendSince: (data.rows[i].friends_since),
+					PMC: { hashField: (data.rows[i].friend_B_Hash || data.rows[i].friend_A_Hash) }
 				};
 			}
-			data.rows = newRet;
-			return callback(data);
+			UpgradesMethods.handleAssociatedUpgrades(req, res, newRet).then(function(handledUpgrades) {
+				data.rows = newRet;
+				return callback(data);
+			});
 		});
 	}
 
 	function getFriendsPMCFunc(req, res, callback) {
-		// var FRIENDS_LIST_FUNC_QUERY = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
 		var FRIENDS_LIST_FUNC_QUERY = {where: {}, order:[['createdAt', "ASC"]], offset:0, limit:0},
 		filterValue = (req.playerInfo.PMC ? req.playerInfo.PMC.hashField : '123');
 

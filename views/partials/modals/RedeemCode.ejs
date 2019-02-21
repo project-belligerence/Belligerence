@@ -1,0 +1,40 @@
+
+<div class="modal-window">
+	<div class="modal-header">
+		<i class="icon ion-key"></i>
+		<h2 class="modal-title">Confirm Access Key</h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
+	</div>
+
+	<div class="modal-body">
+		<div class="modal-body" id="modal-body">
+			Please enter a valid Access Key.
+
+			<form class="send-message" ng-submit="closeModal(true)">
+				<div class="form-group title">
+					<div class="input-group">
+						<input type="text" class="form-control" id="access-key-input" ng-model="ModalController.accessKeyInput">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+		<a class="section-button medium muted" role="button" ng-click="closeModal(false)">
+			<ul>
+				<li><i class="icon ion-minus"></i></li>
+				<li>Cancel</li>
+			</ul>
+		</a>
+		<a class="section-button medium success" role="button" ng-click="ModalController.redeeemKey()">
+			<ul>
+				<li><i class="icon ion-arrow-right-c"></i></li>
+				<li>Confirm</li>
+			</ul>
+		</a>
+	</div>
+</div>

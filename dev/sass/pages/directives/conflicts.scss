@@ -1,0 +1,316 @@
+
+$border_style: 1px solid #666;
+
+.asset-bar-container {
+	border: $border_style;
+
+	display: inline-block;
+	position: relative;
+
+	width: 100%;
+	height: 30px;
+	z-index: 99;
+	box-shadow: 0px 0px 10px #111;
+
+	@include breakpoint("medium") {
+		position: relative;
+		top: 10px;
+	}
+
+	@include breakpoint("small") {
+		@include factor-property(margin-top, 1);
+		display: block;
+		top: 0px;
+	}
+
+	.shine-effect {
+		z-index: 50;
+		position: absolute;
+		height: 28px;
+		left: 0;
+		right: 0;
+		margin-left: auto;
+		margin-right: auto;
+		background-image: url("/images/shine-repeat.png");
+		background-repeat: round;
+
+		@include breakpoint("medium") {
+			top: 0px;
+		}
+	}
+
+	.war-score {
+		z-index: 99;
+		position: absolute;
+		left: 43%;
+		top: 3px;
+		text-shadow: 0px 0px 5px #000, 0px 0px 5px #000, 0px 0px 10px #111;
+		@include font-size(factor(2.4));
+		font-family: $main_font;
+		letter-spacing: -1px;
+
+		&.single {
+			@include font-size(factor(3));
+			top: 27px;
+
+			@include breakpoint("small") {
+				top: 93px;
+			}
+		}
+	}
+
+	.asset-bar {
+		margin: 0px 1px;
+		position: absolute;
+		height: 28px;
+		background-image: url("/images/arrow_bg.png");
+		background-repeat: round;
+
+		&.neutral { @extend %color_neutral; }
+		&.blufor { @extend %color_blu; }
+		&.opfor { @extend %color_op; }
+		&.indfor { @extend %color_ind; }
+
+		&.faction-a {
+			left: 0;
+		}
+
+		&.faction-b {
+			right: 0;
+			@include prefix(transform, scaleX(-1));
+		}
+	}
+}
+
+.conflicts-directive-container {
+	display: inline-block;
+	width: 100%;
+
+	.conflicts-directive {
+
+		.conflict-col {
+
+			.conflict-object {
+
+				width: 100%;
+				@include factor-property(padding, 1);
+				display: inline-block;
+
+				@include breakpoint("medium") {
+					@include factor-property(margin-bottom, 5);
+				}
+
+				&:hover {
+					.main-body { background-size: 130%; }
+
+					.main-top .name {
+						text-shadow: 0px 0px 10px $main_color, 0px 0px 5px $main_color;
+					}
+				}
+
+				.main-top {
+					width: 100%;
+					text-align: center;
+
+					margin-left: auto;
+					margin-right: auto;
+
+					@include factor-property(margin-bottom, 2);
+
+					font-family: $main_font;
+					letter-spacing: -1px;
+
+					.name {
+						@include transition(text-shadow .5s, color .25s);
+						display: inline-block;
+						color: white;
+						font-weight: 800;
+						text-shadow: 0px 0px 10px #000, 0px 0px 10px #000;
+						@include font-size(factor(3));
+					}
+				}
+
+				.main-body {
+					@include transition(background-size, .5s);
+
+					display: table;
+
+					width: 100%;
+					@include factor-property(padding, 1);
+
+					background-position: center;
+					background-repeat: repeat;
+					background-size: 100%;
+
+					border: $border_style;
+
+					border-radius: 2px;
+					box-shadow: 0px 0px 10px #000, 0px 0px 20px #111;
+
+					@include breakpoint("medium") {
+						height: 170px;
+					}
+
+					@include breakpoint("small") {
+						height: 190px;
+					}
+
+					.casualties-container {
+						cursor: help;
+
+						@include breakpoint("medium") {
+							@include factor-property(margin-top, 1);
+						}
+
+						.casualties {
+							display: inline-block;
+							padding: factor(.2) factor(1);
+							padding-bottom: factor(.7);
+							border: $border_style;
+							background: url("/images/cardbg_inverted.png") repeat 100%;
+							box-shadow: 0px 0px 10px #000;
+							border-radius: 2px;
+
+							.skull {
+								@include prefix(filter, saturate(0%) brightness(300%));
+								width: 15px;
+								height: auto;
+								@include factor-property(margin-right, .5);
+							}
+
+							.number {
+								@include font-size(factor(2));
+								display: inline-block;
+								font-family: $main_font;
+								font-weight: 800;
+								position: relative;
+								top: 2px;
+							}
+
+							&.faction-b {
+								float: right;
+
+								@include breakpoint("medium") {
+									right: 17px;
+								}
+
+								.skull {
+									margin-right: 0;
+									@include factor-property(margin-left, .5);
+								}
+							}
+						}
+					}
+
+					.top-section {
+						color: #fff;
+						text-shadow: 0px 0px 10px #000,
+									 0px 0px 5px #000,
+									 0px 0px 2px #000;
+
+						text-align: center;
+						@include font-size(factor(2.5));
+						font-family: $main_font;
+						letter-spacing: -1px;
+
+						@include factor-property(padding-bottom, 2);
+
+						@include breakpoint("medium") { @include font-size(factor(2.2)); }
+						@include breakpoint("small") { @include font-size(factor(2)); }
+
+						.date {
+							@include factor-property(margin-right, 2);
+							display: inline-block;
+						}
+
+						.mission {
+							display: inline-block;
+						}
+
+						.icon {
+							display: inline-block;
+							@include factor-property(margin-right, .5);
+						}
+					}
+
+					.middle-bar {
+						width: 100%;
+						padding: 0;
+						margin: 0;
+						display: table;
+
+						.left .flag-container { float: left; }
+						.right .flag-container { float: right; }
+
+						.left, .right {
+							display: table-cell;
+							width: 1%;
+
+							.flag-container {
+								display: inline-block;
+
+								box-shadow: 0px 0px 20px #111 inset;
+
+								.flag-img {
+									@include size(124px, 63px);
+									border: $border_style;
+									border-radius: 3px;
+
+									box-shadow: 0px 0px 10px #000;
+
+									cursor: help;
+
+									@include breakpoint("medium") {
+										@include size(90px, 46px);
+									}
+
+									&.inactive {
+										@include prefix(filter, saturate(0%));
+									}
+
+									&.winner {
+										@include prefix(animation, pulse-drop-shadow-white-large 3s ease-in-out infinite);
+									}
+								}
+
+								.home {
+									cursor: help;
+
+									z-index: 99;
+									position: relative;
+
+									display: inline-block;
+									float: right;
+
+									top: -35px;
+									right: 5px;
+
+									@include font-size(factor(4));
+									text-shadow: 0px 0px 5px #000;
+								}
+							}
+						}
+
+						.center-section {
+							display: inline-block;
+							width: 100%;
+							padding: 0px 5px;
+
+							position: relative;
+							top: -10px;
+						}
+
+						.small-casualties {
+							@include breakpoint("medium") {
+								width: 100%;
+								display: inline-block !important;
+							}
+						}
+					}
+				}
+
+			}
+		}
+
+	}
+}

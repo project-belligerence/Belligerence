@@ -18,14 +18,48 @@
 	exports.uploadPlayerAvatar = uploadPlayerAvatar;
 	exports.uploadPMCAvatar = uploadPMCAvatar;
 	exports.uploadModulePicture = uploadModulePicture;
+	exports.uploadIntelPicture = uploadIntelPicture;
+	exports.getImagesInFolder = getImagesInFolder;
+	exports.deleteImageinFolder = deleteImageinFolder;
 
 	var
 		generalSettings = {
 			thumbName: "thumb",
 			mainName: "main"
 		},
-		allowedContent = ['items', 'modifiers', 'stores', 'upgrades']
+		allowedContent = ['items', 'modifiers', 'stores', 'upgrades', 'advisories', 'objectives', 'maps', 'factions'],
+		old_upload_content = ['upgrades', 'objectives', 'advisories', 'factions'],
+		has_alpha = ['upgrades', 'objectives', 'advisories']
 	;
+
+	function getImagesInFolder(req, res) {
+		var fs = require('fs'),
+			pathArg = config.folders.uploads + "/" + config.folders.uploads_images + "/" + req.query.folder + "/" + req.query.type + "/",
+			filesList = [];
+
+		fs.readdir(pathArg, function(err, items) {
+			items.forEach(function(file) {
+				var uniqueFile = file.split("_")[0];
+				if (uniqueFile === "thumb") filesList.push(((file.split("_")[1]).split(".")[0]));
+			});
+			return API.methods.sendResponse(req, res, true, "Returning folders", filesList);
+		});
+	}
+
+	function deleteImageinFolder(req, res) {
+		var fs = require('fs'),
+			pathArg = config.folders.uploads + "/" + config.folders.uploads_images + "/" + req.body.folder + "/" + req.body.type + "/",
+			filename = pathArg + "main_" + req.body.id + "." + req.body.extension,
+			filenameThumb = pathArg + "thumb_" + req.body.id + "." + req.body.extension;
+
+		fs.stat(filename, function(err, stat) {
+			if (err === null) {
+				fs.unlink(filename);
+				fs.unlink(filenameThumb);
+			}
+			return API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
+		});
+	}
 
 	function uploadPlayerAvatar(req, res) {
 		settingsObject = {
@@ -35,12 +69,13 @@
 			quality: 85,
 			mainSize: 250,
 			thumbSize: 64,
+			aspectRatio: [1, 1],
 			uploadName: req.playerInfo.hashField,
 			validTypes: ['jpeg', 'png'],
 			maxSizeKb: 1024
 		};
 
-		handleUpload(req, res, function() {
+		handleUploadOld(req, res, function() {
 			return API.methods.sendResponse(req, res, true, config.messages().modules.uploads.success);
 		});
 	}
@@ -53,12 +88,32 @@
 			quality: 85,
 			mainSize: 350,
 			thumbSize: 64,
+			aspectRatio: [1, 1],
 			uploadName: req.playerInfo.PMC.hashField,
 			validTypes: ['jpeg', 'png'],
 			maxSizeKb: 1024
 		};
 
-		handleUpload(req, res, function() {
+		handleUploadOld(req, res, function() {
+			return API.methods.sendResponse(req, res, true, config.messages().modules.uploads.success);
+		});
+	}
+
+	function uploadIntelPicture(req, res) {
+		settingsObject = {
+			header: 'intel',
+			destination: config.folders.uploads + "/" + config.folders.uploads_images + "/modules/" + "intel/",
+			originalName: 'intel_picture',
+			quality: 85,
+			mainSize: 350,
+			thumbSize: 64,
+			aspectRatio: [1, 1],
+			uploadName: req.params.intelHash,
+			validTypes: ['jpeg', 'png'],
+			maxSizeKb: 1024
+		};
+
+		handleUploadOld(req, res, function() {
 			return API.methods.sendResponse(req, res, true, config.messages().modules.uploads.success);
 		});
 	}
@@ -71,26 +126,36 @@
 		], true)) { return 0; }
 
 		var type = req.params.Type,
-			hash = req.params.Hash;
+			hash = req.params.Hash,
+			uploadFunction = (API.methods.inArray(type, old_upload_content) ? handleUploadOld : handleUpload);
 
 		settingsObject = {
 			header: 'module',
+			alpha: (API.methods.inArray(type, has_alpha)),
 			destination: config.folders.uploads + "/" + config.folders.uploads_images + "/modules/" + type + "/",
 			originalName: 'module_picture',
 			quality: 100,
 			mainSize: 350,
 			thumbSize: 64,
+			aspectRatio: [1, 1],
 			uploadName: hash,
 			validTypes: ['jpeg', 'png'],
 			maxSizeKb: 1024
 		};
 
-		handleUpload(req, res, function() {
+		switch (type) {
+			case "factions": {
+				settingsObject.aspectRatio = [2,1];
+				settingsObject.alpha = true;
+			} break;
+		}
+
+		uploadFunction(req, res, function() {
 			return API.methods.sendResponse(req, res, true, config.messages().modules.uploads.success);
 		});
 	}
 
-	function handleUpload(req, res, done) {
+	function handleUploadOld(req, res, done) {
 		var
 			storage = multer.diskStorage({destination: makeDestination, filename: filterName}),
 			upload = multer({storage: storage, fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName)
@@ -100,13 +165,12 @@
 			if (err) return handleError(req, res, err);
 
 			return sharp(settingsObject.destination + finalFileName)
-				.resize(settingsObject.thumbSize, settingsObject.thumbSize)
+				.resize((settingsObject.thumbSize * (settingsObject.aspectRatio[0])), (settingsObject.thumbSize * settingsObject.aspectRatio[1]))
 				.toFile(settingsObject.destination + generalSettings.thumbName + "_" + finalFileName , function(err) {
 					if (err) return handleError(req, res, err);
 
 					return sharp(settingsObject.destination + finalFileName)
-						.resize(settingsObject.mainSize, settingsObject.mainSize)
-						.quality(settingsObject.quality)
+						.resize((settingsObject.mainSize * settingsObject.aspectRatio[0]), (settingsObject.mainSize * settingsObject.aspectRatio[1]))
 						.toFile(settingsObject.destination + generalSettings.mainName + "_" + finalFileName , function(err) {
 							if (err) return handleError(req, res, err);
 
@@ -119,19 +183,51 @@
 		});
 	}
 
-	function makeDestination(req, file, cb) {
-		return cb(null, settingsObject.destination);
+	function handleUpload(req, res, done) {
+		var
+			storage = multer.diskStorage({destination: makeDestination, filename: filterName}),
+			upload = multer({storage: storage, fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName),
+			defaultBackgroundPicture = (config.folders.uploads + "/" + config.folders.uploads_images + "/content/" + "default_bg.png")
+		;
+
+		return upload(req, res, function(err) {
+			if (err) return handleError(req, res, err);
+
+			return sharp(defaultBackgroundPicture)
+				.overlayWith((settingsObject.destination + finalFileName))
+				.toBuffer(function(err, data) {
+					return sharp(data)
+						.resize(settingsObject.thumbSize)
+						.toFile((settingsObject.destination + generalSettings.thumbName + "_" + finalFileName), function(err) {
+							if (err) return handleError(req, res, err);
+							return sharp(defaultBackgroundPicture)
+								.overlayWith((settingsObject.destination + finalFileName))
+								.resize(settingsObject.mainSize)
+								.toFile(settingsObject.destination + generalSettings.mainName + "_" + finalFileName , function(err) {
+									if (err) return handleError(req, res, err);
+
+									require('fs').unlink((settingsObject.destination + finalFileName), function(err) {
+										if (err) throw Error(err);
+										return done();
+									});
+								});
+						});
+				});
+		});
 	}
+
+	function makeDestination(req, file, cb) { return cb(null, settingsObject.destination); }
 
 	function filterName(req, file, cb) {
 		var md5	= require("md5"),
 			randomHash = (md5(Math.random(999))),
-			newFileName = (function(v) {
+			newFileName = (function(v, a) {
+				var fFormat = a ? "png" : "jpg";
 				switch(v) {
-					case "avatar": { return (settingsObject.uploadName + "." + "jpg"); }
-					default: { return (settingsObject.uploadName + "." + "jpg"); }
+					case "avatar": { return (settingsObject.uploadName + "." + fFormat); }
+					default: { return (settingsObject.uploadName + "." + fFormat); }
 				}
-			})(settingsObject.header);
+			})(settingsObject.header, settingsObject.alpha);
 
 			finalFileName = newFileName;
 
@@ -140,9 +236,7 @@
 
 	function filterFile(req, file, cb) {
 		var fileType = file.mimetype.split("/")[1];
-
 		if (_.indexOf(settingsObject.validTypes, fileType) < 0) { return cb("LIMIT_UNEXPECTED_TYPE", false); }
-
 		return cb(null, true);
 	}
 
@@ -156,7 +250,8 @@
 				default: { return "failure"; }
 			}
 		})();
-		return API.methods.sendResponse(req, res, false, "ERROR: " + config.messages().modules.uploads[errCode]);
+		// return API.methods.sendResponse(req, res, false, "ERROR: " + config.messages().modules.uploads[errCode]);
+		return API.methods.sendResponse(req, res, false, "" + err + ".");
 	}
 
 })();

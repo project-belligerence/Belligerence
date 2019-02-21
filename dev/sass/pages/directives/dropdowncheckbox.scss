@@ -1,0 +1,71 @@
+
+.dropdowncheck {
+	display: inline-block;
+
+	.checklist {
+		z-index: 999;
+		@include transition(opacity .25s);
+		@include factor-property(margin-top, 1.5);
+		position: absolute;
+		display: none;
+		@include opacity(0);
+		.checklist-list {
+			.checklist-item {
+				@include factor-property(margin-bottom, 1);
+				.checkbox-form { height: 36px;
+					.form-group {
+						display: inline-block;
+						@include factor-property(margin-bottom, 0);
+						.extra-input {
+							.body.check {
+								.choices {
+									@include transition(background-color .25s);
+									@include factor-property(margin-left, 6);
+									background-color: $main_color;
+									min-width: 150px;
+									width: 100%;
+									@include factor-property(padding-left, 1);
+									@include factor-property(padding-right, 2);
+									box-shadow: 0px 0px 10px rgba(0,0,0,1),
+												0px 0px 10px rgba(0,0,0,1);
+
+									&:hover { background-color: $main_color_dark; }
+
+									.icon {
+										cursor: pointer;
+										display: inline-block;
+										@include font-size(factor(3.7));
+									}
+									.label-text {
+										top: -2px;
+										@include factor-property(margin-left, 0.5);
+										position: relative;
+										display: inline-block;
+									}
+								}
+								.box {
+									box-shadow: 0px 0px 5px #000;
+									position: absolute;
+									top: 0px;
+									@include size(35px);
+									.icon {
+										@include font-size(factor(3));
+										margin-left: 3px;
+										top: -2px;
+									}
+								}
+							}
+
+							&.no-icon {
+								.choices {
+									padding-bottom: 6px;
+									.label-text { top: 3px !important; }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

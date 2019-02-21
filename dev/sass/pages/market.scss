@@ -1,0 +1,892 @@
+
+#market-page {
+	@include factor-property(min-height, 100);
+	@include factor-property(padding-bottom, 40);
+
+	hr {
+		border-color: #333;
+	}
+
+	#view-main {
+		text-align: center;
+		.text-block {
+			@include factor-property(margin-top, 7);
+			@include font-size(factor(3));
+
+			@include breakpoint("medium") { @include font-size(factor(2)); }
+		}
+	}
+
+	#view-buy {
+
+		.filters {
+
+			.filter-containers {
+				display: inline-block;
+				.section-button {
+					@include breakpoint("small") { margin-bottom: 14px; }
+				}
+				.bottom-filters {
+					position: relative;
+					top: -11px;
+					@include breakpoint("small") { top: 0px; }
+
+					.main-filters {
+						.single-filter {
+							display: inline-block;
+							@include factor-property(margin-right, 2);
+
+							&.slider {
+								@include breakpoint("small") { margin-top: 14px; }
+								width: 250px;
+							}
+
+							@include breakpoint("small") { margin-bottom: 7px; }
+
+							.form-group {
+								.input-group {
+									display: inline-block;
+
+									.form-control {
+										position: relative;
+										top: 2px;
+										height: 44px;
+										float: none;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				.input-filter {
+					.f-typehead {
+						display: inline-block;
+						background-color: $main_color;
+						@include font-size(factor(4));
+						padding: 5px 14px;
+
+						position: relative;
+						top: 3px;
+					}
+
+					.typeahead {
+						display: inline-block;
+						.form-control {
+							width: 250px;
+							@include breakpoint("small") { width: 220px; }
+						}
+					}
+
+					.filtering {
+						.title {
+							h3 { display: inline-block; }
+						}
+					}
+				}
+			}
+		}
+
+		.stores-container {
+
+			.specializations-container {
+				display: inline-block;
+
+				.specializations-single {
+					display: inline-block;
+					@include factor-property(margin-right, 1);
+					@include factor-property(margin-bottom, 0.5);
+					padding: 3px 5px;
+					background-color: $main_color;
+					letter-spacing: -1px;
+
+					.spec { display: inline-block; padding: 0px 3px; }
+
+					i {	@include factor-property(margin-right, 0.1); padding: 0px 2px; }
+				}
+			}
+
+			#store-card-container {
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				left: 0;
+				top: 0;
+				z-index: 99;
+
+				#store-card {
+					top: 90px;
+					position: relative;
+					width: 450px;
+					text-align: center;
+					margin-left: auto;
+					margin-right: auto;
+
+					@include breakpoint("small") {
+						top: 60px;
+						width: 250px;
+					}
+
+					.window-top {
+						z-index: 2;
+						padding: 1px 0px;
+						background-color: $main_color;
+
+						box-shadow: 0px 0px 5px #333;
+
+						.window-title {
+							font-family: $main_font;
+							@include font-size(factor(2.5));
+							@include factor-property(margin-left, 1);
+							float: left;
+							position: relative;
+							top: 3px;
+							left: 3px;
+							text-transform: uppercase;
+						}
+						.btn {
+							position: relative;
+							top: -1px;
+							float: right;
+						}
+					}
+
+					.store-zoom-content {
+						background: url("/images/cardbg.png") repeat 100%;
+						box-shadow: 0px 0px 10px #333, 0px 0px 5px #000;
+
+						@include factor-property(padding-bottom, 3);
+						overflow-y: auto;
+
+						@include breakpoint("small") {
+							height: 350px;
+						}
+
+						.hexagon-container {
+							position: relative;
+							top: -15px;
+						}
+
+						.content {
+							@include factor-property(margin-top, 4);
+
+							@include breakpoint("small") { @include factor-property(margin-top, 0); }
+
+							.name {
+								font-weight: 800;
+								color: $main_color;
+								font-family: $main_font;
+								letter-spacing: -3px;
+								@include font-size(factor(4));
+								line-height: 25px;
+							}
+						}
+
+						.upgrades {
+							@include factor-property(padding, 2);
+
+							.required, .blocked {
+								display: block;
+								.back {
+									@include factor-property(margin-top, 2);
+									@include factor-property(margin-bottom, 1);
+									width: 100%;
+									display: inline-block;
+
+									.text {
+										font-family: $main_font;
+										letter-spacing: -1px;
+										@include font-size(factor(2.5));
+										float: left;
+										display: inline;
+										text-align: left;
+										padding: 3px 10px;
+										text-shadow: 0px 0px 3px #000, 0px 0px 1px #000;
+									}
+								}
+								.upgrade-list {
+									.single-upgrade {
+										display: inline-block;
+
+										img { @include prefix(filter, drop-shadow(0px 0px 1px #000)); }
+
+										.rank-container {
+											position: relative;
+											.upgrade-rank {
+												letter-spacing: -2px;
+												font-family: $main_font;
+												color: white;
+												background-color: $main_color;
+												display: inline-block;
+												padding: 0px 5px;
+												@include font-size(factor(2.2));
+												position: absolute;
+												bottom: 0px;
+												right: 17px;
+
+												&.success { background-color: $success_color; }
+											}
+										}
+									}
+								}
+							}
+							.required .back .text { background-color: $success_color; }
+							.blocked .back .text { background-color: #555; }
+						}
+					}
+				}
+			}
+
+			#stores-tier-container {
+				@include prefix(filter, blur(0px));
+				@include transition(.5s);
+				&.do-blur {
+					@include prefix(filter, blur(10px));
+				}
+			}
+
+			.store-tier {
+
+				.store-prestige {
+					text-align: center;
+					@include factor-property(margin-top, 3);
+					@include factor-property(margin-bottom, 10);
+
+					h1 {
+						letter-spacing: -7px;
+
+						.prestige { @include factor-property(margin-bottom, 4); text-shadow: 0px 0px 20px #000; }
+
+						.rank {
+							@include factor-property(margin-left, 1);
+							@include factor-property(margin-top, 2);
+							background: url("/images/honeybg_red.png") repeat 100%;
+							color: white;
+							display: inline-block;
+							width: 100px;
+
+							.number { font-weight: lighter; margin-right: 7px; }
+
+							.icon {
+								position: relative;
+								top: -10px;
+								left: -5px;
+								@include font-size(factor(5));
+
+								@include breakpoint("small") { top: -4px; }
+							}
+						}
+					}
+				}
+
+				.store-column {
+					display: inline-block;
+					@include factor-property(margin-bottom, 5);
+					padding: 0px 5px;
+
+					&:hover {
+						border-left-color: $main_color_dark;
+						.toggle-card .icons { width: 32px; }
+						.store-single { &.has-upgrade { border-left-width: 40px; } }
+					}
+
+					.toggle-card {
+						display: inline-block;
+						float: left;
+						position: relative;
+						z-index: 99;
+						left: 0;
+						height: 0px;
+
+						.icons {
+							@include transition(width .2s);
+							width: 0px;
+							overflow: hidden;
+
+							position: relative;
+							left: 4px;
+							top: 0px;
+
+							cursor: pointer;
+							line-height: 0px;
+
+							padding: 65px 0px;
+
+							@include font-size(factor(5));
+							display: inline-block;
+
+							i {
+								padding-left: 1px;
+								cursor: pointer;
+
+								&.ion-flash {
+									position: relative;
+									left: 4px;
+								}
+							}
+
+							@include breakpoint("medium") { width: 32px; }
+
+							@include breakpoint("small") {
+								@include font-size(factor(7));
+								left: 6px;
+								width: 45px;
+								padding: 110px 0px;
+							}
+						}
+					}
+
+					.store-single {
+						box-shadow: 0px 0px 20px #000,
+									0px 0px 10px #000;
+						@include transition(border-left .25s);
+
+						min-height: 170px;
+						padding-bottom: 10px;
+
+						width: 95%;
+
+						background: url("/images/cardbg.png") repeat 100%;
+
+						*{ border-bottom: 0px solid #fff; }
+
+						&.has-status {
+							&.is-dead { @include prefix(filter, grayscale(100%)); }
+							&.is-wounded { @include prefix(filter, sepia(100%)); }
+							&.is-missing { @include prefix(filter, opacity(20%)); }
+						}
+
+						border-left-style: solid;
+						border-left-width: 10px;
+						border-left-color: $main_color;
+
+						&.has-upgrade {
+							&.bad-required { border-left-color: #ccc; }
+							&.bad-blacklisted { border-left-color: #333; }
+							&.good-upgrades { border-left-color: $success_color; }
+
+							@include breakpoint("medium") {	border-left-width: 40px; }
+							@include breakpoint("small") {	border-left-width: 60px; }
+						}
+
+						@include breakpoint("small") { width: 100%; }
+
+						.store-object {
+							.hexagon-container {
+								float: left;
+								display: inline-block;
+								@include factor-property(margin-left, 1);
+								@include factor-property(margin-right, 1);
+								@include factor-property(margin-top, 2);
+
+								.hexagon {
+									.status-icon {
+										position: relative;
+										top: -5px;
+										left: 0px;
+										z-index: 9999999999;
+										color: $main_color;
+
+										i {
+											font-size: factor(9) !important;
+											cursor: help;
+											position: relative;
+											text-shadow: 0px 0px 20px rgba(0,0,0,.8),
+														 0px 0px 10px rgba(0,0,0,.8);
+
+											&.ion-help { left: 3px; }
+										}
+										@include breakpoint("small") { left: 0px; }
+									}
+								}
+
+								@include breakpoint("small") {
+									@include factor-property(margin-top, 4);
+
+									width: 100%;
+									float: none;
+
+									.hexagon {
+										width: 100px;
+										text-align: center;
+										margin-right: auto;
+										margin-left: auto;
+									}
+								}
+							}
+
+							.content {
+								display: inline-block;
+								width: 200px;
+								@include factor-property(margin-top, 3);
+								@include factor-property(padding-bottom, 2);
+
+								color: white;
+
+								.name {
+									@include font-size(factor(4));
+
+									@include breakpoint("small") {
+										@include factor-property(padding-bottom, 2);
+									}
+								}
+
+								@include breakpoint("small") {
+									padding: 0 5px;
+									left: 0px;
+									text-align: center;
+									width: 100%;
+									@include factor-property(padding-bottom, 3);
+									@include factor-property(margin-top, 0);
+
+									margin-right: auto;
+									margin-left: auto;
+
+								}
+							}
+
+							.item-filter {
+								@include font-size(factor(2.3));
+								padding: 10px;
+								font-weight: 800;
+								color: #333;
+								display: inline-block;
+
+								.amount, .discount {
+									@include font-size(factor(3));
+									color: $main_color;
+								}
+
+							}
+						}
+					}
+				}
+
+				&.under-prestige {
+
+					h1 { .rank { background-color: #aaa; color: white; background: url("/images/cardbg.png") repeat 100%; }}
+					.store-prestige { *{color: #777;} }
+					.store-single {
+						border-left: 15px solid #777;
+						background: url("/images/cardbg_dark.png") repeat 100%;
+
+						&:hover { border-left: 15px solid #777; }
+
+						.store-object {
+							.content {
+								.name { color: #333; text-shadow: 0px 0px 5px #555; }
+								.specializations-container {
+									.specializations-single {
+										background-color: #333;
+										color: #999;
+									}
+								}
+							}
+						}
+					}
+
+				}
+			}
+
+			.no-stores {
+
+				width: 50%;
+				margin-left: auto;
+				margin-right: auto;
+				padding: factor(10) factor(0);
+				text-align: center;
+				.no-store-match {
+					padding: factor(5) factor(0);
+					background: url("/images/honeybg_red.png") repeat 100%;
+					color: white;
+					@include font-size(factor(5));
+
+					.icon { @include font-size(factor(8)); }
+					.text {
+						letter-spacing: -3px;
+						font-family: $main_font;
+						text-transform: uppercase;
+					}
+				}
+
+				@include breakpoint("small") {
+					width: 100%;
+
+					.no-store-match {
+						.text { @include font-size(factor(4)); }
+					}
+				}
+			}
+		}
+	}
+
+	#view-store {
+		.top-buttons {
+			@include breakpoint("medium") {
+				@include factor-property(margin-bottom, 10);
+			}
+
+			@include breakpoint("small") {
+				.pull-left, .pull-right { float: none !important; }
+				.section-button { @include factor-property(margin-top, 1); }
+			}
+
+		}
+
+		.items-container {
+			min-height: 200px;
+		}
+
+		.store-message {
+			font-family: $main_font;
+			@include font-size(factor(3));
+			text-align: center;
+			padding: 20px 10px;
+			background-color: $warning_color;
+			color: #333;
+			@include factor-property(margin-top, 3);
+			@include factor-property(margin-bottom, 5);
+			letter-spacing: -1px;
+			line-height: 25px;
+
+			i {
+				position: relative;
+				top: 4px;
+				@include font-size(factor(4));
+				@include factor-property(margin-right, 1);
+			}
+
+			@include breakpoint("small") {
+				i { display: block; @include factor-property(margin-bottom, 2);	}
+			}
+
+			&.warning { background-color: $warning_color; color: #333; }
+			&.muted { background-color: #ccc; color: #000; }
+		}
+
+		.store-resupply {
+			i {
+				@include factor-property(margin-right, 1);
+				@include font-size(factor(5));
+				top: 4px;
+				position: relative;
+			}
+
+			text-align: center;
+			@include font-size(factor(4));
+			font-family: $main_font;
+			letter-spacing: -2px;
+
+			.day-list {
+				@include factor-property(margin-bottom, 1);
+				display: inline-block;
+				.day {
+					line-height: 0px;
+					display: inline-block;
+					@include font-size(factor(5));
+					color: $main_color;
+					text-shadow: 0px 0px 3px #000, 0px 0px 5px #000;
+				}
+				.sep {
+					line-height: 0px;
+					display: inline-block;
+					@include font-size(factor(4));
+					color: #ccc;
+					text-shadow: 0px 0px 3px #000, 0px 0px 5px #000;
+				}
+			}
+		}
+
+		.display-upgrade {
+			text-align: center;
+			padding: factor(4) 0px;
+		}
+
+		.store-upgrades {
+			text-align: center;
+
+			.upgrades {
+				@include factor-property(padding, 2);
+				@include factor-property(padding-bottom, 10);
+
+				.required, .blocked {
+					display: block;
+					@include factor-property(margin-bottom, 2);
+
+					.back {
+						@include factor-property(margin-top, 2);
+						@include factor-property(margin-bottom, 3);
+						width: 100%;
+						display: inline-block;
+
+						.text {
+							font-family: $main_font;
+							letter-spacing: -1px;
+							@include font-size(factor(3.5));
+							display: inline;
+							text-align: left;
+							padding: 3px 10px;
+							text-shadow: 0px 0px 3px #000, 0px 0px 1px #000;
+						}
+					}
+					.upgrade-list {
+						.single-upgrade {
+							display: inline-block;
+
+							.upgrade-icon {
+								width: 128px;
+								@include prefix(filter, drop-shadow(0px 0px 1px #000));
+								@include breakpoint("small") { width: 115px; }
+							}
+
+							.rank-container {
+								position: relative;
+								.upgrade-rank {
+									letter-spacing: -2px;
+									font-family: $main_font;
+									color: white;
+									background-color: $main_color;
+									display: inline-block;
+									padding: 0px 5px;
+									@include font-size(factor(3));
+									position: absolute;
+									bottom: 0px;
+									right: 40px;
+
+									&.success { background-color: $success_color; }
+
+									@include breakpoint("small") { right: 35px; }
+								}
+							}
+						}
+					}
+				}
+				.required .back .text { background-color: $success_color; }
+				.blocked .back .text { background-color: #333; }
+			}
+		}
+
+		.store-top {
+			@include factor-property(margin-bottom, 60);
+
+			@include breakpoint("medium") { @include factor-property(margin-bottom, 35); }
+			@include breakpoint("small") { @include factor-property(margin-bottom, 0); }
+
+			.hexagon-container .display-upgrade {
+				position: absolute;
+				bottom: -20px;
+				left: 55px;
+
+				text-align: center;
+			}
+
+			.name {
+				@include font-size(factor(8));
+				font-family: $main_font;
+				text-align: center;
+				color: $main_color;
+				letter-spacing: -6px;
+				@include factor-property(margin-bottom, 2);
+
+				@include breakpoint("small") {
+					line-height: 50px;
+					@include factor-property(margin-bottom, 4);
+				}
+			}
+
+			.specializations-container {
+				text-align: center;
+
+				.specializations-single {
+					display: inline-block;
+					@include factor-property(margin-right, 1);
+					@include factor-property(margin-bottom, 0.5);
+					padding: 3px 5px;
+					@include font-size(factor(3));
+					background-color: $main_color;
+					letter-spacing: -1px;
+
+					.spec { display: inline-block; padding: 0px 3px; }
+
+					i {	@include factor-property(margin-right, 0.1); padding: 0px 2px; }
+				}
+			}
+
+			.speech-bubble {
+				z-index: 9;
+				text-align: center;
+				position: relative;
+				top: 120px;
+
+				background-color: $main_color;
+				color: white;
+				@include font-size(factor(4));
+				@include factor-property(padding, 5);
+				@include factor-property(margin-left, 5);
+
+				.tri-container {
+					width: 50px;
+					height: 50px;
+					z-index: 10;
+					position: relative;
+					top: -80px;
+					left: -105px;
+					float: left;
+
+					.triangle {
+						width: 0;
+						height: 0;
+						border-style: solid;
+						border-width: 0 70px 70px 0;
+						border-color: transparent $main_color transparent transparent;
+					}
+				}
+
+				@include breakpoint("medium") {
+					@include factor-property(padding, 2);
+					top: 70px;
+					.tri-container { top: -60px; left: -65px; }
+				}
+				@include breakpoint("small") {
+					top: -20px;
+					left: -20px;
+
+					.tri-container {
+						position: absolute;
+						top: -30px; left: 135px;
+						.triangle {
+							border-width: 40px 0 0 40px;
+							border-color: transparent transparent transparent $main_color;
+						}
+					}
+				}
+			}
+		}
+
+		&.is-dead, &.is-missing, &.is-wounded {
+			.name { color: #ccc; text-shadow: 0px 0px 10px #000; }
+			.specializations-single { background-color: #333 !important; color: white; }
+
+			.day { color: #ccc; }
+
+			.speech-bubble { display: none; }
+			.hexagon-container {
+				margin-left: 90%;
+				@include breakpoint("medium") { margin-left: 140%; }
+				@include breakpoint("small") { margin-left: 20%; }
+
+				.ac-bg-img__full-size {
+					@include prefix(filter, grayscale(100%));
+				}
+			}
+		}
+	}
+
+	#view-checkout {
+
+		.stores-container {
+			.store-image {
+				&:hover {
+					.checkout-store-name {
+						color: #eee;
+						background-color: $main_color_dark;
+					}
+				}
+
+				.checkout-store-name {
+					@include transition(color .25s, background-color .25s);
+					color: #eee;
+					font-family: $main_font;
+					letter-spacing: -1px;
+					@include font-size(factor(4));
+					text-align: center;
+					padding: 10px 20px;
+					background: url("/images/honeybg_red.png") repeat 100%;
+
+					@include breakpoint("medium") {
+						line-height: 25px;
+					}
+				}
+
+				@include breakpoint("medium") {
+					@include factor-property(margin-bottom, 5);
+				}
+			}
+
+			.store-cost {
+				letter-spacing: -3px;
+				font-family: $main_font;
+				@include font-size(factor(5));
+				background: url("/images/honeybg_red.png") repeat 100%;
+				padding: factor(0.7) factor(3);
+				@include factor-property(margin-bottom, 2);
+			}
+
+			.store-items {
+				overflow-y: auto;
+				height: 370px;
+				@include breakpoint("medium") { height: 235px; }
+				@include breakpoint("small") { height: 240px; }
+			}
+		}
+
+		.checkout-price {
+			@include factor-property(margin-right, 2);
+			@include font-size(factor(5));
+			font-family: $main_font;
+			float: right;
+
+			.final-cost-label {
+				text-transform: uppercase;
+				letter-spacing: -3px;
+				@include factor-property(padding-left, 2);
+				@include factor-property(margin-bottom, 2);
+				background: url("/images/honeybg_red.png") repeat 100%;
+				@include font-size(factor(6));
+			}
+
+
+			.cost-container .icon, .funds-container .icon, .remaining-funds-container .icon {
+				background: url("/images/honeybg_red.png") repeat 100%;
+				padding: 3px 10px;
+				@include font-size(factor(4));
+			}
+
+			.cost-container {
+				@include factor-property(margin-bottom, 2);
+				.current-cost {
+					letter-spacing: -4px;
+					display: inline-block;
+					@include font-size(factor(5));
+				}
+				.ion-ios-cart { padding: 3px factor(2); }
+			}
+
+			.funds-container {
+				.current-funds {
+					letter-spacing: -4px;
+					display: inline-block;
+					margin-left: 0px;
+					@include font-size(factor(5));
+				}
+			}
+
+			.remaining-funds-container {
+				.remaining-funds {
+					letter-spacing: -2px;
+					display: inline-block;
+				}
+				.ion-arrow-swap { padding: 3px factor(2); }
+			}
+
+			hr {margin: 10px 0px;}
+		}
+	}
+
+	#checkout-button {
+		position: fixed;
+		z-index: 999;
+		bottom: 9px;
+		right: 7px;
+	}
+}

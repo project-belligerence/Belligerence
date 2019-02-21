@@ -1,0 +1,330 @@
+
+#messages-container {
+	@include factor-property(height, 100);
+
+	@include breakpoint("medium") { @include factor-property(height, 90); }
+	@include breakpoint("small") { @include factor-property(height, 150); }
+
+	#messages-buttons {
+		@include factor-property(margin-bottom, 2);
+		.section-button {
+			@include factor-property(margin-right, 0);
+			@include factor-property(margin-bottom, 3);
+
+			&.invites {
+				@include factor-property(margin-right, 6);
+			}
+
+			@include breakpoint("tiny") {
+				@include factor-property(margin-bottom, 1);
+				@include font-size(factor(2));
+
+				li {padding: factor(1);}
+
+				&.invites {
+					@include factor-property(margin-right, 0);
+					@include factor-property(margin-bottom, 2);
+				}
+			}
+		}
+
+		.dropdown {
+			*{@include font-size(factor(3));}
+			display: inline-block;
+			@include factor-property(margin-right, 1);
+
+			.btn {
+				i {
+					margin-left: 0;
+					@include factor-property(margin-right, 1);
+				}
+			}
+		}
+		.btn {
+			@include font-size(factor(3));
+		}
+
+		.items-left {
+			padding: 7px 10px;
+			background-color: #fff;
+			color: #000;
+			border-radius: 5px;
+		}
+
+		@include breakpoint("tiny") {
+			.dropdown {
+				.btn {
+					padding-left: 10px !important;
+					*{ @include font-size(factor(1.7)); }
+					i {
+						@include font-size(factor(2));
+						padding: 0;
+						margin: 0;
+						margin-right: 2px;
+					}
+				}
+				margin-right: 0;
+
+				.dropdown-menu a * {
+					@include font-size(factor(3));
+				}
+			}
+			.btn { @include font-size(factor(2)); }
+		}
+		.items-left {
+			padding: 2px 5px;
+		}
+	}
+
+	#messages-view {
+		#listed-container {
+			padding: 0;
+
+			.pagination-container {
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+
+				.pagination {
+					  margin: factor(2) 0;
+					li a {
+						@include font-size(factor(4));
+						text-align: center;
+						padding-top: 5px;
+						height: 40px;
+						width: 40px;
+					}
+				}
+			}
+
+			#listed-objects {
+				padding: 0;
+				@include transition(height, .25s);
+				@include factor-property(min-height, 30);
+
+				.empty-list {
+					text-align: center;
+					@include font-size(factor(3));
+					font-family: $main_font;
+					@include factor-property(margin-top, 8);
+					i {
+						display: block;
+						@include font-size(factor(8));
+					}
+				}
+
+				.message-object {
+					display: inline-block;
+					@include transition(all, .25s);
+
+					cursor: pointer;
+					* { cursor: pointer; }
+					width: 47%;
+					@include factor-property(padding, 1);
+					@include factor-property(margin-right, 1);
+					@include factor-property(margin-bottom, 1);
+
+					background-color: $main_color;
+					color: #fff;
+
+					.message-status {
+						display: inline-block;
+						float: left;
+						@include factor-property(margin-right, 1);
+						@include factor-property(margin-bottom, 0.2);
+
+						img.avatar-img { height: 50px; }
+						i {
+							float: left;
+							position: absolute;
+							left: 10px;
+							top: 17px;
+							z-index: 90;
+							color: #fff;
+
+							@include font-size(factor(5));
+						}
+					}
+					.message-info {
+						* { line-height: 17px; }
+						.title { font-weight: 800; color: #fff; }
+						.date { font-style: italic; }
+					}
+
+					@include breakpoint("tiny") {
+						@include font-size(factor(1.7));
+					}
+
+					&:hover { background-color: $main_color_dark; }
+
+					&.read {
+						background-color: #fff;
+						color: #111;
+						.message-info { .title { color: $main_color; }}
+						&:hover { background-color: #ccc; color: #000 }
+
+						&.selected {
+							background-color: #222;
+							color: #fff;
+							.message-info { .title { color: #fff; } }
+						}
+					}
+				}
+				.invite-object {
+					padding: 0;
+					color: #000;
+					display: inline-block;
+					@include factor-property(margin-bottom, 2);
+
+					.invite-type {
+						color: #fff;
+						background-color: $main_color;
+						padding: factor(0) factor(1);
+						cursor: help;
+						.icon {
+							@include font-size(factor(4));
+							@include factor-property(margin-right, 1);
+							position: relative;
+							top: 2px;
+						}
+						span { position: relative; top: -4px; }
+					}
+					.invite-details {
+						color: #000;
+						background-color: #fff;
+						padding: factor(1);
+						hr {
+							margin-top: factor(1);
+							margin-bottom: factor(1);
+						}
+						.date-container {
+							color: #000;
+							background-color: #fff;
+							display: inline-block;
+							.date {
+								position: relative;
+								top: -2px;
+								font-style: italic;
+								display: inline-block;
+							}
+							i {
+								@include factor-property(margin-right, 0.5	);
+								@include font-size(factor(3));
+							}
+						}
+						.choices-wrapper {
+							float: right;
+							.choices {
+								display: inline-block;
+								position: relative;
+								right: -5px;
+							}
+						}
+					}
+					.inviter {
+						color: #000;
+						background-color: #fff;
+						border-bottom: 1px solid #ccc;
+
+						a { border: none; }
+
+						img {
+							display: inline-block;
+							height: 36px;
+						}
+						.sender {
+							position: relative;
+							top: 2px;
+							left: 3px;
+							display: inline-block;
+							@include font-size(factor(3));
+						}
+					}
+					@include breakpoint("small") {
+						width: 100%;
+
+						.invite-details .choices-wrapper {
+							overflow: hidden;
+							float: none;
+							.choices { margin-top: 10px; float: right; }
+						}
+					}
+				}
+			}
+		}
+		#current-message-view {
+			.top-info {
+				@include transition(top .25s, background-color .15s, color .15s);
+				position: relative;
+				top: 0px;
+
+				&:hover {
+					top: -10px;
+					background-color: $main_color;
+					color: #fff;
+
+					.triangle-isosceles {
+						&:after {
+							border-color: $main_color transparent;
+						}
+					}
+				}
+
+				border: none;
+
+				display: inline-block;
+
+				background-color: #fff;
+				@include factor-property(padding, 2);
+
+				@include factor-property(margin-bottom, 4);
+
+				color: #000;
+
+				.sender-avatar {
+					img { height: 40px; }
+					display: inline-block;
+					@include factor-property(margin-right, 1);
+				}
+				.unit-info {
+					float: right;
+					display: inline-block;
+					@include font-size(factor(2));
+
+					@include breakpoint("small") { @include font-size(factor(2)); float: none; }
+
+					.sender {}
+					.message-date {}
+				}
+			}
+			.body-info {
+				display: block;
+				@include factor-property(padding, 2);
+
+				background-color: #fff;
+				color: #000;
+				.message-title {
+					font-family: $main_font;
+					@include font-size(factor(3.5));
+					line-height: 27px;
+					@include factor-property(margin-bottom, 3);
+					color: $main_color_dark;
+				}
+			}
+			.section-button {
+				@include factor-property(margin-right, 1);
+			}
+			@include breakpoint("small") { @include factor-property(margin-bottom, 20); }
+		}
+	}
+
+	.spinner {
+		height: 100px;
+		img {
+		height: 50px;
+		left: 42%;
+		top: 25%;
+		position: absolute;
+		}
+	}
+}

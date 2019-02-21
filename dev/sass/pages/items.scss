@@ -1,0 +1,77 @@
+
+#item-list-container {
+	@include factor-property(min-height, 80);
+	@include factor-property(margin-bottom, 20);
+
+	.filters {
+
+		.filter-containers {
+			display: inline-block;
+			width: 100%;
+
+			.section-button {
+				@include breakpoint("small") { margin-bottom: 14px; }
+			}
+
+			.top-filters {
+				.section-button {
+					@include factor-property(margin-right, 2);
+				}
+			}
+
+			.dropdown-section {
+				.dropdown {
+					display: inline-block;
+					@include breakpoint("small") { .btn { @include font-size(factor(2.5)); } }
+				}
+			}
+
+			.bottom-filters {
+				@include transition(height .5s, padding-top .5s, margin-top 1s);
+				padding-top: 3px;
+
+				@include factor-property(margin-top, 0);
+				overflow: hidden;
+				padding-top: 0px;
+				height: 0px;
+
+				@include breakpoint("small") { top: 0px; }
+
+				&.displaying {
+					@include factor-property(margin-top, 3);
+					padding-top: 3px;
+					height: 260px;
+
+					@include breakpoint("medium") { height: 350px; }
+					@include breakpoint("small") { height: 670px; }
+				}
+
+				.single-filter {
+					display: inline-block;
+					@include factor-property(margin-right, 2);
+					@include factor-property(margin-bottom, 2);
+
+					.slider {
+						width: 300px;
+						@include breakpoint("small") {
+							margin-top: 14px;
+							width: 250px;
+						}
+					}
+
+					@include breakpoint("small") { margin-bottom: 7px; }
+
+					.form-control {
+						position: relative;
+						top: 2px;
+						height: 44px;
+						float: none;
+					}
+				}
+
+			}
+		}
+	}
+
+	#items-list-directive-container { }
+}

@@ -3,16 +3,24 @@
 	<div class="modal-header">
 		<i class="icon ion-android-warning"></i>
 		<h2 class="modal-title">Report {{::ModalController.contextData.name}}</h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
 	</div>
 
 	<div class="modal-body">
 		<div class="modal-body" id="modal-body">
 			<div class="message-receiver">
 				Reporting:
-				<div class="circle unit-avatar">
+				<div class="circle unit-avatar" ng-if="!(ModalController.options.icon)"	ng-cloak>
 					<div class="small"
-					ac-background-image background-image="{{::ModalController.contextData.image}}thumb_{{::ModalController.options.hash}}.jpg">
+					ng-class="{ 'shadow': (ModalController.options.extension === 'png') }"
+					ac-background-image background-image="{{::ModalController.contextData.image}}thumb_{{::ModalController.options.hash}}.{{::(ModalController.options.extension || 'jpg')}}">
 					</div>
+				</div>
+				<div class="report-icon" ng-if="ModalController.options.icon" ng-cloak>
+					<i class="icon big" ng-class="ModalController.options.icon"></i>
 				</div>
 				<span class="receiver" ng-bind="ModalController.options.alias"></span>
 			</div>

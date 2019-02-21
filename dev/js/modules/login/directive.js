@@ -1,12 +1,14 @@
 (function() {
 	'use strict';
 
-	LoginDirectiveFunctions.$inject = ["$scope", "$timeout", "$cookies", "loginServices"];
+	LoginDirectiveFunctions.$inject = ["$rootScope", "$state", "$scope", "$timeout", "$cookies", "apiServices", "loginServices", "playerServices"];
 
-	function LoginDirectiveFunctions($scope, $timeout, $cookies, loginServices) {
+	function LoginDirectiveFunctions($rootScope, $state, $scope, $timeout, $cookies, apiServices, loginServices, playerServices) {
 		var vm = this;
 
 		$scope.loading = false;
+		vm.displayLoginForm = true;
+		vm.displayPlayerInfo = false;
 
 		$scope.displayLogin = false;
 		$scope.displayLogin2 = false;
@@ -20,6 +22,36 @@
 
 		$scope.alertType = "warning";
 
+		$scope.submitLoginForm = submitLoginForm;
+
+		vm.displayContract = apiServices.displayContract;
+		vm.numberToArray = apiServices.numberToArray;
+		vm.applyControlledClass = apiServices.applyControlledClass;
+
+		$scope.$on("loginEvent", displayLoginMessageEvent);
+		$scope.$on("logoutEvent", displayOnToken);
+
+		displayOnToken();
+
+		function displayOnToken() {
+			vm.displayLoginForm = (apiServices.getToken() === null);
+
+			if (!vm.displayLoginForm) {
+				playerServices.getSelf().then(function(d) {
+					vm.selfInfo = d;
+					vm.displayPlayerInfo = true;
+
+					vm.selfSide = (vm.selfInfo.PMC ? vm.selfInfo.PMC.sideField : vm.selfInfo.sideField);
+
+					vm.quickRoutes = [
+						{ icon: "ion-android-cart", name: "Stores", route: "app.public.market" },
+						{ icon: "ion-document-text", name: "Contracts", route: "app.private.operations" },
+						{ icon: "ion-archive", name: "Inbox", route: "app.private.messages" }
+					];
+				});
+			}
+		}
+
 		function renderAlertClasses() {
 			$scope.alertClass = {
 				"alert-warning": ($scope.alertType == "warning"),
@@ -31,10 +63,6 @@
 				"ion-checkmark": ($scope.alertType == "success")
 			};
 		}
-
-		$scope.submitLoginForm = submitLoginForm;
-
-		$scope.$on("loginEvent", displayLoginMessageEvent);
 
 		function clearWarning() {
 			var d = $scope.displayWarning,
@@ -50,19 +78,18 @@
 		}
 
 		function doLogin(data) {
-			$scope.loading = false;
-
-			if (data) {
-				console.log("Logged in: ", data);
-				console.log("TOKEN: ", data.data.token);
-
-				$cookies.put('loggedInToken', data.data.token);
-			}
+			if (apiServices.responseOK(data)) {
+				if (data) {
+					$timeout(1000).then(function() {
+						$cookies.put('loggedInToken', data.data.token);
+						$state.go("app.private.dashboard");
+						$rootScope.$broadcast("navbar:refreshDirective");
+					});
+				}
+			} else { $scope.loading = false; }
 		}
 
 		function displayLoginMessageEvent(event, res) {
-			console.log("RECEIVED EVENT: ", event);
-
 			$scope.alertType = ((res.success === true) ? "success" : "warning");
 			$scope.loginAlertMessage = res.message;
 
@@ -72,13 +99,11 @@
 
 		renderAlertClasses();
 
-		(function displayLoginForm() {
+		(function () {
 			$timeout(function() { $scope.displayLogin = true; }, $scope.animations[0]);
 			$timeout(function() {
 				$scope.displayLogin2 = true;
-
 				if (($(window).innerWidth()) > 800) { $("#loginInputUsername").focus();	}
-
 			}, $scope.animations[1]);
 		})();
 	}
@@ -88,7 +113,8 @@
 			scope: { },
 			restrict : "E",
 			templateUrl: 'directive/login.ejs',
-			controller: LoginDirectiveFunctions
+			controller: LoginDirectiveFunctions,
+			controllerAs: "LoginFormCtrl"
 		};
 	}
 

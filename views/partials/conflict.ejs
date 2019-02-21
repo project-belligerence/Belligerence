@@ -1,0 +1,373 @@
+<div class="container-fluid top-spacer generic-object single" id="single-conflict-container" ng-init="Controller = CtrlSingleConflict;">
+	<div class="container">
+		<div class="fade-animation-slow" ng-if="(Controller.showObject && Controller.showParticipants)" ng-cloak>
+
+			<div class="header">
+				<div class="col-md-12">
+					<div class="row pull-left">
+						<a ng-click="Controller.askReportObject(Controller.objectInfo)" class="section-button warning muted" role="button">
+							<ul>
+								<li><i class="icon ion-alert-circled"></i></li>
+								<li>Report {{::(Controller.objectSettings.name)}}</li>
+							</ul>
+						</a>
+					</div>
+					<div class="row pull-right" ng-if="(Controller.selfInfo.playerPrivilege <= 1)" ng-cloak>
+						<a ng-href="admin?menu=content&section={{::(Controller.objectSettings.name).toLowerCase()}}&editHash={{::(Controller.objectInfo[Controller.objectSettings.hash_property])}}" class="section-button warning small" role="button">
+							<ul>
+								<li><i class="icon ion-edit"></i></li>
+								<li>Edit {{::(Controller.objectSettings.name)}}</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="body">
+				<div class="display-object" ng-class="::(Controller.applyControlledClass(Controller.objectInfo.sideField))" ng-init="object = Controller.objectInfo; render = Controller.renderInfo;">
+
+					<div class="col-md-12">
+						<div class="row">
+
+							<div class="col-md-12 object-details">
+								<div class="row">
+
+									<div class="top">
+										<h2 ng-bind="::(object.nameField)"></h2>
+										<div class="date">
+											<span ng-bind="::(render.status.text)"></span> <time-ago from-time='{{::object[render.status.prop]}}'></time-ago>
+										</div>
+										<hr />
+									</div>
+
+								</div>
+
+							</div>
+
+							<div class="col-md-12 body">
+								<div class="row">
+									<div class="main-belligerents">
+										<div class="filler small visible-xs-block">
+
+											<a ng-href="map/{{::(object.Map.classnameField)}}" class="map-container">
+												<div class="map-bg" ng-style="{{::(Controller.mapBackground(object.Map))}}"></div>
+												<div class="name" ng-bind="::(object.Map.nameField)"></div>
+											</a>
+
+											<div class="asset-bar-container">
+												<div ng-if="::(object.statusField !== 1)">
+													<div class="shine-effect"></div>
+													<div class="war-score single" ng-bind="::(render.conflict_flow.scores.winning + '%')"></div>
+													<div
+														class="asset-bar faction-a"
+														ng-class="::(Controller.applyControlledClass(render.faction_sides.faction_A))"
+														ng-style="::(Controller.setBarProperties(render.conflict_flow.faction_a))"
+													></div>
+													<div
+														class="asset-bar faction-b"
+														ng-class="::(Controller.applyControlledClass(render.faction_sides.faction_B))"
+														ng-style="::(Controller.setBarProperties(render.conflict_flow.faction_b))"
+													></div>
+												</div>
+											</div>
+
+										</div>
+
+										<div class="factions a" ng-class="::(Controller.applyControlledClass(render.factions.faction_A_leader.sideField))">
+
+											<a ng-href="faction/{{::(render.factions.faction_A_leader.hashField)}}" class="flag-container">
+
+												<div
+													class="flag"
+													ac-background-image background-image="{{::(Controller.flagClass(render.factions.faction_A_leader, 'main'))}}"
+													ng-class="::(Controller.getFlagClass(render.factions.faction_A_leader))"
+												>
+												</div>
+
+												<div class="home-container">
+													<i class="icon ion-home home" ng-if="::((render.factions.faction_A_leader.MapId) === (object.MapId))"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														popover-popup-delay="250"
+														popover-append-to-body="true"
+														uib-popover="This Faction is fighting in its home territory."
+													></i>
+												</div>
+
+												<div class="name-container">
+													<div class="name" ng-bind="::(render.factions.faction_A_leader.nameField)"></div>
+												</div>
+
+											</a>
+
+											<div class="casualties-container small visible-xs-block">
+												<div class="casualties a">
+													<div class="number" ng-bind="::(render.factions.faction_A_leader.participant_table.casualtiesField  | number)"></div>
+													<img src="images/icons/skull.png" class="skull" />
+												</div>
+											</div>
+
+											<div class="modifier-container">
+
+												<div class="modifier-label">
+													<div class="text">CONFLICT MODIFIERS</div>
+												</div>
+
+												<div class="modifier-list">
+													<div
+														class="modifier"
+														ng-repeat="modifier in Controller.modifierList track by $index"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														popover-popup-delay="250"
+														popover-append-to-body="true"
+														uib-popover="{{::(modifier.name)}}"
+													>
+														<i class="icon" ng-class="::(modifier.icon)"></i>
+														<div class="modifier-text" ng-bind="::(Controller.getModifierValue(render.factions.faction_A_leader.participant_table[modifier.value]))"></div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+
+										<div class="filler visible-lg-block visible-md-block visible-sm-block">
+
+											<a ng-href="map/{{::(object.Map.classnameField)}}" class="map-container">
+												<div class="map-bg" ng-style="{{::(Controller.mapBackground(object.Map))}}"></div>
+												<div class="name" ng-bind="::(object.Map.nameField)"></div>
+											</a>
+
+											<div class="asset-bar-container">
+												<div ng-if="::(object.statusField !== 1)">
+													<div class="shine-effect"></div>
+													<div class="war-score single" ng-bind="::(render.conflict_flow.scores.winning + '%')"></div>
+													<div
+														class="asset-bar faction-a"
+														ng-class="::(Controller.applyControlledClass(render.faction_sides.faction_A))"
+														ng-style="::(Controller.setBarProperties(render.conflict_flow.faction_a))"
+													></div>
+													<div
+														class="asset-bar faction-b"
+														ng-class="::(Controller.applyControlledClass(render.faction_sides.faction_B))"
+														ng-style="::(Controller.setBarProperties(render.conflict_flow.faction_b))"
+													></div>
+												</div>
+											</div>
+
+											<div
+												class="casualties-container"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												popover-popup-delay="1000"
+												popover-append-to-body="true"
+												uib-popover="{{::('Deaths and casualties')}}"
+											>
+												<div class="casualties a">
+													<img src="images/icons/skull.png" class="skull" />
+													<div class="number" ng-bind="::(render.factions.faction_A_leader.participant_table.casualtiesField | number)"></div>
+												</div>
+												<div class="casualties b">
+													<div class="number" ng-bind="::(render.factions.faction_B_leader.participant_table.casualtiesField  | number)"></div>
+													<img src="images/icons/skull.png" class="skull" />
+												</div>
+											</div>
+
+										</div>
+
+										<div class="factions b" ng-class="::(Controller.applyControlledClass(render.factions.faction_B_leader.sideField))">
+
+											<a ng-href="faction/{{::(render.factions.faction_B_leader.hashField)}}" class="flag-container">
+
+												<div
+													class="flag"
+													ac-background-image background-image="{{::(Controller.flagClass(render.factions.faction_B_leader, 'main'))}}"
+													ng-class="::(Controller.getFlagClass(render.factions.faction_B_leader))"
+												></div>
+
+												<div class="home-container">
+													<i class="icon ion-home home" ng-if="::((render.factions.faction_B_leader.MapId) === (object.MapId))"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														popover-popup-delay="250"
+														popover-append-to-body="true"
+														uib-popover="This Faction is fighting in its home territory."
+													></i>
+												</div>
+
+												<div class="name-container">
+													<div class="name" ng-bind="::(render.factions.faction_B_leader.nameField)"></div>
+												</div>
+
+											</a>
+
+											<div class="casualties-container small visible-xs-block">
+												<div class="casualties b">
+													<div class="number" ng-bind="::(render.factions.faction_B_leader.participant_table.casualtiesField  | number)"></div>
+													<img src="images/icons/skull.png" class="skull" />
+												</div>
+											</div>
+
+											<div class="modifier-container b">
+
+												<div class="modifier-label">
+													<div class="text">CONFLICT MODIFIERS</div>
+												</div>
+
+												<div class="modifier-list">
+													<div
+														class="modifier"
+														ng-repeat="modifier in Controller.modifierList track by $index"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														popover-popup-delay="250"
+														popover-append-to-body="true"
+														uib-popover="{{::(modifier.name)}}"
+													>
+														<i class="icon" ng-class="::(modifier.icon)"></i>
+														<div class="modifier-text" ng-bind="::(Controller.getModifierValue(render.factions.faction_B_leader.participant_table[modifier.value]))"></div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-12 body" ng-if="::((render.factions.factions_A.length > 0) || (render.factions.factions_B.length > 0))">
+								<div class="row">
+
+									<hr />
+
+									<div class="participants-container">
+
+										<div class="participants">
+											<i class="icon ion-person-stalker"></i>
+											<span class="text">SUPPORTING BELLIGERENTS</span>
+										</div>
+
+										<div class="participant-factions">
+
+											<div class="col-md-6 col-sm-6 col-xs-6">
+												<div class="row">
+
+													<div class="factions a">
+														<ul class="faction-list">
+															<li
+																class="faction"
+																ng-repeat="faction in render.factions.factions_A track by $index"
+																popover-trigger="'mouseenter'"
+																popover-class="tooltip"
+																popover-popup-delay="250"
+																popover-append-to-body="true"
+																uib-popover="{{::(faction.nameField)}}"
+																ng-class="::(Controller.getFlagClass(faction))"
+															>
+
+																<a ng-href="faction/{{::(faction.hashField)}}">
+
+																	<div class="flag-container">
+																		<div class="flag" ac-background-image background-image="{{::(Controller.flagClass(faction, 'main'))}}">
+																		</div>
+																		<div class="home-container">
+																			<i class="icon ion-home home" ng-if="::((faction.MapId) === (object.MapId))"
+																				popover-trigger="'mouseenter'"
+																				popover-class="tooltip"
+																				popover-popup-delay="250"
+																				popover-append-to-body="true"
+																				uib-popover="This Faction is fighting in its home territory."
+																			></i>
+																		</div>
+																	</div>
+																</a>
+																<div class="casualties-container">
+																	<div class="casualties">
+																		<img src="images/icons/skull.png" class="skull" />
+																		<div class="number" ng-bind="::(faction.participant_table.casualtiesField | number)"></div>
+																	</div>
+																</div>
+															</li>
+														</ul>
+													</div>
+
+												</div>
+											</div>
+
+											<div class="col-md-6 col-sm-6 col-xs-6 pull-right">
+												<div class="row">
+
+													<div class="factions b">
+														<ul class="faction-list">
+															<li
+																class="faction"
+																ng-repeat="faction in render.factions.factions_B track by $index"
+																popover-trigger="'mouseenter'"
+																popover-class="tooltip"
+																popover-popup-delay="250"
+																popover-append-to-body="true"
+																uib-popover="{{::(faction.nameField)}}"
+																ng-class="::(Controller.getFlagClass(faction))"
+															>
+
+																<a ng-href="faction/{{::(faction.hashField)}}">
+																	<div class="flag-container">
+																		<div class="flag" ac-background-image background-image="{{::(Controller.flagClass(faction, 'main'))}}">
+																		</div>
+																		<div class="home-container">
+																			<i class="icon ion-home home" ng-if="::((faction.MapId) === (object.MapId))"
+																				popover-trigger="'mouseenter'"
+																				popover-class="tooltip"
+																				popover-popup-delay="250"
+																				popover-append-to-body="true"
+																				uib-popover="This Faction is fighting in its home territory."
+																			></i>
+																		</div>
+																	</div>
+																</a>
+
+																<div class="casualties-container">
+																	<div class="casualties">
+																		<img src="images/icons/skull.png" class="skull" />
+																		<div class="number" ng-bind="::(faction.participant_table.casualtiesField | number)"></div>
+																	</div>
+																</div>
+															</li>
+														</ul>
+													</div>
+
+												</div>
+											</div>
+
+										</div>
+
+									</div>
+
+								</div>
+							</div>
+
+							<div class="col-md-12 bottom-properties">
+
+								<div class="row object-details">
+									<div class="body">
+
+
+
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		    <div class="footer"></div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

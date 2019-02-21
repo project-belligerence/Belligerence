@@ -1,0 +1,677 @@
+
+#units-fluid-container {
+	@include factor-property(padding-bottom, 20);
+	a { border: none; }
+	#units-page-top {
+
+	}
+
+	#units-page-filters {
+		.filter-containers {
+			cursor: default;
+			display: block;
+
+			.search {
+				@include factor-property(margin-left, 1);
+				@include breakpoint("small") {
+					@include factor-property(margin-top, 1);
+					@include factor-property(margin-left, 0);
+				}
+			}
+
+			.reset {
+				display: inline-block;
+				@include factor-property(margin-left, 3);
+				@include breakpoint("small") {
+					@include factor-property(margin-top, 6);
+					@include factor-property(padding-bottom, 5);
+					@include factor-property(margin-left, 0);
+				}
+			}
+
+			&.long { height: auto; }
+
+			a.section-button {
+				@include breakpoint("small") {
+					@include factor-property(margin-bottom, 1);
+				}
+			}
+
+			.unit-filters {
+				display: block;
+				@include factor-property(margin-top, 3);
+
+				a, .dropdown, .text-filters, .form-group, .editable-field { display: inline-block; }
+
+				.dropdown-section {
+					display: inline-block;
+					.dropdown {
+						position: relative;
+						top: -3px;
+						.btn span {@include font-size(factor(3));}
+						.btn { padding: factor(1) factor(2); }
+
+						@include breakpoint("small") {
+							@include factor-property(margin-bottom, 2);
+						}
+					}
+				}
+
+				.editable-field {
+					@include factor-property(margin-left, 1);
+					@include factor-property(margin-right, 1);
+				}
+
+				.prestige-filter {
+					position: relative;
+					top: 0px;
+					margin: 0 factor(1);
+					display: inline-block;
+					.text { display: block; }
+					i {
+						cursor: pointer;
+						@include font-size(factor(3));
+					}
+					@include breakpoint("medium") { top: -10px;	}
+					@include breakpoint("small") { top: 10px;	}
+					@include breakpoint("small") {
+						display: block;
+						top: 0px;
+						margin-bottom: factor(3);
+					}
+					.rz-bubble { bottom: 17px; }
+				}
+
+				.form-group {
+					@include breakpoint("medium") {
+						@include factor-property(margin-bottom, 5);
+					}
+					@include breakpoint("small") {
+						@include factor-property(margin-bottom, 6);
+					}
+					height: 14px;
+					.input-group {
+						input { font-weight: 800; height: 46px;	}
+					}
+				}
+
+				.unit-tags {
+					input {
+						@include factor-property(padding, 2);
+						width: factor(25) !important;
+					}
+				}
+
+				.max-tags {
+					display: inline-block;
+					@include font-size(factor(3));
+				}
+
+				.checkbox-form {
+					position: relative;
+					top: 2px;
+					margin: factor(1) factor(0.5);
+					margin-right: factor(2);
+					display: inline-block;
+					.box {
+						padding: 10px;
+					}
+					.label-text {
+						position: relative;
+						@include font-size(factor(2));
+						display: inline-block;
+					}
+					@include breakpoint("medium") { top: 22px; margin: 0 factor(0.5); }
+					@include breakpoint("small") {
+						top: 0px;
+						display: block;
+						@include font-size(factor(2));
+						left: -4px;
+					}
+				}
+
+				.order {
+					position: relative;
+					top: -3px;
+					padding: factor(1.2) factor(2.5);
+					color: #fff;
+					margin-left: 3px;
+
+					i { @include font-size(factor(2));}
+				}
+			}
+		}
+	}
+
+	#pagination-container {
+		width: 100%;
+
+		&.fixed {
+			position: fixed;
+
+			bottom: -45px;
+			left: 55%;
+
+			-webkit-animation: fadeIn .5s both;
+			-moz-animation: fadeIn .5s both;
+			animation: fadeIn .5s both;
+
+			@include prefix(transform, translate(-50%, 0px));
+
+			li a { box-shadow: 0px 0px 7px #333; }
+
+			@include breakpoint('small') { width: 360px; }
+			@include breakpoint('tiny') {
+				width: 290px;
+				bottom: -30px;
+			}
+		}
+		form {
+			display: inline-block;
+			position: relative;
+			top: -33px;
+			left: -5px;
+
+			input {
+				background-color: $main_color;
+				color: white;
+				font-family: $main_font;
+				text-align: center;
+				@include size(58px);
+				@include font-size(factor(6));
+			}
+
+			@include breakpoint("small") {
+				display: block;
+				top: -20px;
+				left: 0px;
+				width: 40px;
+				float: none;
+				margin-left: auto;
+				margin-right: auto;
+				input {
+					@include size(40px);
+					@include font-size(factor(4));
+				}
+			}
+		}
+	}
+
+	#units-page-units {
+		@include transition(height .25s);
+		min-height: 200px;
+
+		@include factor-property(margin-bottom, 5);
+
+		.no-results {
+			text-align: center;
+			padding: factor(5) factor(2);
+		}
+
+		#units-page-outfits {
+			.outfit-card {
+				.outfit-card-width {
+					display: inline-block;
+					@include factor-property(margin-bottom, 5);
+
+					.prestige {
+						background-color: $main_color;
+						text-align: center;
+						padding: factor(1) 0;
+						.icon {
+							@include factor-property(padding-right, 1);
+							@include font-size(factor(3));
+							color: #fff;
+						}
+					}
+
+					.outfit-card-unit {
+						@include factor-property(padding, 1.5);
+
+						.display_name {
+							@include transition(color .25s);
+							font-weight: 800;
+							text-align: center;
+							@include font-size(factor(3.5));
+							color: $main_color;
+							font-family: $main_font;
+							display: block;
+
+							padding: factor(2) 0;
+							@include factor-property(margin-bottom, 2);
+
+							&:hover {
+								color: $main_color_dark;
+							}
+						}
+
+						.body {
+							#card-avatar-container {
+								display: block;
+								width: 200px;
+								margin-left: auto;
+								margin-right: auto;
+
+								#card-avatar {
+									@include prefix(filter, drop-shadow(0px 0px 4px #000));
+									display: inline-block;
+
+									.is-friend {
+										background-color: $main_color;
+										padding: factor(1) factor(1.5);
+										display: inline-block;
+										position: relative;
+										top: -55px;
+										left: 20px;
+
+										i {
+											line-height: 1;
+											padding: 0;
+											text-align: center;
+											cursor: help;
+											@include font-size(factor(3));
+											color: #fff;
+											text-shadow: 0px 0px 10px #000;
+										}
+									}
+
+									.hexagon {
+										width: 200px;
+										height: 150px;
+										.card-avatar-render {
+											@include size(200px);
+											position: relative;
+											top: -20px;
+
+											.ac-bg-img__full-size, .ac-bg-img__placeholder {
+												background-size: 100%;
+											}
+										}
+									}
+								}
+							}
+						}
+
+						.date {
+							@include font-size(factor(2.5));
+							font-weight: 800;
+							color: $main_color;
+							text-align: center;
+							@include factor-property(padding-top, 1);
+						}
+
+						.motto {
+							margin-left: auto;
+							margin-right: auto;
+							text-align: center;
+							width: 90%;
+							@include factor-property(padding, 2);
+							background: url("/images/honeybg_red.png") repeat 100%;
+							color: white;
+							text-shadow: 0px 0px 5px #000;
+							@include factor-property(margin-top, 2);
+							@include factor-property(margin-bottom, 1);
+						}
+
+						.info {
+							text-align: center;
+							color: #111;
+							font-weight: 800;
+
+							@include font-size(factor(2.5));
+							@include factor-property(padding, 1.5);
+
+							i {
+								position: relative;
+								top: 2px;
+								@include font-size(factor(3));
+								color: $main_color_dark;
+							}
+
+							.location, .comments, .current-players {
+								display: inline-block;
+								@include factor-property(margin-right, 2);
+							}
+
+							.location {
+								@include transition(color .25s);
+								cursor: pointer;
+								*{cursor: pointer;}
+								color: $main_color;
+								&:hover { color: $main_color_light; }
+							}
+						}
+
+						.tags {
+							@include factor-property(margin-bottom, 2);
+							@include factor-property(margin-left, 2);
+							color: #111;
+							ul {
+								display: inline-block;
+								i {
+									position: relative;
+									top: 5px;
+									left: -2px;
+									@include font-size(factor(3));
+								}
+								li {
+									margin-right: 2px;
+									margin-top: 4px;
+									display: inline-block;
+									a {	padding: 3px 5px; &:hover { color: #fff; }}
+								}
+							}
+						}
+					}
+
+					.open-applications {
+						@include factor-property(padding, 2);
+						background-color: $success_color;
+						color: #fff;
+						font-weight: 800;
+
+						.icon {
+							position: relative;
+							top: 3px;
+							@include font-size(factor(3));
+							@include factor-property(margin-right, 1);
+						}
+					}
+				}
+			}
+		}
+
+		#units-page-operators {
+			@include transition(height .25s);
+
+			.operator-card {
+				.operator-card-width {
+					display: inline-block;
+					padding-right: 10px;
+					padding-left: 0;
+
+					.operator-card-unit {
+						background-size: 100%;
+						background-repeat: repeat;
+						box-shadow: 0px 0px 10px rgba(0,0,0,.5) inset;
+
+						color: #000;
+						border: 3px solid #fff;
+						border-radius: 5px;
+						border-bottom-right-radius: 0px;
+						border-bottom-left-radius: 0px;
+						@include factor-property(margin-bottom, 2);
+
+						&.employed {
+							@include breakpoint("small") {
+								background-position: center center;
+								background-size: 200%;
+								background-repeat: no-repeat;
+							}
+							background-size: 110%;
+							color: #fff;
+							text-shadow: 0px 0px 5px #000;
+
+							a { color: #fff; text-shadow: 0px 0px 5px #111, 0px 0px 10px #111; }
+
+							.content .info {
+								.alias {
+									color: #fff;
+									&:hover { color: #ddd; }
+								}
+								.contract .class-stamp { background: url("/images/class-stamps_inverted_small.png") no-repeat; }
+
+								.location {
+									color: #fff;
+									text-shadow: 0px 0px 5px #111, 0px 0px 10px #111;
+									&:hover { color: #ddd; }
+								}
+
+								.outfit {
+									word-wrap: break-word;
+									display: inline-block;
+									@include transition(color .25s);
+									font-weight: 800;
+									@include font-size(factor(2.5));
+									&:hover { color: #ddd; }
+								}
+							}
+							.bio { box-shadow: 0px 0px 5px #222; }
+						}
+
+						.top {
+							color: #fff;
+							padding: 5px;
+							background: url("/images/honeybg_red.png") repeat 100%;
+
+							.be { display: inline-block; }
+							.prestige {
+								@include factor-property(margin-left, 1);
+								display: inline-block;
+								i { @include factor-property(margin-right, 1); }
+							}
+							.card-date {
+								position: relative;
+								top: 2px;
+								@include font-size(factor(2));
+								display: inline-block; float: right;
+								text-shadow: 0px 0px 5px #000;
+							}
+							#logo-img { height: 25px; }
+						}
+
+						.content {
+							@include factor-property(padding, 1);
+							@include factor-property(padding-bottom, 3);
+							min-height: 135px;
+
+							.body {
+								@include breakpoint("small") {
+									width: 100px;
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}
+								width: 100px;
+								display: inline-block;
+								margin-left: 10px;
+								margin-right: 10px;
+
+								#card-avatar-container {
+									display: inline-block;
+
+									#card-avatar {
+										@include prefix(filter, drop-shadow(0px 2px 3px rgba(0,0,0,.7)));
+										position: absolute;
+										top: 55px;
+										left: 10px;
+
+										@include breakpoint("small") {
+											@include factor-property(margin-top, 1);
+											position: relative;
+											top: 0;
+											left: 0;
+											display: inline-block;
+										}
+
+										.hexagon {
+											width: 115px;
+											height: 100px;
+
+											.card-avatar-render {
+												height: 100%;
+												width: 100%;
+
+												.ac-bg-img__full-size, .ac-bg-img__placeholder {
+													background-size: cover;
+												}
+											}
+										}
+									}
+								}
+
+								.is-friend {
+									@include breakpoint("small") {
+										top: 120px;
+										left: 30%;
+									}
+									background-color: $main_color;
+									padding: 3px 7px;
+									display: inline-block;
+									position: absolute;
+									top: 129px;
+									left: 30px;
+									border-radius: 2px;
+
+									cursor: help;
+									* { cursor: help; }
+
+									i {
+										padding: 0;
+										text-align: center;
+										@include font-size(factor(2));
+										color: #fff;
+										text-shadow: 0px 0px 5px #000;
+										line-height: 0;
+									}
+								}
+							}
+							.info {
+								@include breakpoint("small") {
+									width: 100%;
+									position: initial;
+									top: initial;
+									left: initial;
+									display: block;
+									@include factor-property(margin-top, 2);
+									text-align: center;
+								}
+
+								position: relative;
+								top: 0px;
+								left: 130px;
+								display: block;
+								width: 55%;
+
+								.ng-binding, .icon { display: inline; }
+
+								.alias {
+									@include breakpoint("small") { @include factor-property(margin-bottom, 1); }
+
+									@include transition(color .25s);
+
+									width: auto;
+									font-family: $main_font;
+									color: $main_color;
+									line-height: 30px;
+									font-weight: bold;
+									display: block;
+									word-wrap: break-word;
+									letter-spacing: -2px;
+									@include font-size(factor(3.5));
+
+									&:hover { color: $main_color_light; }
+								}
+								.location {
+									display: block;
+									font-weight: 800;
+									@include font-size(factor(2.5));
+									@include transition(color .25s);
+									cursor: pointer;
+									*{cursor: pointer;}
+									color: $main_color;
+									&:hover { color: $main_color_light; }
+								}
+
+								.comments {
+									@include font-size(factor(3));
+									display: block;
+									i { display: inline-block }
+								}
+
+								.contract {
+									.class-stamp {
+										@include breakpoint("small") {
+											position: absolute;
+											top: 30%;
+											left: 68%;
+										}
+										background: url("/images/class-stamps_small.png") no-repeat;
+
+										height: 60px;
+										width: 60px;
+
+										position: absolute;
+										top: 80%;
+										left: 50px;
+
+										&.commander { background-position-x: 0px; }
+										&.freelancer { background-position-x: -62px; }
+										&.soldier { background-position-x: -122px; }
+									}
+								}
+							}
+						}
+						.bio {
+							margin-left: auto;
+							margin-right: auto;
+							text-align: center;
+							width: 95%;
+							@include factor-property(padding, 2);
+							background: url("/images/honeybg_red.png") repeat 100%;
+							color: white;
+							text-shadow: 0px 0px 5px #000;
+							@include factor-property(margin-bottom, 1);
+						}
+
+						.tags {
+							@include factor-property(margin-bottom, 2);
+							@include factor-property(margin-left, 2);
+							ul {
+								display: inline-block;
+								i {
+									position: relative;
+									top: 5px;
+									left: -2px;
+									@include font-size(factor(3));
+								}
+								li {
+									margin-right: 2px;
+									margin-top: 4px;
+									display: inline-block;
+									a {	padding: 3px 5px; &:hover { color: #fff; }}
+								}
+							}
+						}
+						.steam {
+							background: url("/images/cardbg_dark.png") repeat 100%;
+							@include factor-property(padding, 0.5);
+							text-align: right;
+							span {
+								letter-spacing: 3px;
+								font-family: $main_font;
+								color: #111;
+								text-shadow:
+									-1px -1px 0px #fff,
+									1px 1px 0px #000,
+									0px 0px 3px rgba(0,0,0,1),
+									0px 0px 5px rgba(0,0,0,1);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.spinner {
+	position: absolute;
+	top: -20px;
+	left: 48%;
+	margin-top: 120px;
+	width: 50px;
+	img {
+		height: 50px;
+	}
+}

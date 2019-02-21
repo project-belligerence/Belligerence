@@ -2,18 +2,23 @@
 <html ng-app="mainApp" ng-controller="AppMainCtrl as mainapp" ng-cloak>
 	<head>
 		<% include ../components/head %>
+		<% include ../components/templates %>
+		<% include ../components/singletons/favicons %>
 		<% include ../components/singletons/styles %>
 	</head>
 	<body>
-		<div id="page-top" style="padding-top: 100px;">
+		<div id="page-top">
 
-			<ui-view autoscroll="false">
+			<header ui-view="header">
+				<nav-directive></nav-directive>
+				<alerts-directive></alerts-directive>
+			</header>
+
+			<ui-view class="main-view-render" autoscroll="false">
 				<% include ../components/no-view %>
 			</ui-view>
 
-			<nav-directive></nav-directive>
-
-			<alerts-directive></alerts-directive>
+			<funds-directive></funds-directive>
 
 			<% include ../components/singletons/dev %>
 			<% include ../components/singletons/js %>

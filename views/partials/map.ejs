@@ -1,0 +1,172 @@
+<div class="container-fluid top-spacer generic-object single" id="single-map-container" ng-init="Controller = CtrlSingleMap;">
+	<div class="container">
+		<div class="fade-animation-slow" ng-if="(Controller.showObject)" ng-cloak>
+
+			<div class="header">
+				<div class="col-md-12">
+					<div class="row pull-left">
+						<a ng-click="Controller.askReportObject(Controller.objectInfo)" class="section-button warning muted" role="button">
+							<ul>
+								<li><i class="icon ion-alert-circled"></i></li>
+								<li>Report {{::(Controller.objectSettings.name)}}</li>
+							</ul>
+						</a>
+					</div>
+					<div class="row pull-right" ng-if="(Controller.selfInfo.playerPrivilege <= 1)" ng-cloak>
+						<a ng-href="admin?menu=content&section={{::(Controller.objectSettings.name).toLowerCase()}}&editHash={{::(Controller.objectInfo[Controller.objectSettings.hash_property])}}" class="section-button warning small" role="button">
+							<ul>
+								<li><i class="icon ion-edit"></i></li>
+								<li>Edit {{::(Controller.objectSettings.name)}}</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="body">
+				<div class="row display-object">
+					<div class="col-md-12">
+						<div class="row">
+							<div class="sidebar picture object-details col-md-4 col-sm-5">
+								<div class="visible-xs-block object-details">
+									<a href="maps">
+										<div class="top">
+											<h2 ng-bind="::(Controller.objectInfo.nameField)"></h2>
+											<hr />
+										</div>
+									</a>
+								</div>
+								<img
+									class="picture-img"
+									src="images/modules/{{::Controller.objectSettings.image_folder}}/main_{{::(Controller.objectInfo[Controller.objectSettings.image_property])}}.{{::(Controller.objectSettings.image_extension)}}"
+									width="100%"
+								/>
+							</div>
+
+							<div class="col-md-8 col-sm-7 object-details">
+								<div class="top visible-lg-block visible-md-block visible-sm-block">
+									<h2 ng-bind="::(Controller.objectInfo.nameField)"></h2>
+									<hr />
+								</div>
+
+								<div class="body">
+									<div class="single-property">
+										<div class="property long" ng-bind="::(Controller.objectInfo.descriptionField)" ></div>
+									</div>
+								</div>
+
+								<div class="visible-lg-block visible-md-block col-md-12 bottom-properties">
+									<div class="row object-details">
+										<div class="body">
+											<div class="single-property" ng-cloak ng-repeat="property in Controller.objectSettings.simpleProperties track by $index">
+												<div class="label">
+													<div class="description" ng-bind="::(property.label)"></div>
+													<i
+														class="icon ion-help help"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="{{::(property.tooltip)}}"
+													></i>
+												</div>
+												<a
+													ng-if="::(property.query_property)"
+													ng-href="{{::(Controller.generateLink(property.query_property, property.model_property))}}"
+												>
+													<div class="property" ng-bind="::(Controller.displayProperty(property))"></div>
+												</a>
+												<div
+													class="property"
+													ng-if="::(!(property.query_property))"
+													ng-bind="::(Controller.displayProperty(property))">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="visible-sm-block visible-xs-block col-md-12 bottom-properties">
+						<div class="object-details">
+							<div class="body">
+								<div class="single-property" ng-cloak ng-repeat="property in Controller.objectSettings.simpleProperties track by $index">
+									<div class="label">
+										<div class="description" ng-bind="::(property.label)"></div>
+										<i
+											class="icon ion-help help"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											uib-popover="{{::(property.tooltip)}}"
+										></i>
+									</div>
+									<a
+										ng-if="::(property.query_property)"
+										ng-href="{{::(Controller.generateLink(property.query_property, property.model_property))}}"
+									>
+										<div class="property" ng-bind="::(Controller.displayProperty(property))"></div>
+									</a>
+									<div
+										class="property"
+										ng-if="::(!(property.query_property))"
+										ng-bind="::(Controller.displayProperty(property))">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="related-sections">
+
+				<ul class="selector-list">
+					<li class="selector" ng-repeat="selector in Controller.objectSettings.relatedSections track by $index" ng-click="Controller.changeSection(selector.id)" ng-class="{ 'selected': (Controller.objectSettings.activeSection === selector.id) }">
+						<i class="icon" ng-class="::(selector.icon)"></i>
+						<div class="text" ng-bind="selector.name"></div>
+					</li>
+				</ul>
+
+				<div class="display-section fade-animation-slow" ng-if="(Controller.displaySection)" ng-cloak>
+
+					<h3 ng-bind="::(Controller.objectSettings.relatedSections[Controller.objectSettings.activeSection].description)">
+					</h3>
+
+					<hr/>
+
+					<div class="section locations-container fade-animation-slow" ng-if="::(Controller.objectSettings.activeSection === 'location')" ng-cloak>
+						<locations-directive
+							object-list="Controller.sectionData"
+						></locations-directive>
+					</div>
+
+					<div class="section conflicts-container fade-animation-slow" ng-if="::(Controller.objectSettings.activeSection === 'conflict')" ng-cloak>
+						<div class="col-md-12">
+							<div class="row">
+								<conflicts-directive
+									object-list="Controller.sectionData"
+									column-size="6"
+								></conflicts-directive>
+							</div>
+						</div>
+					</div>
+
+					<div class="section factions-container fade-animation-slow" ng-if="::(Controller.objectSettings.activeSection === 'home')" ng-cloak>
+						<factions-directive
+							object-list="Controller.sectionData"
+						></factions-directive>
+					</div>
+
+					<div class="section factions-container fade-animation-slow" ng-if="::(Controller.objectSettings.activeSection === 'interest')" ng-cloak>
+						<factions-directive
+							object-list="Controller.sectionData"
+						></factions-directive>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

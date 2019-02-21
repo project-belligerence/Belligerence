@@ -1,0 +1,193 @@
+
+<span ng-init="Directive = CtrlDirectiveMissions;"></span>
+
+<div class="missions-directive-container" ng-if="(Directive.displayDirective())" ng-cloak>
+	<div class="missions-directive">
+		<div class="missions-col col-md-3 col-sm-6 col-xs-12 message-animation" ng-repeat="object in objectList track by $index" ng-init="Directive.initObject(object);">
+			<div class="row">
+				<a ng-href="mission/{{::object.hashField}}">
+					<div class="mission-object" ng-class="::({'no-slots': object.isFull})">
+
+						<div class="main-folder">
+
+							<div class="back-folder"></div>
+							<div
+								class="back-paper"
+								ng-style="::(Directive.applyUIStyle(object, 'paper'))"
+							></div>
+							<div class="folder-bottom"></div>
+
+							<div class="content">
+								<div
+									class="map-photo"
+									ng-style="::(Directive.applyUIStyle(object, 'photo'))"
+								>
+									<div class="paper-clip"></div>
+									<div class="picture-container">
+										<div
+											class="picture map"
+											ng-style="::(Directive.setBGPicture(object.Map.classnameField, 'thumb', 'maps', 'jpg'))"
+										></div>
+										<div class="name" ng-bind="::(object.Map.nameField)"></div>
+									</div>
+								</div>
+
+								<div class="contract-status" ng-if="::(object.matchedOperation.enabled)" ng-cloak>
+									<div class="contract-status-container" ng-class="::(object.matchedOperation.class)">
+										<div class="hexagon-container small no-margin">
+											<div class="hexagon">
+												<div class="in1">
+													<div class="in2">
+													<i class="icon" ng-class="::(object.matchedOperation.icon)"></i>
+												</div></div>
+											</div>
+											<div class="status-text" ng-bind="::(object.matchedOperation.text)"></div>
+										</div>
+									</div>
+									<!-- <div class="contract-status-back"></div> -->
+								</div>
+
+								<div class="header section">
+									<div class="briefing-container">
+										<div class="logo"></div>
+										<div class="mission-briefing">
+											MISSION<br/>BRIEFING
+										</div>
+									</div>
+
+									<div class="difficulty-container">
+										<div class="title medium light">DIFFICULTY:	</div>
+										<ul class="stars-container">
+											<li
+												class="star"
+												ng-repeat="rating in [1,2,3,4,5] track by $index"
+											>
+												<i class="icon" ng-class="::(Directive.getRatingIcon(rating, object))">
+												</i>
+											</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="operation-section section">
+									<div class="title main">OPERATION:</div>
+									<div class="text main" ng-bind="::(object.nameField)"></div>
+								</div>
+
+								<div class="objective-section section">
+
+									<div class="stamp-paper large"></div>
+
+									<div
+										class="paper"
+										ng-style="::(Directive.applyUIStyle(object, 'obj'))"
+									>
+										<div class="icon-container">
+											<div class="picture objective" ng-style="::(Directive.setBGPicture(object.Objective.iconName, 'thumb', 'objectives', 'png'))">
+											</div>
+										</div>
+										<div class="text-container">
+											<div class="sub-title" ng-bind="::(object.Objective.nameField)"></div>
+											<div class="sub-text" ng-bind="::(Directive.limitObjectiveDesc(object.Objective.descriptionField))"></div>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="factions-section section">
+
+									<div class="client faction" ng-class="::(Directive.applyControlledClass(object.FactionA.sideField))">
+										<div class="faction-container">
+											<div class="title main">CLIENT:</div>
+											<div class="stamp-paper small"></div>
+											<div class="picture flag"
+												ng-style="::(Directive.setBGPicture(object.FactionA.hashField, 'thumb', 'factions', 'png'))"
+											></div>
+											<div class="side-stamp"></div>
+										</div>
+										<div class="title medium">PAYMENT:</div>
+										<div class="reward">
+											<span class="title medium light">D$</span>
+											<span class="text large" ng-bind="::(object.rewardAField | number)"></span>
+										</div>
+									</div>
+
+									<div class="target faction" ng-class="::(Directive.applyControlledClass(object.FactionB.sideField))">
+										<div class="faction-container">
+											<div class="contract" ng-if="::(object.matchedContract === object.FactionB.sideField)">
+												YOU ARE CONTRACTED TO THIS SIDE IN THIS MISSION
+											</div>
+											<div class="title main">TARGET:</div>
+											<div class="stamp-paper small"></div>
+											<div class="picture flag"
+												ng-style="::(Directive.setBGPicture(object.FactionB.hashField, 'thumb',  'factions', 'png'))">
+											</div>
+											<div class="side-stamp"></div>
+										</div>
+										<div class="title medium">PAYMENT:</div>
+										<div class="reward">
+											<span class="title medium light">D$</span>
+											<div class="smudge-container" ng-if="::(!object.Objective.adversarialField)" ng-cloak>
+												<div
+													class="stamp-paper smudge"
+													ng-style="::(Directive.applyUIStyle(object, 'smudge2'))"
+												></div>
+												<span class="text large">______</span>
+											</div>
+											<span
+												class="text large"
+												ng-bind="::(object.rewardBField | number)"
+												ng-if="::(object.Objective.adversarialField)" ng-cloak
+											></span>
+										</div>
+									</div>
+
+								</div>
+
+								<div class="bottom-section section bottom">
+									<div class="contracts">
+										<div class="title main">OPERATORS:</div>
+
+										<div class="contracts-container" ng-class="::({'adversarial': (object.Objective.adversarialField)})">
+											<div
+												class="text large"
+												ng-class="::(Directive.applyControlledClass(object.FactionA.sideField))"
+												ng-bind="::(object.signedUnits.a)"
+											></div>
+											<span class="separator" ng-if="::(object.Objective.adversarialField)">
+											-
+											</span>
+											<div
+												class="text large"
+												ng-if="::(object.Objective.adversarialField)"
+												ng-class="::(Directive.applyControlledClass(object.FactionB.sideField))"
+												ng-bind="::(object.signedUnits.b)"
+											></div>
+											<div class="title main slash">/</div>
+											<div class="unit-limit" ng-bind="::(object.Objective.unitLimit)"></div>
+										</div>
+									</div>
+
+									<div class="time-limit">
+										<div class="title main">TIME LEFT:</div>
+
+										<div class="number-container">
+											<span class="text large" ng-bind="::(object.timeLeft.hours)"></span>
+											<span class="title medium light">h</span>
+											<span class="text large" ng-bind="::(object.timeLeft.minutes)"></span>
+											<span class="title medium light">m</span>
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

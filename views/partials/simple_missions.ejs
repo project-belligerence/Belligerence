@@ -1,0 +1,116 @@
+
+<div class="container-fluid top-spacer">
+	<div id="simple-missions" class="container">
+		<div class="container">
+			<div class="col-md-12">
+				<div class="row">
+					<h2>Missions</h2>
+					<h3>Select from the available contracts.</h3>
+
+					<hr />
+				</div>
+			</div>
+
+			<div class="missions-container col-md-12">
+				<div class="row">
+					<ul class="mission-list">
+						<li class="message-animation" ng-repeat="mission in CtrlSimpleMissions.missionList track by $index" ng-class="{'bad-prestige': (mission.requiredPrestige > CtrlSimpleMissions.selfInfo.playerPrestige) }">
+							<div class="mission-single col-md-4 col-sm-6">
+
+								<div class="top">
+
+									<div class="prestige">
+										<i class="icon ion-star" ng-repeat="star in CtrlSimpleMissions.numberToArray(mission.requiredPrestige) track by $index"></i>
+									</div>
+
+									<div class="hexagon-container small noselect rotate">
+										<div class="hexagon">
+											<div class="in1">
+												<div class="in2">
+													<i class="icon" ng-class="::(CtrlSimpleMissions.getTypeIcon(mission.typeField))"></i>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="title">
+										<span ng-bind="::(mission.nameField)"></span>
+									</div>
+
+								</div>
+
+								<div class="body">
+
+									<div class="prop-label">SITUATION</div>
+
+									<div class="description" ng-bind="::(mission.descriptionField)"></div>
+
+									<div class="prop-label">LOCATION</div>
+
+									<div class="location">
+										<div class="map">
+											<i class="icon ion-earth"></i>
+											<div class="number" ng-bind="::(mission.locationMap)"></div>
+										</div>
+										<div class="grid">
+											<i class="icon ion-map"></i>
+											<div class="number" ng-bind="::(mission.locationGrid)"></div>
+										</div>
+
+									</div>
+
+								</div>
+
+								<div class="footer">
+
+									<div class="cost-info fee">
+										<div class="param">CONTRACT FEE</div>
+										<div class="value" ng-bind="::(mission.costFunds) | currency :'D$ ': 0"></div>
+									</div>
+
+									<div class="cost-info reward">
+										<div class="param">COMMISSION</div>
+										<div class="value" ng-bind="::(mission.rewardFunds) | currency :'D$ ': 0"></div>
+									</div>
+
+								</div>
+
+								<div class="interactions">
+
+									<div class="sign-contract" ng-if="::(mission.missionStatus !== '2')" ng-cloak>
+										<a
+											ng-click="CtrlSimpleMissions.signContract(mission)"
+											class="section-button warning medium animated"
+											role="button"
+											a-disabled="((mission.requiredPrestige > CtrlSimpleMissions.selfInfo.playerPrestige) || (mission.contractOwner !== null))"
+										ng-cloak>
+											<ul>
+												<li><i class="icon ion-checkmark-circled"></i></li>
+												<li ng-bind="((mission.contractOwner !== CtrlSimpleMissions.selfInfo.hashField) ? 'ACCEPT MISSION' : 'CONTRACT SIGNED')"></li>
+											</ul>
+										</a>
+									</div>
+
+									<div class="claim-contract" ng-if="::(mission.missionStatus === '2')" ng-cloak>
+										<a
+											ng-click="CtrlSimpleMissions.claimReward(mission)"
+											class="section-button success medium animated"
+											role="button"
+											a-disabled="(mission.missionStatus !== '1') && (mission.contractOwner !== CtrlSimpleMissions.selfInfo.hashField)"
+										ng-cloak>
+											<ul>
+												<li><i class="icon ion-cash"></i></li>
+												<li>FINISH CONTRACT</li>
+											</ul>
+										</a>
+									</div>
+
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

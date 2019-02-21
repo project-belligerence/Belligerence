@@ -54,7 +54,6 @@
 	}
 
 	function getComments(req, res) {
-
 		var commentType = req.params.type,
 			commentSubject = req.params.subject;
 
@@ -72,6 +71,7 @@
 				case "pmc": { return "pmc_table"; }
 			}
 		})(commentType);
+
 		if (!API.methods.validate(req, res, [subjectTable])) { return 0; }
 
 		getEntityComments(req, res, subjectTable, commentSubject, function(comments) {
@@ -153,11 +153,16 @@
 	function postComment(req, res) {
 
 		if (!API.methods.validateParameter(req, res, [
-			[req.body.title, 'string', config.numbers.modules.comments.titleLength],
 			[req.body.body, 'string', config.numbers.modules.comments.bodyMaxLength],
 			[req.body.type, 'string', queryValues(req).allowedPostValues.typeValues],
 			[req.body.subject, 'string']
 		])) { return 0; }
+
+		if (req.body.title) {
+			if (!API.methods.validateParameter(req, res, [
+				[req.body.title, 'string', config.numbers.modules.comments.titleLength]
+			])) { return 0; }
+		}
 
 		var subjectModel = (function(v) {
 			switch (v) {
@@ -226,15 +231,15 @@
 				allowDeletion = (function(v) {
 					switch (v) {
 						case "item": { return (req.playerInfo.hashField == comment.commenterField); }
-						case "upgrade": { return (req.playerInfo.hashField == comment.commenterField); }
-						case "intel": { return (req.playerInfo.hashField == comment.commenterField); }
-						case "players": { return ((req.playerInfo.hashField == comment.commenterField) || (req.playerInfo.hashField == comment.subjectField)); }
+						case "upgrade": { return (req.playerInfo.hashField === comment.commenterField); }
+						case "intel": { return (req.playerInfo.hashField === comment.commenterField); }
+						case "player": { return ((req.playerInfo.hashField === comment.commenterField) || (req.playerInfo.hashField === comment.subjectField)); }
 						case "pmc": {
 							var rV = false;
 							if (req.playerInfo.PMC) {
-								rV = (req.playerInfo.PMC.hashField == comment.subjectField);
+								rV = (req.playerInfo.PMC.hashField === comment.subjectField);
 							} else { rV = false; }
-							return ((req.playerInfo.hashField == comment.commenterField) || rV);
+							return ((req.playerInfo.hashField === comment.commenterField) || rV);
 						}
 					}
 				})(comment.typeField);

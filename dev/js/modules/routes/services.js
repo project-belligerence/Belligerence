@@ -1,27 +1,60 @@
 (function() {
 	'use strict';
 
-	RoutesServicesFunction.$inject = ["$rootScope", "$state", "apiServices", "alertsServices"];
+	RoutesServicesFunction.$inject = ["$rootScope", "$state", "$timeout", "$cookies", "apiServices", "playerServices", "alertsServices"];
 
-	function RoutesServicesFunction($rootScope, $state, apiServices, alertsServices) {
+	function RoutesServicesFunction($rootScope, $state, $timeout, $cookies, apiServices, playerServices, alertsServices) {
 
 		var methods = {
+			directToBannedRoute: directToBannedRoute,
 			securePrivateRoute: securePrivateRoute,
+			secureAdminRoute: secureAdminRoute,
 			routeToDashboard: routeToDashboard,
 			secureUnloggedRoute: secureUnloggedRoute,
 			scrollToTop: scrollToTop,
-			updatePageTitle: updatePageTitle
+			updatePageTitle: updatePageTitle,
+			transitionRoute: transitionRoute,
+			endTransitionRoute: endTransitionRoute,
+			setAnonymousSessionToken: setAnonymousSessionToken
 		};
 
 		function updatePageTitle(event, toState, toParams, fromState, fromParams) {
 			$rootScope.$broadcast("updatePageTitle", toState.routeName);
 		}
 
+		function directToBannedRoute(event, toState, toParams, fromState, fromParams) {
+			if ($rootScope.routeError === 10) {
+				event.preventDefault();
+				if ((toState.name) && (toState.url !== "banned")) if (fromState.name === "") $state.go("app.public.banned");
+				return true;
+			}
+		}
+
 		function securePrivateRoute(event, toState, toParams, fromState, fromParams) {
+			var prevFromState = fromState;
 			if (((toState.name) && (toState.name.match(/^app\.private\./))) && !(apiServices.getToken())) {
 				event.preventDefault();
 				alertsServices.addNewAlert("warning", "You must be logged in to continue.");
-				return $state.go("app.public.frontpage");
+				if (prevFromState.name === "") $state.go("app.public.frontpage");
+				return true;
+			}
+		}
+
+		function secureAdminRoute(event, toState, toParams, fromState, fromParams) {
+			var prevFromState = fromState,
+				cancelRoute = function() {
+					event.preventDefault();
+					alertsServices.addNewAlert("warning", "Insufficient permissions to view this page.");
+					if (prevFromState.name === "") $state.go("app.public.frontpage");
+					return true;
+				};
+
+			if ((toState.name && (toState.name.match(/^app\.admin\./)))) {
+				playerServices.getSelf(true).then(function(data) {
+					if (data && (apiServices.getToken())) {
+						if (data.playerPrivilege > 3) { return cancelRoute(); }
+					} else { return cancelRoute(); }
+				});
 			}
 		}
 
@@ -40,11 +73,34 @@
 			}
 		}
 
+		function transitionRoute(event, toState, toParams, fromState, fromParams) {
+			$timeout(function() {
+				var currentRoute = $state.current.name;
+
+				if ((currentRoute === fromState.name) && (toState.name !== fromState.name) && (!$rootScope.routeError)) {
+					$("#page-top").addClass("darken");
+					$("#loading-bar .bar").addClass("broaden");
+				}
+			}, 1000);
+		}
+
+		function endTransitionRoute(event, toState, toParams, fromState, fromParams) {
+			$("#page-top").removeClass("darken");
+			$("#loading-bar .bar").removeClass("broaden");
+		}
+
 		function scrollToTop(event, toState, toParams, fromState, fromParams) {
 			$("html, body").animate({ scrollTop: 0 }, {
 				duration: 250,
 				easing: 'linear'
 			});
+		}
+
+		function setAnonymousSessionToken() {
+			if (!$cookies.get("anonymousSessionToken")) {
+				var uniqId = _.uniqueId(_.now());
+				$cookies.put("anonymousSessionToken", uniqId);
+			}
 		}
 
 		return methods;

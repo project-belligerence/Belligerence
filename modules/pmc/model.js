@@ -16,13 +16,28 @@
 					field: 'motto'
 				},
 				locationField: {
-					type: DataTypes.STRING,
+					type: DataTypes.INTEGER,
 					field: 'location',
-					defaultValue: 'International'
+					defaultValue: 0
 				},
 				bioField: {
 					type: DataTypes.TEXT,
 					field: 'bio'
+				},
+				sideField: { // The Outfit's current side aligned, BLUFOR, OPFOR, etc
+					type: DataTypes.INTEGER,
+					field: 'side',
+					defaultValue: 0
+				},
+				missionsWonNum: {
+					type: DataTypes.INTEGER,
+					field: 'missions_won',
+					defaultValue: 0
+				},
+				missionsFailedNum: {
+					type: DataTypes.INTEGER,
+					field: 'missions_failed',
+					defaultValue: 0
 				},
 				tierNameFields: {
 					type: DataTypes.TEXT,
@@ -68,7 +83,7 @@
 				sizeTier: {
 					type: DataTypes.INTEGER,
 					field: 'size',
-					defaultValue: 1 // if this hits -1 the PMC is defunct
+					defaultValue: 4 // if this hits -1 the PMC is defunct
 				},
 				currentFunds: {
 					type: DataTypes.FLOAT,
@@ -78,7 +93,7 @@
 				openForApplications: {
 					type: DataTypes.BOOLEAN,
 					field: 'open_applications',
-					defaultValue: true
+					defaultValue: false
 				},
 				privateFields: {
 					type: DataTypes.TEXT,
@@ -95,7 +110,7 @@
 				privateVisibility: {
 					type: DataTypes.STRING,
 					field: 'private_visibility',
-					defaultValue: 'nobody'
+					defaultValue: 'everyone'
 				},
 				hashField: {
 					type: DataTypes.STRING,
@@ -106,7 +121,7 @@
 				freezeTableName: true,
 				name: {
 					singular: 'PMC',
-					plural: 'PMC',
+					plural: 'PMC'
 				},
 				hooks: {
 					beforeCreate: function(model, options) {
@@ -122,26 +137,27 @@
 						switch (mode) {
 							case 'query': {
 								switch (role) {
-									case 'admin': { return []; }
+									case 'admin': { return []; } break;
 									case 'user': { return [
 										'id', 'private_fields', 'private_visibility', 'funds', 'updatedAt'
-									]; }
-									default: { return []; }
+									]; } break;
+									default: { return []; } break;
 								}
 							} break;
-							case 'creation': { return 'funds, prestige'; }
+							case 'creation': { return 'funds, prestige'; } break;
 						}
 					},
 					whitelistProperties: function(mode, role) {
 						switch (mode) {
 							case 'query': {
 								switch (role) {
-									case 'admin': { return []; }
+									case 'admin': { return []; } break;
 									case 'user': {
  									return [
- 										'motto', 'location', 'createdAt', 'totalPlayers', 'tags', 'prestige', 'size', 'totalPlayers', 'funds', 'hideComments', 'blockComments'
-									]; }
-									default: { return []; }
+ 										'bio', 'motto', 'location', 'createdAt', 'totalPlayers', 'tags', 'prestige', 'hideUpgrades',
+ 										'size', 'funds', 'missions_failed', 'missions_won', 'hideComments', 'blockComments', 'blockInvites', 'blockUpgrades', 'hideUnits'
+									]; } break;
+									default: { return []; } break;
 								}
 							} break;
 						}
@@ -157,7 +173,7 @@
 					},
 					defaultValues: function(value) {
 						switch(value) {
-							case "tierNameFields": { return ['CEO','Commander', 'Officer', 'Sargeant', 'Soldier']; }
+							case "tierNameFields": { return ['CEO','Commander', 'Officer', 'Sergeant', 'Soldier']; } break;
 						}
 					}
 				},
@@ -173,6 +189,11 @@
 						if (funds >= amount) {
 							this.update({ currentFunds: (funds - amount) }).then(function() { return done(rObject); });
 						} else { return done(rObject); }
+					},
+					addFunds: function(amount, done) {
+						var funds = this.currentFunds,
+							rObject = { currentFunds: (funds + amount) };
+						this.update({ currentFunds: (funds + amount) }).then(function() { return done(rObject); });
 					},
 					getAllTransactions: function(done) {
 						var TransactionHistoryModel = require('./../index.js').getModels().transaction_history,
@@ -204,11 +225,25 @@
 							return done(transactions);
 						});
 					},
-					addNewItem: function(p_itemHash, amount, deployed, done) {
+					getActiveContractsAmount: function(done) {
+						var ContractsModel = require('./../index.js').getModels().contracts,
+							thisId = this.getDataValue('id'),
+							whereQuery = { EmployerId: thisId, ContractedId: null, redeemedField: false	};
+						ContractsModel.findAll({ where: whereQuery }).then(function(contracts) { return done(contracts.length); });
+					},
+					addNewItem: function(p_itemHash, p_itemClassname, p_itemType, p_itemClass, amount, deployed_amount, done) {
 						var PMCItems = require('./../index.js').getModels().pmc_items,
 							thisHash = this.getDataValue('hashField');
 
-						PMCItems.create({ownerHash: thisHash, itemHash: p_itemHash, amountField: amount, deployedField: (deployed || false)}).then(function(ownedItem) {
+						PMCItems.create({
+								ownerHash: thisHash,
+								itemHash: p_itemHash,
+								itemType: p_itemType,
+								itemClass: p_itemClass,
+								itemClassname: p_itemClassname,
+								amountField: amount,
+								deployedAmount: deployed_amount
+							}).then(function(ownedItem) {
 							return done(ownedItem);
 						});
 					},
@@ -239,7 +274,9 @@
 						var PMCSettings = require('./../index.js').getModels().pmc_settings,
 							thisHash = this.getDataValue('hashField');
 
-						PMCSettings.create({pmcHash: thisHash}).then(function(settings) { return done(settings); });
+						PMCSettings.create({ pmcHash: thisHash }).then(function(settings) {
+							return (done ? done(settings) : true);
+						});
 					},
 					getSettings: function(done) {
 						var PMCSettings = require('./../index.js').getModels().pmc_settings,

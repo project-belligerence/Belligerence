@@ -6,11 +6,174 @@
 @mixin transition-timing-function($timing...) {	@include prefix(transition-timing-function, $timing); }
 @mixin transition-delay($delay...) { @include prefix(transition-delay, $delay); }
 
+$duration_time_fast: 1s;
+$duration_time_slow: 5s;
+$duration_time_slowest: 15s;
+
+@keyframes spin {
+	from {transform:rotate(0deg);}
+	to {transform:rotate(360deg);}
+}
+
 .anm-all {
 	* {
 		$delay: .25s;
 		@include transition(all $delay);
 	}
+}
+
+.expand-height-animation {
+	$delay: .5s;
+	max-height: 999px;
+	@include opacity(1);
+	&.ng-hide-add { transition: all ease-in-out $delay; }
+	&.ng-hide-remove {transition: all ease-in-out $delay; }
+	&.ng-hide { max-height: 0px; @include opacity(0); }
+}
+
+@-webkit-keyframes slide {
+	from { background-position: left 0; }
+	to { background-position: 100% 0; }
+}
+
+@-webkit-keyframes PulseBG {
+    0%{background-position:51% 0%}
+    50%{background-position:50% 100%}
+    100%{background-position:51% 0%}
+}
+@-moz-keyframes PulseBG {
+    0%{background-position:51% 0%}
+    50%{background-position:50% 100%}
+    100%{background-position:51% 0%}
+}
+@-o-keyframes PulseBG {
+    0%{background-position:51% 0%}
+    50%{background-position:50% 100%}
+    100%{background-position:51% 0%}
+}
+@keyframes PulseBG {
+    0%{background-position:51% 0%}
+    50%{background-position:50% 100%}
+    100%{background-position:51% 0%}
+}
+
+@include keyframes(pulse-drop-shadow-black) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 1px #222)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 3px #222)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 1px #222)) }
+}
+
+@include keyframes(pulse-text-shadow-black) {
+	0% { text-shadow: 0px 0px 3px #000; }
+	50% { text-shadow: 0px 0px 5px #000; }
+	100% { text-shadow: 0px 0px 3px #000; }
+}
+
+@include keyframes(pulse-drop-shadow-white-large) {
+	$size1: 20px;
+	$size2: 40px;
+	$color1: #fff;
+	$color2: #ddd;
+
+	0% { @include prefix(filter, drop-shadow(0px 0px $size1 $color1)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px $size2 $color2)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px $size1 $color1)) }
+}
+
+@include keyframes(pulse-drop-shadow-black-soft) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 1px #222)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 10px #222)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 1px #222)) }
+}
+
+@include keyframes(pulse-drop-shadow-success) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 1px $success_color)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 3px $success_color)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 1px $success_color)) }
+}
+
+@include keyframes(pulse-drop-shadow-success-2) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 1px $success_color)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 10px $success_color)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 1px $success_color)) }
+}
+
+@include keyframes(pulse-drop-shadow-warning) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 1px $warning_color)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 5px $warning_color)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 1px $warning_color)) }
+}
+
+@include keyframes(pulse-drop-shadow-main) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 1px $main_color_dark)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 3px $main_color)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 1px $main_color_dark)) }
+}
+
+@include keyframes(pulse-drop-shadow-main-2) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 5px $main_color_dark)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 15px $main_color)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 5px $main_color_dark)) }
+}
+
+@include keyframes(pulse-drop-shadow-main-3) {
+	0% { @include prefix(filter, drop-shadow(0px 0px 3px $main_color_dark)) }
+	50% { @include prefix(filter, drop-shadow(0px 0px 8px $main_color)) }
+	100% { @include prefix(filter, drop-shadow(0px 0px 3px $main_color_dark)) }
+}
+
+@include keyframes(pulse-border-left-warning) {
+	$animationColor: $warning_color;
+	0% { border-left-color: darken($animationColor, 0%); }
+	50% { border-left-color: darken($animationColor, 10%); }
+	100% { border-left-color: darken($animationColor, 0%); }
+}
+
+@include keyframes(pulse-background-color-warning) {
+	$animationColor: $warning_color;
+	0% { background-color: darken($animationColor, 0%); }
+	50% { background-color: darken($animationColor, 10%); }
+	100% { background-color: darken($animationColor, 0%); }
+}
+
+@include keyframes(pulse-border-left-black) {
+	$animationColor: #111;
+	0% { border-left-color: lighten($animationColor, 0%); }
+	50% { border-left-color: lighten($animationColor, 20%); }
+	100% { border-left-color: lighten($animationColor, 0%); }
+}
+
+@include keyframes(pulse-background-color-black) {
+	$animationColor: #111;
+	0% { background-color: lighten($animationColor, 0%); }
+	50% { background-color: lighten($animationColor, 20%); }
+	100% { background-color: lighten($animationColor, 0%); }
+}
+
+.pulse-drop-shadow-black-slow { @include prefix(animation, pulse-drop-shadow-black $duration_time_slow ease-in-out infinite); }
+.pulse-drop-shadow-black-slow-soft { @include prefix(animation, pulse-drop-shadow-black-soft $duration_time_slow ease-in-out infinite); }
+.pulse-drop-shadow-black-fast { @include prefix(animation, pulse-drop-shadow-black $duration_time_fast ease-in-out infinite); }
+.pulse-text-shadow-black-fast { @include prefix(animation, pulse-text-shadow-black $duration_time_fast ease-in-out infinite); }
+
+.pulse-drop-shadow-main-fast { @include prefix(animation, pulse-drop-shadow-main $duration_time_fast ease-in-out infinite); }
+
+.pulse-border-left-black-fast { @include prefix(animation, pulse-border-left-black $duration_time_fast ease-in-out infinite); }
+.pulse-border-left-black-slow { @include prefix(animation, pulse-border-left-black $duration_time_slow ease-in-out infinite); }
+
+.pulse-border-left-warning-fast { @include prefix(animation, pulse-border-left-warning $duration_time_fast ease-in-out infinite); }
+
+.pulse-background-color-warning-fast { @include prefix(animation, pulse-background-color-warning $duration_time_fast ease-in-out infinite); }
+.pulse-background-color-black-fast { @include prefix(animation, pulse-background-color-black $duration_time_fast ease-in-out infinite); }
+
+.pulse-bg-animation {
+	$duration_time: $duration_time_slowest;
+
+	background: linear-gradient(180deg, $main_background_color, lighten($main_background_color, 5%));
+	background-size: 400% 400%;
+	-webkit-animation: PulseBG $duration_time ease infinite;
+	-moz-animation: PulseBG $duration_time ease infinite;
+	-o-animation: PulseBG $duration_time ease infinite;
+	animation: PulseBG $duration_time ease infinite;
 }
 
 .ng-view-animation {
@@ -35,6 +198,50 @@
 	&.ng-leave.ng-leave-active {
 		position: relative;
 		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 5);
+		animation-delay: ($delay_xfast / 5);
+	}
+}
+
+.slide-in-out {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: slideInRight;
+	$animationOut: slideOutRight;
+
+	$delay_in: $delay_xfast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.86, 0, 0.07, 1);
+
+	&.ng-move,
+	&.ng-enter,
+	&.ng-leave,
+	&.ng-move.ng-move-active,
+	&.ng-enter.ng-enter-active,
+	&.ng-leave.ng-leave-active {
+		position: relative;
+		width: 100%;
+
+		&.anm-abs { position: absolute; }
 	}
 
 	&.ng-leave {
@@ -90,6 +297,56 @@
 	&.ng-enter-stagger {
 		transition-delay: ($delay_xfast / 2);
 		animation-delay: ($delay_xfast / 2);
+	}
+}
+
+.upgrade-render-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.86, 0, 0.07, 1);
+
+	position: absolute;
+
+	@include opacity(1);
+	left: 0px;
+
+	@include transition(left $delay_in $easing, opacity $delay_in $easing);
+
+	&.ng-hide {
+		left: -300px;
+		@-moz-document url-prefix() {
+			left: 0px;
+		}
+		@include opacity(0);
+	}
+}
+
+.upgrade-render-animation-safe {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.86, 0, 0.07, 1);
+
+	position: absolute;
+
+	@include opacity(1);
+	left: 0px;
+
+	@include transition(left $easing $delay_in, opacity $easing $delay_in);
+
+	&.ng-hide {
+		@include opacity(0);
 	}
 }
 
@@ -173,9 +430,253 @@
 	}
 }
 
+.fade-animation-fast-stagger {
+	$delay_xfast: .25s; $delay_fast: .5s;
+	$animationIn: fadeIn; $animationOut: fadeOut;
+	$delay_in: $delay_fast;	$delay_out: $delay_xfast;
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 5);
+		animation-delay: ($delay_xfast / 5);
+	}
+}
+
+.footer-bar-animation {
+	$delay_xfast: .05s; $delay_fast: .5s;
+	$animationIn: slideInUp; $animationOut: slideOutDown;
+	$delay_in: $delay_fast;	$delay_out: $delay_xfast;
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.message-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+
+	$animationIn: fadeInUp;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(1, 1, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 5);
+		animation-delay: ($delay_xfast / 5);
+	}
+}
+
+.comment-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+
+	$animationIn: fadeInUp;
+	$animationOut: fadeOutDown;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(1, 1, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 5);
+		animation-delay: ($delay_xfast / 5);
+	}
+}
+
+.intel-filter-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(1, 1, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 5);
+		animation-delay: ($delay_xfast / 5);
+	}
+}
+
+.card-animation-stagger {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+
+	$animationIn: rollIn;
+	$animationOut: fadeOut;
+
+	$delay_in: .5s;
+	$delay_out: $delay_fast;
+
+	$easing: cubic-bezier(0.7, 1, 0.1, 0.9);
+	$easing_leave: cubic-bezier(0.175, 0.885, 0.12, 1.3);
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing_leave;
+		-moz-animation: $animationOut $delay_out both $easing_leave;
+		animation: $animationOut $delay_out both $easing_leave;
+	}
+
+	&.ng-enter-stagger {
+		transition-delay: ($delay_fast / 3);
+		animation-delay: ($delay_fast / 3);
+	}
+}
+
+.outfits-animation-stagger {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+
+	$animationIn: fadeInUp;
+	$animationOut: fadeOut;
+
+	$delay_in: .5s;
+	$delay_out: $delay_fast;
+
+	$easing: cubic-bezier(0.7, 1, 0.1, 0.9);
+	$easing_leave: cubic-bezier(0.175, 0.885, 0.12, 1.3);
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing_leave;
+		-moz-animation: $animationOut $delay_out both $easing_leave;
+		animation: $animationOut $delay_out both $easing_leave;
+	}
+
+	&.ng-enter-stagger {
+		transition-delay: ($delay_fast / 2);
+		animation-delay: ($delay_fast / 2);
+	}
+}
+
+.card-animation {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+
+	$animationIn: rollIn;
+	$animationOut: rotateOut;
+
+	$delay_in: 1s;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.175, 0.885, 0.12, 1.1);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
 ui-view { @extend .fade-animation; }
 
 .slide-sides-fade {
+	$delay_xfast: .25s;
+	$delay_fast: .5s;
+	$delay_slow: 1s;
+	$delay_xslow: 1.5s;
+
+	$animationIn: fadeIn;
+	$animationOut: fadeOut;
+
+	$delay_in: $delay_fast;
+	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave.ng-leave-active {
+		position: absolute;
+		width: 100%;
+	}
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.button-fade-absolute {
 	$delay_xfast: .25s;
 	$delay_fast: .5s;
 	$delay_slow: 1s;
@@ -236,6 +737,33 @@ ui-view { @extend .fade-animation; }
 		-webkit-animation: $animationIn $delay_in both $easing;
 		-moz-animation: $animationIn $delay_in both $easing;
 		animation: $animationIn $delay_in both $easing;
+	}
+}
+
+.flip-animation-stagger-fast {
+	$delay_xfast: .25s;	$delay_fast: .5s; $delay_slow: 1s; $delay_xslow: 1.5s;
+
+	$animationIn: flipInY; $animationOut: flipOutY;
+
+	$delay_in: $delay_fast;	$delay_out: $delay_xfast;
+
+	$easing: cubic-bezier(0.18, -0.50, 0.265, 0.95);
+
+	&.ng-leave {
+		-webkit-animation: $animationOut $delay_out both $easing;
+		-moz-animation: $animationOut $delay_out both $easing;
+		animation: $animationOut $delay_out both $easing;
+	}
+
+	&.ng-enter {
+		-webkit-animation: $animationIn $delay_in both $easing;
+		-moz-animation: $animationIn $delay_in both $easing;
+		animation: $animationIn $delay_in both $easing;
+	}
+
+	&.ng-enter-stagger {
+		transition-delay: ($delay_xfast / 2);
+		animation-delay: ($delay_xfast / 2);
 	}
 }
 
@@ -315,7 +843,7 @@ ui-view { @extend .fade-animation; }
 	&.ng-leave.ng-leave-active, &.ng-enter.ng-enter-active {
 		position: absolute;
 		width: 100%;
-		z-index: 9999999999;
+		z-index: 9999;
 	}
 
 	&.ng-leave {

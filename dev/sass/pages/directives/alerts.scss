@@ -2,7 +2,7 @@
 #page-alerts-container {
 	position: fixed;
 
-	@include factor-property(top, 3);
+	@include factor-property(top, 0);
 	left: 100%;
 	transform: translate(-100%, 0);
 
@@ -21,22 +21,51 @@
 		top: 10px;
 	}
 
-	.page-alerts {
-		text-align: center;
-		width: inherit;
+	.alert {
+		padding: 0px;
+		padding-top: 10px;
+	}
 
-		@include factor-property(padding, 1);
+	.alert-msg {
+		display: inline-block;
+		width: 65%;
+		text-align: center;
+	}
+
+	.page-alerts {
+		$duration: .5s;
+		$easing: cubic-bezier(1, 1, 0.265, 0.95);
+		@include transition(height $duration $easing, padding $duration $easing, margin-bottom $duration $easing);
+		text-align: center;
+		height: 50px;
+
+		overflow: visible;
 
 		@include factor-property(margin-bottom, 1);
-
 		@include prefix(box-shadow, 0 0 10px rgba(10,10,10,0.5));
+
+		.icon {
+			@include font-size(factor(4));
+			position: relative;
+			left: 10px;
+			top: -10px;
+			float: left;
+		}
 
 		.close {
 			@include font-size(factor(7));
 
+			line-height: 0;
+			display: inline-block;
 			position: relative;
-			top: -13px;
-			right: 7px;
+			top: 5px;
+			right: 10px;
+			float: right;
+		}
+
+		&.closing {
+			overflow-y: hidden;
+			margin-bottom: 0px;
 		}
 	}
 

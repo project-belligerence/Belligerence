@@ -1,96 +1,151 @@
 
-<div id="units-container">
+<div id="units-container" ng-class="::(styleClass)">
 
-	<div class="ng-view-animation-units" ng-repeat="tier in organizedTiers" ng-init="tierIndex = $index" ng-if="(CtrlUnits.displayMode === 'ranked')" ng-cloak>
+	<div class="ng-view-animation-units" ng-repeat="tier in organizedTiers track by $index" ng-init="tierIndex = $index" ng-if="::(CtrlUnits.displayMode === 'ranked')" ng-cloak>
 		<div class="tiers-list" ng-if="organizedTiers[tierIndex].length > 1">
 			<ul class="units-list">
-				<li class="unit ng-view-animation-units" ng-repeat="unit in (organizedTiers[tierIndex])" ng-init="unitIndex = $index">
+				<li class="unit soldier ng-view-animation-units" ng-repeat="unit in (organizedTiers[tierIndex]) track by $index" ng-init="unitIndex = $index" ng-class="::(CtrlUnits.applyControlledClass(unit.PMCSide))">
 					<div ng-if="(unitIndex > 0)">
 
-						<div class="circle unit-avatar">
-							<div class="medium" ac-background-image background-image="images/avatars/players/main_{{unit.hashField}}.jpg">
+						<div class="square shadow unit-avatar">
+							<div class="frame auto" ac-background-image background-image="images/avatars/players/main_{{unit.hashField}}.jpg">
 								<div class="avatar-radial-container">
 									<radial-menu
 										options="radialOptions"
 
 										list-class=""
 										item-class=""
-										arguments="{tier: tierIndex, alias: unit.aliasField, hash: unit.hashField, offset: {top: 0, left: 0}}"
+										arguments="{tier: tierIndex, alias: unit.aliasField, hash: unit.hashField, offset: {top: 0, left: 0, distance: 60}}"
 									></radial-menu>
 								</div>
 							</div>
 						</div>
 
 						<div class="info">
-							<div class="meta small"><span ng-bind="unit.aliasField"></span></div>
-							<span ng-bind="pmcInfo.tier_names[organizedTiers[tierIndex][0]]"></span>
+							<div class="unit-meta-bar small"><span ng-bind="unit.aliasField"></span></div>
+							<div class="tier-container">
+								<div class="tier" ng-bind="(pmcInfo.tier_names[organizedTiers[tierIndex][0]] || '???')"></div>
+							</div>
 						</div>
+
 					</div>
 				</li>
 			</ul>
 		</div>
 	</div>
 
-	<div ng-if="(CtrlUnits.displayMode === 'friends')" ng-cloak>
+	<div ng-if="::(CtrlUnits.displayMode === 'friends')" ng-cloak>
 		<ul class="units-list">
-			<div class="ng-view-animation-units" ng-repeat="unit in unitsList" ng-if="(unitsList.length > 0)" ng-cloak>
-				<div class="col-md-4 col-sm-6 col-xs-12">
-					<li class="unit">
-						<div class="circle unit-avatar">
-							<div class="medium" ac-background-image background-image="images/avatars/players/main_{{::unit.friendHash}}.jpg">
-								<div class="avatar-radial-container">
-									<radial-menu
-										options="radialOptions"
-										list-class=""
-										item-class=""
-										arguments="{tier: 0, alias: unit.friendAlias, hash: unit.friendHash, offset: {top: 0, left: 0}}"
-									></radial-menu>
-								</div>
+			<div class="unit ng-view-animation-units" ng-repeat="unit in unitsList track by $index" ng-if="::(unitsList.length > 0)" ng-class="::(CtrlUnits.applyControlledClass(unit.friendSide))" ng-cloak>
+				<li>
+					<div class="square shadow unit-avatar">
+						<div class="frame auto" ac-background-image background-image="images/avatars/players/main_{{::unit.friendHash}}.jpg">
+							<upgrades-directive unit="unit"></upgrades-directive>
+							<div class="avatar-radial-container">
+								<radial-menu
+									options="radialOptions"
+									list-class=""
+									item-class=""
+									arguments="{tier: 0, alias: unit.friendAlias, hash: unit.friendHash, offset: {top: 0, left: 0}}"
+								></radial-menu>
 							</div>
 						</div>
+					</div>
 
-						<div class="info">
-							<div class="meta small"><span ng-bind="::unit.friendAlias"></span></div>
-							<span class="since">Added <time-ago from-time='{{::unit.friendSince}}'></time-ago></span>
-						</div>
-					</li>
-				</div>
+					<div class="info">
+						<div class="unit-meta-bar small"><span ng-bind="::unit.friendAlias"></span></div>
+						<span class="since">Added <time-ago from-time='{{::unit.friendSince}}'></time-ago></span>
+					</div>
+				</li>
 			</div>
 		</ul>
-		<div ng-if="(unitsList.length === 0)" ng-cloak>
+		<div ng-if="::(unitsList.length === 0)" ng-cloak>
 			<h2 class="text-center">You have no friends.</h2>
 		</div>
 	</div>
 
-	<div ng-if="(CtrlUnits.displayMode === 'pmc-friends')" ng-cloak>
+	<div ng-if="::(CtrlUnits.displayMode === 'pmc-friends')" ng-cloak>
 		<ul class="units-list">
-			<div class="ng-view-animation-units" ng-repeat="unit in unitsList" ng-if="(unitsList.length > 0)" ng-cloak>
-				<div class="col-md-4 col-sm-6 col-xs-12">
-					<li class="unit">
-						<div class="circle unit-avatar">
-							<div class="medium" ac-background-image background-image="images/avatars/pmc/main_{{::unit.friendHash}}.jpg">
-								<div class="avatar-radial-container">
-									<radial-menu
-										options="radialOptions"
-										list-class=""
-										item-class=""
-										arguments="{tier: 0, alias: unit.friendAlias, hash: unit.friendHash, offset: {top: 0, left: 2}}"
-									></radial-menu>
-								</div>
+			<div class="unit outfit ng-view-animation-units" ng-repeat="unit in unitsList track by $index" ng-if="::(unitsList.length > 0)" ng-class="::(CtrlUnits.applyControlledClass(unit.friendSide))" ng-cloak>
+				<li>
+					<div class="square shadow unit-avatar">
+						<div class="frame auto" ac-background-image background-image="images/avatars/pmc/main_{{::unit.friendHash}}.jpg">
+							<upgrades-directive unit="unit" mode="outfit"></upgrades-directive>
+							<div class="avatar-radial-container">
+								<radial-menu
+									options="radialOptions"
+									list-class=""
+									item-class=""
+									arguments="{tier: 0, alias: unit.friendAlias, hash: unit.friendHash, offset: {top: 0, left: 0, distance: -20}}"
+								></radial-menu>
 							</div>
 						</div>
+					</div>
 
-						<div class="info">
-							<div class="meta small"><span ng-bind="::unit.friendAlias"></span></div>
-							<span class="since">Added <time-ago from-time='{{::unit.friendSince}}'></time-ago></span>
-						</div>
-					</li>
-				</div>
+					<div class="info">
+						<div class="unit-meta-bar small"><span ng-bind="::unit.friendAlias"></span></div>
+						<span class="since">Allied <time-ago from-time='{{::unit.friendSince}}'></time-ago></span>
+					</div>
+				</li>
 			</div>
 		</ul>
-		<div ng-if="(unitsList.length === 0)" ng-cloak>
+		<div ng-if="::(unitsList.length === 0)" ng-cloak>
 			<h2 class="text-center">Your Outfit has no alliances.</h2>
 		</div>
+	</div>
+
+	<div ng-if="::(CtrlUnits.displayMode === 'interest')" ng-cloak>
+		<ul class="units-list simple">
+			<li class="unit interest ng-view-animation-units" ng-repeat="unit in unitsList track by $index" ng-class="::(CtrlUnits.applyControlledClass(unit.sideField))">
+
+				<div class="square shadow unit-avatar">
+					<div class="frame auto" ac-background-image background-image="images/avatars/players/main_{{::unit.hashField}}.jpg">
+						<upgrades-directive unit="unit"></upgrades-directive>
+						<div class="avatar-radial-container">
+							<radial-menu
+								options="radialOptions"
+
+								list-class=""
+								item-class=""
+								arguments="{ aliasField: unit.aliasField, hashField: unit.hashField, sideField: unit.sideField, percentageField: unit.percentField, alias: unit.aliasField, hash: unit.hashField }"
+							></radial-menu>
+						</div>
+					</div>
+
+					<div class="stats-container-1">
+						<div class="stats-container-2">
+							<div
+								class="stat prestige"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								popover-popup-delay="250"
+								uib-popover="Freelancer prestige rank."
+							>
+								<i class="icon ion-star"></i>
+								<span class="since" ng-bind="{{::unit.playerPrestige}}"></span>
+							</div>
+							<div
+								class="stat percentage"
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								popover-popup-delay="250"
+								uib-popover="The desired percentage of the Mission reward."
+							>
+								<i class="icon ion-pie-graph"></i>
+								<span class="since" ng-bind="{{::(unit.percentField)}}"></span>%
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="info">
+					<div class="unit-meta-bar small"><span ng-bind="unit.aliasField"></span></div>
+					<span class="since"><time-ago from-time='{{::unit.createdAt}}'></time-ago></span>
+				</div>
+
+			</li>
+		</ul>
 	</div>
 
 </div>

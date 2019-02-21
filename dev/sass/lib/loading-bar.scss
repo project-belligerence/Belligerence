@@ -33,10 +33,10 @@ $main_color: $main_color_light;
 }
 
 #loading-bar .bar {
-	-webkit-transition: width 350ms;
-	-moz-transition: width 350ms;
-	-o-transition: width 350ms;
-	transition: width 350ms;
+	-webkit-transition: width 350ms, height, 250ms;
+	-moz-transition: width 350ms, height, 250ms;
+	-o-transition: width 350ms, height, 250ms;
+	transition: width 350ms, height, 250ms;
 
 	background: $main_color;
 	position: fixed;
@@ -49,6 +49,8 @@ $main_color: $main_color_light;
 	border-top-right-radius: 1px;
 
 	box-shadow: 2px 0px 5px $main_color_dark;
+
+	&.broaden {	height: ($bar_height * 2); }
 }
 
 /* Fancy blur effect */

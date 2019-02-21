@@ -3,20 +3,155 @@
 	<div class="modal-header">
 		<i class="icon" ng-class="ModalController.options.header.icon" ng-if="ModalController.options.header" ng-cloak></i>
 		<h2 class="modal-title" ng-bind="::ModalController.options.header.text"></h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
 	</div>
 
-	<div class="modal-body">
-		<div class="modal-body" id="modal-body" ng-bind="::ModalController.options.body.text"></div>
+	<div class="modal-main-body">
+		<div class="modal-body-text" ng-bind="::(ModalController.options.body.text)" ng-if="::(ModalController.options.body.text)" ng-cloak></div>
+
+		<div ng-class="::(ModalController.specialMode)" ng-if="::(ModalController.specialMode === 'eximport-loadout')" ng-cloak>
+			<div class="col-md-12">
+				<div class="row">
+					<form>
+						<div class="form-group">
+							<div class="input-group loadout-box">
+								<textarea
+									ng-change="ModalController.readImports()"
+									class="form-control"
+									rows="7"
+									ng-model="ModalController.loadoutInput"
+								></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="col-md-12 expand-height-animation" ng-hide="(!(ModalController.decryptedLoadout) || ModalController.loadoutInput.length === 0)" ng-cloak>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="sent-loadout">
+								<div class="sent-property">
+									<div class="property">Name</div>
+									<div class="value" ng-bind="ModalController.decryptedLoadout.nameField"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="row">
+							<div class="sent-loadout">
+								<div class="sent-property">
+									<div class="property">Description</div>
+									<div class="value" ng-bind="ModalController.decryptedLoadout.descriptionField"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="row">
+							<div class="sent-loadout">
+								<div class="sent-items" ng-repeat="item in ModalController.decryptedLoadout.contentField track by $index">
+									<div class="picture">
+										<a ng-href="item/{{item[0]}}" >
+											<div class="amount" ng-bind="item[1]"></div>
+											<img class="image" src="images/modules/items/thumb_{{(item[0])}}.jpg">
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-class="::(ModalController.specialMode)" ng-if="::(ModalController.specialMode === 'air-drop')" ng-cloak>
+
+			<div class="col-md-12 col-fix">
+				<div class="row">
+					<div class="airdrop-item col-md-4 col-sm-4 col-xs-12">
+						<items-directive
+							item-list="[ModalController.options.item]"
+							display-mode="single"
+							allow-inspect="false"
+						></items-directive>
+					</div>
+					<div class="grid-input col-md-8 col-sm-8 col-xs-12">
+
+						<div class="title">GRID REFERENCE:</div>
+
+						<form class="form-inline">
+							<div class="form-group">
+								<input
+									type="text" class="form-control" id="modalInputAirDropGrid1" placeholder="000"
+									maxlength="4" autofocus="false" ng-model="ModalController.dropInputs.gridRef1"
+								>
+							</div>
+							<div class="form-group">
+								<input
+									type="text" class="form-control" id="modalInputAirDropGrid2" placeholder="000"
+									maxlength="4" autofocus="false" ng-model="ModalController.dropInputs.gridRef2"
+								>
+							</div>
+						</form>
+
+						<div class="dropdown-section">
+							<div class="title">SIGNAL COLOR:</div>
+
+							<div class="dropdown">
+							<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+								<span ng-bind="(ModalController.airDropColors[ModalController.dropInputs.smokeColor].name)"></span>
+							</button>
+							<div class="signal-display" ng-class="(ModalController.airDropColors[ModalController.dropInputs.smokeColor].class)">
+								<i class="icon ion-help-buoy"></i>
+							</div>
+							<ul class="dropdown-menu">
+								<li ng-click="ModalController.changeAirDropColor($index)" ng-repeat="item in ::(ModalController.airDropColors) track by $index">
+									<a href="#" ng-click="scope = item.value">
+										<span ng-bind="::(item.name)"></span>
+									</a>
+								</li>
+							</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="modal-payment" ng-if="ModalController.options.cost" ng-cloak>
+		<div class="extra-input noselect">
+			<input type="checkbox" id="payment-agree" ng-model="ModalController.acceptPayment">
+			<label class="input-label" for="payment-agree">
+				<div class="body check">
+					<div class="box"><i class="icon ion-checkmark small"></i></div>
+					<div class="payment-text">
+						<span>
+							I authorize the payment of
+							<span class="amount" ng-bind="::ModalController.options.cost | currency:'D$ '"></span>
+						</span>
+						<img src="images/chipcard.png" id="barcode-img" />
+					</div>
+				</div>
+			</label>
+		</div>
 	</div>
 
     <div class="modal-footer">
-		<a class="section-button medium muted" role="button" ng-click="closeModal(false)">
+		<a class="section-button medium muted" role="button" ng-click="closeModal(false)" ng-class="::(ModalController.options.choices.no.class)">
 			<ul>
 				<li ng-if="ModalController.options.choices.no.icon"><i class="icon" ng-class="ModalController.options.choices.no.icon"></i></li>
 				<li ng-if="ModalController.options.choices.no.text" ng-bind="::ModalController.options.choices.no.text"></li>
 			</ul>
 		</a>
-		<a class="section-button medium" role="button" ng-click="closeModal(true)">
+		<a class="section-button medium" role="button" ng-click="closeModal(true)" ng-class="[(ModalController.options.choices.yes.class), {'muted': !(ModalController.isPaidFor())}]">
 			<ul>
 				<li ng-if="ModalController.options.choices.yes.icon"><i class="icon" ng-class="ModalController.options.choices.yes.icon"></i></li>
 				<li ng-if="ModalController.options.choices.yes.text" ng-bind="::ModalController.options.choices.yes.text"></li>

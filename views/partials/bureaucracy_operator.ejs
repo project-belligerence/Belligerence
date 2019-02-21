@@ -1,0 +1,120 @@
+<div class="container-fluid top-spacer">
+	<div id="bureaucracy-page" class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Bureaucracy</h2>
+				<h3>Administrative actions related to your contract.</h3>
+				<hr />
+			</div>
+		</div>
+		<div class="col-md-12 fade-animation-fast" ng-if="(CtrlBureaucracyOperator.pageState === 'main')" ng-cloak>
+			<div class="row">
+				<div class="actions col-md-3 col-sm-5 col-xs-12 noselect" ng-repeat="menuItem in CtrlBureaucracyOperator.menuOptions" ng-class="{'muted': !(menuItem.enable) }">
+					<div
+						class="row"
+						ng-click="(menuItem.fn || CtrlBureaucracyOperator.changeState(menuItem.state))"
+						a-disabled="!(menuItem.enable)"
+						ui-sref="{{::(menuItem.route || 'app.private.bureaucracy-operator')}}"
+					>
+						<i class="icon" ng-class="::(menuItem.icon)"></i>
+						<div class="title" ng-bind="::(menuItem.title)"></div>
+						<hr />
+						<div class="description" ng-bind="::(menuItem.description)"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="back-button" class="fade-animation-fast" ng-if="(CtrlBureaucracyOperator.pageState !== 'main') && (CtrlBureaucracyOperator.pageState !== 'null')" ng-cloak>
+			<a
+				ng-click="CtrlBureaucracyOperator.changeState('main')"
+				class="section-button medium animated"
+				role="button"
+			>
+				<ul>
+					<li><i class="icon ion-arrow-return-left"></i></li>
+					<li>Back</li>
+				</ul>
+			</a>
+		</div>
+
+		<div id="class-change" class="fade-animation-fast" ng-if="(CtrlBureaucracyOperator.pageState === 'class-change')" ng-cloak>
+
+			<div class="current">
+				<div class="current-text">You are currently a:</div>
+				<i class="icon" ng-class="::(CtrlBureaucracyOperator.displayContract(CtrlBureaucracyOperator.selfInfo.contractType).icon)"></i>
+				<div class="name" ng-bind="::(CtrlBureaucracyOperator.displayContract(CtrlBureaucracyOperator.selfInfo.contractType).name)"></div>
+				<div class="prestige" ng-if="::((CtrlBureaucracyOperator.selfInfo.playerPrestige !== undefined) && (CtrlBureaucracyOperator.selfInfo.contractType === 2))"
+				>
+					<i class="icon ion-star" ng-repeat="star in CtrlBureaucracyOperator.numberToArray(CtrlBureaucracyOperator.selfInfo.playerPrestige) track by $index"></i>
+				</div>
+
+				<div class="classes" id="class-selection">
+					<div class="col-md-12" id="class-selection-choices">
+						<div class="row row-centered">
+
+							<div
+								class="class-choice soldier noselect col-md-4 col-sm-3 col-xs-12"
+								ng-click="CtrlBureaucracyOperator.selectClass(2)"
+								ng-class="{'selected': (CtrlBureaucracyOperator.currentSelectedClass === 2)}"
+								ng-if="::(CtrlBureaucracyOperator.selfInfo.contractType !== 1)"
+							ng-cloak>
+								<div class="hexagon-container">
+									<div class="hexagon">
+										<div class="in1"><div class="in2">
+											<div class="class-icon"></div>
+										</div></div>
+									</div>
+								</div>
+								<div class="title">Soldier</div>
+								<hr>
+								<div class="description">
+									Soldiers - although not an active diplomatic force - play a vital role in the battlefield, utilizing their skills and equipment in order to ensure victory for their Outfits. Recommended for players of all backgrounds.
+								</div>
+								<div class="info">
+									Your only duty is to fight. Find an Outfit that fits your standards, and jump straight into the action.
+								</div>
+							</div>
+							<div
+								class="class-choice freelancer noselect col-md-4 col-sm-4 col-xs-12"
+								ng-click="CtrlBureaucracyOperator.selectClass(3)"
+								ng-class="{'selected': (CtrlBureaucracyOperator.currentSelectedClass === 3)}"
+								ng-if="::(CtrlBureaucracyOperator.selfInfo.contractType !== 2)"
+							ng-cloak>
+								<div class="hexagon-container">
+									<div class="hexagon">
+										<div class="in1"><div class="in2">
+											<div class="class-icon"></div>
+										</div></div>
+									</div>
+								</div>
+								<div class="title">Freelancer</div>
+								<hr>
+								<div class="description">
+									The wild cards of the front, Freelancers aren't attached or commited to any cause, Outfit, or even any particular role. Usually specializing in a specific skill-set, they work on a contract-to-contract basis, always looking to upgrade their skills and improve their equipment.
+								</div>
+								<div class="info">
+									You will receive a small amount of credit, enough to purchase your basic equipment and get ready for your first contract. After that, it's all up to you.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="confirm-button fade-animation-fast">
+				<a
+					ng-click="CtrlBureaucracyOperator.confirmClassChange()"
+					class="section-button big animated"
+					role="button"
+					a-disabled="(CtrlBureaucracyOperator.currentSelectedClass === -1)"
+				>
+					<ul>
+						<li><i class="icon ion-checkmark"></i></li>
+						<li>CONFIRM</li>
+					</ul>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

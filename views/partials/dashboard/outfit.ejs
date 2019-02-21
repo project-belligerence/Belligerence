@@ -8,6 +8,7 @@
 				class="icon ion-help-circled helper small"
 				popover-trigger="'mouseenter'"
 				popover-class="tooltip"
+				popover-placement="bottom"
 				uib-popover="Choose your Outfit Emblem. Mobile users can swipe left/right to switch screens."
 			></i>
 		</div>
@@ -146,9 +147,9 @@
 					class="icon ion-star"
 					popover-trigger="'mouseenter'"
 					popover-class="tooltip"
-					uib-popover="Prestige points"
+					uib-popover="Prestige rank"
 				></i>
-				<span ng-bind="::CtrlDashboard.pmcInfo.prestige"></span>
+				<span ng-bind="::(CtrlDashboard.pmcInfo.prestige)"></span>
 			</li>
 		</ul>
 	</div>
@@ -225,7 +226,7 @@
 
 						Example of tags:
 						<ul class="tags-example">
-							<li ng-repeat="tag in ['Tactical', 'Casual', 'Teamwork']" ng-click="CtrlDashboard.addTagPMC(tag)">{{tag}}</li>
+							<li ng-repeat="tag in ::['Tactical', 'Casual', 'Teamwork']" ng-click="CtrlDashboard.addTagPMC(tag)" ng-bind="::(tag)"></li>
 						</ul>
 					</div>
 				</div>
@@ -242,10 +243,20 @@
 							></i>
 						</div>
 
-						<div
-							editable-text="CtrlDashboard.pmcInfo.location"
-							on-change="CtrlDashboard.editFieldPMC('location', value)"
-						></div>
+						<div class="dropdown-section">
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<span ng-bind="CtrlDashboard.regionOptions[CtrlDashboard.pmcInfo.location]"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlDashboard.editOutfitRegion($index)" ng-repeat="item in ::(CtrlDashboard.regionOptions) track by $index">
+										<a href="#" ng-click="scope = item">
+											<span ng-bind="::(CtrlDashboard.regionOptions[$index])"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 
 					<div class="editable-field">
@@ -259,9 +270,9 @@
 							></i>
 						</div>
 
-						<div class="tier-item" ng-repeat="tier in CtrlDashboard.pmcInfo.tier_names">
+						<div class="tier-item" ng-repeat="tier in (CtrlDashboard.pmcInfo.tier_names) track by $index">
 							<div class="tier-meta">
-								Tier <span class="number">{{ $index }}</span>
+								Tier <span class="number" ng-bind="::($index)"></span>
 								<i class="icon ion-arrow-right-b"></i>
 							</div>
 							<div
@@ -293,10 +304,104 @@
 					class="icon ion-help-circled helper small"
 					popover-trigger="'mouseenter'"
 					popover-class="tooltip"
-					uib-popover="Allow unemployed Operators to apply to join your Outfit."
+					uib-popover="Allow unemployed Soldiers to apply to join your Outfit."
 				></i>
 			</div>
 		</div>
 	</form>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="editable-field">
+				<div class="meta">
+					<span>Privacy</span>
+					<i
+						class="icon ion-help-circled helper small"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Define what info will be hidden from certain people."
+					></i>
+				</div>
+
+				<div class="privacy-settings">
+					<h3>Visible to:</h3>
+
+					<div class="dropdown-section">
+						<div class="dropdown">
+							<button
+								class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown"
+								ng-class="{ 'btn-muted': (CtrlDashboard.visibilitySettings[CtrlDashboard.currentOutfitPrivacy.selectedVisibilityIndex].value === CtrlDashboard.pmcInfo.private_visibility), 'btn-warning': (CtrlDashboard.visibilitySettings[CtrlDashboard.currentOutfitPrivacy.selectedVisibilityIndex].value !== CtrlDashboard.pmcInfo.private_visibility) }"
+							>
+								<span ng-bind="CtrlDashboard.visibilitySettings[CtrlDashboard.currentOutfitPrivacy.selectedVisibilityIndex].name"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li ng-click="(CtrlDashboard.currentOutfitPrivacy.selectedVisibilityIndex = $index)" ng-repeat="item in ::(CtrlDashboard.visibilitySettings) track by $index">
+									<a href="#" ng-click="scope = item.value">
+										<span ng-bind="::item.name"></span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<a
+						ng-click="CtrlDashboard.resetAllPrivacy('outfit')"
+						class="section-button warning medium animated pull-right"
+						role="button"
+					>
+						<ul>
+							<li><i class="icon ion-eye"></i></li>
+							<li>Reset All</li>
+						</ul>
+					</a>
+
+					<span class="current-privacy" ng-bind="CtrlDashboard.visibilitySettings[CtrlDashboard.currentOutfitPrivacy.selectedVisibilityIndex].hint"></span>
+
+					<h3>Private fields:</h3>
+
+					<ul class="settings-list">
+						<li class="setting noselect"
+							ng-repeat="setting in ::(CtrlDashboard.outfitPrivacySettings) track by setting.value"
+							ng-click="CtrlDashboard.toggleOutfitPrivacySetting(setting.value)"
+							ng-class="{'selected': CtrlDashboard.inArray(setting.value, CtrlDashboard.currentOutfitPrivacy.currentPrivacySettings), 'active': (CtrlDashboard.inArray(setting.value, CtrlDashboard.pmcInfo.private_fields) && CtrlDashboard.inArray(setting.value, CtrlDashboard.currentOutfitPrivacy.currentPrivacySettings))}"
+						>
+							<i class="icon info" ng-class="::(setting.icon)"></i>
+							<span ng-bind="::(setting.name)"></span>
+							<i
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="{{::setting.hint}}"
+								class="icon ion-help-circled hint"
+							>
+							</i>
+						</li>
+					</ul>
+
+					<div class="save flip-animation" ng-if="CtrlDashboard.checkForOutfitChanges()" ng-cloak>
+						<span>You have unsaved changes.</span>
+						<a
+							ng-click="CtrlDashboard.undoPrivacyChanges('outfit')"
+							class="section-button warning medium animated"
+							role="button"
+						>
+							<ul>
+								<li><i class="icon ion-reply"></i></li>
+								<li>Undo</li>
+							</ul>
+						</a>
+						<a
+							ng-click="CtrlDashboard.saveOutfitPrivacySettings()"
+							class="section-button medium animated"
+							role="button"
+						>
+							<ul>
+								<li><i class="icon ion-checkmark"></i></li>
+								<li>Save</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>

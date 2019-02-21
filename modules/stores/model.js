@@ -17,13 +17,17 @@
 					type: DataTypes.TEXT,
 					field: 'description'
 				},
-				pictureField: {
-					type: DataTypes.STRING,
-					field: 'status'
-				},
 				typesField: {
 					type: DataTypes.STRING,
-					field: 'types'
+					field: 'types',
+					get: function() {
+						var API = require('./../../routes/api.js');
+						return API.methods.getPseudoArray(this.getDataValue('typesField'), true);
+					},
+					set: function(val) {
+						var API = require('./../../routes/api.js');
+						this.setDataValue('typesField', API.methods.setPseudoArray(val));
+					}
 				},
 				prestigeRequired: {
 					type: DataTypes.INTEGER,
@@ -50,13 +54,29 @@
 					},
 					set: function(val) {
 						var API = require('./../../routes/api.js');
-						this.setDoublePseudoArray('blacklistedUpgradesField', API.methods.setPseudoArray(val));
+						this.setDataValue('blacklistedUpgradesField', API.methods.setDoublePseudoArray(val));
 					}
 				},
 				statusField: {
 					type: DataTypes.INTEGER,
 					field: 'status',
 					defaultValue: 0
+				},
+				resupplyDay: {
+					type: DataTypes.STRING,
+					field: 'resupply',
+					get: function() {
+						var API = require('./../../routes/api.js'),
+							_ = require("lodash"),
+							rVar = _.sortBy(API.methods.getPseudoArray(this.getDataValue('resupplyDay'), true));
+						return rVar;
+					},
+					set: function(val) {
+						var API = require('./../../routes/api.js'),
+							_ = require("lodash");
+						var cVal = _.sortBy(val);
+						this.setDataValue('resupplyDay', API.methods.setPseudoArray(cVal));
+					}
 				},
 				hashField: {
 					type: DataTypes.STRING,
@@ -107,6 +127,7 @@
 										actualDiscount.push(owned_stock[j].discountField);
 									}
  								}
+
 								if (!API.methods.validate(req, res, [foundProduct], config.messages().modules.stores.item_not_owned_specific(currentProduct.nameField))) { return 0; }
 							}
 

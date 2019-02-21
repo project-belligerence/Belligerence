@@ -20,6 +20,41 @@
 			};
 		}];
 
+		var dropdownCheckbox = ['$timeout', 'apiServices', function($timeout, apiServices) {
+			return {
+				restrict: 'E',
+				scope: { buttonName: "=", options: "=", model: "=", onChange: "=", doReset: "=?" },
+				link: link,
+				templateUrl: 'directive/dropdownCheckbox.ejs'
+			};
+
+			function link(scope, el, attrs) {
+				scope.displayMenu = true;
+				scope.innerModel = {};
+
+				scope.addToModel = function(v) {
+					apiServices.switchFromArray(v, scope.model);
+					if (scope.onChange) scope.onChange();
+				};
+
+				scope.doReset = function() { scope.innerModel = {}; };
+
+				scope.displayMenuFunction = function() {
+					scope.displayMenu = !(scope.displayMenu);
+					var checklistEl = $(el).find(".checklist");
+					if (scope.displayMenu) {
+						checklistEl.css({display: "inline-block"});
+						$timeout(100).then(function(){ checklistEl.css({opacity: 1}); });
+					} else {
+						checklistEl.css({opacity: 0});
+						$timeout(100).then(function(){ checklistEl.css({display: "none"}); });
+					}
+				};
+				scope.displayMenuFunction();
+				scope.options.forEach(function(o, i) { scope.innerModel['value' + (o.data || i)] = (apiServices.inArray((o.data || i), scope.model)); });
+			}
+		}];
+
 		var createRadialMenu = ['$timeout', '$location', 'apiServices' , function($timeout, $location, apiServices) {
 			return {
 				restrict: 'E',
@@ -45,10 +80,19 @@
 					isOpen = !(scope.options.toggleOnClick),
 					subItems = [],
 					disabledItems = [],
-					argPos = (scope.arguments.offset || {top: 0, left: 0})
+					argPos = (scope.arguments.offset ? {
+						top: (scope.arguments.offset.top || 0),
+						left: (scope.arguments.offset.left),
+						distance: (scope.arguments.offset.distance || 40)
+					} : { top: 0, left: 0, distance: 0 })
 				;
 
 				scope.newList = apiServices.cloneValue(scope.options.items);
+
+				if (scope.arguments.tier >= 5) {
+					var filteredFields = ["Demote", "Promote"];
+					scope.newList = _.filter(scope.newList, function(o) { return (_.indexOf(filteredFields, o.content) <= -1); });
+				}
 
 				scope.buttonInteraction = buttonInteraction;
 
@@ -74,7 +118,6 @@
 							liRoute = scope.newList[itemID].route;
 
 						if (liFunction) scope.newList[itemID].function(scope.arguments);
-						// if (liRoute) $location.path(liRoute(scope.arguments));
 					}
 				}
 
@@ -95,7 +138,7 @@
 								var liPad = ((liIcon.length === 0) ? 0 : 40),
 									nWidth = ((parseInt($(liEl2).outerWidth(), 10) + liPad)),
 									nHeight = parseInt($(liEl2).outerHeight(), 10);
-								liElObj.css('width', nWidth);
+								liElObj.css('width', "100%");
 								liElObj.css('height', nHeight);
 							});
 
@@ -106,7 +149,7 @@
 								if (ulMaxWidth > 45) ulMaxWidth = ((ulMaxWidth / 10));
 								ulObj.css({
 									'top': (thisTop - 50),
-									'left': (thisLeft + (ulMaxWidth)),
+									'left': (thisLeft + (ulMaxWidth) - 10),
 									'width': elParent.outerWidth()
 								});
 							}
@@ -151,7 +194,7 @@
 						jEL.find("li").each(function(ix, liEl) {
 							var
 								angle = ((ix * (360/totalItems)) + 270),
-								distance = ((eHeight + 40) / 2),
+								distance = ((eHeight + (argPos.distance)) / 2),
 
 								finalLeft = (distance * Math.cos(angle.toRad())),
 								finalTop = (((eHeight / 2) + 40) + distance * Math.sin(angle.toRad()))
@@ -200,7 +243,8 @@
 
 		var directives = {
 			ngHTMLFunction: ngHTMLFunction,
-			createRadialMenu: createRadialMenu
+			createRadialMenu: createRadialMenu,
+			dropdownCheckbox: dropdownCheckbox
 		};
 
 		return directives;

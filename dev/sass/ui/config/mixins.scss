@@ -22,9 +22,44 @@ $breakpoints: (
 	'large':  (min-width : 980px)
 );
 
+$breakpoints-min: (
+	'tiny':   (min-width : 320px),
+	'small':  (min-width : 361px),
+	'medium': (min-width : 768px),
+	'large':  (min-width : 980px)
+);
+
+$breakpoints-max: (
+	'tiny':   (max-width : 320px),
+	'small':  (max-width : 361px),
+	'medium': (max-width : 768px),
+	'large':  (max-width : 980px),
+	'small-tiny': (max-width : 361px)
+);
+
 @mixin breakpoint($name) {
 	@if map-has-key($breakpoints, $name) {
 		@media only screen and #{inspect(map-get($breakpoints, $name))} {
+			@content;
+		}
+	} @else {
+		@warn "Couldn't find a breakpoint named `#{$name}`.";
+	}
+}
+
+@mixin breakpoint-min($name) {
+	@if map-has-key($breakpoints-min, $name) {
+		@media only screen and #{inspect(map-get($breakpoints-min, $name))} {
+			@content;
+		}
+	} @else {
+		@warn "Couldn't find a breakpoint named `#{$name}`.";
+	}
+}
+
+@mixin breakpoint-max($name) {
+	@if map-has-key($breakpoints-max, $name) {
+		@media only screen and #{inspect(map-get($breakpoints-max, $name))} {
 			@content;
 		}
 	} @else {
@@ -73,6 +108,21 @@ $breakpoints: (
 	#{$property}: #{$value};
 }
 
+@mixin keyframes($name) {
+	@-webkit-keyframes #{$name} {
+		@content
+	}
+	@-moz-keyframes #{$name} {
+		@content
+	}
+	@-ms-keyframes #{$name} {
+		@content
+	}
+	@keyframes #{$name} {
+		@content
+	}
+}
+
 /*			Generate state properties */
 
 @mixin hafStates($list) {
@@ -95,6 +145,10 @@ $breakpoints: (
 			}
 		}
 	}
+}
+
+@mixin gridSize($size_x, $size_y, $mX: 0, $gs: 50) {
+	@include size((($gs*$size_x)+ $mX)+px,($gs*$size_y)+px);
 }
 
 /*			Font-Factor */

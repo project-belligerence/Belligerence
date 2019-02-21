@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	TemplateServicesFunction.$inject = [];
+	TemplateServicesFunction.$inject = ["$timeout", "apiServices"];
 
-	function TemplateServicesFunction() {
+	function TemplateServicesFunction($timeout, apiServices) {
 
 		var methods = {
 			TemplateFunction: TemplateFunction

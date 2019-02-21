@@ -32,10 +32,10 @@
 					'ng-file-upload',
 					'ng-tags-input',
 					'angular-timeago',
-
-					'validator',
-					'babel-polyfill',
-					'oidc-client'
+					'angular-bootstrap-colorpicker',
+					'angularjs-slider',
+					'angular-websocket',
+					'validator'
 				]
 			},
 			output: {
@@ -58,24 +58,24 @@
 					"window.jQuery":"jquery",
 					_: "lodash",
 					validator: "validator",
-					oidc: "oidc-client"
+					masonry: "masonry-layout",
+					SimpleCryptoJS: "simple-crypto-js",
+					matrixTransform: "2d-css-matrix-parse",
+					moment: "moment",
+					webNotificationAPI: "simple-web-notification",
+					AOS: "aos"
 				}),
 				new webpack.optimize.CommonsChunkPlugin("vendors", "[name].bundle.js", Infinity)
+
 				// new BundleAnalyzerPlugin()
 			],
   		}
   	;
 
 	buildConfig.entry.vendors.push('bootstrap/dist/js/bootstrap.min');
-	// buildConfig.entry.vendors.push('bootstrap/dist/js/npm');
+	buildConfig.entry.vendors.push('angular-ui-bootstrap/dist/ui-bootstrap-tpls');
 
-  	buildConfig.entry.vendors.push('jquery/dist/jquery');
-
-  	buildConfig.entry.vendors.push('lodash/lodash.min');
-
-  	buildConfig.entry.vendors.push('angular-ui-bootstrap/dist/ui-bootstrap-tpls');
-
-	if (true) buildConfig.plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyConfig));
+	if (!(debug)) buildConfig.plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyConfig));
 
 	module.exports = buildConfig;
 

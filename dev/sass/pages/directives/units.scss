@@ -1,76 +1,222 @@
 
 #units-container {
-	@include factor-property(min-height, 150);
 	$transition_time: 0.2s;
 
 	.tiers-list {
 		border-bottom: 1px solid $main_color;
+		@include factor-property(padding-bottom, 5);
 		@include factor-property(margin-bottom, 5);
 	}
 
 	.units-list {
+		position: relative;
 		text-align: center;
+
+		&.simple {
+			text-align: left;
+			.unit { @include factor-property(margin-right, 5); }
+		}
+
+		.stats-container-1 {
+			z-index: 50;
+			bottom: 100%;
+			height: 10px;
+			width: inherit;
+			position: relative;
+
+			.stats-container-2 {
+				width: 100%;
+				position: absolute;
+				z-index: 15;
+
+				top: 3px;
+				left: 2px;
+
+				padding: 0 factor(1);
+
+				.stat {
+					font-family: $main_font;
+					padding: factor(1);
+					background-color: $main_color;
+					color: #ddd;
+					display: inline-block;
+					float: left;
+					font-weight: 800;
+					@include font-size(factor(2));
+					line-height: 0;
+					letter-spacing: -1px;
+
+					&.percentage { float: right; }
+
+					&, .icon { cursor: help; }
+				}
+			}
+		}
+
 		.unit {
 			display: inline-block;
 			text-align: center;
+			vertical-align: top;
+			@include factor-property(margin-right, 2);
+			width: 130px;
+
+			&.neutral {
+				$color: #ddd;
+				$color_dark: #aaa;
+				$border_style: 5px solid $color;
+
+				.unit-avatar .frame { border-left: $border_style; }
+				.info .unit-meta-bar { background-color: $color; color: #111; text-shadow: none; }
+				&:hover { .info .unit-meta-bar { background-color: $color_dark !important; color: #111 !important; }}
+			}
+
+			&.blufor {
+				$color: $blufor_color;
+				$color_dark: $blufor_color_dark;
+				$border_style: 5px solid $color;
+
+				.unit-avatar .frame { border-left: $border_style; }
+				.info .unit-meta-bar { background-color: $color; }
+				&:hover { .info .unit-meta-bar { background-color: $color_dark !important; }}
+			}
+
+			&.blufor {
+				$color: $blufor_color;
+				$color_dark: $blufor_color_dark;
+				$border_style: 5px solid $color;
+
+				.unit-avatar .frame { border-left: $border_style; }
+				.info .unit-meta-bar { background-color: $color; }
+				&:hover { .info .unit-meta-bar { background-color: $color_dark !important; }}
+			}
+			&.opfor {
+				$color: $opfor_color;
+				$color_dark: $opfor_color_dark;
+				$border_style: 5px solid $color;
+
+				.unit-avatar .frame { border-left: $border_style; }
+				.info .unit-meta-bar { background-color: $color; }
+				&:hover { .info .unit-meta-bar { background-color: $color_dark !important; }}
+			}
+			&.indfor {
+				$color: $indfor_color;
+				$color_dark: $indfor_color_dark;
+				$border_style: 5px solid $color;
+
+				.unit-avatar .frame { border-left: $border_style; }
+				.info .unit-meta-bar { background-color: $color; }
+				&:hover { .info .unit-meta-bar { background-color: $color_dark !important; }}
+			}
+
+			&.soldier {
+				width: unset;
+				.unit-avatar { @include size(130px); }
+			}
+
+			&.interest {
+				width: 150px;
+				.unit-avatar { @include size(150px); }
+			}
+
+			&.outfit {
+				width: 200px;
+				.unit-avatar { @include size(200px); }
+				.info .unit-meta-bar {
+					@include font-size(factor(3));
+					line-height: 26px;
+				}
+			}
 
 			.info {
-				@include factor-property(margin-bottom, 5);
-				@include factor-property(margin-right, 5);
+				max-width: 100%;
+				text-align: center;
+				position: relative;
 
-				.meta {
+				@include factor-property(margin-top, 1);
+
+				.unit-meta-bar {
+					display: inline-block;
 					@include transition(all $transition_time);
-					@include factor-property(min-width, 28);
-					@include factor-property(max-width, 40);
+
+					background-color: $main_color;
+					color: #ddd;
+
+					font-family: $main_font;
+					@include font-size(factor(2.5));
+					padding: factor(1);
+					@include factor-property(margin-bottom, 1);
+					letter-spacing: -1px;
+					line-height: 20px;
+
+					width: 100%;
+					margin-right: auto;
+					margin-left: auto;
+
+					text-shadow: 0px 0px 5px #000, 0px 0px 10px #000;
+				}
+
+				.tier-container {
+					@include font-size(factor(3));
+					position: relative;
+					text-align: center;
+					height: 20px;
+
+					.tier {
+						text-align: center;
+						@include font-size(factor(2.5));
+					}
 				}
 
 				.since {
-					@include font-size(factor(2.5));
+					@include font-size(factor(2));
 					font-style: italic;
+					display: block;
+					@include factor-property(line-height, 3);
 				}
 			}
 
 			.unit-avatar {
 				@include transition(all $transition_time);
-				height: 170px;
 				display: block;
+				position: relative;
+
+				height: 130px;
+
+				margin-right: auto;
+				margin-left: auto;
+
+				.frame {
+					margin-right: auto;
+					margin-left: auto;
+
+					box-shadow: 0px 0px 20px #000;
+				}
 
 				.avatar-radial-container {
+					cursor: pointer;
+					z-index: 40;
 					display: inline-block;
 					top: 0;
+					left: 0;
 
-					height: 150px;
-					width: 150px;
+					width: inherit;
+					height: inherit;
+					position: absolute;
 
-					float: left;
-
-					&.large {
-						height: 200px;
-						width: 200px;
-					}
+					&.active { z-index: 60; }
 				}
-			}
-
-			&:hover {
-				cursor: pointer;
 			}
 
 			&:hover, .active {
-				.meta {
+				.unit-meta-bar {
 					background-color: #ddd !important;
-					color: $main_color !important;
+					color: #ddd !important;
 				}
 
-				// .circle .medium {
-				// 	width: 160px; height: 160px;
-				// 	@include prefix(transform, translate(-5px, -5px));
-				// }
-
-				.info .meta span {}
+				.info .unit-meta-bar span {}
 			}
 
 			.active {
-				cursor: zoom-out;
 				.circle .medium {
 					width: 130px; height: 130px;
 					@include prefix(transform, translate(+10px, +10px));

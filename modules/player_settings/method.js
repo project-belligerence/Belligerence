@@ -9,6 +9,13 @@
 	exports.removeAllowedMachine = removeAllowedMachine;
 	exports.getSettingSelf = getSettingSelf;
 	exports.updateSettingSelf = updateSettingSelf;
+	exports.getMachineName = getMachineName;
+
+	function getMachineName(req, res) {
+		var os = require("os");
+		var thing = (req.headers['x-forwarded-for'] || req.connection.remoteAddress);
+		API.methods.sendResponse(req, res, true, "", thing);
+	}
 
 	function updateSettingSelf(req, res) {
 		if (!API.methods.validateParameter(req, res, [[req.body.require_machine_validation, 'boolean']])) { return 0; }
@@ -35,15 +42,17 @@
 			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
 
 			entry.getSettings(function(items) {
-				API.methods.sendResponse(req, res, true, "", items);
+				var filteredItems = require('lodash').omit(items.dataValues, ["id", "createdAt", "updatedAt"]);
+				filteredItems.validMachines = API.methods.getPseudoArray(filteredItems.validMachines);
+				API.methods.sendResponse(req, res, true, "", filteredItems);
 			});
 		});
 	}
 
 	function addAllowedMachine(req, res) {
+		var os = require("os");
 
-		if (!API.methods.validateParameter(req, res, [[req.body.machine, 'string']], true)) { return 0; }
-
+		req.body.machine = os.hostname();
 		req.body.machine = req.body.machine.toUpperCase();
 
 		PlayerModel.sync({force: false}).then(function() {
@@ -69,9 +78,9 @@
 	}
 
 	function removeAllowedMachine(req, res) {
+		var os = require("os");
 
-		if (!API.methods.validateParameter(req, res, [[req.body.machine, 'string']], true)) { return 0; }
-
+		req.body.machine = os.hostname();
 		req.body.machine = req.body.machine.toUpperCase();
 
 		PlayerModel.sync({force: false}).then(function() {

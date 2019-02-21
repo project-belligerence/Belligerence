@@ -20,6 +20,15 @@
 			};
 		}];
 
+		function LastRepeatFunction() {
+			function linkFunction(scope, element, attrs) { if (scope.$parent.$last) { scope.callback(); } }
+			return {
+				scope: { callback: "&lastRepeatFunction" },
+				restrict: 'A',
+				link: linkFunction
+			};
+		}
+
 		function aDisabled() {
 			return {
 				compile: function(tElement, tAttrs, transclude) {
@@ -120,6 +129,7 @@
 
 		var directives = {
 			ngHTMLFunction: ngHTMLFunction,
+			LastRepeatFunction: LastRepeatFunction,
 			placeholderImgFunction: placeholderImgFunction,
 			acBackgroundImageFunction: acBackgroundImageFunction,
 			aDisabled: aDisabled

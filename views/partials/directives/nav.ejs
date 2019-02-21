@@ -4,100 +4,166 @@
 		<div class="container-fluid">
 			<div id="nav" class="row">
 
-				<div id="side-menu"> <!--  -->
-					<div id="expand-menu" ng-click="NavController.toggleNavMode()">
+				<div id="side-menu">
+
+					<div id="expand-menu">
 						<div id="nav-logo">
-							<img src="images/belligerence-logo-small-inv.png" />
+							<a ui-sref="app.public.frontpage">
+								<img src="images/belligerence-logo-small-inv.png" />
+							</a>
 						</div>
-						<div id="expand-icon">
+						<div id="expand-icon" ng-click="NavController.toggleNavMode()">
 							<i class="ion-navicon-round"></i>
 						</div>
 					</div>
 
-					<div id="menu-items" class="hide-mobile fade-animation-fast" ng-if="NavController.displayIcons" ng-cloak>
-						<div class="menu-item" ng-repeat="menuItem in NavController.expandedMenuItems">
-							<i class="icon" ng-class="menuItem.icon"></i>
-							<span class="text" ng-bind="::menuItem.name"></span>
+					<div id="menu-items" class="hide-mobile fade-animation-fast" ng-if="(NavController.displayIcons)" ng-cloak>
+						<div
+							class="menu-item"
+							ng-repeat="menuItem in NavController.expandedMenuItems track by $index"
+							ng-click="(!(menuItem.menu) ? NavController.setNavMenuState(1) : NavController.extendMenu($event))"
+						>
+							<a class="menu-item-anchor" href="{{::(menuItem.route || '#')}}">
+								<i class="icon" ng-class="::(menuItem.icon)"></i>
+								<span class="text" ng-bind="::(menuItem.name)"></span>
+
+								<i class="menu-expand-arrow icon ion-arrow-down-b" ng-if="::(menuItem.menu)"></i>
+
+								<div class="menu-item-submenu" ng-if="::(menuItem.menu)" ng-cloak>
+									<div
+										class="submenu-item" ng-class="::(subMenu.class)"
+										ng-repeat="subMenu in menuItem.menu track by $index"
+										ng-click="NavController.setNavMenuState(1)"
+									>
+										<a
+											class="submenu-item-anchor"
+											ui-sref="{{::(NavController.getUIRoute(subMenu))}}"
+										>
+											<i class="icon" ng-class="::subMenu.icon"></i>
+											<span class="text" ng-bind="::subMenu.name"></span>
+										</a>
+									</div>
+								</div>
+							</a>
 						</div>
 					</div>
 				</div>
 
-				<ul class="fade-animation-fast" id="nav-icons" ng-if="(NavController.displayIcons) && (NavController.isLogged)" ng-cloak>
+				<ul class="fade-animation-fast" id="nav-icons" ng-if="(NavController.displayIcons) && (NavController.isLogged)" ng-class="(NavController.applyControlledClass(NavController.playerInfo.absoluteSide))" ng-cloak>
 					<li class="nav-icon">
 						<div class="dropdown">
 							<div class="dropdown-toggle" data-toggle="dropdown">
 								<div class="square">
-									<div class="square-icon" ac-background-image background-image="images/avatars/players/main_{{NavController.playerInfo.hashField}}.jpg"></div>
+									<div class="square-icon" ac-background-image background-image="images/avatars/players/main_{{::(NavController.playerInfo.hashField)}}.jpg"></div>
 								</div>
 								<div class="carat">
 									<i class="icon ion-ios-person"></i>
 									<i class="icon ion-arrow-down-b"></i>
 								</div>
 							</div>
-							<ul class="dropdown-menu">
-								<div ng-repeat="item in NavController.dropdownOptions.player">
-									<li ui-sref="{{::item.route}}" ng-if="!(item.separator)" ng-cloak>
-										<i class="icon" ng-class="item.icon"></i>
-										{{::item.text}}
-									</li>
-									<li role="separator" class="divider" ng-if="(item.separator)" ng-cloak></li>
+							<ul class="dropdown-menu dropdown-menu-right-sm">
+								<div ng-class="{'is-separator': (item.separator)}" ng-repeat="item in NavController.dropdownOptions.player track by $index">
+									<a ui-sref="{{::(NavController.getUIRoute(item))}}" ng-if="::(!(item.separator))" ng-cloak>
+										<li class="menu-item" ng-class="{'sub-menu': (item.sub)}">
+											<i class="icon" ng-class="::(item.icon)"></i>
+											<span class="menu-text" ng-bind="::(item.text)"></span>
+										</li>
+									</a>
+									<li role="separator" class="divider" ng-if="::(item.separator)" ng-cloak></li>
 								</div>
 							</ul>
 						</div>
 					</li>
-					<li class="nav-icon" ng-if="(NavController.playerInfo.PMC != undefined)" ng-cloak>
+					<li class="nav-icon" ng-if="::(NavController.playerInfo.PMC)" ng-cloak>
 						<div class="dropdown">
 							<div class="dropdown-toggle" data-toggle="dropdown">
 								<div class="square">
-									<div class="square-icon" ac-background-image background-image="images/avatars/pmc/main_{{NavController.playerInfo.PMC.hashField}}.jpg"></div>
+									<div class="square-icon" ac-background-image background-image="images/avatars/pmc/main_{{::(NavController.playerInfo.PMC.hashField)}}.jpg"></div>
 								</div>
 								<div class="carat">
 									<i class="icon ion-ios-people"></i>
 									<i class="icon ion-arrow-down-b"></i>
 								</div>
 							</div>
-							<ul class="dropdown-menu">
-								<div ng-repeat="item in NavController.dropdownOptions.pmc">
-									<li ui-sref="{{::item.route}}" ng-if="!(item.separator)" ng-cloak>
-										<i class="icon" ng-class="item.icon"></i>
-										{{::item.text}}
-									</li>
-									<li role="separator" class="divider" ng-if="(item.separator)" ng-cloak></li>
+							<ul class="dropdown-menu dropdown-menu-right-sm">
+								<div ng-class="{'is-separator': (item.separator)}" ng-repeat="item in NavController.dropdownOptions.pmc track by $index">
+									<a ui-sref="{{::(NavController.getUIRoute(item))}}" ng-if="::(!(item.separator))" ng-cloak>
+										<li class="menu-item" ng-class="{'sub-menu': (item.sub)}">
+											<i class="icon" ng-class="::(item.icon)"></i>
+											<span class="menu-text" ng-bind="::(item.text)"></span>
+										</li>
+									</a>
+									<li role="separator" class="divider" ng-if="::(item.separator)" ng-cloak></li>
 								</div>
 							</ul>
 						</div>
 					</li>
-					<li class="nav-icon single-icon nav-mail-icon">
+					<li class="nav-icon single-icon nav-mail-icon" ng-class="NavController.alertIcon.class">
 						<div class="dropdown">
 							<div class="dropdown-toggle" data-toggle="dropdown">
-								<i class="icon ion-email"></i>
-								<div class="mail-number">{{NavController.totalMessages}}</div>
+								<div class="alert-number-container" ng-show="(NavController.totalAlerts > 0)">
+									<div class="alert-number" ng-bind="NavController.totalAlerts"></div>
+								</div>
+								<i class="icon" ng-class="NavController.alertIcon.icon"></i>
 							</div>
-							<ul class="dropdown-menu">
-								<div ng-repeat="item in NavController.dropdownOptions.mail">
+							<ul class="dropdown-menu dropdown-menu-right">
+								<div ng-class="{'is-separator': (item.separator)}" ng-repeat="item in NavController.dropdownOptions.alerts track by $index">
+									<a ui-sref="{{::(NavController.getUIRoute(item))}}" ng-if="::((!(item.separator)) && ((item.if === undefined ? true : item.if)))" ng-cloak>
+										<li class="menu-item" ng-class="{'sub-menu': (item.sub)}" ng-click="item.doFunction()" ng-if="::(item.display ? item.display() : true)">
+											<i class="icon" ng-class="::(item.icon)"></i>
+											<span class="menu-text" ng-bind="::(item.text)"></span>
 
-									<a href="{{(item.url || '#')}}" ng-if="!(item.separator)" ng-cloak>
-										<li ng-click="item.doFunction()">
-											<i class="icon" ng-class="item.icon"></i>
-											<span ng-bind="::item.text"></span>
+											<div class="inv-number" ng-if="(item.value)">
+												<span class="value" ng-class="[{'invisible': (item.value <= 0)}, item.class]" ng-bind="(item.value)"></span>
+											</div>
 
-											<div class="pull-right" ng-if="item.value !== undefined">
-												<span class="value" ng-class="{'invisible': (item.value <= 0)}" ng-bind="item.value"></span>
+											<div class="inv-number stacked-list" ng-if="(item.values)">
+												<div class="item" ng-repeat="subItem in item.values track by $index" ng-if="(subItem.value > 0)" ng-cloak>
+													<span class="value" ng-class="::(subItem.class)" ng-bind="(subItem.value)"></span>
+												</div>
 											</div>
 										</li>
 									</a>
-
-									<li role="separator" class="divider" ng-if="(item.separator)" ng-cloak></li>
+									<li role="separator" class="divider" ng-if="::(item.separator)" ng-cloak></li>
 								</div>
 							</ul>
 						</div>
 					</li>
-					<li class="nav-icon single-icon logout">
+					<li class="nav-icon single-icon logout" ng-class="NavController.renderEtcMenu().color">
 						<div class="dropdown">
 							<div class="dropdown-toggle" data-toggle="dropdown">
-								<i class="icon ion-more"></i>
+								<div class="alert-number-container" ng-show="(NavController.currentCart.length > 0)">
+									<div class="alert-number" ng-bind="NavController.currentCartSize" ng-cloak></div>
+								</div>
+								<i class="icon" ng-class="NavController.renderEtcMenu().class"></i>
 							</div>
-							<ul class="dropdown-menu go-right">
+							<ul class="dropdown-menu dropdown-menu-right">
+								<a ui-sref="app.admin.menu({menu: 'main'})" ng-if="::(NavController.playerInfo.playerPrivilege <= 3)" ng-cloak>
+									<li>
+										<i class="icon ion-star"></i>
+										Admin Menu
+									</li>
+								</a>
+
+								<div class="is-separator" ng-if="::(NavController.playerInfo.playerPrivilege <= 3)" ng-cloak>
+									<li role="separator" class="divider"></li>
+								</div>
+
+								<div ng-if="(NavController.currentCart.length > 0)" ng-cloak>
+									<a ui-sref="app.private.checkout">
+										<li>
+											<i class="icon ion-android-cart"></i>
+											Checkout
+
+											<div class="inv-number" ng-if="(NavController.currentCart.length > 0)" ng-cloak>
+												<span class="value" ng-bind="NavController.currentCartSize"></span>
+											</div>
+										</li>
+									</a>
+									<div class="is-separator">
+										<li role="separator" class="divider"></li>
+									</div>
+								</div>
 								<li ng-click="NavController.askLogout()">
 									<i class="icon ion-log-out"></i>
 									Sign out
@@ -110,19 +176,15 @@
 					<li class="nav-icon single-icon logout">
 						<div class="dropdown">
 							<div class="dropdown-toggle" data-toggle="dropdown">
-								<i class="icon ion-more"></i>
+								<i class="icon" ng-class="NavController.renderEtcMenu().class"></i>
 							</div>
-							<ul class="dropdown-menu go-right">
-								<a href="signup">
+							<ul class="dropdown-menu dropdown-menu-right">
+								<a ui-sref="app.public.signup">
 									<li>
 										<i class="icon ion-clipboard"></i>
 										Register
 									</li>
 								</a>
-								<li ng-click="NavController.askLogout()">
-									<i class="icon ion-log-in"></i>
-									Sign in
-								</li>
 							</ul>
 						</div>
 					</li>

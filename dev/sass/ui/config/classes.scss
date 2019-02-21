@@ -12,3 +12,20 @@
 }
 
 .main-color-background { background-color: $main_color; }
+
+.white-bg-background {
+	background: url(/images/cardbg_light.png) repeat 100%;
+}
+
+.center-column {
+	float: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Hide class
+
+.hide-large { @include breakpoint-max("large") { display: none !important; } }
+.hide-medium { @include breakpoint-max("medium") { display: none !important; } }
+.hide-small { @include breakpoint-max("small") { display: none !important; } }
+.hide-tiny { @include breakpoint-max("tiny") { display: none !important; } }

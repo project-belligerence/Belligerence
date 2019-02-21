@@ -1,0 +1,65 @@
+<div class="container-fluid top-spacer">
+	<div id="bureaucracy-page" class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Bureucracy</h2>
+				<h3>Administrative actions related to your Outfit's contract.</h3>
+				<hr />
+			</div>
+		</div>
+		<div class="col-md-12 fade-animation-fast" ng-if="(CtrlBureaucracyOutfit.pageState === 'main')" ng-cloak>
+			<div class="row">
+				<div class="actions col-md-3 col-sm-5 col-xs-12 noselect" ng-repeat="menuItem in CtrlBureaucracyOutfit.menuOptions" ng-class="{'muted': !(menuItem.enable) }">
+					<div
+						class="row"
+						ng-click="(menuItem.fn ? menuItem.fn() : CtrlBureaucracyOutfit.changeState(menuItem.state))"
+						a-disabled="!(menuItem.enable)"
+						ui-sref="{{::(menuItem.route || 'app.private.bureaucracy-outfit')}}"
+					>
+						<i class="icon" ng-class="::(menuItem.icon)"></i>
+						<div class="title" ng-bind="::(menuItem.title)"></div>
+						<hr />
+						<div class="description" ng-bind="::(menuItem.description)"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="back-button" class="fade-animation-fast" ng-if="(CtrlBureaucracyOutfit.pageState !== 'main') && (CtrlBureaucracyOutfit.pageState !== 'null')" ng-cloak>
+			<a
+				ng-click="CtrlBureaucracyOutfit.changeState('main')"
+				class="section-button medium animated"
+				role="button"
+			>
+				<ul>
+					<li><i class="icon ion-arrow-return-left"></i></li>
+					<li>Back</li>
+				</ul>
+			</a>
+		</div>
+		<div id="class-change" class="fade-animation-fast" ng-if="(CtrlBureaucracyOutfit.pageState === 'transfer-leadership')" ng-cloak>
+
+			<units-directive
+				interaction-options="CtrlBureaucracyOutfit.unitsRadialOptions"
+				player-info="CtrlBureaucracyOutfit.selfInfo"
+				pmc-info="CtrlBureaucracyOutfit.selfPMC"
+				units-list="CtrlBureaucracyOutfit.unitsInfo"
+				friends-list="CtrlBureaucracyOutfit.selfFriends"
+				display-mode="ranked"
+			></units-directive>
+
+			<div id="confirm-button fade-animation-fast">
+				<a
+					ng-click="CtrlBureaucracyOperator.confirmClassChange()"
+					class="section-button big animated"
+					role="button"
+					a-disabled="(CtrlBureaucracyOperator.currentSelectedClass === -1)"
+				>
+					<ul>
+						<li><i class="icon ion-checkmark"></i></li>
+						<li>CONFIRM</li>
+					</ul>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

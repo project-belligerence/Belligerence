@@ -1,0 +1,543 @@
+
+.missions-directive-container {
+	display: inline-block;
+	width: 100%;
+
+	$paper_main_color: #3d3121;
+	$paper_light_color: lighten($paper_main_color, 15%);
+	$written_main_color: #750404;
+	$written_light_color: lighten($written_main_color, 5%);
+
+	$light_dark_color: #333;
+
+	.missions-directive {
+
+		.mission-object {
+			&.no-slots { @include prefix(filter, saturate(20%)); }
+
+			@include transition(top, .10s);
+
+			position: relative;
+			top: 0px;
+
+			&:hover {
+				top: -20px;
+				@include breakpoint("medium") { top: 0px; }
+			}
+
+			.main-folder {
+				@include factor-property(margin, 1);
+				@include factor-property(margin-right, 2.5);
+				padding: factor(5) factor(3);
+
+				@include factor-property(padding-left, 2);
+
+				background: url("/images/paper-texture.jpg") repeat 100%;
+				border-top-left-radius: 10px;
+				border-top-right-radius: 10px;
+
+				box-shadow: 0px 0px 10px #000;
+
+				.back-folder {
+					background: url("/images/paper-texture.jpg") repeat 100%;
+					border-top-left-radius: 10px;
+					border-top-right-radius: 10px;
+					@include prefix(filter, brightness(60%));
+
+					height: 98%;
+					width: 50px;
+					@include factor-property(margin, 1);
+					margin-bottom: 50px;
+
+					position: absolute;
+					right: -5px;
+					top: -7px;
+
+					z-index: -1;
+				}
+
+				.back-paper {
+					@include prefix(transform, rotate(0.2deg));
+					background-color: #fff;
+					height: 93%;
+					width: 50px;
+					position: absolute;
+					right: 10px;
+					top: 20px;
+
+					z-index: -1;
+				}
+
+				.folder-bottom {
+					background: url("/images/stripes.png") repeat 100% top;
+					@include prefix(filter, sepia(100%) saturate(200%) brightness(90%));
+
+					position: absolute;
+					bottom: 0px;
+					right: 2px;
+
+					height: 40%;
+					width: 16px;
+
+					border-top-right-radius: 10px;
+
+					@include breakpoint("small") { right: 1px; }
+				}
+
+				.content {
+					border-left: 3px solid #967953;
+					padding: 0px factor(1);
+
+					.contract-status {
+						z-index: 99;
+						position: absolute;
+						top: 0px;
+						left: 40px;
+						width: 110px;
+
+						.contract-status-container {
+							padding: factor(2) 0;
+							box-shadow: 0px 0px 5px #111;
+
+							.hexagon {
+								height: 75px;
+
+								.in2 {
+									line-height: 0px;
+									padding-top: 9px;
+									.icon { @include font-size(factor(8)); }
+								}
+							}
+
+							.status-text {
+								background-color: white;
+								color: #111;
+								@include font-size(factor(2));
+								text-align: center;
+								font-family: $main_font;
+								letter-spacing: -1px;
+								font-weight: 800;
+								padding: factor(.5) 0px;
+								@include factor-property(margin-top, 1.5);
+								text-transform: uppercase;
+							}
+
+							&.contract {
+								background-color: $main_color;
+								.icon { color: $main_color; }
+							}
+
+							&.interest {
+								background-color: $warning_color;
+								.icon { color: #222; }
+							}
+
+							&.negotiation {
+								background-color: #333;
+								.icon { color: #333; }
+							}
+						}
+
+						.contract-status-back {
+							z-index: -1;
+							@include size(25px);
+							position: absolute;
+							top: 6px;
+							right: -12px;
+							background-color: white;
+							@include prefix(transform, rotate(133deg));
+						}
+					}
+
+					.section {
+						margin-bottom: factor(3);
+						display: inline-block;
+						width: 100%;
+
+						&.bottom { margin-bottom: factor(0); }
+					}
+
+					.title {
+						display: inline-block;
+
+						font-family: $main_font;
+						@include font-size(factor(2.8));
+						color: $paper_main_color;
+						letter-spacing: -1px;
+						font-weight: 800;
+
+						@include factor-property(margin-right, 1);
+
+						@include breakpoint("small") { @include factor-property(margin-right, 0); }
+
+						&.medium {
+							@include font-size(factor(2.5));
+						}
+
+						&.light {
+							color: $paper_light_color;
+						}
+					}
+
+					.text {
+						font-family: $sub_font;
+						@include font-size(factor(2.5));
+						display: inline-block;
+						color: $written_main_color;
+						font-weight: 800;
+
+						background-image: linear-gradient(to right, $paper_main_color 33%, rgba(255,255,255,0) 0%);
+						background-position: bottom;
+						background-size: 5px 2px;
+						background-repeat: repeat-x;
+
+						&.large {
+							color: $written_light_color;
+							@include font-size(factor(4.5));
+							letter-spacing: -2px;
+
+							@include breakpoint("small") { @include font-size(factor(4)); }
+						}
+					}
+
+					.picture {
+						background-size: cover;
+						.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 100%;	}
+
+						&.objective {
+							@include prefix(filter, brightness(25%));
+							@include size(50px);
+						}
+
+						&.flag {
+							border-radius: 5px;
+							@include size(100px, 50px);
+
+							@include breakpoint("small") {
+								@include size(80px, 40px);
+							}
+						}
+
+						&.map {
+							@include size(70px);
+						}
+					}
+
+					.map-photo {
+						z-index: 99;
+
+						position: absolute;
+						right: 5px;
+						top: 28%;
+
+						.paper-clip {
+							z-index: 99;
+
+							@include size(54px);
+							background-image: url("/images/paperclip.png");
+
+							position: absolute;
+							right: -5px;
+							top: -2px;
+						}
+
+						.picture-container {
+							@include prefix(transform, rotate(10deg));
+							@include prefix(filter, drop-shadow(0px 0px 4px rgba(0,0,0,.5)));
+							@include factor-property(padding, .5);
+							background-color: #fff;
+
+							.name {
+								position: absolute;
+								bottom: 5px;
+								left: 6px;
+								background-color: #fff;
+								padding: 0px 4px;
+								margin-top: 5px;
+								text-align: center;
+								@include font-size(factor(1.5));
+								font-family: $main_font;
+								color: #111;
+								letter-spacing: -1px;
+								text-transform: uppercase;
+								font-weight: 800;
+							}
+						}
+					}
+
+					.stamp-paper {
+						position: absolute;
+						background-size: contain;
+						background-repeat: no-repeat;
+						width: 100%;
+
+						&.large {
+							height: 100%;
+							background-image: url("/images/paper-stamp.png");
+						}
+
+						&.small {
+							height: 75px;
+							background-image: url("/images/paper-stamp-small.png");
+
+							@include breakpoint("small") { height: 65px; }
+						}
+
+						&.smudge {
+							height: 35px;
+							background-image: url("/images/smudge.png");
+						}
+					}
+
+					.header {
+						.briefing-container {
+							display: inline-block;
+							position: relative;
+							@include factor-property(top, 1);
+
+							.logo {
+								display: inline-block;
+								background-image: url("/images/belligerence-logo-small.png");
+								background-repeat: no-repeat;
+								background-size: cover;
+								@include size(40px);
+							}
+
+							.mission-briefing {
+								@include factor-property(margin-left, .5);
+								font-family: $main_font;
+								display: inline-block;
+								position: relative;
+								top: -6px;
+								color: $paper_main_color;
+								font-weight: 800;
+								letter-spacing: -1px;
+								line-height: 18px;
+							}
+						}
+
+						.difficulty-container {
+							display: inline-block;
+							float: right;
+
+							.stars-container {
+								border: 2px solid $paper_light_color;
+								padding: 0px 5px;
+
+								.star {
+									text-align: center;
+									display: inline-block;
+									margin: 0px 1px;
+
+									.icon {
+										@include font-size(factor(2.5));
+										&.ion-android-star { color: $written_main_color; }
+										&.ion-android-star-outline { color: $light_dark_color; }
+									}
+								}
+							}
+						}
+					}
+
+					.operation-section {
+						margin-bottom: factor(2);
+					}
+
+					.objective-section {
+						margin-bottom: factor(5);
+						position: relative;
+						width: 100%;
+						height: 100px;
+
+						.paper {
+							background: url("/images/paper-bg.jpg") repeat 100%;
+							display: inline-block;
+							padding: factor(1) factor(.5);
+							@include prefix(transform, rotate(-2deg));
+							box-shadow: 1px 1px 3px #333;
+
+							position: relative;
+							top: 7px;
+							left: 7px;
+
+							width: 100%;
+
+							.icon-container {
+								position: relative;
+								top: 3px;
+								left: 3px;
+								display: inline-block;
+								@include factor-property(margin-right, 1);
+								vertical-align: top;
+							}
+
+							.text-container {
+								display: inline-block;
+								width: 70%;
+
+								font-family: $main_font;
+								letter-spacing: -1px;
+
+								.sub-title {
+									display: block;
+									@include font-size(factor(2));
+									color: $written_main_color;
+									font-weight: 800;
+									text-transform: uppercase;
+								}
+
+								.sub-text {
+									display: block;
+									color: $light_dark_color;
+									@include factor-property(line-height, 2.5);
+								}
+							}
+						}
+					}
+
+					.factions-section {
+						.faction {
+							display: inline-block;
+
+							&.client { float: left; }
+							&.target {
+								float: right;
+								position: relative;
+								right: -5px;
+							}
+
+							@include breakpoint("small") { width: 100px; }
+
+							.faction-container {
+								position: relative;
+
+								.flag {
+									position: relative;
+									top: -3px;
+									left: 3px;
+									margin: factor(2) factor(1);
+									box-shadow: 1px 1px 5px rgba(0,0,0,.5), 1px 1px 10px #333;
+								}
+
+								.side-stamp {
+									@include size(25px);
+
+									position: absolute;
+									top: 30px;
+									right: 10px;
+
+									box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+
+									background-color: white;
+									border-radius: 100%;
+								}
+							}
+
+							&.blufor .side-stamp { background-color: $blufor_color; }
+							&.opfor .side-stamp { background-color: $opfor_color; }
+							&.indfor .side-stamp { background-color: $indfor_color; }
+						}
+
+						.reward {
+							.smudge-container {
+								position: relative;
+								display: inline;
+
+								.smudge {
+									position: absolute;
+									top: -10px;
+									left: 0;
+									width: 100px;
+
+									@include breakpoint("small") { left: -10px; }
+								}
+							}
+						}
+					}
+
+					.advisories-section {
+						.advisories-container {
+							position: relative;
+							width: 100%;
+							height: 100px;
+						}
+					}
+
+					.bottom-section {
+
+						.contracts {
+							display: inline-block;
+							@include breakpoint("small") { width: 90px; }
+
+							.contracts-container {
+								display: block;
+								text-align: right;
+
+								&.adversarial {
+									.text {
+										@include font-size(factor(4));
+
+										&.blufor { color: $blufor_color; }
+										&.opfor { color: $opfor_color; }
+										&.indfor { color: $indfor_color; }
+									}
+									.slash { margin: 0;	}
+
+									.unit-limit {
+										@include breakpoint("small") {
+											@include factor-property(margin-top, 1);
+										}
+									}
+								}
+
+								.separator {
+									color: #111;
+									font-weight: bold;
+								}
+
+								.slash {
+									position: relative;
+									top: 4px;
+									@include font-size(factor(5));
+									@include factor-property(margin-left, 1);
+
+									@include breakpoint("small") {
+										@include factor-property(margin-left, 0);
+										@include font-size(factor(3));
+									}
+								}
+
+								.unit-limit {
+									@include prefix(transform, rotate(2deg));
+									display: inline-block;
+									@include font-size(factor(3.5));
+									font-family: $main_font;
+									background: url("/images/cardbg_inverted_light.png") repeat 100%;
+									line-height: 0.8;
+									padding: factor(1);
+									box-shadow: 0px 0px 3px #111;
+								}
+							}
+						}
+
+						.time-limit {
+							float: right;
+							display: inline-block;
+
+							.title {
+								display: block;
+							}
+
+							.number-container {
+								float: right;
+								display: inline-block;
+
+								* { display: inline-block; }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

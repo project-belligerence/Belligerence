@@ -14,31 +14,35 @@
 					type: DataTypes.STRING,
 					field: 'classname'
 				},
+				contentField: { // Mod @name, @A3, @APEX, @RHS_GREF, etc
+					type: DataTypes.INTEGER,
+					field: 'content'
+				},
 				descriptionField: {
 					type: DataTypes.TEXT,
 					field: 'description'
 				},
 				typeField: {
-					type: DataTypes.INTEGER,
+					type: DataTypes.STRING,
 					field: 'type',
-					defaultValue: 0
+					defaultValue: "4"
 				},
 				classField: {
-					type: DataTypes.INTEGER,
+					type: DataTypes.STRING,
 					field: 'class',
-					defaultValue: 0
+					defaultValue: "01"
 				},
 				valueField: {
 					type: DataTypes.FLOAT,
 					field: 'value',
 					defaultValue: 0
 				},
-				currentPrice: {
+				currentPrice: { // Dummy field
 					type: DataTypes.INTEGER,
 					field: 'current_price',
 					defaultValue: 0
 				},
-				discountField: {
+				discountField: { // Dummy field
 					type: DataTypes.INTEGER,
 					field: 'discount',
 					defaultValue: 0
@@ -48,7 +52,7 @@
 					field: 'deployable',
 					defaultValue: false
 				},
-				infoField: {
+				infoField: { // Wikipedia link
 					type: DataTypes.TEXT,
 					field: 'info'
 				},
@@ -117,7 +121,7 @@
 						var config = require('./../../config.js'),
 							typeV = (this.getDataValue('typeField')),
 							classV = (this.getDataValue('classField')),
-							classNumber = typeV.toString() + classV.toString();
+							classNumber = classV;
         				return config.enums.classes[classNumber].modifier;
 					},
 					getTypeModifier: function() {
@@ -125,15 +129,12 @@
         				return config.enums.types[this.getDataValue('typeField')].modifier;
 					},
 					generatePrice: function(model) {
-
 						var ModifierModel = require('./../index.js').getModels().modifiers,
 							config = require('./../../config.js'),
 							API = require('./../../routes/api.js');
 
-						return ModifierModel.findOne({ where: {"activeField": true}}).then(function(modifier) {
+						return ModifierModel.findOne({ where: {"activeField": true }}).then(function(modifier) {
 							var totalModifiers = [];
-
-							console.log(modifier);
 
 							totalModifiers.push((modifier.discountAll || 0));
 							totalModifiers.push(modifier.discountMarket || 0);
@@ -156,9 +157,7 @@
 							rObject.currentPrice = itemValue;
 							rObject.discountField = itemModifiersValue;
 
-							product.update(rObject).then(function(){
-								return true;
-							});
+							product.update(rObject).then(function(model) { return true; });
 						});
 					}
 				}

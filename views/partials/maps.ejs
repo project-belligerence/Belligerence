@@ -1,0 +1,168 @@
+<div class="container-fluid top-spacer generic-object" id="maps-list-container" ng-init="Controller = CtrlMaps;">
+	<div ng-if="Controller.displayPage">
+		<div class="col-md-12">
+			<div class="row">
+				<h2 ng-bind="::(Controller.pageValues.title)"></h2>
+				<h3 ng-bind="::(Controller.pageValues.description)"></h3>
+				<hr />
+				<div class="row filters">
+					<div class="col-md-12">
+						<div class="filter-containers">
+
+							<div class="top-filters">
+
+								<form class="form-inline main-filters" ng-submit="Controller.reloadQueryState()">
+									<div class="form-group">
+										<a class="section-button search muted medium"
+											role="button"
+											ng-click="Controller.toggleDisplayFilter()"
+										>
+											<ul>
+												<li><i class="icon ion-search"></i></li>
+												<li ng-bind="((Controller.displayFilter === true) ? 'Hide filters' : 'Display filters')"></li>
+											</ul>
+										</a>
+									</div>
+									<div class="form-group">
+										<a class="section-button search warning medium"
+											role="button"
+											ng-click="Controller.reloadQueryState()"
+										>
+											<ul>
+												<li><i class="icon ion-search"></i></li>
+												<li>Apply</li>
+											</ul>
+										</a>
+									</div>
+									<div class="form-group">
+
+										<div class="dropdown-section">
+											<div class="dropdown">
+												<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+													Sort by:
+													<strong ng-bind="Controller.filterValues.sortList[Controller.qSortIndex].text"></strong>
+												</button>
+												<ul class="dropdown-menu">
+													<li ng-click="Controller.qSortIndex = $index" ng-repeat="item in (Controller.filterValues.sortList) track by $index">
+														<a href="#" ng-click="scope = item">
+															<span ng-bind="(item.text)"></span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<a class="btn btn-default medium order" ng-click="Controller.changeFilterOrder()">
+											<i style="margin-right: 3px;" class="icon" ng-class="(Controller.basicQuery.order === 'ASC') ? 'ion-arrow-up-b' : 'ion-arrow-down-b'"></i>
+											<span ng-bind="(Controller.basicQuery.order === 'ASC') ? 'Ascending' : 'Descending'"></span>
+										</a>
+									</div>
+								</form>
+							</div>
+
+							<hr />
+
+							<div class="bottom-filters" ng-class="{'displaying': Controller.displayFilter}">
+
+								<form class="form-inline main-filters" ng-submit="Controller.reloadQueryState()">
+									<div class="form-group" ng-repeat="queryObject in Controller.queryValues track by $index">
+										<div class="single-filter">
+
+											<input type="text" class="form-control" placeholder="{{::(queryObject.name)}}" ng-if="::(queryObject.type === 'text')" ng-model="queryObject.model" ng-cloak>
+
+											<div class="slider" ng-if="::(queryObject.type === 'slider')" ng-cloak>
+												<span class="slider-label noselect" ng-bind="::(queryObject.name)">
+												</span>
+												<rzslider rz-slider-model="queryObject.model.min" rz-slider-high="queryObject.model.max" rz-slider-options="queryObject.options">
+												</rzslider>
+											</div>
+
+											<div class="dropdown-section" ng-if="::(queryObject.type === 'dropdown')" ng-cloak>
+												<div class="dropdown">
+													<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+														<span ng-bind="::(queryObject.label)"></span> <strong ng-bind="Controller.filterValues[queryObject.ref][queryObject.model].text"></strong>
+													</button>
+													<ul class="dropdown-menu">
+														<li ng-click="queryObject.model = $index" ng-repeat="item in ::(Controller.filterValues[queryObject.ref]) track by $index">
+															<a href="#" ng-click="scope = item">
+																<span ng-bind="::(item.text)"></span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+									<div class="form-group" ng-repeat="queryObject in Controller.queryValuesDetails track by $index" ng-if="queryObject.model" ng-cloak>
+										<div class="single-filter">
+											<input
+												type="text" class="form-control"
+												placeholder="{{(queryObject.name)}}"
+												ng-model="queryObject.model"
+											ng-cloak>
+										</div>
+									</div>
+
+									<input type="submit" id="submit" value="Submit"/ style="display:none;">
+								</form>
+
+								<hr />
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<maps-directive
+				object-list="Controller.objectData"
+			></maps-directive>
+		</div>
+
+		<div class="col-md-12">
+			<div class="row" id="pagination-container">
+				<div class="text-center intel-filter-animation" ng-if="Controller.showPagination" ng-cloak>
+					<nav aria-label="Page navigation">
+						<ul
+							uib-pagination
+
+							id="items-pagination"
+							class="pagination"
+
+							ng-change="Controller.movePage('a')"
+
+							first-text="&laquo;"
+							last-text="&raquo;"
+							next-text="&#9656;"
+							previous-text="&#9666;"
+
+							force-ellipses="true"
+							rotate="true"
+
+							total-items="Controller.objectListCount"
+							items-per-page="Controller.filterValues.perPage"
+							ng-model="Controller.basicQuery.page"
+							max-size="1"
+
+							boundary-links="false"
+							boundary-link-numbers="true"
+						></ul>
+						<form class="pagination-form" ng-submit="Controller.submitPageChange()">
+							<div class="form-group">
+								<input type="text" id="page-input" ng-change="Controller.inputPageChange()" class="form-control" ng-model="Controller.basicQuery.page">
+							</div>
+							<input type="submit" style="display:none;" />
+						</form>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

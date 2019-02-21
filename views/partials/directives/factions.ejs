@@ -1,0 +1,42 @@
+
+<span ng-init="Directive = CtrlDirectiveFactions;"></span>
+
+<div class="factions-directive-container" ng-if="(Directive.displayDirective())" ng-cloak>
+	<div class="factions-directive" >
+		<div class="faction-col col-md-3 col-sm-4 col-xs-12 message-animation" ng-repeat="object in objectList track by $index">
+			<div class="row">
+				<div class="faction-object" ng-class="::(Directive.applyControlledClass(object.sideField))">
+					<a ng-href="faction/{{::(object.hashField)}}">
+						<div class="top-section">
+							<div class="picture"
+								ac-background-image
+								background-image="images/modules/factions/main_{{::(object.hashField)}}.png">
+								<div class="name" ng-bind="::(object.nameField)"></div>
+							</div>
+						</div>
+						<div class="body-section">
+							<div class="description" ng-bind="::(object.descriptionField)"></div>
+						</div>
+						<div class="footer-section">
+							<div class="modifiers-container">
+								<ul class="modifier-list">
+									<li
+										ng-init="modClass = Directive.getTierClass(object[modifier.field]);"
+										class="modifier"
+										ng-repeat="modifier in Directive.modifiersList track by $index"
+										ng-class="::(modClass)"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-append-to-body="true"
+										popover-popup-delay="100"
+										uib-popover="{{::(modifier.name + ': ' + modClass.toUpperCase())}}"
+									><i class="icon" ng-class="::(modifier.icon)"></i></li>
+								</ul>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

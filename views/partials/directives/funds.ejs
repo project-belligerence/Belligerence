@@ -1,0 +1,16 @@
+
+<div id="funds-main-container" ng-class="{ 'display': CtrlFundsDirective.displayFunds }">
+	<div class="fade-animation-fast" ng-if="CtrlFundsDirective.displayFunds" ng-cloak>
+		<div id="funds-container">
+			<div id="funds-interpolation" ng-bind="CtrlFundsDirective.resultSign + (CtrlFundsDirective.scoringPoints | currency:'': 0)">
+			</div>
+			<div id="funds-current" ng-bind="CtrlFundsDirective.currentFunds | currency:'D$ ': 0">
+			</div>
+		</div>
+		<div class="resolve-funds" ng-class="{'fade': !(CtrlFundsDirective.scoringPoints !== 0)}">
+			<a type="button" class="btn btn-success big" ng-click="CtrlFundsDirective.resolveFunds()">
+				<i class="icon ion-ios-skipforward"></i>
+			</a>
+		</div>
+	</div>
+</div>

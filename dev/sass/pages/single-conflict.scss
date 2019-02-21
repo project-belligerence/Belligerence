@@ -1,0 +1,557 @@
+
+#single-conflict-container {
+
+	$filler_padding: 0px 7px;
+
+	.object-details {
+
+		h2 {
+			display: inline-block;
+			background: url("/images/cardbg_inverted_light.png") repeat 100%;
+			color: #fff;
+			padding: factor(2) factor(4);
+			@include font-size(factor(8));
+
+			@include breakpoint("medium") {
+				@include font-size(factor(5));
+				letter-spacing: -2px;
+			}
+
+			@include breakpoint("small") {
+				@include font-size(factor(4));
+			}
+		}
+
+		.date {
+			@include factor-property(margin-top, 2);
+			font-family: $main_font;
+			letter-spacing: -3px;
+			@include font-size(factor(4));
+
+			@include breakpoint("small") {
+				@include font-size(factor(2.5));
+				letter-spacing: -1px;
+			}
+		}
+	}
+
+	.casualties-container {
+		cursor: help;
+		display: inline-block;
+		width: 100%;
+
+		padding: 0px factor(1);
+
+		@include breakpoint("small") {
+			padding: 0px 0px;
+		}
+
+		&.small {
+			display: none !important;
+
+			@include breakpoint("small") {
+				display: inline-block !important;
+			}
+
+			.casualties {
+				.skull {
+					top: 0px;
+					@include factor-property(width, 2);
+				}
+
+				.number {
+					@include font-size(factor(2));
+				}
+			}
+		}
+
+		.casualties {
+			display: inline-block;
+			padding: factor(.2) factor(1);
+			padding-bottom: factor(.7);
+			background: url("/images/cardbg_inverted_light.png") repeat 100%;
+			box-shadow: 0px 0px 10px #000;
+			border-radius: 1px;
+			border: 1px solid #555;
+
+			.skull {
+				@include prefix(filter, saturate(0%) brightness(300%));
+				@include factor-property(margin-right, .5);
+				@include factor-property(width, 3);
+				height: auto;
+				position: relative;
+				top: -2px;
+			}
+
+			.number {
+				text-shadow: 0px 0px 10px #000, 0px 0px 5px #000;
+				@include font-size(factor(3));
+				display: inline-block;
+				font-family: $main_font;
+				font-weight: 800;
+				position: relative;
+				top: 2px;
+			}
+
+			&.b {
+				float: right;
+
+				.skull {
+					margin-right: 0;
+					@include factor-property(margin-left, .5);
+				}
+			}
+		}
+	}
+
+	.flag-container {
+		display: inline-block;
+		position: relative;
+
+		&:hover {
+			.flag .ac-bg-img__full-size, .flag .ac-bg-img__placeholder {
+				box-shadow: 0px 0px 50px #000 inset;
+			}
+		}
+
+		.flag {
+			@include size(350px, 170px);
+
+			border-radius: 3px;
+			box-shadow: 0px 0px 10px #000;
+
+			.ac-bg-img__full-size, .ac-bg-img__placeholder {
+				@include transition(box-shadow .25s);
+				box-shadow: 0px 0px 20px #111 inset;
+				background-size: 100%;
+			}
+
+			&.inactive {
+				@include prefix(filter, saturate(0%));
+			}
+
+			&.winner {
+				@include prefix(animation, pulse-drop-shadow-white-large 3s ease-in-out infinite);
+			}
+		}
+
+		@include breakpoint("medium") {
+			top: -80px;
+
+			.flag {
+				@include size(200px, 90px);
+			}
+		}
+
+		@include breakpoint("small") {
+			top: 0px;
+
+			width: 100%;
+
+			.flag {
+				@include size(130px, 70px);
+				right: 0px;
+			}
+		}
+
+		.home-container {
+			position: absolute;
+			top: 0px;
+
+			.home {
+				position: relative;
+				cursor: help;
+
+				display: inline-block;
+
+				top: -7px;
+				left: 10px;
+
+				@include font-size(factor(8));
+				text-shadow: 0px 0px 5px #000, 0px 0px 5px #000;
+
+				@include breakpoint("medium") {
+					top: 0px;
+					@include font-size(factor(4));
+				}
+			}
+		}
+	}
+
+	.factions {
+		&.neutral {
+			.name-container .name { background-color: #eee; color: #111; }
+		}
+
+		&.blufor {
+			.name-container .name { background-color: $blufor_color; color: #eee; }
+		}
+
+		&.opfor {
+			.name-container .name { background-color: $opfor_color; color: #eee; }
+		}
+
+		&.indfor {
+			.name-container .name { background-color: $indfor_color; color: #eee; }
+		}
+
+		&.b {
+			.faction-list .faction {
+				text-align: right;
+				float: right;
+
+				.casualties-container {
+					float: left;
+
+					.casualties {
+						.skull {
+							position: relative;
+							top: 5px;
+							float: right;
+							margin-right: 0;
+							@include factor-property(margin-left, 1);
+						}
+					}
+				}
+			}
+
+			@include breakpoint("small") {
+
+				.name-container {
+					right: 7px;
+				}
+			}
+		}
+
+		.faction-list {
+			.flag {
+				@include size(190px, 95px);
+			}
+
+			.faction {
+				width: 190px;
+				display: inline-block;
+
+				.home-container .home {
+					top: 1px;
+					@include font-size(factor(5));
+				}
+
+				&.inactive {
+					.flag {
+						@include prefix(filter, saturate(0%));
+					}
+				}
+			}
+
+			@include breakpoint("medium") {
+				.flag {
+					@include size(140px, 69px);
+				}
+
+				.faction {
+					width: 140px;
+
+					.flag-container {
+						top: 0px;
+					}
+				}
+			}
+
+			@include breakpoint("small") {
+				.flag { @include size(110px, 55px); }
+				.faction { width: 110px; }
+			}
+		}
+	}
+
+	.participants-container {
+
+		.participants {
+			@include factor-property(margin-top, 2);
+			display: inline-block;
+			width: 100%;
+			font-family: $main_font;
+			letter-spacing: -2px;
+			@include font-size(factor(4));
+			text-shadow: 0px 0px 10px #000, 0px 0px 5px #000;
+			text-align: center;
+			color: #fff;
+
+			.icon {
+				@include factor-property(margin-right, 1);
+			}
+
+			@include breakpoint("small") {
+				@include font-size(factor(3));
+			}
+		}
+
+		.participant-factions {
+			@include factor-property(margin-top, 5);
+		}
+
+		.casualties-container {
+			cursor: default;
+			padding: 0;
+			float: right;
+			display: inline-block;
+
+			.casualties {
+
+				.skull {
+					@include factor-property(width, 2);
+					top: 1px;
+				}
+
+				.number {
+					@include font-size(factor(2));
+				}
+
+				&.b {
+					float: right;
+
+					.skull {
+						margin-right: 0;
+						@include factor-property(margin-left, .5);
+					}
+				}
+			}
+		}
+	}
+
+	.main-belligerents {
+		width: 100%;
+		padding: 0;
+		margin: 0;
+		display: table;
+
+		@include breakpoint("small") {
+			display: inline-block;
+		}
+
+		.factions {
+			display: table-cell;
+			width: 1%;
+
+			@include breakpoint("small") {
+				width: 100%;
+			}
+
+			.name-container {
+				display: inline-block;
+				position: absolute;
+				top: 123px;
+
+				.name {
+					margin-left: 10px;
+
+					padding: factor(.5) factor(1.5);
+
+					@include font-size(factor(3));
+					letter-spacing: -2px;
+					font-family: $main_font;
+					text-shadow: 0px 0px 5px #000, 0px 0px 5px #000;
+					box-shadow: 0px 0px 10px #222;
+				}
+
+				@include breakpoint("medium") {
+					top: 50px;
+
+					.name {
+						@include font-size(factor(2.5));
+						letter-spacing: -1px;
+					}
+				}
+
+				@include breakpoint("small") {
+					top: 35px;
+
+					.name {
+						@include font-size(factor(2));
+						letter-spacing: -1px;
+					}
+				}
+			}
+
+			.modifier-container {
+				@include factor-property(margin-top, 3);
+
+				&.b {
+					margin-top: 17px;
+
+					.modifier-label {
+						float: right;
+					}
+
+					.modifier-list {
+						float: right;
+
+						.modifier { float: right; }
+					}
+				}
+
+				.modifier-label {
+					@include font-size(factor(2.5));
+					@include factor-property(margin-bottom, 1);
+					padding: factor(.5) factor(1.5);
+					font-family: $main_font;
+					background: url('/images/cardbg_dark.png') repeat;
+					color: #000;
+					display: inline-block;
+					font-weight: 800;
+					letter-spacing: -1px;
+
+					box-shadow: 0px 0px 10px #000;
+
+					.text {
+						display: inline-block;
+					}
+
+					@include breakpoint("small") {
+						@include font-size(factor(1.7));
+					}
+				}
+
+				.modifier-list {
+					.modifier {
+						display: inline-block;
+						*{cursor: help;}
+
+						margin-right: 3px;
+						@include factor-property(margin-top, 1);
+
+						.icon {
+							display: inline-block;
+							background-color: #eee;
+							color: #111;
+							padding: factor(.5) factor(1.5);
+						}
+
+						.modifier-text {
+							position: relative;
+							left: -4px;
+							padding: factor(.5) factor(1.5);
+							display: inline-block;
+							font-family: $main_font;
+							background: url('/images/cardbg_inverted_light.png') repeat;
+						}
+
+						@include breakpoint("small") {
+							margin-right: 0px;
+							display: block;
+
+							.modifier-text {
+								left: 0px;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.filler {
+			display: inline-block;
+			width: 100%;
+
+			float: left;
+
+			&.small {
+				width: 100%;
+				float: none;
+
+				@include breakpoint("small") {
+					display: inline-block !important;
+				}
+
+				.map-container {
+					height: 100px;
+					padding: 0px;
+
+					.name {
+						top: -50px;
+						@include opacity(1);
+					}
+				}
+
+				.asset-bar-container {
+					padding: 0px;
+
+					.shine-effect {
+						top: 93px;
+					}
+				}
+			}
+
+			.map-container {
+				height: 70px;
+				width: 100%;
+				float: left;
+				padding: $filler_padding;
+
+				&:hover {
+					.name {
+						top: -50px;
+						@include opacity(1);
+					}
+				}
+
+				.map-bg {
+					box-shadow: 0px 0px 20px #000 inset;
+					height: 90px;
+					width: 100%;
+
+					background-size: 100%;
+					background-position: center;
+				}
+
+				.name {
+					@include transition(opacity .25s, top .25s);
+					@include opacity(0);
+					font-size: factor(4);
+					letter-spacing: -2px;
+					font-family: $main_font;
+					text-shadow: 0px 0px 10px #000, 0px 0px 5px #000;
+					position: relative;
+					top: -25px;
+					text-align: center;
+				}
+
+				@include breakpoint("medium") {
+					.name {
+						top: -50px;
+						@include opacity(1);
+					}
+				}
+			}
+
+			.asset-bar-container {
+				border: none;
+				height: 0px;
+
+				padding: $filler_padding;
+
+				position: relative;
+				top: -2px;
+
+				min-height: 55px;
+
+				box-shadow: 0px 0px 0px #000;
+
+				.shine-effect {
+					width: 100%;
+					position: relative;
+					top: 28px;
+				}
+
+				.asset-bar {
+					display: inline-block;
+					position: relative;
+					margin: 0;
+
+					&.faction-b { float: right;	}
+				}
+			}
+		}
+	}
+}

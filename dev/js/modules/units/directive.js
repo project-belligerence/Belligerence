@@ -10,42 +10,54 @@
 
 		$scope.radialOptions = apiServices.cloneValue(($scope.interactionOptions || {isOpen: false, toggleOnClick: true, enableDefaults: true, items:[]}));
 
+		vm.applyControlledClass = apiServices.applyControlledClass;
+
 		if ($scope.radialOptions.enableDefaults) {
-			if (apiServices.getToken()) {
-				$scope.radialOptions.items.push(
-					{content: 'Message', icon: 'ion-email', tooltip: 'Sends the Operator a message.',
-					 condition: checkMessage, function: unitsServices.askSendMessage },
 
-					{content: 'Profile', icon: 'ion-document-text', tooltip: 'Opens the Operator profile.',
-					 route: unitsServices.getPlayerProfile }
-				);
-
-				if (vm.displayMode !== "friends") {
+			switch (vm.displayMode) {
+				case "pmc-friends": {
 					$scope.radialOptions.items.push(
-						{content: 'Befriend', icon: 'ion-person-add', tooltip: 'Add the Operator to your friends list.',
-						 condition: checkFriend, function: unitsServices.askAddFriend }
+						{content: 'Profile', icon: 'ion-document-text', tooltip: 'Opens the Outfit profile.',
+						 route: unitsServices.getPMCProfile }
 					);
-				}
-			} else {
-				$scope.radialOptions.items.push(
-					{content: 'Profile', icon: 'ion-document-text', tooltip: 'Opens the Operator profile.',
-					 route: unitsServices.getPlayerProfile }
-				);
-			}
+				} break;
+				case "interest": {
+					if (apiServices.getToken()) {
+						$scope.radialOptions.items.push({
+							content: 'Message', icon: 'ion-email', tooltip: 'Sends the Operator a message.',
+						 	condition: checkMessage, function: unitsServices.askSendMessage
+						});
+					}
+					$scope.radialOptions.items.push({
+						content: 'Profile', icon: 'ion-document-text', tooltip: 'Opens the Operator profile.',
+						 route: unitsServices.getPlayerProfile
+					});
+				} break;
+				default: {
+					if (apiServices.getToken()) {
+						$scope.radialOptions.items.push(
+							{content: 'Message', icon: 'ion-email', tooltip: 'Sends the Operator a message.',
+							 condition: checkMessage, function: unitsServices.askSendMessage },
 
-			if (vm.displayMode === "pmc-friends") {
-				$scope.radialOptions.items = [];
+							{content: 'Profile', icon: 'ion-document-text', tooltip: 'Opens the Operator profile.',
+							 route: unitsServices.getPlayerProfile }
+						);
 
-				$scope.radialOptions.items.push(
-					{content: 'Profile', icon: 'ion-document-text', tooltip: 'Opens the Outfit profile.',
-					 route: unitsServices.getPMCProfile }
-				);
+						if (vm.displayMode !== "friends") {
+							$scope.radialOptions.items.push(
+								{content: 'Befriend', icon: 'ion-person-add', tooltip: 'Add the Operator to your friends list.',
+								 condition: checkFriend, function: unitsServices.askAddFriend }
+							);
+						}
+					} else {
+						$scope.radialOptions.items.push(
+							{content: 'Profile', icon: 'ion-document-text', tooltip: 'Opens the Operator profile.',
+							 route: unitsServices.getPlayerProfile }
+						);
+					}
+				} break;
 			}
 		}
-
-		console.log(vm.displayMode);
-
-		$timeout(function() { unitsServices.centerUnits(); }, 0);
 
 		switch (vm.displayMode) {
 			case "ranked": {
@@ -58,17 +70,13 @@
 		}
 
 		function initializeTiers(event, units) {
-			$scope.organizedTiers = [[0],[1],[2],[3],[4]];
-			for (i in units) { $scope.organizedTiers[units[i].playertier].push(units[i]); }
-			$timeout(function() { unitsServices.centerUnits(); }, 0);
+			$scope.organizedTiers = [[0],[1],[2],[3],[4],[5]];
+			for (i in units) { $scope.organizedTiers[((units[i].playerTier === undefined) ? 5 : units[i].playerTier)].push(units[i]); }
 		}
 
 		function reloadUnits(event, units) {
 			$scope.unitsList = [];
-			$timeout(function() {
-				$scope.unitsList = units;
-				$timeout(function() { unitsServices.centerUnits(); }, 0);
-			}, 250);
+			$timeout(function() { $scope.unitsList = units;	}, 250);
 		}
 
 		function checkFriend(a) { return unitsServices.checkFriend(a, $scope.playerInfo, $scope.friendsList); }
@@ -83,7 +91,8 @@
 				pmcInfo: "=",
 				playerInfo: "=",
 				friendsList: "=",
-				displayMode: "@"
+				displayMode: "@",
+				styleClass: "@"
 			},
 			restrict : "E",
 			templateUrl: 'directive/units.ejs',

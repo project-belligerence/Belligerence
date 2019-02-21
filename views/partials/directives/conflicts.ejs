@@ -1,0 +1,141 @@
+
+<span ng-init="::(Directive = CtrlDirectiveConflicts)"></span>
+
+<div class="conflicts-directive-container" ng-if="(Directive.displayDirective())" ng-cloak>
+	<div class="conflicts-directive">
+		<div class="conflict-col col-sm-6 col-xs-12 message-animation" ng-class="::(Directive.getNormalColumnSize())" ng-repeat="object in objectList track by $index">
+			<div class="row">
+				<div class="conflict-object" ng-init="::(Directive.initObject(object))">
+					<a ng-href="conflict/{{::(object.hashField)}}">
+
+						<div class="main-top">
+							<div class="name" ng-bind="::(object.nameField)"></div>
+						</div>
+
+						<div class="main-body" ng-style="{{::(Directive.mapBackground(object.Map))}}">
+
+							<div class="top-section">
+								<div class="date"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-popup-delay="250"
+									popover-append-to-body="true"
+									uib-popover="{{::(object.createdAt | date)}}"
+								>
+									<i class="icon ion-clock"></i>
+									<span ng-bind="::(object.renderInfo.status.text)"></span> <time-ago from-time='{{::object[object.renderInfo.status.prop]}}'></time-ago>
+								</div>
+								<div class="mission">
+									<i class="icon ion-document-text"></i>
+									<strong ng-bind="::(object.missionCount)"></strong> active missions
+								</div>
+							</div>
+
+							<div class="middle-bar">
+
+								<div class="left">
+									<div class="flag-container">
+										<img
+											class="flag-img"
+											ng-src="images/modules/factions/main_{{::(object.Factions[0].hashField)}}.png"
+											ng-class="::(Directive.getFlagClass(object, object.Factions[0]))"
+
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-popup-delay="250"
+											popover-append-to-body="true"
+											uib-popover="{{::(object.Factions[0].nameField)}}"
+										>
+									</div>
+								</div>
+
+								<div class="center-section hide-medium">
+
+									<div class="asset-bar-container" ng-if="::(object.statusField !== 1)" ng-cloak>
+										<div class="shine-effect"></div>
+										<div class="war-score" ng-bind="::(object.conflict_flow.scores.winning + '%')"></div>
+										<div class="asset-bar faction-a" ng-class="::(Directive.applyControlledClass(object.Factions[0].sideField))" ng-style="::(Directive.setBarProperties(object, object.conflict_flow.faction_a))"></div>
+										<div class="asset-bar faction-b" ng-class="::(Directive.applyControlledClass(object.Factions[1].sideField))" ng-style="::(Directive.setBarProperties(object, object.conflict_flow.faction_b))"></div>
+									</div>
+
+									<div
+										class="casualties-container"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-popup-delay="250"
+										popover-append-to-body="true"
+										uib-popover="{{::('Deaths and casualties')}}"
+									>
+										<div class="casualties faction-a">
+											<img src="images/icons/skull.png" class="skull" />
+											<div class="number" ng-bind="::(object.Factions[0].participant_table.casualtiesField | number)"></div>
+										</div>
+										<div class="casualties faction-b">
+											<div class="number" ng-bind="::(object.Factions[1].participant_table.casualtiesField  | number)"></div>
+											<img src="images/icons/skull.png" class="skull" />
+										</div>
+									</div>
+
+								</div>
+
+								<div class="right">
+									<div class="flag-container">
+										<img
+											class="flag-img"
+											ng-src="images/modules/factions/main_{{::(object.Factions[1].hashField)}}.png"
+											ng-class="::(Directive.getFlagClass(object, object.Factions[1]))"
+
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-popup-delay="250"
+											popover-append-to-body="true"
+											uib-popover="{{::(object.Factions[1].nameField)}}"
+										>
+									</div>
+								</div>
+							</div>
+
+							<div class="small-casualties visible-sm-block visible-xs-block">
+
+								<div class="casualties-container">
+									<div class="casualties faction-a"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-popup-delay="250"
+										popover-append-to-body="true"
+										uib-popover="{{::('Deaths and casualties')}}"
+									>
+										<img src="images/icons/skull.png" class="skull" />
+										<div class="number" ng-bind="::(object.Factions[0].participant_table.casualtiesField | number)"></div>
+									</div>
+									<div class="casualties faction-b"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-popup-delay="250"
+										popover-append-to-body="true"
+										uib-popover="{{::('Deaths and casualties')}}"
+									>
+										<div class="number" ng-bind="::(object.Factions[1].participant_table.casualtiesField  | number)"></div>
+										<img src="images/icons/skull.png" class="skull" />
+									</div>
+								</div>
+
+								<div class="asset-bar-container" ng-if="::(object.statusField !== 1)" ng-cloak>
+									<div class="shine-effect"></div>
+
+									<div class="war-score" ng-bind="::(object.conflict_flow.scores.winning + '%')"></div>
+
+									<div class="asset-bar faction-a" ng-class="::(Directive.applyControlledClass(object.Factions[0].sideField))" ng-style="::(Directive.setBarProperties(object, object.conflict_flow.faction_a))"></div>
+
+									<div class="asset-bar faction-b" ng-class="::(Directive.applyControlledClass(object.Factions[1].sideField))" ng-style="::(Directive.setBarProperties(object, object.conflict_flow.faction_b))"></div>
+								</div>
+
+							</div>
+
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

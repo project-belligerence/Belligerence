@@ -4,6 +4,7 @@
 	// SERVER DEPENDENCIES
 
 	var 	express = require('express'),
+			dotenv = require('dotenv').config(),
 			Sequelize = require('sequelize'),
 
 			methodOverride = require('method-override'),
@@ -18,10 +19,16 @@
 
 			env = process.env.NODE_ENV || config.env,
 
-			app = module.exports = express();
+			app = module.exports = express(),
+
+			// Runs scheduled tasks.
+			scheduled = config.scheduled();
 
 	// CONNECTS TO DATABASE
 	var	sequelize = new Sequelize(config.db.newConnection());
+
+	// SETUP PASSPORT
+	config.methods.setupPassportSteam(app);
 
 	// ENVIRONMENTS
 	app.set('port', process.env.PORT || config.port);
@@ -35,10 +42,13 @@
 	// SETS UP ROUTES
 	routes.setup(app, express);
 
+	// STARTS SERVER
+	var serverObject = http.createServer(app).listen(app.get('port'), config.methods.openServer(app));
+
+	// INITIALIZES WEBSOCKET
+	config.websocket.init(serverObject);
+
 	// CLOSES CONNECTION WITH DB WHEN TERMINATED
 	process.on('SIGINT', config.methods.closeServer);
-
-	// STARTS SERVER
-	http.createServer(app).listen(app.get('port'), config.methods.openServer(app));
 
 })();

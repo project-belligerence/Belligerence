@@ -1,0 +1,71 @@
+
+<div class="modal-window">
+	<div class="modal-header">
+		<i class="icon" ng-class="::(ModalController.options.header.icon)"></i>
+		<h2 class="modal-title" ng-bind="::(ModalController.options.header.text)"></h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
+	</div>
+
+	<div class="modal-body">
+		<div class="modal-body" id="modal-body">
+			<div class="message-receiver invite">
+				<div class="circle unit-avatar">
+					<div class="small"
+					ac-background-image background-image="{{::ModalController.contextData.image}}thumb_{{::ModalController.options.target}}.jpg">
+					</div>
+				</div>
+				<span ng-bind="::(ModalController.options.body.text)"></span>
+			</div>
+
+			<form class="send-message">
+				<div class="form-group message">
+					<div class="input-group">
+						<textarea type="text" class="form-control" id="messageInputBody" ng-model="ModalController.modalMessage" placeholder="Type an optional message here."></textarea>
+					</div>
+					<div class="characters-remaining"><span ng-bind="(ModalController.maxMessageCharacters - ModalController.modalMessage.length)"></span> characters remaining.</div>
+				</div>
+				<div class="form-error">
+					<div class="error-message flip-animation" ng-if="(ModalController.currentError.length > 0)">
+						<i class="icon ion-alert-circled"></i><span ng-bind="ModalController.currentError"></span>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="modal-payment" ng-if="ModalController.options.cost" ng-cloak>
+		<div class="extra-input noselect">
+			<input type="checkbox" id="payment-agree" ng-model="ModalController.acceptPayment">
+			<label class="input-label" for="payment-agree">
+				<div class="body check">
+					<div class="box"><i class="icon ion-checkmark small"></i></div>
+					<div class="payment-text">
+						<span>
+							I authorize the payment of
+							<span class="amount" ng-bind="::ModalController.options.cost | currency:'D$ '"></span>
+						</span>
+						<img src="images/chipcard.png" id="barcode-img" />
+					</div>
+				</div>
+			</label>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+		<a class="section-button medium muted" role="button" ng-click="closeModal(false)">
+			<ul>
+				<li><i class="icon" ng-class=::(ModalController.options.choices.no.icon)></i></li>
+				<li ng-bind="::(ModalController.options.choices.no.text)"></li>
+			</ul>
+		</a>
+		<a class="section-button medium" role="button" ng-click="closeModal(true)" ng-class="{'muted': !(ModalController.isPaidFor())}">
+			<ul>
+				<li><i class="icon" ng-class="::(ModalController.options.choices.yes.icon)"></i></li>
+				<li ng-bind="::(ModalController.options.choices.yes.text)"></li>
+			</ul>
+		</a>
+	</div>
+</div>

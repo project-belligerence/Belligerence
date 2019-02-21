@@ -36,6 +36,19 @@
 		.input-group-addon { @include icon($icon_size_small); }
 	}
 
+	#loginRememberForm {
+		position: absolute;
+		width: 100%;
+	}
+
+	.input-label {
+		.body-text {
+			color: black;
+			background-color: #fff;
+			padding: factor(1.5) factor(2);
+		}
+	}
+
 	.body.check .box {
 		padding: 11px 11px;
 		i {left: 0px;}
@@ -100,8 +113,13 @@
 }
 
 #fp-join-call {
+	@include factor-property(margin-top, 15);
+
 	#join-call-text {
-		margin-right: 77px;
+		@include font-size(factor(3));
+		letter-spacing: -1px;
+		text-shadow: 0px 0px 5px #000, 0px 0px 10px #000;
+		margin-right: 50px;
 		@include breakpoint('medium') {
 			margin-bottom: 10px;
 			display: block;
@@ -110,11 +128,11 @@
 }
 
 #fp-warning-container {
-
 	@include factor-property(margin-top, 3);
 	@include factor-property(min-height, 11);
 
 	.warning-container {
+		top: -20px;
 		position: absolute;
 		width: 100%;
 		max-width: 360px;
@@ -134,12 +152,6 @@
 
 		$easing: cubic-bezier(1, -0.55, 0.265, 1.55);
 
-		&.ng-leave-active, &.ng-enter-active {
-			// position: absolute;
-			// width: 100%;
-			// max-width: 360px;
-		}
-
 		&.ng-leave {
 			-webkit-animation: $animationOut $delay_out both $easing;
 			-moz-animation: $animationOut $delay_out both $easing;
@@ -158,8 +170,124 @@
 	@include factor-property(margin-bottom, 15);
 }
 
-#fp-intel-container {
-	h2 { text-transform: uppercase; color: $main_text_color; }
+#loggedInForm {
+	@include factor-property(margin-top, 7);
 
-	@include factor-property(padding-top, 11);
+	.logged-in-container {
+		display: inline-block;
+		width: 100%;
+
+		h3, h2 { margin: 0; }
+
+		.logged-column {
+			@include factor-property(margin-bottom, 2);
+			padding: 0 factor(1);
+			background: url("/images/cardbg_light.png");
+			display: inline-block;
+
+			&.short {
+				@include factor-property(margin-bottom, 1);
+			}
+
+			h2 {
+				letter-spacing: -6px;
+				@include font-size(factor(8));
+			}
+
+			.info-name {
+				@include font-size(factor(5));
+				color: #111;
+				letter-spacing: -2px;
+				font-weight: 800;
+			}
+		}
+
+		.player-avatar {
+			display: inline-block;
+			height: 150px;
+		}
+
+		.info-contract {
+			vertical-alignment: bottom;
+
+			.icon, .name {
+				padding: 0 factor(1);
+				background: url("/images/cardbg_light.png");
+				display: inline-block;
+				@include font-size(factor(3));
+				color: #000;
+				font-weight: 800;
+				letter-spacing: -1px;
+			}
+
+			.icon {
+				@include factor-property(margin-right, .5);
+			}
+		}
+
+		.self-info-column {
+			display: inline-block;
+
+			&.blufor .logged-column { color: #fff; background: $blufor_color; .info-name { color: #fff; } }
+			&.opfor .logged-column { color: #fff; background: $opfor_color; .info-name { color: #fff; } }
+			&.indfor .logged-column { color: #fff; background: $indfor_color; .info-name { color: #fff; } }
+		}
+
+		.button-section {
+			.route-button {
+				@include transition(background-color .25s);
+				cursor: pointer;
+				padding: factor(2);
+				@include factor-property(margin-right, 2);
+				background-color: $main_color;
+				text-align: center;
+
+				display: inline-block;
+				color: #fff;
+
+				width: auto;
+
+				&:hover { background-color: $main_color_dark; }
+
+				.icon {
+					@include font-size(factor(3));
+					line-height: 0;
+				}
+
+				.description {
+					@include factor-property(margin-top, 1);
+					max-width: 70px;
+					letter-spacing: 0px;
+				}
+			}
+		}
+	}
+
+	@include breakpoint("medium") { margin-top: 0; }
+
+	@include breakpoint("small") {
+		@include factor-property(margin-top, 10);
+
+		.logged-in-container {
+			.logged-column {
+				h2 { @include font-size(factor(7)); }
+				.info-name { @include font-size(factor(4)); }
+
+			}
+			.detail-column {
+				.info-contract { .icon, .name { @include font-size(factor(2.5)); } }
+			}
+			.player-avatar {
+				height: 90px;
+				.medium-2 { @include size(85px); }
+			}
+
+			.button-section {
+				@include factor-property(margin-top, 2);
+				.route-button {
+					@include factor-property(margin-right, 1);
+				}
+			}
+		}
+	}
 }

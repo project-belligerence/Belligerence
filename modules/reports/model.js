@@ -15,7 +15,7 @@
 				},
 				contentField: { // Type of content that was reported: 'players', 'pmc', 'intel', 'item', 'store', 'upgrade', 'comment'
 					type: DataTypes.STRING,
-					field: 'issuer'
+					field: 'content'
 				},
 				resolvedField: { // Whether the report was resolved by the moderators.
 					type: DataTypes.BOOLEAN,

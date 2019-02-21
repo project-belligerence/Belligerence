@@ -37,31 +37,45 @@
 				already_registered: 'You are already registered.',
 				already_freelancer: 'You are already a Freelancer.',
 				already_soldier: 'You are already a Soldier.',
-				freelancer_cant_create_pmc: 'Freelancers are not allowed to create PMCs.'
+				freelancer_cant_create_pmc: 'Freelancers are not allowed to create Outfits.',
+				cannot_reclaim_soldier: 'You cannot claim your networth as a Soldier.',
+				reclaimed_networth: 'Your accumulated networth was claimed successfully.'
 			},
 			pmc: {
-				that_in_pmc: 'This player is already part of a PMC.',
-				not_in_pmc: 'You are currently not part of a PMC.',
-				self_in_pmc: 'You are already part of a PMC.',
-				action_not_allowed_soldiers: 'This action is not allowed for Soldiers without a PMC.',
-				not_open_applications: 'This PMC is not currently open for applications.',
+				that_in_pmc: 'This player is already part of an Outfit.',
+				not_in_pmc: 'You are currently not part of an Outfit.',
+				self_in_pmc: 'You are already part of an Outfit.',
+				action_not_allowed_soldiers: 'This action is not allowed for Soldiers without an Outfit.',
+				not_open_applications: 'This Outfit is not currently open for applications.',
 				tier_changed: function(good) { return 'The member has been ' + (good ? 'promoted' : 'demoted') + '.'; },
 				higher_tier_req: 'This member needs to be of a higher tier before being promoted to owner.',
-				now_leader: function(member, pmc) { return (member) + ' is now the leader of the PMC.'; },
-				was_kicked: 'The player has been kicked out the PMC.',
-				cant_leave_leader: 'You cannot leave a populated PMC as the leader. Transfer ownership to another member and try again.',
-				size_up: 'The PMC size was successfully increased.',
-				pmc_full: 'The PMC is full.'
+				now_leader: function(member, pmc) { return (member) + ' is now the leader of the Outfit.'; },
+				was_kicked: 'The player has been kicked out the Outfit.',
+				cant_leave_leader: 'You cannot leave a populated Outfit as the leader. Transfer ownership to another member and try again.',
+				size_up: 'The Outfit size was successfully increased.',
+				pmc_full: 'The Outfit is full.',
+				active_contracts: 'Soldiers may not join an Outfit engaged in active Contracts.'
+			},
+			rank: {
+				max_rank: "Your Prestige Rank is maxed out.",
+				rank_upgraded: "Your Prestige Rank was increased successfully."
+			},
+			alignment: {
+				side_changed: "The side alignment has been reset."
+			},
+			contracts: {
+				active_contracts: 'You cannot perform this action while engaged in active Contracts.'
 			},
 			bans: {
 				no_reason: 'No reason given.'
 			},
 			friends: {
-				own_pmc: 'You can\'t be friends with your own PMC.',
+				own_pmc: 'You can\'t be friends with your own Outfit.',
 				own_self: 'You can\'t be friends with yourself!',
 				already_friends: 'You are already friends with this player.',
-				already_friends_pmc: 'Your PMC is already friends with this PMC.',
-				friend_removed: 'The Operator has been removed from your friends list.'
+				already_friends_pmc: 'Your Outfit is already friends with this Outfit.',
+				friend_removed: 'The Operator has been removed from your friends list.',
+				alliance_removed: 'The Alliance has been dissolved.'
 			},
 			messages: {
 				message_to_self: "You wouldn't want to send a message to yourself.",
@@ -71,14 +85,14 @@
 				not_owned: 'This item is not owned.'
 			},
 			intel: {
-				hidden: 'Hidden'
+				hidden: '???'
 			},
 			invites: {
 				invalid: 'Invalid Invite type.',
-				request_playerPMC: 'Player requests membership with PMC.',
-				invite_playerPMC: 'PMC invites player to join their ranks.',
+				request_playerPMC: 'Player requests membership with Outfit.',
+				invite_playerPMC: 'Outfit invites player to join their ranks.',
 				friends_player: 'Player invites another player to be their friend.',
-				friends_PMC: 'PMC is inviting another PMC to be their allies.',
+				friends_PMC: 'Outfit is inviting another Outfit to be their allies.',
 				invite_created: 'The invitation was sent successfully.',
 				invite_exists: 'This invitation has already been sent.'
 			},
@@ -92,15 +106,18 @@
 				activated: function(modifier) { return'The selected modifier ' + modifier + ' is now enabled.'; }
 			},
 			upgrades: {
+				cannot_respec_contract: "You cannot respec with active Contracts.",
 				max_tier: 'This upgrade is as its maximum rank.',
 				wrong_type: 'This upgrade is not compatible with your current job.',
 				upgrade_toggled: function(word) { return 'Upgrade ownership is now ' + word + ' outsiders.'; },
 				upgrade_prominence_toggled: function(word) { return 'Upgrade prominence is now ' + word + ' outsiders.'; },
 				transaction_upgrade_low_rank: function(upgrade, curRank, nedRank) { return 'In order to complete this transaction, the upgrade "' + upgrade + '" needs to be at rank ' + nedRank + ' or higher, currently at ' + curRank + '.'; },
-				transaction_upgrade_high_rank: function(upgrade, curRank, nedRank) { return 'In order to complete this transaction, the upgrade "' + upgrade + '" cannot be at or above rank ' + nedRank + ', currently at ' + curRank + '.'; }
+				transaction_upgrade_high_rank: function(upgrade, curRank, nedRank) { return 'In order to complete this transaction, the upgrade "' + upgrade + '" cannot be at or above rank ' + nedRank + ', currently at ' + curRank + '.'; },
+				contract_upgrade_low_rank: function(upgrade, curRank, nedRank) { return 'In order to sign this contract, the upgrade "' + upgrade + '" needs to be at rank ' + nedRank + ' or higher, currently at ' + curRank + '.'; },
+				contract_upgrade_high_rank: function(upgrade, curRank, nedRank) { return 'In order to sign this contract, the upgrade "' + upgrade + '" cannot be at or above rank ' + nedRank + ', currently at ' + curRank + '.'; }
 			},
 			uploads: {
-				success: 'Uploaded completed.',
+				success: 'Upload completed.',
 				failure: 'Upload has failed.',
 				wrong_file: 'Wrong file uploaded.',
 				wrong_type: 'Invalid file type.',

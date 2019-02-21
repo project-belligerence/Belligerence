@@ -1,0 +1,431 @@
+
+<div class="items-directive" ng-if="::(CtrlDirectiveItems.displayMode !== 'single')" ng-cloak>
+
+	<div class="filters" ng-if="::(CtrlDirectiveItems.displayFilters)" ng-cloak>
+
+		<hr />
+
+		<div class="filter-inputs">
+
+			<div class="text-filter">
+				<label for="itemFilterInput"><i class="icon ion-search"></i></label>
+				<input type="text" id="itemFilterInput" class="form-control" placeholder="Quick filter"
+				ng-model="CtrlDirectiveItems.filterInput.mainFilter" ng-change="CtrlDirectiveItems.changeFilter()">
+			</div>
+
+			<dropdown-checkbox
+				button-name="'Filter for Types'"
+				options="CtrlDirectiveItems.filterValues.types"
+				model="CtrlDirectiveItems.filterInput.typeFilter"
+				on-change="CtrlDirectiveItems.changeFilter"
+			></dropdown-checkbox>
+
+			<form class="checkbox-form deploybox" ng-if="::(CtrlDirectiveItems.displayMode === 'inventory')" ng-cloak>
+				<div class="form-group">
+					<div class="input-group">
+						<div class="extra-input noselect">
+							<input type="checkbox" id="inputUnemployed"
+							ng-model="CtrlDirectiveItems.onlyDeployed" ng-click="CtrlDirectiveItems.changeFilter()">
+							<label class="input-label" for="inputUnemployed">
+								<div class="body check">
+									<div class="box"><i class="icon ion-checkmark small"></i></div>
+									<div class="label-text">Only deployed</div>
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="col-md-12">
+			<div class="row">
+				<hr class="short" />
+			</div>
+		</div>
+
+		<div class="loadouts-container" ng-if="::(CtrlDirectiveItems.displayMode === 'inventory')" ng-cloak>
+			<div class="col-md-12">
+				<div class="row interaction-row">
+					<a ng-click="CtrlDirectiveItems.displayLoadouts()" class="section-button small animated" role="button">
+						<ul>
+							<li><i class="icon" ng-class="(CtrlDirectiveItems.showLoadouts ? 'ion-tshirt-outline' : 'ion-tshirt' )" ></i></li>
+							<li ng-bind="(CtrlDirectiveItems.showLoadouts ? 'Hide Loadouts' : 'Display Loadouts')"></li>
+						</ul>
+					</a>
+					<a ng-click="CtrlDirectiveItems.showNewLoadoutField()" class="section-button success small animated" role="button" a-disabled="(CtrlDirectiveItems.currentlyDeployedAmount <= 0)">
+						<ul>
+							<li><i class="icon ion-android-archive"></i></li>
+							<li>Save/Update current Loadout</li>
+						</ul>
+					</a>
+					<a ng-click="CtrlDirectiveItems.importLoadout()" class="section-button small animated" role="button">
+						<ul>
+							<li><i class="icon ion-ios-download"></i></li>
+							<li>Import Loadout</li>
+						</ul>
+					</a>
+					<div class="go-right">
+						<a ng-click="CtrlDirectiveItems.askResetLoadout()" class="section-button warning small animated go-right" role="button">
+							<ul>
+								<li><i class="icon ion-ios-filing-outline"></i></li>
+								<li>Reset deployed items</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 expand-height-animation" ng-hide="!CtrlDirectiveItems.showLoadouts" ng-cloak>
+				<div class="loadout-table row">
+					<div class="table-responsive">
+						<table class="table table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Name</th>
+									<th>Description</th>
+									<th>Items</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="loadout-rows comment-animation" ng-repeat="loadout in (CtrlDirectiveItems.loadoutList | orderBy:'-bookmarkField') track by $index" >
+									<td class="star" ng-click="CtrlDirectiveItems.bookmarkLoadout(loadout)"><i class="icon" ng-class="{'ion-star': (loadout.bookmarkField), 'ion-ios-star-outline': !(loadout.bookmarkField)}"></td>
+									<td class="text" ng-bind="loadout.nameField"></td>
+									<td class="text" ng-bind="loadout.descriptionField"></td>
+									<td class="number" ng-bind="loadout.contentField.length"></td>
+									<td class="interaction">
+										<a ng-click="CtrlDirectiveItems.askLoadLoadout(loadout)" class="section-button success small animated" role="button">
+											<ul>
+												<li><i class="ion-checkmark"></i></li>
+												<li>Assign</li>
+											</ul>
+										</a>
+										<a ng-click="CtrlDirectiveItems.exportLoadout(loadout)" class="section-button muted small animated" role="button">
+											<ul>
+												<li><i class="icon ion-share"></i></li>
+												<li>Export</li>
+											</ul>
+										</a>
+										<a ng-click="CtrlDirectiveItems.askDeleteLoadout(loadout)" class="section-button warning small animated" role="button">
+											<ul>
+												<li><i class="icon ion-trash-a"></i></li>
+												<li>Delete</li>
+											</ul>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12 new-loadout-container expand-height-animation" ng-hide="!CtrlDirectiveItems.addNewLoadout" ng-cloak>
+				<div class="row">
+					<hr />
+					<div class="col-md-4">
+						<div class="row">
+							<div class="warning-column">
+								<div class="warning-icon">
+									<i class="icon ion-android-archive"></i>
+								</div>
+								<div class="warning-text">
+									Select the items and their respective amounts you wish to save into this loadout.
+								</div>
+								<div class="warning-total-items">
+									<span class="number" ng-bind="CtrlDirectiveItems.currentlyDeployedAmount"></span> Items selected.
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="row">
+							<form class="form" ng-submit="">
+								<div class="form-group">
+									<label for="newLoadoutName">Name</label>
+									<input
+										type="text"
+										class="form-control"
+										id="newLoadoutName"
+										name="newLoadoutName"
+										ng-model="CtrlDirectiveItems.newLoadoutModels.nameField"
+										ng-change="CtrlDirectiveItems.checkForExistingLoadout()"
+										placeholder="Name a new loadout you wish to create, or an existing one you want to update."
+									/>
+								</div>
+								<div class="form-group">
+									<label for="newLoadoutDescription">Description</label>
+									<input
+										type="text"
+										class="form-control"
+										id="newLoadoutDescription"
+										name="newLoadoutDescription"
+										ng-model="CtrlDirectiveItems.newLoadoutModels.descriptionField"
+										placeholder="Description (optional)"
+									/>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="save-row col-md-12">
+					<div class="row">
+						<a ng-click="CtrlDirectiveItems.askSaveLoadout(CtrlDirectiveItems.newLoadoutModels.updatingExistingLoadout)" ng-class="{'warning': (CtrlDirectiveItems.newLoadoutModels.updatingExistingLoadout), 'success': !(CtrlDirectiveItems.newLoadoutModels.updatingExistingLoadout)}"
+						class="section-button animated" a-disabled="((CtrlDirectiveItems.newLoadoutModels.nameField === '') || (CtrlDirectiveItems.currentlyDeployedAmount <= 0))" role="button">
+							<ul>
+								<li><i class="icon" ng-class="{'ion-plus': !(CtrlDirectiveItems.newLoadoutModels.updatingExistingLoadout), 'ion-edit': (CtrlDirectiveItems.newLoadoutModels.updatingExistingLoadout)}"></i></li>
+								<li ng-bind="(CtrlDirectiveItems.newLoadoutModels.updatingExistingLoadout ? 'Update loadout' : 'New loadout')"></li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="row">
+					<hr />
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="items-centerer col-md-12">
+
+		<ul class="items-container row" ng-class="::[{'wide': (CtrlDirectiveItems.displayMode === 'inventory')},(CtrlDirectiveItems.displayMode)]" ng-if="::(CtrlDirectiveItems.itemList.length > 0)" ng-cloak>
+
+			<li class="item-container message-animation"
+
+				ng-class="[(CtrlDirectiveItems.displayMode), (CtrlDirectiveItems.getItemGridSize(item.typeField, item.classField)), {'display-body': ((fItem || item).showItemBody), 'deploying-mode': ((fItem || item).isDeployed) }]"
+
+				ng-repeat="item in CtrlDirectiveItems.itemList | filter:CtrlDirectiveItems.filterInput.mainFilter:strict | orderBy:'[-deployingMode, +typeField]'"
+
+				ng-if="(CtrlDirectiveItems.typeFiltered((fItem || item).typeField) && (CtrlDirectiveItems.displayItems) && (CtrlDirectiveItems.onlyDeployed ? (item.isDeployed && CtrlDirectiveItems.canDeploy(item)) : (true)) && (!(item.hideItem)))"
+
+			ng-cloak>
+				<div ng-init="fItem = CtrlDirectiveItems.checkoutInit(item.item, 'items');"></div>
+
+				<div class="image" ng-class="{'muted': ((((fItem || item).amountField) <= 0) || !(CtrlDirectiveItems.enablePurchase)), 'deploying-mode': ((fItem || item).isDeployed) }">
+
+					<div class="expand-container" ng-class="{'single': (CtrlDirectiveItems.bodyOnly) }">
+						<a role="button" class="btn btn-default expand-button" ng-click="CtrlDirectiveItems.expandItemDetails((fItem || item))">
+							<i class="icon ion-ios-search-strong"></i>
+						</a>
+						<a ng-href="item/{{::((fItem || item).hashField)}}"  role="button" class="btn btn-default expand-button">
+							<i class="icon ion-clipboard"></i>
+						</a>
+					</div>
+
+					<div class="name" ng-bind="::((fItem || item).nameField)"></div>
+
+					<div class="item-bg-container">
+						<div class="item-bg" ng-style="::(CtrlDirectiveItems.setBGPicture((fItem || item).hashField, 'main', 'items', 'jpg'))"></div>
+					</div>
+
+					<div
+						ng-click="CtrlDirectiveItems.openItemMenu((fItem || item))"
+						class="menu-icon"
+						ng-class="[{'display': ((fItem || item).showItemBody)}]"
+						ng-if="::(CtrlDirectiveItems.displayMode === 'inventory')"
+					ng-cloak>
+						<i class="icon" ng-class="{ 'ion-close-round': ((fItem || item).showItemBody), 'ion-navicon-round': !((fItem || item).showItemBody) }"></i>
+					</div>
+
+					<div class="top">
+
+						<div ng-if="::(CtrlDirectiveItems.displayMode === 'purchase')" ng-cloak>
+							<div class="left stat success" ng-if="::(((fItem || item).storeDiscount) !== 0)" ng-bind="::(((fItem || item).storeDiscount) + '%')" ng-class="{'warning': (((fItem || item).storeDiscount) < 0) }" ng-bind="::('x' + ((fItem || item).amountField))">></div>
+							<div class="right stat" ng-class="{'muted': (((fItem || item).amountField) <= 0) }" ng-bind="::('x' + ((fItem || item).amountField))"></div>
+						</div>
+
+						<div ng-if="::(CtrlDirectiveItems.displayMode === 'inventory')" ng-cloak>
+							<div
+								class="right stat deployed-amount"
+								ng-if="((fItem || item).isDeployed)"
+								ng-bind="((item.deployedAmount))"
+							></div>
+							<div class="right stat owned-amount" ng-bind="('x' + (item.amountOwned))"></div>
+							<div class="item-class">
+								<i
+									class="icon"
+									ng-class="::(CtrlDirectiveItems.getTypeIcon(item.typeField))"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-popup-delay="500"
+									popover-placement="right"
+									uib-popover="{{::(CtrlDirectiveItems.filterValues.classes[((fItem || item)).classField].name)}}"
+								></i>
+							</div>
+						</div>
+
+						<div ng-if="::(CtrlDirectiveItems.displayMode === 'checkout')" ng-cloak>
+							<div class="right stat" ng-bind="::('x' + (item.amount))"></div>
+						</div>
+
+					</div>
+
+				</div>
+
+				<div class="body" id="{{::('item-' + item.itemId)}}" ng-class="[{'single': (CtrlDirectiveItems.bodyOnly), 'deploying-mode': ((fItem || item).isDeployed), 'display': ((fItem || item).showItemBody) }]" ng-scrollbar rebuild-on-resize rebuild-on="rebuild">
+
+					<div class="type">
+						<div class="text" ng-bind="::(CtrlDirectiveItems.filterValues.classes[((fItem || item)).classField].name)"></div>
+					</div>
+
+					<div class="mode-purchase" ng-if="::(CtrlDirectiveItems.displayMode === 'purchase')" ng-cloak>
+						<div class="store-price" ng-bind="::((fItem || item).storePrice) | currency :'D$ ': 0">
+						</div>
+
+						<div ng-if="::(CtrlDirectiveItems.displayMode === 'purchase')" ng-cloak>
+							<div class="extra-input-container">
+								<div ng-if="!((fItem || item).isPurchased)">
+									<a ng-click="CtrlDirectiveItems.addToCart(false, item)" class="section-button success small animated" a-disabled="(item.amountField <= 0) || !(CtrlDirectiveItems.enablePurchase)" role="button">
+										<ul>
+											<li><i class="icon ion-android-cart"></i></li>
+											<li>Add to cart</li>
+										</ul>
+									</a>
+								</div>
+
+								<div class="extra-input" ng-if="((fItem || item).isPurchased)" ng-cloak>
+									<input type="number" class="form-control" min="1" max="{{ ::(item.amountField) }}"
+										ng-model="(fItem || item).currentBoughtAmount"
+										ng-change="CtrlDirectiveItems.doMax(item.amountField, (fItem || item), 'currentBoughtAmount')"
+										ng-blur="CtrlDirectiveItems.minMax(1, item.amountField, (fItem||item), 'currentBoughtAmount')"
+									>
+
+									<a ng-click="CtrlDirectiveItems.addToCart(true, item)" class="section-button success small animated" role="button">
+										<ul>
+											<li><i class="icon ion-checkmark-circled"></i></li>
+										</ul>
+									</a>
+
+									<a ng-click="CtrlDirectiveItems.removeFromCart(CtrlDirectiveItems.currentStore, item)" class="section-button warning small animated" role="button">
+										<ul>
+											<li><i class="icon ion-close"></i></li>
+										</ul>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="mode-inventory" ng-if="::(CtrlDirectiveItems.displayMode === 'inventory')" ng-cloak>
+						<div class="inventory-items">
+							<ul class="extra-input-container noselect">
+
+								<li class="menu-item-button"
+									ng-click="CtrlDirectiveItems.expandItemDetails((fItem || item));CtrlDirectiveItems.openItemMenu((fItem || item));"
+								>
+									<i class="icon ion-android-search"></i>
+									<div class="inner-text">Inspect</div>
+								</li>
+								<a ng-href="item/{{::((fItem || item).hashField)}}" >
+									<li class="menu-item-button">
+										<i class="icon ion-clipboard"></i>
+										<div class="inner-text">Page</div>
+									</li>
+								</a>
+								<a ng-init="ownsAirDrop = CtrlDirectiveItems.hasAirDropUpgrade().valid;"
+								   ng-click="CtrlDirectiveItems.airDropItem(item)"
+								a-disabled="(ownsAirDrop)">
+									<li role="button"
+										class="menu-item-button"
+										ng-if="CtrlDirectiveItems.canAirDrop(item)"
+									ng-cloak>
+										<i class="icon ion-plane"></i>
+										<div class="inner-text">Airdrop</div>
+									</li>
+								</a>
+								<li class="menu-item-button slide-in-out anm-abs"
+									ng-if="(((fItem || item).deployableField)&&!((fItem || item).deployingMode))"
+									ng-click="CtrlDirectiveItems.expandIcons((fItem || item))"
+								ng-cloak>
+									<i class="icon ion-archive"></i>
+									<div class="inner-text">Deploy</div>
+								</li>
+
+								<div
+									class="extra-input deploy-amount slide-in-out anm-abs"
+									ng-if="(((fItem || item).deployableField) && ((fItem || item).deployingMode))"
+								>
+									<input type="number" class="form-control" min="1" max="{{ ::(item.amountOwned) }}"
+										ng-model="(fItem || item).deployedAmount"
+										ng-change="CtrlDirectiveItems.doMax(item.amountOwned, (fItem || item), 'deployedAmount')"
+										ng-blur="CtrlDirectiveItems.minMax(1, item.amountOwned, (fItem||item), 'deployedAmount')"
+									>
+
+									<a ng-click="CtrlDirectiveItems.deployItem((fItem || item), (fItem || item).deployedAmount)" class="section-button small animated" role="button"
+									ng-class="{'warning': (((fItem || item).deployedAmount) !== ((fItem || item).initialDeployed)) }">
+										<ul>
+											<li><i class="icon ion-archive"></i></li>
+										</ul>
+									</a>
+									<a ng-click="CtrlDirectiveItems.cancelDeployment((fItem || item))" class="section-button warning small animated" role="button">
+										<ul>
+											<li><i class="icon ion-close"></i></li>
+										</ul>
+									</a>
+
+								</div>
+
+							</ul>
+						</div>
+					</div>
+
+					<div class="mode-checkout" ng-if="::(CtrlDirectiveItems.displayMode === 'checkout')" ng-cloak>
+						<div class="store-price" ng-bind="::(CtrlDirectiveItems.extraFunctions.calculatePrice(fItem, item.amount, CtrlDirectiveItems.currentStore)) | currency :'D$ ': 0"></div>
+					</div>
+				</div>
+
+			</li>
+		</ul>
+	</div>
+
+	<div class="no-items" ng-if="::(CtrlDirectiveItems.itemList.length <= 0)" ng-cloak>
+
+		<i class="icon ion-ios-filing-outline"></i>
+		<div class="message" ng-bind="::(CtrlDirectiveItems.getNoItemStatus())"></div>
+
+	</div>
+
+</div>
+
+<div class="items-directive message-animation" ng-if="(CtrlDirectiveItems.displayMode === 'single') && (CtrlDirectiveItems.displayItems)" ng-cloak>
+
+	<div class="items-container" ng-init="fItem = (CtrlDirectiveItems.itemList[0]);">
+
+		<div class="item-container message-animation"
+				ng-repeat="item in CtrlDirectiveItems.itemList | filter:CtrlDirectiveItems.filterInput.mainFilter"
+				ng-if="(CtrlDirectiveItems.typeFiltered((fItem || item).typeField) && (CtrlDirectiveItems.displayItems) && (CtrlDirectiveItems.onlyDeployed ? item.isDeployed : true))"
+			ng-cloak>
+			<div ng-init="fItem = CtrlDirectiveItems.checkoutInit(item.item, 'items');"></div>
+
+			<div class="image" ng-class="{'muted': ((((fItem || item).amountField) <= 0) || !(CtrlDirectiveItems.enablePurchase)) }">
+
+				<div class="expand-container single" ng-if="::(CtrlDirectiveItems.allowInspect)" ng-cloak>
+					<a role="button" class="btn btn-default expand-button" ng-click="CtrlDirectiveItems.expandItemDetails((fItem || item))">
+						<i class="icon ion-ios-search-strong"></i>
+					</a>
+					<a ng-href="item/{{::((fItem || item).hashField)}}"  role="button" class="btn btn-default expand-button">
+						<i class="icon ion-clipboard"></i>
+					</a>
+				</div>
+
+				<div class="name" ng-bind="::((fItem || item).nameField)"></div>
+				<img class="picture" src="images/modules/items/main_{{::(fItem || item).hashField}}.jpg">
+
+			</div>
+
+			<div class="body single">
+				<div class="type">
+					<div class="text" ng-bind="::(CtrlDirectiveItems.filterValues.classes[((fItem || item)).classField].name)"></div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

@@ -1,0 +1,66 @@
+
+<div class="modal-window">
+	<div class="modal-header">
+		<i class="icon ion-flash-off"></i>
+		<h2 class="modal-title">Issue Ban</h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
+	</div>
+
+	<div class="modal-body">
+		<div class="modal-body" id="modal-body">
+			<a ng-href="operator/{{::ModalController.playerData.hashField}}" >
+				<div class="message-receiver ban">
+					<div class="circle unit-avatar">
+						<div class="medium"
+						ac-background-image background-image="images/avatars/players/main_{{::ModalController.playerData.hashField}}.jpg">
+						</div>
+					</div>
+					<div class="receiver" ng-bind="ModalController.playerData.aliasField"></div>
+				</div>
+			</a>
+
+			<hr class="separator" />
+
+			<form class="send-message ban">
+				<div class="form-group message">
+					<div class="input-group">
+						<label for="banPlayerDays">Ban reason</label>
+						<textarea type="text" class="form-control" id="banPlayerDays" rows="3" ng-model="ModalController.banReason" placeholder="State here the reason for the ban. (cannot be empty)"></textarea>
+					</div>
+					<div class="characters-remaining">{{ (ModalController.maxMessageCharacters - ModalController.banReason.length) }} characters remaining.</div>
+				</div>
+				<div class="form-group">
+					<label for="banPlayerDays">Duration in days</label>
+					<div class="input-group">
+						<input
+							type="number"
+							id="banPlayerDays"
+							class="form-control number"
+							min="1" max="999"
+							ng-change="ModalController.doMax(999, ModalController, 'banDays')"
+							ng-blur="ModalController.minMax(1, 999, ModalController, 'banDays')"
+						ng-model="ModalController.banDays">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+		<a class="section-button medium muted" role="button" ng-click="closeModal(false)">
+			<ul>
+				<li><i class="icon ion-arrow-left-c"></i></li>
+				<li>Cancel</li>
+			</ul>
+		</a>
+		<a class="section-button medium" a-disabled="((ModalController.banReason.length < 5) || (ModalController.banReason.length >= ModalController.maxMessageCharacters))" role="button" ng-click="closeModal(true)">
+			<ul>
+				<li><i class="icon ion-flash-off"></i></li>
+				<li>Confirm Ban</li>
+			</ul>
+		</a>
+	</div>
+</div>

@@ -45,12 +45,12 @@
 		function postComment(title, body, subject, type) {
 			return apiServices.requestPOST({
 				url: "/api/generalactions/postComment",
-				data: {"title": title,	"body": body, "subject": subject, "type": type}
+				data: { "title": title,	"body": body, "subject": subject, "type": type }
 			});
 		}
 
 		function deleteComment(comment) {
-			return apiServices.requestPOST({url: "/api/generalactions/deleteComment", data: {"comment": comment}});
+			return apiServices.requestPOST({url: "/api/generalactions/deleteComment", data: { "comment": comment }});
 		}
 
 		return methods;

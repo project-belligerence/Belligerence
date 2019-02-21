@@ -3,11 +3,11 @@
 
 	PMCControllerFunction.$inject = [
 		"$rootScope", "$scope","$state", "$stateParams", "$timeout",
-		"apiServices", "generalServices", "uiServices", "unitsServices",
-		"pmcInfo", "selfInfo", "selfFriends", "pmcUnits", "selfPMCFriends"
+		"apiServices", "pmcServices", "generalServices", "uiServices", "unitsServices", "upgradesServices",
+		"pmcInfo", "selfInfo", "selfFriends", "pmcUnits"
 	];
 
-	function PMCControllerFunction($rootScope, $scope, $state, $stateParams, $timeout, apiServices, generalServices, uiServices, unitsServices, pmcInfo, selfInfo, selfFriends, pmcUnits, selfPMCFriends) {
+	function PMCControllerFunction($rootScope, $scope, $state, $stateParams, $timeout, apiServices, pmcServices, generalServices, uiServices, unitsServices, upgradesServices, pmcInfo, selfInfo, selfFriends, pmcUnits) {
 		var vm = this;
 
 		vm.pmcInfo = pmcInfo[0];
@@ -16,13 +16,27 @@
 
 		vm.selfInfo = (selfInfo || apiServices.returnUnloggedUser());
 		vm.selfFriends = (selfFriends || []);
+
 		vm.pmcUnits = pmcUnits;
-		vm.selfPMCFriends = (selfPMCFriends || []);
+
+		vm.selfPMCFriends = [];
+		if (vm.selfInfo.PMC) {
+			pmcServices.getFriendsSelf().then(function(data) {
+				vm.selfPMCFriends = data;
+				vm.enableAlliance = canAskFriend();
+			});
+		}
 
 		vm.currentTab = 1;
 
 		vm.displayContract = apiServices.displayContract;
 		vm.displayPrivilege = apiServices.displayPrivilege;
+		vm.numberToArray = apiServices.numberToArray;
+		vm.applyControlledClass = apiServices.applyControlledClass;
+		vm.vv = apiServices.vv;
+
+		vm.prominenceClass = upgradesServices.setProminenceClass;
+		vm.rankComplete = upgradesServices.getRankComplete;
 
 		vm.addAsFriend = addAsFriend;
 		vm.checkIfFriend = checkIfFriend;
@@ -34,9 +48,13 @@
 		vm.canApply = canApply;
 		vm.askAlly = askAlly;
 		vm.askJoinPMC = askJoinPMC;
+		vm.askRemoveAlly = askRemoveAlly;
+		vm.gV = gV;
+		vm.eV = eV;
 
 		vm.statsItems = [
-			new statsItem('Current Funds', 'card', 'funds')
+			new statsItem('Successful Missions', 'trophy', 'missions_won'),
+			new statsItem('Failed Missions', 'close', 'missions_failed')
 		];
 
 		vm.unitsRadialOptions = {
@@ -46,35 +64,62 @@
 			items: []
 		};
 
-		console.log("PMC INFO:", vm.pmcInfo);
-		console.log("PMC Friends:", vm.selfPMCFriends);
-		console.log("SELF INFO:", vm.selfInfo);
-		console.log("Friend?", checkIfFriend());
-		console.log("Same PMC?", (vm.selfInfo.PMCId === vm.pmcInfo.id));
-		console.log("canAskFriend()", canAskFriend());
+		vm.enableApplication = canApply();
+		vm.enableAlliance = canAskFriend();
 
-		$rootScope.$broadcast("updatePageTitle", vm.pmcInfo.display_name + " | Outfit");
+		// console.log("vm.selfFriends", vm.selfFriends);
+		// console.log("PMC INFO:", vm.pmcInfo);
+		// console.log("PMC Friends:", vm.selfPMCFriends);
+		// console.log("SELF INFO:", vm.selfInfo);
+		// console.log("Friend?", checkIfFriend());
+		// console.log("PMC Units:", pmcUnits);
+		// console.log("Same PMC?", (vm.selfInfo.PMCId === vm.pmcInfo.id));
+		// console.log("canAskFriend()", canAskFriend());
 
-		function askAlly() {return unitsServices.askAddAlly({alias: vm.pmcInfo.display_name, hash: vm.pmcInfo.hashField});}
-		function askJoinPMC() {return unitsServices.askJoinPMC({alias: vm.pmcInfo.display_name, hash: vm.pmcInfo.hashField});}
+		uiServices.updateWindowTitle([vm.pmcInfo.display_name + " | Outfit"]);
+
+		generalServices.getRegions().then(function(v) { vm.regionNames = v; });
+
+		// ==========================================================================
+
+		function eV(v) { return vm.vv(vm.pmcInfo[v]); }
+
+		function gV(v) {
+			if (vm.eV(v)) return vm.pmcInfo[v];
+
+			switch(v) {
+				case "motto": { return ". . ."; } break;
+				case "totalPlayers": { return "?"; } break;
+				case "size": { return "??"; } break;
+				case "bio": { return "No description available."; } break;
+				default: { return "???"; } break;
+			}
+		}
+
+		function askAlly() { return unitsServices.askAddAlly({alias: vm.pmcInfo.display_name, hash: vm.pmcInfo.hashField}); }
+		function askRemoveAlly() {
+			unitsServices.askRemoveAlly({alias: vm.pmcInfo.display_name, hash: vm.pmcInfo.hashField}).then(function(data){
+				if (data) $state.reload();
+			});
+		}
+		function askJoinPMC() { return unitsServices.askJoinPMC({alias: vm.pmcInfo.display_name, hash: vm.pmcInfo.hashField}); }
 
 		function statsItem(text, icon, value) { return { text: text, icon: ("ion-" + icon),	value: value };}
 
 		function doResize() { return uiServices.centerHexagon("#unit-avatar", "#header", true); }
 
-		function canAskFriend() { return ((vm.selfInfo.playerTier <= 1) && (!(checkIfFriend)) && (vm.selfInfo.PMCId !== vm.pmcInfo.id)); }
+		function canAskFriend() { return ((vm.selfInfo.playerTier <= 1) && (!(checkIfFriend())) && ((vm.selfInfo.PMC ? vm.selfInfo.PMC.hashField : "123") != vm.pmcInfo.hashField)); }
 
-		function canApply() {
-			return ((vm.selfInfo.PMCId === undefined) && (vm.pmcInfo.open_applications === 1) && (vm.pmcInfo.size > vm.pmcInfo.totalPlayers));
-		}
+		function canApply() { return ((vm.selfInfo.PMCId === null) && (vm.pmcInfo.open_applications === 1) && (vm.pmcInfo.size > vm.pmcInfo.totalPlayers));	}
 
 		function checkIfFriend() {
 			var isFriend = false;
-			for (var i in vm.selfPMCFriends) {if (vm.selfPMCFriends[i].friendHash === vm.pmcInfo.hashField) isFriend = true;}
+			for (var i in vm.selfPMCFriends) { if (vm.selfPMCFriends[i].friendHash == vm.pmcInfo.hashField) isFriend = true; }
 			return isFriend;
 		}
 
 		function addAsFriend() {return unitsServices.askAddFriend({alias: vm.pmcInfo.aliasField, hash: vm.pmcInfo.hashField});}
+
 		function sendMessage() {return unitsServices.askSendMessage({alias: vm.pmcInfo.aliasField, hash: vm.pmcInfo.hashField});}
 
 		function sendReport() {return unitsServices.askReportPMC({alias: vm.pmcInfo.display_name, hash: vm.pmcInfo.hashField});}
@@ -103,10 +148,9 @@
 			}
 		}
 
-		doResize();
-		$(window).resize(doResize);
-		$scope.$on('$destroy', function() {$(window).off("resize", doResize);});
-		if (vm.pmcInfo === undefined) return $state.go("app.public.frontpage");
+		// doResize();
+		// $(window).resize(doResize);
+		// $scope.$on('$destroy', function() {$(window).off("resize", doResize);});
 	}
 
 	exports.function = PMCControllerFunction;

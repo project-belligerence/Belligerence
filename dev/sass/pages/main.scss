@@ -1,8 +1,22 @@
 
+@import "shared.scss";
 @import "frontpage.scss";
 @import "dashboard.scss";
 @import "unit.scss";
 @import "signup.scss";
+@import "operations.scss";
+@import "messages.scss";
+@import "intel.scss";
+@import "units.scss";
+@import "bureaucracy.scss";
+@import "admin.scss";
+@import "market.scss";
+@import "items.scss";
+@import "objects-shared.scss";
+@import "upgrades.scss";
+@import "single-item.scss";
+@import "single-conflict.scss";
+@import "simple_missions.scss";
 
 @import "directives/intel.scss";
 @import "directives/cheers.scss";
@@ -12,3 +26,14 @@
 @import "directives/radial.scss";
 @import "directives/comments.scss";
 @import "directives/nav.scss";
+@import "directives/footer.scss";
+@import "directives/funds.scss";
+@import "directives/dropdowncheckbox.scss";
+@import "directives/item.scss";
+@import "directives/maps.scss";
+@import "directives/locations.scss";
+@import "directives/factions.scss";
+@import "directives/objectives.scss";
+@import "directives/conflicts.scss";
+@import "directives/missions.scss";
+@import "directives/upgrades.scss";

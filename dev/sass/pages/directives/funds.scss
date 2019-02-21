@@ -1,0 +1,105 @@
+#funds-main-container {
+	@include transition(right .5s cubic-bezier(0.68, -0.55, 0.265, 1.55), padding .25s);
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	z-index: 99999;
+
+	padding: 0;
+
+	&.spaced {
+		right: 415px;
+		@include breakpoint("medium") { right: 300px; }
+		@include breakpoint("small") { right: 10px; bottom: 15px }
+	}
+	&.display { padding: 0 factor(3) 0 0; }
+
+	#funds-container {
+		display: inline-block;
+
+		text-shadow: 0px 0px 5px #000, 0px 0px 10px #000;
+
+			.color-red {
+				text-shadow: 0px 0px 5px #000,
+							 0px 0px 10px #000,
+							 0px 0px 10px #000,
+							 0px 0px 20px $main_color,
+							 0px 0px 25px $main_color,
+							 0px 0px 30px $main_color_dark;
+			}
+
+			.color-green {
+				text-shadow: 0px 0px 5px #000,
+							 0px 0px 10px #000,
+							 0px 0px 10px #000,
+							 0px 0px 20px $success_color,
+							 0px 0px 25px $success_color,
+							 0px 0px 30px $success_color_dark;
+			}
+
+		#funds-interpolation {
+			@include transition(text-shadow, .25s);
+			font-family: $main_font;
+			@include transition(top 1s, opacity 1s);
+			@include font-size(factor(7));
+
+			text-align: right;
+
+			position: relative;
+			top: 70px;
+
+			@include opacity(0);
+
+			&.displaying {
+				top: 0px;
+				@include opacity(1);
+			}
+		}
+
+		#funds-current {
+			@include transition(text-shadow, .25s);
+			text-align: right;
+			font-family: $main_font;
+			@include font-size(factor(7));
+			letter-spacing: -5px;
+		}
+	}
+	.resolve-funds {
+		@include transition(opacity, .5s);
+		@include opacity(1);
+		@include factor-property(margin-left, 2);
+		display: inline-block;
+
+		position: relative;
+		top: -27px;
+		letter-spacing: -5px;
+
+		&.fade { @include opacity(1); }
+	}
+
+	@include breakpoint("small") {
+		#funds-container {
+			width: 100%;
+			#funds-interpolation {
+				top: 61px;
+				@include font-size(factor(6));
+				letter-spacing: -6px;
+			}
+			#funds-current {
+				@include font-size(factor(6));
+				@include opacity(1);
+				letter-spacing: -6px;
+			}
+		}
+		.resolve-funds {
+			float: right;
+			top: 5px;
+			right: -3px;
+			.btn {
+				line-height: 0;
+				padding: 5px 60px;
+				@include font-size(factor(4));
+			}
+		}
+	}
+}

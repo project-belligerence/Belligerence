@@ -1,0 +1,60 @@
+<script type="text/ng-template" id="storeItemsTypeahead.html">
+	<a>
+		<img ng-src="images/modules/items/thumb_{{match.label.hashField}}.jpg" width="32">
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+		@<span class="class" ng-bind-html="match.label.contentField | uibTypeaheadHighlight:query"></span> ::
+		<span class="type" ng-bind-html="match.label.typeField | uibTypeaheadHighlight:query"></span> -
+		<span class="class" ng-bind="match.label.classField"></span>
+	</a>
+</script>
+
+<script type="text/ng-template" id="upgradesTypeahead.html">
+	<a>
+		<img class="transparent" ng-src="images/modules/upgrades/thumb_{{match.label.iconName}}.png" width="32">
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+		<span class="class" ng-bind-html="match.label.typeField | uibTypeaheadHighlight:query"></span>
+		<span class="type" ng-bind-html="match.label.kindField | uibTypeaheadHighlight:query"></span>
+	</a>
+</script>
+
+<script type="text/ng-template" id="objectivesTypeahead.html">
+	<a>
+		<img class="transparent" ng-src="images/modules/objectives/thumb_{{match.label.iconName}}.png" width="32">
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+	</a>
+</script>
+
+<script type="text/ng-template" id="advisoriesTypeahead.html">
+	<a>
+		<img class="transparent" ng-src="images/modules/advisories/thumb_{{match.label.iconName}}.png" width="32">
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+	</a>
+</script>
+
+<script type="text/ng-template" id="mapsTypeahead.html">
+	<a>
+		<img class="transparent" ng-src="images/modules/maps/thumb_{{match.label.nameField}}.jpg" width="32">
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+	</a>
+</script>
+
+<script type="text/ng-template" id="locationsTypeahead.html">
+	<a>
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+		<span class="type" ng-bind-html="match.label.typeField | uibTypeaheadHighlight:query"></span>
+	</a>
+</script>
+
+<script type="text/ng-template" id="conflictsTypeahead.html">
+	<a>
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+	</a>
+</script>
+
+<script type="text/ng-template" id="factionsTypeAhead.html">
+	<a>
+		<img class="transparent" ng-src="images/modules/factions/thumb_{{match.label.hashField}}.png" width="64" height="32">
+		<span class="title" ng-bind-html="match.label.nameField | uibTypeaheadHighlight:query"></span>
+		| <span class="type" ng-bind-html="match.label.sideField | uibTypeaheadHighlight:query"></span>
+	</a>
+</script>

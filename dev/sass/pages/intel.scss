@@ -1,0 +1,363 @@
+
+#page-intel-container {
+	h2 { color: #fff; }
+
+	#intel-directive {
+		@include factor-property(padding-top, 20);
+
+		.new-intel {
+			display: inline-block;
+			@include factor-property(margin-left, 2);
+		}
+	}
+
+	.hexagon {
+		height: 320px;
+		width: 220px;
+		.in2 {
+			background-color: white;
+
+			i {
+				position: absolute;
+				top: 20%;
+				left: 22%;
+				@include font-size(factor(20));
+				color: #111;
+				z-index: 9999;
+
+				&.ion-clipboard { left: 30%; }
+			}
+
+			&.has-picture {
+				background-color: #ddd;
+				i {
+					top: 50% !important;
+					left: 41% !important;
+					color: white;
+					text-shadow: 0px 0px 10px #000;
+					font-size: factor(10) !important;
+				}
+
+				img {
+					width: 254px;
+					height: auto;
+					left: -15px;
+					top: 33px;
+					position: relative;
+				}
+			}
+		}
+	}
+
+	#single-intel-container {
+		cursor: inherit;
+		@include factor-property(margin-bottom, 2);
+
+		hr { border-color: #ddd; }
+
+		.extra-options {
+			float: none;
+			margin-left: auto;
+			margin-right: auto;
+			@include factor-property(padding-top, 0.5);
+			@include factor-property(padding-bottom, 8);
+		}
+
+		.intel-list {
+			@include factor-property(min-height, 80);
+			float: none;
+			margin: 0 auto;
+
+			#single-intel {
+				@include factor-property(padding-top, 2);
+				@include font-size(factor(3));
+				@include breakpoint("small") { @include font-size(factor(2)); }
+
+				.hexagon-container {
+					@include factor-property(margin-bottom, 5);
+					height: 280px;
+					.hexagon { margin-right: auto; margin-left: auto; }
+				}
+
+				.title h3 {
+					@include font-size(factor(5));
+					@include factor-property(margin-bottom, 2);
+					text-shadow: 0px 0px 10px #000;
+
+					@include breakpoint("small") { @include font-size(factor(4)); }
+				}
+
+				.intel-info {
+					text-align: center;
+
+					.date {
+						display: inline-block;
+						@include font-size(factor(3));
+						text-align: center;
+						@include factor-property(margin-right, 3);
+						.text {
+							display: inline-block;
+							text-shadow: 0px 0px 10px #000;
+						}
+					}
+
+					.poster {
+						display: inline-block;
+						margin: factor(2) 0;
+						text-align: center;
+						text-shadow: 0px 0px 10px #000;
+						a {
+							margin-left: 3px;
+							@include transition(background-color .25s);
+							display: inline-block;
+							border-bottom: none;
+							color: #111;
+							@include factor-property(padding, 1);
+							background-color: #fff;
+							text-shadow: none;
+
+							&:hover { background-color: #eee; }
+						}
+					}
+				}
+
+				.intel-body  {
+					@include factor-property(margin-top, 5);
+					@include factor-property(margin-bottom, 10);
+
+					& p {
+						@include factor-property(line-height, 6);
+						background-color: #fff;
+						color: #111;
+						padding: factor(2) factor(3);
+						font-weight: 800;
+					}
+					@include breakpoint("small") {
+						& p { @include factor-property(line-height, 4);	}
+					}
+				}
+
+				.bottom {
+					@include factor-property(margin-top, 4);
+					@include factor-property(margin-bottom, 19);
+
+					.section-button { margin-top: 10px;	}
+				}
+			}
+		}
+
+		@include breakpoint("tiny") {
+			.section-button {
+				li {
+					padding: factor(0.5) factor(1.3);
+					@include font-size(factor(2));
+				}
+			}
+		}
+	}
+
+	.spinner {
+		position: absolute;
+		top: 200px;
+		left: 45%;
+		width: 100px;
+		height: 100px;
+		img {
+			height: 50px;
+			left: 42%;
+			top: 25%;
+			position: absolute;
+		}
+		@include breakpoint("small") { top: 250px; left: 30%; }
+	}
+
+	#compose-intel-container {
+		@include factor-property(padding-bottom, 40);
+		h2 { color: $main_color; }
+
+		.submit-form {
+			@include factor-property(margin-top, 5);
+
+			#unit-avatar {
+				width: 250px;
+				margin-left: auto;
+				margin-right: auto;
+
+				.hexagon {
+					&.avatar-medium {
+						height: 350px;
+						width: 250px;
+						.in2 {
+							background-color: white;
+
+							i {
+								position: absolute;
+								top: 21%;
+								left: 25%;
+								@include font-size(factor(21));
+								color: #111;
+								z-index: 9999;
+
+								&.ion-clipboard { left: 30%; }
+							}
+
+							&.has-picture {
+								background-color: #ddd;
+								i { color: white; text-shadow: 0px 0px 10px #000; }
+
+								img.custom-picture {
+									width: auto;
+									height: 290px;
+									position: relative;
+									top: 30px;
+									left: -10px;
+								}
+								img.operator-picture {
+									width: auto;
+									height: 290px;
+									position: relative;
+									top: 30px;
+									left: -10px;
+								}
+								img.outfit-picture {
+									width: auto;
+									height: 290px;
+									position: relative;
+									top: 30px;
+									left: -10px;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			form {
+				.form-group {
+					input { @include font-size(factor(3)); font-weight: 800; }
+					textarea { @include font-size(factor(3)); font-weight: 800; }
+					label {
+						@include factor-property(margin-bottom, 2);
+						h3 {
+							border-left: solid 3px $main_color;
+							margin: 0;
+							@include factor-property(padding-left, 1);
+						}
+					}
+					.extra-input {
+						height: 47px;
+						position: relative;
+						top: 3px;
+						border-left: solid 3px $main_color;
+						@include factor-property(padding-left, 2);
+					}
+					.color-picker {
+						display: inline-block;
+						.btn { padding: factor(1.1) factor(2); }
+
+						@include breakpoint("small") {
+							@include factor-property(margin-top, 1);
+						}
+					}
+					.lock-picture {
+						display: inline-block;
+						.extra-input { border: none; }
+					}
+				}
+			}
+			.remaining-characters {
+				@include font-size(factor(3));
+
+				&.good { color: green; }
+				&.bad { color: $main_color; }
+			}
+			.dropdown-menus {
+				@include factor-property(margin-top, 4);
+
+				.dropdown {
+					&.open { background-color: transparent; }
+				}
+
+			}
+			.submit-section {
+				h2 {
+					margin: 0; display: inline-block;
+					span.cost { color: #ccc; }
+				}
+				@include factor-property(margin-top, 2);
+				.section-button {
+					@include breakpoint("small") { @include factor-property(margin-top, 2); }
+					ul { background-color: #111; }
+				}
+
+				@include breakpoint("tiny") {
+					h2 { @include font-size(factor(3.5));	}
+				}
+			}
+		}
+	}
+}
+
+.inline-group {
+	display: inline-block;
+	@include factor-property(margin-right, 1);
+}
+
+#avatar-upload-container {
+	@include factor-property(margin-top, 20);
+
+	&.inward-upload {
+		@include factor-property(margin-top, 5);
+		@include factor-property(margin-bottom, 5);
+	}
+
+	#avatar-upload-form-container {
+		@include transition(opacity .25s);
+
+		.crop-area {
+			@include transition(border 0.25s);
+			overflow: hidden;
+			width: auto;
+			height: 400px;
+
+			border: 7px dashed #ddd;
+
+			&:hover { border: 7px dashed $main_color; }
+
+			.upload-text {
+				text-align: center;
+				position: relative;
+				top: 40%;
+				@include opacity(1);
+			}
+
+			img-crop {
+				@include prefix(filter, blur(0px));
+				position: relative;
+				top: -60px;
+				height: 350px;
+				width: auto;
+				canvas { @include opacity(1); }
+			}
+
+			&.blocked {
+				border: 15px solid $main_color;
+				&:hover {
+					border: 15px solid $main_color;
+				}
+				.upload-text { @include opacity(0); }
+				img-crop { @include prefix(filter, blur(3px)); canvas { @include opacity(0.7); }}
+			}
+		}
+		a.section-button {
+			@include factor-property(margin-bottom, 5);
+		}
+	}
+}
+
+#comments-container {
+	@include factor-property(padding-top, 5);
+	@include factor-property(padding-bottom, 20);
+	float: none;
+	margin: 0 auto;
+}

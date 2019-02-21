@@ -2,8 +2,19 @@
 /* =================================
 	Styles for the frontpage view.
    ================================= */
+
+.fp_header_bg {
+	@include generate_background_image($header_background);
+	min-height: 500px;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
 #fp-upper-section {
-	@include factor-property(margin-bottom, 10);
+	@include factor-property(margin-bottom, 15);
+
+	@include breakpoint("medium") { margin-bottom: 0; }
+	@include breakpoint("small") { padding-bottom: 20px; }
 
 	#belligerence-logo {
 		position: relative;
@@ -17,7 +28,7 @@
 			margin-left: auto;
 			margin-right: auto;
 
-			@include breakpoint('tiny') { width: $size_small; }
+			@include breakpoint('medium') { width: 100%; }
 			@include breakpoint('small') { width: $size_small; }
 		}
 
@@ -25,6 +36,8 @@
 			margin: 20px 0 5px 0;
 			@include breakpoint('medium') { margin: 10px 0 5px 0; }
 			@include breakpoint('small') { margin: 30px 0 5px 0; }
+
+			text-shadow: 0px 0px 15px #000, 0px 0px 5px #000;
 
 			h2 {
 				@include factor-property(font-size, 8);
@@ -54,8 +67,273 @@
 			}
 
 			hr {
+				border-color: white;
 				margin: 0;
 			}
 		}
 	}
+}
+#fp-content-section-outer {
+	border-top: none;
+
+	#fp-content-section-inner {
+
+		#fp-point-section-container {
+
+			.point-section {
+				position: relative;
+				display: inline-block;
+				width: 100%;
+				height: 300px;
+
+				&.auto-height { height: auto; }
+
+				@include factor-property(margin-bottom, 3);
+
+				&.first {
+					@include factor-property(margin-bottom, 20);
+
+					.bg {
+						position: relative;
+						top: -70px;
+						@include breakpoint("medium") { top: -100px; }
+					}
+
+					@include breakpoint("small") {
+						@include factor-property(margin-top, 5);
+					}
+				}
+
+				&.last {
+					height: auto;
+					margin-bottom: 0;
+					@include factor-property(padding-bottom, 8);
+
+					@include breakpoint("small") {
+						height: auto;
+						@include factor-property(margin-top, 5);
+					}
+				}
+
+				&.left {
+					.bg { background-position: left; }
+					.text { padding: factor(4) 0 0 factor(8); }
+				}
+
+				&.right {
+					.bg {
+						background-position: right;
+						float: right;
+					}
+					.text { padding: 0 factor(4) 0 0; }
+
+					.col-xs-12.hidden-sm { height: auto; }
+				}
+
+				.bg {
+					@include prefix(filter, drop-shadow(0px 0px 10px rgba(0,0,0,0.7)));
+					display: inline-block;
+					position: relative;
+					background-size: contain;
+					z-index: 10;
+
+					width: 100%;
+
+					&.fp_first_section_bg {
+						height: 450px;
+						@include breakpoint("small") {
+							height: 300px;
+							top: 10px;
+						}
+					}
+
+					&.fp_second_section_bg {
+						height: 320px;
+						top: -30px;
+						@include breakpoint("medium") { top: -30px; }
+						@include breakpoint("small") {
+							height: 200px;
+							top: 0px;
+						}
+					}
+
+					&.fp_third_section_bg {
+						height: 370px;
+						top: 40px;
+						@include breakpoint("medium") {
+							height: 240px;
+							top: 30px;
+						}
+						@include breakpoint("small") {
+							height: 200px;
+							top: 10px;
+						}
+					}
+
+					&.fp_fourth_section_bg {
+						height: 370px;
+						top: -30px;
+						@include breakpoint("medium") {
+							height: 300px;
+							top: 40px;
+						}
+						@include breakpoint("medium") {
+							height: 200px;
+							top: 0px;
+						}
+					}
+
+					&.fp_fifth_section_bg {
+						height: 300px;
+						top: 160px;
+						@include breakpoint("medium") {
+							height: 190px;
+							top: 338px;
+						}
+						@include breakpoint("small") {
+							top: 85px;
+							right: 3px;
+						}
+					}
+
+					@include breakpoint("small") { background-position: center !important; }
+				}
+
+				.text {
+					vertical-align: top;
+					display: inline-block;
+					z-index: 1;
+					width: 100%;
+
+					h2 {
+						letter-spacing: -4px;
+						text-transform: uppercase;
+						background-color: #fff;
+						border-left: 10px solid $main_color;
+						padding: factor(2);
+						padding-right: 0;
+					}
+				}
+
+				@include breakpoint("medium") {
+					height: auto;
+					margin-bottom: 0;
+
+					&.first { margin-bottom: -50px; }
+
+					&.left { .text { padding: factor(3) 0 0 factor(3); } }
+					&.right { .text { padding: 0 factor(1) 0 0; } }
+					.text {
+						h2 { @include font-size(factor(5)); }
+					}
+				}
+
+				@include breakpoint("small") {
+					&.first { @include factor-property(padding-bottom, 10); }
+
+					&.left { .text { padding: 0; } }
+					&.right { .text { padding: 0; } }
+					.text {
+						h2 {
+							@include font-size(factor(4));
+							letter-spacing: -2px;
+							padding-right: factor(1);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+#fp-end-call {
+	@include factor-property(margin-top, 5);
+	@include factor-property(margin-bottom, 10);
+
+	.headline-column, .bottom-column {
+		@include factor-property(margin-top, 5);
+		text-align: center;
+
+		.main-headline {
+			h2 {
+				letter-spacing: -6px;
+				text-transform: uppercase;
+				@include font-size(factor(8));
+
+				@include breakpoint("small") {
+					@include font-size(factor(6));
+					letter-spacing: -4px;
+				}
+			}
+		}
+
+		.sub-headline {
+			padding: factor(2);
+			color: #111;
+			@include factor-property(margin-bottom, 7);
+			h3 {
+				@include factor-property(margin-top, 5);
+				letter-spacing: -1px;
+				@include font-size(factor(2.5));
+				strong { @include font-size(factor(3)); }
+			}
+		}
+	}
+
+	.bottom-column {
+		margin: 0;
+	}
+
+	.main-column {
+		color: #111;
+		@include factor-property(margin-top, 7);
+
+		.info-column {
+			@include factor-property(margin-bottom, 10);
+			text-align: center;
+
+			.column-icon {
+				@include factor-property(margin-bottom, 3);
+				height: 200px;
+				width: 100%;
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
+
+				&.factions-icon { background-image: $factions_icon; }
+				&.city-icon { background-image: $city_icon; }
+				&.mission-icon { background-image: $mission_icon; }
+			}
+
+			.text-description {
+				font-family: $main_font;
+				@include font-size(factor(5));
+				letter-spacing: -4px;
+				color: $main_color;
+			}
+
+			.text-info {
+				@include factor-property(margin-top, 5);
+				@include factor-property(padding-left, 5);
+				@include font-size(factor(2.5));
+				color: #000;
+				border-left: 10px solid $main_color;
+				width: 80%;
+				text-align: left;
+				line-height: 1.8;
+
+				@include breakpoint("medium") {
+					width: 100%;
+					border-left: 5px solid $main_color;
+					@include font-size(factor(2));
+				}
+			}
+		}
+	}
+}
+
+#fp-intel-container {
+	@include factor-property(padding-top, 11);
+	h2 { text-transform: uppercase; color: $main_text_color; }
+	hr { border-color: #ccc; }
 }

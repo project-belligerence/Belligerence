@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	TemplateControllerFunction.$inject = [];
+	TemplateControllerFunction.$inject = ["$scope", "$timeout", "apiServices"];
 
-	function TemplateControllerFunction() {
+	function TemplateControllerFunction($scope, $timeout, apiServices) {
 		var vm = this;
 
 	}

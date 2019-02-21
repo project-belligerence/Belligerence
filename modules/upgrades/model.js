@@ -11,20 +11,33 @@
 					field: 'name',
 					defaultValue: 'Generic Upgrade'
 				},
-				typeField: {
+				slugField: { // Simple name, like my-upgrade
 					type: DataTypes.STRING,
+					field: 'slug'
+				},
+				ingameVariable: { // A variable that's automatically assigned to the players in-game
+					type: DataTypes.STRING,
+					field: 'ingame'
+				},
+				typeField: { // 0 - All, 1 - Freelancer, 2 - Outfit
+					type: DataTypes.INTEGER,
 					field: 'type',
-					defaultValue: 'player'
+					defaultValue: 0
 				},
 				kindField: { // if it's an contract, certification, attack, gotta decide on them all
-					type: DataTypes.STRING,
+					type: DataTypes.INTEGER,
 					field: 'kind',
-					defaultValue: 'misc'
+					defaultValue: 0
 				},
 				iconName: {
 					type: DataTypes.STRING,
 					field: 'icon',
-					defaultValue: 'default'
+					defaultValue: 'generic'
+				},
+				hasUIField: {
+					type: DataTypes.BOOLEAN,
+					field: 'has_ui',
+					defaultValue: false
 				},
 				flavortextField: {
 					type: DataTypes.TEXT,
@@ -57,12 +70,23 @@
 					field: 'cost_multiplier',
 					defaultValue: 1.5
 				},
+				parentUpgrade: { // Hashfield for whatever upgrade this is parented to
+					type: DataTypes.STRING,
+					field: 'parent'
+				},
 				requiredUpgradesField: {
 					type: DataTypes.TEXT,
 					field: 'required_upgrades',
 					get: function() {
-						var API = require('./../../routes/api.js');
-						return API.methods.getDoublePseudoArray(this.getDataValue('requiredUpgradesField'));
+						var API = require('./../../routes/api.js'),
+							currentRequired = API.methods.getDoublePseudoArray(this.getDataValue('requiredUpgradesField')),
+							parentUpgrade = this.getDataValue('parentUpgrade');
+						if (parentUpgrade !== "") {
+							var found = false;
+							for (var i in currentRequired) if (currentRequired[i][0] === parentUpgrade) found = true;
+							if (!found) currentRequired.unshift([parentUpgrade, "1"]);
+						}
+						return currentRequired;
 					},
 					set: function(val) {
 						var API = require('./../../routes/api.js');
@@ -78,7 +102,7 @@
 					},
 					set: function(val) {
 						var API = require('./../../routes/api.js');
-						this.setDoublePseudoArray('blacklistedUpgradesField', API.methods.setPseudoArray(val));
+						this.setDataValue('blacklistedUpgradesField', API.methods.setDoublePseudoArray(val));
 					}
 				},
 				hashField: {

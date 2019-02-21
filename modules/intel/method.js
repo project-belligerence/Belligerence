@@ -18,29 +18,43 @@
 	exports.get = get;
 	exports.put = put;
 	exports.deleteEntry = deleteEntry;
+	exports.returnIntelPrice = returnIntelPrice;
+	exports.returnIntelPricePartial = returnIntelPricePartial;
+
+	initializeWebsocketEvents();
 
 	function queryValues(req) {
 		return {
 			folderName: require('path').basename(__dirname),
-			allowedSortValues: ['createdAt', 'poster_hash', 'title', 'body', 'type', 'visibility', 'totalComments'],
+			allowedSortValues: ['createdAt', 'poster_hash', 'title', 'body', 'type', 'visibility', 'totalComments', 'totalCheers'],
 			allowedPostValues: {
 				visibility: ["freelancers", "ownPMC", "allPMC", "friends", "friends-PMC", "everyone"],
 				displayAs: ["player", "pmc", "anonymous"],
-				types: ['statement', 'intel', 'certification']
+				types: ['statement', 'intel', 'certification'],
+				background: ['uploaded-picture', "operator-picture", "outfit-picture", "color"]
 			},
 			generateWhereQuery:	function(req) {
 				var object = {};
 
-				if (req.query.qDisplay) { object.display = { $like: "%" + req.query.qDisplay + "%" }; }
+				if (req.query.qDisplay) {
+					if (req.query.qDisplay !== "all") object.display = { $like: "%" + req.query.qDisplay + "%" };
+				}
+				if (req.query.qType) {
+					if (req.query.qType !== "all") object.type = { $like: "%" + req.query.qType + "%" };
+				}
 				if (req.query.qPosterHash) { object.poster_hash = { $like: "%" + req.query.qPosterHash + "%" }; }
 				if (req.query.qTitle) { object.title = { $like: "%" + req.query.qTitle + "%" }; }
 				if (req.query.qBody) { object.body = { $like: "%" + req.query.qBody + "%" }; }
-				if (req.query.qType) { object.type = { $like: "%" + req.query.qType + "%" }; }
 				if (req.query.qVisibility) { object.visibility = { $like: "%" + req.query.qVisibility + "%" }; }
 
 				return object;
 			}
 		};
+	}
+
+	function initializeWebsocketEvents() {
+		var WebsocketEvent = new config.websocket.WebsocketEventObject();
+		config.websocket.registerEvent("RefreshIntel", WebsocketEvent);
 	}
 
 	function proccessIntelVisibility(req, entry, entriesToFilter) {
@@ -122,10 +136,14 @@
 			baseAttributes = "id, original_poster_hash AS originalPosterHash, poster_hash AS posterHash, display AS displayAs, " +
 							 "poster_details AS posterDetails, original_poster_details AS originalPosterDetails, " +
 							 "cheers AS cheersDetails, title AS titleField, body AS bodyField, type as typeField, " +
-							 "visibility AS visibilityField, hashField," +
+							 "visibility AS visibilityField, background_field AS backgroundField, background_type AS backgroundType, " +
+							 "hashField," +
 							 "createdAt as createdAt ",
-			countQuery =	"(SELECT COUNT(*) FROM `comments_tables`" +
-						 	"WHERE comments_tables.subjectField = " + MainTable + ".hashField" +
+			countQuery =	"(SELECT COUNT(*) FROM `cheers_tables`" +
+						 	"WHERE cheers_tables.target = intel_tables.hashField" +
+							") AS totalCheers, " +
+							"(SELECT COUNT(*) FROM `comments_tables`" +
+						 	"WHERE comments_tables.subjectField = intel_tables.hashField" +
 							") AS totalComments";
 
 		API.methods.generateRawQuery(req, res,
@@ -207,6 +225,7 @@
 								var entriesToFilter = [];
 
 								for (var i=0; i < foundModels.length; i++) {
+									foundModels[i].hasPicture = (foundModels[i].hasPicture === 1) ? true : false;
 									foundModels[i].bodyField = limitBody(foundModels[i].bodyField);
 									if (!(proccessIntelVisibility(req, foundModels[i]))) { entriesToFilter.push(i); }
 								}
@@ -228,7 +247,10 @@
 											foundModels[entriesToFilter[i]].bodyField = hiddenMsg;
 											foundModels[entriesToFilter[i]].typeField = hiddenMsg;
 											foundModels[entriesToFilter[i]].visibilityField = hiddenMsg;
+											foundModels[entriesToFilter[i]].hasPicture = false;
 											foundModels[entriesToFilter[i]].hashField = hiddenMsg;
+											foundModels[entriesToFilter[i]].backgroundField = hiddenMsg;
+											foundModels[entriesToFilter[i]].backgroundType = hiddenMsg;
 											foundModels[entriesToFilter[i]].createdAt = hiddenMsg;
 											foundModels[entriesToFilter[i]].updatedAt = hiddenMsg;
 										}
@@ -260,13 +282,73 @@
 
 				entry = proccessCheers(req, [entry]);
 
-				var CommentsMethods = require('./../index.js').getMethods().comments;
+				API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
 
-				CommentsMethods.getEntityComments(req, res, "intel_tables", entry[0].dataValues.hashField, function(comments) {
-					entry[0].dataValues.comments = comments;
-					API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
-				});
+				/*
+					var CommentsMethods = require('./../index.js').getMethods().comments;
+
+					CommentsMethods.getEntityComments(req, res, "intel_tables", entry[0].dataValues.hashField, function(comments) {
+						entry[0].dataValues.comments = comments;
+						API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
+					});
+				*/
 			});
+		});
+	}
+
+	function returnIntelPrice(req, res) {
+		var displayAs = req.body.display_as,
+			type = req.body.type,
+			visibility = req.body.visibility,
+			background_field = (req.body.background_field || "#fff|#111"),
+			background_type = (req.body.background_type || "color"),
+
+			intProp = [displayAs, type, visibility, background_field, background_type],
+			intPropString = ["displayAs", "type", "visibility", "background_field", "background_type"];
+
+		if(!API.methods.validate(req, res, intProp)) { return 0; }
+
+		if (!API.methods.validateParameter(req, res, [
+			[visibility, 'string', queryValues(req).allowedPostValues.visibility],
+			[displayAs, 'string', queryValues(req).allowedPostValues.displayAs],
+			[type, 'string', queryValues(req).allowedPostValues.types],
+			[background_type, 'string', queryValues(req).allowedPostValues.background],
+		])) { return 0; }
+
+		returnIntelPriceFunc(req, res, intProp, intPropString, function(cost){
+			API.methods.sendResponse(req, res, true, "Returning cost for Intel", cost);
+		});
+	}
+
+	function returnIntelPricePartial(req, res) {
+
+		var intProp = [], intPropString = [];
+
+		if (req.body.display_as) { var displayAs = req.body.display_as; intProp.push(displayAs); intPropString.push("displayAs"); }
+		if (req.body.type) { var type = req.body.type; intProp.push(type); intPropString.push("type"); }
+		if (req.body.visibility) { var visibility = req.body.visibility; intProp.push(visibility); intPropString.push("visibility"); }
+		if (req.body.background_type) { var background_type = req.body.background_type; intProp.push(background_type); intPropString.push("background_type"); }
+
+		if(!API.methods.validate(req, res, intProp)) { return 0; }
+
+		returnIntelPriceFunc(req, res, intProp, intPropString, function(cost){
+			API.methods.sendResponse(req, res, true, "Returning cost for Intel", cost);
+		});
+	}
+
+	function returnIntelPriceFunc(req, res, intelProperties, intelPropertiesString, callback) {
+		var prices = config.prices.modules.intel,
+		currentCost = 0;
+
+		intelProperties.forEach(function(element, index) {
+			if (!((intelPropertiesString[index] === "title") || (intelPropertiesString[index] === "body") || (intelPropertiesString[index] === "background_field"))) {
+				currentCost += prices[intelPropertiesString[index]][element];
+		   	}
+		});
+
+		var ActionsCostMethods = require('./../index.js').getMethods().actions_cost;
+		return ActionsCostMethods.getPropertyFunc(req, res, "costPostIntelBase", function(cost){
+			return callback(currentCost + cost);
 		});
 	}
 
@@ -277,17 +359,30 @@
 			body = req.body.body,
 			type = req.body.type,
 			visibility = req.body.visibility,
+			background_field = (req.body.background_field || "#fff|#111"),
+			background_type = (req.body.background_type || "color"),
 
 			GeneralMethods = require('./../index.js').getMethods().general_methods;
 
-		if(!API.methods.validate(req, res, [displayAs, title, body, type, visibility])) { return 0; }
+		if (!(req.playerInfo.PMCId) && (
+			(background_type === "outfit-picture") ||
+			(visibility === "allPMC") ||
+			(visibility === "ownPMC") ||
+			(visibility === "friends-PMC") ||
+			(displayAs === "pmc")
+		)) {
+			if(!API.methods.validate(req, res, [false], config.messages().modules.pmc.not_in_pmc)) { return 0; }
+		}
+
+		if(!API.methods.validate(req, res, [displayAs, title, body, type, visibility, background_field, background_type])) { return 0; }
 
 		if (!API.methods.validateParameter(req, res, [
 			[visibility, 'string', queryValues(req).allowedPostValues.visibility],
 			[displayAs, 'string', queryValues(req).allowedPostValues.displayAs],
 			[title, 'string', config.numbers.modules.intel.titleLength],
 			[body, 'string', config.numbers.modules.intel.bodyMaxLength],
-			[type, 'string', queryValues(req).allowedPostValues.types]
+			[type, 'string', queryValues(req).allowedPostValues.types],
+			[background_type, 'string', queryValues(req).allowedPostValues.background],
 		])) { return 0; }
 
 		var update = {};
@@ -305,71 +400,132 @@
 			} break;
 		}
 
-		GeneralMethods.paySystemAction(req, res, 'postIntel', function(success) {
-			update.originalPosterHash = req.playerInfo.hashField;
-			if (displayAs) update.displayAs = displayAs;
-			if (title) update.titleField = title;
-			if (body) update.bodyField = body;
-			if (type) update.typeField = type;
-			if (visibility) update.visibilityField = visibility;
+		var intProp = [displayAs, type, visibility, background_field, background_type],
+			intPropString = ["displayAs", "type", "visibility", "background_field", "background_type"];
 
-			mainModel.sync({force: false}).then(function() {
-				mainModel.create(update).then(function(entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, entry); });
+		returnIntelPriceFunc(req, res, intProp, intPropString, function(cost) {
+			var finalCost = cost;
+
+			GeneralMethods.spendFundsGeneralFunc(req, res, finalCost, function(success) {
+				update.originalPosterHash = req.playerInfo.hashField;
+
+				if (displayAs) update.displayAs = displayAs;
+				if (visibility) update.visibilityField = visibility;
+				if (title) update.titleField = title;
+				if (body) update.bodyField = body;
+				if (type) update.typeField = type;
+				if (background_field) update.backgroundField = background_field;
+				if (background_type) update.backgroundType = background_type;
+
+				mainModel.sync({force: false}).then(function() {
+					mainModel.create(update).then(function(entry) {
+						config.websocket.broadcastEvent("RefreshIntel");
+						API.methods.sendResponse(req, res, true, config.messages().new_entry, entry);
+					});
+				});
 			});
 		});
 	}
 
 	function put(req, res) {
 
-		var displayAs = req.body.displayas,
-			title = req.body.title,
-			body = req.body.body,
+		var displayAs = req.body.display_as,
+			title = req.body.title_field,
+			body = req.body.body_field,
 			type = req.body.type,
-			visibility = req.body.visibility;
+			visibility = req.body.visibility,
+			background_field = req.body.background_field,
+			background_type = req.body.background_type;
 
-		if (!API.methods.validateParameter(req, res, [
-			[visibility, 'string', queryValues(req).allowedPostValues.visibility],
-			[displayAs, 'string', queryValues(req).allowedPostValues.displayAs],
-			[title, 'string', config.numbers.modules.intel.titleLength],
-			[body, 'string', config.numbers.modules.intel.bodyMaxLength],
-			[type, 'string', queryValues(req).allowedPostValues.types]
-		])) { return 0; }
+		if ((!(req.playerInfo.PMCId) && (visibility || background_type || displayAs)) && (
+			(background_type === "operator-picture") ||
+			(visibility === "allPMC") ||
+			(visibility === "ownPMC") ||
+			(visibility === "friends-PMC") ||
+			(displayAs === "pmc")
+		)) { if(!API.methods.validate(req, res, [false], config.messages().modules.pmc.not_in_pmc)) { return 0; } }
+
+		var update = {},
+			intProp = [],
+			intPropString = [];
+
+		if (displayAs) {
+			if (!API.methods.validateParameter(req, res, [[displayAs, 'string', queryValues(req).allowedPostValues.displayAs]])) { return 0; }
+			update.displayAs = displayAs;
+
+			switch (displayAs) {
+				case "player": {
+					update.posterHash = req.playerInfo.hashField;
+				} break;
+				case "pmc": {
+					if(!API.methods.validate(req, res, [req.playerInfo.PMC], config.messages().modules.pmc.not_in_pmc)) { return 0; }
+					update.posterHash = req.playerInfo.PMC.hashField;
+				} break;
+				case "anonymous": {
+					update.posterHash = null;
+				} break;
+			}
+
+			intProp.push(displayAs);
+			intPropString.push("displayAs");
+		}
+		if (title) {
+			if (!API.methods.validateParameter(req, res, [[title, 'string', config.numbers.modules.intel.titleLength]])) { return 0; }
+			update.titleField = title;
+		}
+		if (body) {
+			if (!API.methods.validateParameter(req, res, [[body, 'string', config.numbers.modules.intel.bodyMaxLength]])) { return 0; }
+			update.bodyField = body;
+		}
+		if (visibility) {
+			if (!API.methods.validateParameter(req, res, [[visibility, 'string', queryValues(req).allowedPostValues.visibility]])) { return 0; }
+			update.visibilityField = visibility;
+
+			intProp.push(visibility);
+			intPropString.push("visibility");
+		}
+		if (type) {
+			if (!API.methods.validateParameter(req, res, [[type, 'string', queryValues(req).allowedPostValues.types]])) { return 0; }
+			update.typeField = type;
+
+			intProp.push(type);
+			intPropString.push("type");
+		}
+		if (background_type) {
+			if (!API.methods.validateParameter(req, res, [[background_type, 'string', queryValues(req).allowedPostValues.background]])) { return 0; }
+			update.backgroundType = background_type;
+
+			intProp.push(background_type);
+			intPropString.push("background_type");
+		}
+		if (background_field) {
+			update.backgroundField = background_field;
+
+			intProp.push(background_field);
+			intPropString.push("background_field");
+		}
 
 		mainModel.findOne({where:{'hashField': req.params.Hash}}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(req.params.Hash))) { return 0; }
 
 			if (!API.methods.validate(req, res, [(
-				(req.playerInfo.hashField == entry.posterHash) ||
+				(req.playerInfo.hashField == entry.originalPosterHash) ||
 				(req.playerInfo.playerPrivilege <= config.privileges().tiers.admin)
 			)], config.messages().bad_permission)) { return 0; }
 
-			var update = {};
+			returnIntelPriceFunc(req, res, intProp, intPropString, function(cost){
+				var finalCost = cost;
 
-			if (displayAs) {
-				update.displayAs = displayAs;
+				var GeneralMethods = require('./../index.js').getMethods().general_methods;
 
-				switch (displayAs) {
-					case "player": {
-						update.posterHash = req.playerInfo.hashField;
-					} break;
-					case "pmc": {
-						if(!API.methods.validate(req, res, [req.playerInfo.PMC], config.messages().modules.pmc.not_in_pmc)) { return 0; }
-						update.posterHash = req.playerInfo.PMC.hashField;
-					} break;
-					case "anonymous": {
-						update.posterHash = null;
-					} break;
-				}
-			}
+				GeneralMethods.spendFundsGeneralFunc(req, res, finalCost, function(success) {
+					update.originalPosterHash = req.playerInfo.hashField;
 
-			if (title) update.title = title;
-			if (body) update.body = body;
-			if (type) update.type = type;
-			if (visibility) update.visibility = visibility;
-
-			entry.update(update).then(function() {
-				mainModel.sync({force: false}).then(function() {
-					API.methods.sendResponse(req, res, true, config.messages().entry_updated(entry.displaynameField), entry);
+					entry.update(update).then(function() {
+						mainModel.sync({force: false}).then(function() {
+							API.methods.sendResponse(req, res, true, config.messages().entry_updated(entry.displaynameField), entry);
+						});
+					});
 				});
 			});
 		});
@@ -382,22 +538,30 @@
 			if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(req.params.Hash))) { return 0; }
 
 			if (API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.janitor) === false) {
-				if (req.playerInfo.PMC) {
-					if (!API.methods.validate(req, res, [
-						(((req.playerInfo.PMC.hashField == entry.posterHash) && (API.methods.validatePlayerPMCTierFunc(req, config.privileges().tiers.moderator))))
-					], config.messages().bad_permission)) { return 0; }
-				} else {
-					if (!API.methods.validate(req, res, [
-						(req.playerInfo.hashField == entry.posterHash)
-					], config.messages().bad_permission)) { return 0; }
+				switch(entry.displayAs) {
+
+					case "player": {
+						if (!API.methods.validate(req, res, [
+							(req.playerInfo.hashField == entry.posterHash)
+						], config.messages().bad_permission)) { return 0; }
+					} break;
+
+					case "pmc": {
+						if (!API.methods.validate(req, res, [req.playerInfo.PMC], config.messages().bad_permission)) { return 0; }
+						if (!API.methods.validate(req, res, [
+							(((req.playerInfo.PMC.hashField == entry.posterHash) && (API.methods.validatePlayerPMCTierFunc(req, config.privileges().tiers.moderator))))
+						], config.messages().bad_permission)) { return 0; }
+					} break;
+
+					case "anonymous": {
+						if (!API.methods.validate(req, res, [false], config.messages().bad_permission)) { return 0; }
+					} break;
 				}
 			}
 
 			entry.destroy().then(function(rowDeleted) {
 				API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
 			});
-
-			API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
 		});
 	}
 

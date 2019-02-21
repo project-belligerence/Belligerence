@@ -19,9 +19,16 @@
 	exports.purchaseUpgrade = purchaseUpgrade;
 	exports.getTotalModifiedUpgradePrice = getTotalModifiedUpgradePrice;
 
+	initializeWebsocketEvents();
+	function initializeWebsocketEvents() {
+		var WebsocketEvent = new config.websocket.WebsocketEventObject();
+
+		config.websocket.registerEvent("StoreNewStock", WebsocketEvent);
+	}
+
 	function purchaseItem(req, res, buyer, buyer_type, products, store, done) {
 
-		var model = (buyer_type == "player") ? PlayerModel : PMCModel,
+		var i, j, model = (buyer_type == "player") ? PlayerModel : PMCModel,
 			productsHash = [],
 			productsAmount = [],
 			buyerPrestige = 0;
@@ -34,7 +41,7 @@
 			buyerPrestige = req.playerInfo.playerPrestige;
 		}
 
-		for (var i=0; i < products.length; i++) { productsHash.push(products[i][0]); productsAmount.push(products[i][1]); }
+		for (i=0; i < products.length; i++) { productsHash.push(products[i][0]); productsAmount.push(products[i][1]); }
 
 		productsAmount = API.methods.minMaxArray(0, 9999, productsAmount);
 
@@ -50,20 +57,31 @@
 						if (!API.methods.validate(req, res, [whiteRank[0]], config.messages().modules.upgrades.transaction_upgrade_low_rank((whiteRank[1] || 'Unknown'), (whiteRank[2] || 'Unknown'), (whiteRank[3] || 'Unknown')))) { return 0; }
 						if (!API.methods.validate(req, res, [blackRank[0]], config.messages().modules.upgrades.transaction_upgrade_high_rank((blackRank[1] || 'Unknown'), (blackRank[2] || 'Unknown'), (blackRank[3] || 'Unknown')))) { return 0; }
 
-						ItemModel.findAll({ where: {"hashField": productsHash}}).then(function(r_items) {
+						ItemModel.findAll({ where: { "hashField": productsHash }}).then(function(r_items) {
 							if (!API.methods.validate(req, res, [r_items], config.messages().no_entries)) { return 0; }
 
-							store.checkStockAvailable(req, res, r_items, productsAmount, function(stockReturn) {
+							var orderedItems = [];
+
+							for (i = productsHash.length - 1; i >= 0; i--) {
+								for (j = r_items.length - 1; j >= 0; j--) {
+									if (productsHash[i] === r_items[j].hashField) orderedItems.push(r_items[j]);
+								}
+							}
+							orderedItems = orderedItems.reverse();
+
+							store.checkStockAvailable(req, res, orderedItems, productsAmount, function(stockReturn) {
 								var actualAmount = stockReturn.actualAmount;
 
-								getTotalItemPrice(r_items, stockReturn, function(price) {
+								getTotalItemPrice(orderedItems, stockReturn, function(price) {
+
 									buyer.spendFunds(price, function(r) {
 										if (r.valid) {
-											var storeItems = r_items,
-												storeAmount = actualAmount;
+											var storeItems = orderedItems,
+												storeAmount = actualAmount,
+												nParams = {items: orderedItems, amounts: actualAmount};
 
-											Stores.updateStoreStockRecursive(store, storeItems, storeAmount, "minus", function(success) {
-												Items.addItemRecursive(req, res, r_items, buyer, buyer_type, actualAmount, function(success2) {
+											Stores.updateStoreStockRecursive(store, nParams, "minus", function(success) {
+												Items.addItemRecursive(req, res, orderedItems, buyer, buyer_type, actualAmount, function(success2) {
 
 													var transactionRecord = {
 														buyer: req.playerInfo.hashField,
@@ -79,6 +97,7 @@
 													};
 
 													TransactionHistory.post(req, res, transactionRecord, function() {
+														config.websocket.broadcastEvent("StoreNewStock", [store.hashField]);
 														return done(r);
 													});
 												});
@@ -119,11 +138,9 @@
 			totalModifiers.push((modifier.discountAll || 0));
 			totalModifiers.push(modifier.discounts_upgrades || 0);
 
-			if (ownedUpgrade.rankField > 0) {
-				totalValue = ((upgrade.baseCost * upgrade.costMultiplier) * (ownedUpgrade.rankField));
-			} else { totalValue = upgrade.baseCost;	}
+			totalValue = ((upgrade.baseCost * ((ownedUpgrade.rankField || 0) + 1)) * upgrade.costMultiplier);
 
-			API.methods.doLog(req, "The upgrade costs " + totalValue + " from a base cost of " + upgrade.baseCost + " multiplied by " + upgrade.costMultiplier + " times the rank of " + (ownedUpgrade.rankField+1) + ".");
+			API.methods.doLog(req, "The upgrade costs " + totalValue + " from a base cost of " + upgrade.baseCost + " multiplied by " + upgrade.costMultiplier + " times the rank of " + (ownedUpgrade.rankField + 1) + ".");
 
 			return done(totalValue);
 		});
@@ -134,7 +151,17 @@
 		UpgradeModel.findOne({where:{'hashField': p_upgrade}}).then(function(upgrade) {
 			if (!API.methods.validate(req, res, [upgrade], config.messages().entry_not_found(p_upgrade))) { return 0; }
 
-			if (!API.methods.validate(req, res, [buyer_type === (upgrade.typeField || "both")], config.messages().modules.upgrades.wrong_type)) { return 0; }
+			var correctType = (function(buyer, type) {
+				var upgradesEnum = config.enums.upgrades_owner;
+
+				if (type === upgradesEnum[0].data) return true;
+				switch(buyer) {
+					case "player": { return (type === upgradesEnum[2].data); }
+					case "pmc": { return (type === upgradesEnum[1].data); }
+				}
+			})(buyer_type, upgrade.typeField);
+
+			if (!API.methods.validate(req, res, [correctType], config.messages().modules.upgrades.wrong_type)) { return 0; }
 
 			var newQuery = (buyer_type == "player") ? {'upgradeId': upgrade.id, 'PlayerId': buyer.id} : {'upgradeId': upgrade.id, 'PMCId': buyer.id},
 				newModel = (buyer_type == "player") ? PlayerUpgrades : PMCUpgrades,
@@ -168,19 +195,13 @@
 									};
 
 									TransactionHistory.post(req, res, transactionRecord, function() {
+										config.websocket.broadcastEvent("NewUpgrade", [buyer_type, buyer.hashField]);
+
 										if (ownedUpgrade) {
-											ownedUpgrade.update({rankField:(ownedUpgrade.rankField + 1)}).then(function() {
-												return done(r);
-											});
-										} else {
-											buyer.addUpgrade(upgrade).then(function() {
-												return done(r);
-											});
-										}
+											ownedUpgrade.update({rankField:(ownedUpgrade.rankField + 1)}).then(function() { return done(r);	});
+										} else { buyer.addUpgrade(upgrade).then(function() { return done(r); }); }
 									});
-								} else {
-									return done(r);
-								}
+								} else { return done(r); }
 							});
 						});
 					});

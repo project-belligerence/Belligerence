@@ -12,14 +12,17 @@ var getConfig = function(config) {
 
 module.exports = {
 	env: 'development',
-	port: (process.env.PORT || 8080),
+	port: process.env.PORT,
 
 	folders: getConfig('folders'),
 	files: getConfig('files'),
 	db: getConfig('db'),
+	scheduled: getConfig('scheduled'),
+	websocket: getConfig('websocket'),
 
 	privileges: function() { return getConfig('privileges'); },
 	numbers: getConfig('numbers'),
+	prices: getConfig('prices'),
 	enums: getConfig('enums'),
 	messages: function() { return getConfig('messages'); },
 	methods: getConfig('methods'),

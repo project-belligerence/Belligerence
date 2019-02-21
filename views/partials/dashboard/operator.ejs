@@ -8,6 +8,7 @@
 				class="icon ion-help-circled helper small"
 				popover-trigger="'mouseenter'"
 				popover-class="tooltip"
+				popover-placement="bottom"
 				uib-popover="Choose your profile picture. Mobile users can swipe left/right to switch screens."
 			></i>
 		</div>
@@ -176,19 +177,29 @@
 
 					<div class="editable-field">
 						<div class="meta">
-							<span>Location</span>
+							<span>Region</span>
 							<i
 								class="icon ion-help-circled helper small"
 								popover-trigger="'mouseenter'"
 								popover-class="tooltip"
-								uib-popover="Where are you located? (Max. of 32 characters)"
+								uib-popover="Where are you located?"
 							></i>
 						</div>
 
-						<div
-							editable-text="CtrlDashboard.playerInfo.locationField"
-							on-change="CtrlDashboard.editField('location', value)"
-						></div>
+						<div class="dropdown-section">
+							<div class="dropdown">
+								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+									<span ng-bind="CtrlDashboard.regionOptions[CtrlDashboard.playerInfo.locationField]"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li ng-click="CtrlDashboard.editPlayerRegion($index)" ng-repeat="item in ::(CtrlDashboard.regionOptions) track by $index">
+										<a href="#" ng-click="scope = item">
+											<span ng-bind="::(CtrlDashboard.regionOptions[$index])"></span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -214,61 +225,137 @@
 		</div>
 	</div>
 
-	<div class="editable-field">
-		<div class="meta">
-			<span>Tags</span>
-			<i
-				class="icon ion-help-circled helper small"
-				popover-trigger="'mouseenter'"
-				popover-class="tooltip"
-				uib-popover="Choose a few terms that define you as an individual. (Max. of 5 tags)"
-			></i>
-		</div>
-
-		<tags-input
-			ng-model="CtrlDashboard.playerInfo.tagsField"
-			id="player-tags"
-
-			add-on-blur="false"
-
-			min-tags="1"
-			max-tags="5"
-
-			on-tag-adding="CtrlDashboard.addingTag($tag)"
-			on-tag-removing="CtrlDashboard.removingTag($tag)"
-		>
-			<auto-complete
-				source="CtrlDashboard.suggestedTags($query)"
-				min-length="1"
-				max-results-to-show="5"
-			></auto-complete>
-		</tags-input>
-
-		Example of tags:
-		<ul class="tags-example">
-			<li ng-repeat="tag in ['Newbie', 'Relaxed', 'Serious']" ng-click="CtrlDashboard.addTag(tag)">{{tag}}</li>
-		</ul>
-	</div>
-
-<!-- 	<form>
-		<div class="form-group">
-			<div class="input-group">
-
-				<div class="extra-input noselect">
-					<input
-						type="checkbox" id="input-1"
-						ng-change="CtrlDashboard.changeValue('value1')"
-						ng-model="CtrlDashboard.optionValues.value1"
-					>
-					<label class="input-label" for="input-1">
-						<div class="body check">
-							<div class="box"><i class="icon ion-checkmark small"></i></div>
-							<span>Do the thing?</span>
-						</div>
-					</label>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="editable-field">
+				<div class="meta">
+					<span>Tags</span>
+					<i
+						class="icon ion-help-circled helper small"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Choose a few terms that define you as an individual. (Max. of 5 tags)"
+					></i>
 				</div>
 
+				<tags-input
+					ng-model="CtrlDashboard.playerInfo.tagsField"
+					id="player-tags"
+
+					add-on-blur="false"
+
+					min-tags="1"
+					max-tags="5"
+
+					on-tag-adding="CtrlDashboard.addingTag($tag)"
+					on-tag-removing="CtrlDashboard.removingTag($tag)"
+				>
+					<auto-complete
+						source="CtrlDashboard.suggestedTags($query)"
+						min-length="1"
+						max-results-to-show="5"
+					></auto-complete>
+				</tags-input>
+
+				Example of tags:
+				<ul class="tags-example">
+					<li ng-repeat="tag in ::['Newbie', 'Relaxed', 'Serious']" ng-click="CtrlDashboard.addTag(tag)" ng-bind="::(tag)"></li>
+				</ul>
 			</div>
 		</div>
-	</form> -->
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="editable-field">
+				<div class="meta">
+					<span>Privacy</span>
+					<i
+						class="icon ion-help-circled helper small"
+						popover-trigger="'mouseenter'"
+						popover-class="tooltip"
+						uib-popover="Define what info will be hidden from certain people."
+					></i>
+				</div>
+
+				<div class="privacy-settings">
+					<h3>Visible to:</h3>
+
+					<div class="dropdown-section">
+						<div class="dropdown">
+							<button
+								class="btn medium dropdown-toggle" type="button" data-toggle="dropdown"
+								ng-class="{ 'btn-muted': (CtrlDashboard.visibilitySettings[CtrlDashboard.currentPrivacy.selectedVisibilityIndex].value === CtrlDashboard.playerInfo.privateVisibility), 'btn-warning': (CtrlDashboard.visibilitySettings[CtrlDashboard.currentPrivacy.selectedVisibilityIndex].value !== CtrlDashboard.playerInfo.privateVisibility) }"
+							>
+								<span ng-bind="CtrlDashboard.visibilitySettings[CtrlDashboard.currentPrivacy.selectedVisibilityIndex].name"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li ng-click="(CtrlDashboard.currentPrivacy.selectedVisibilityIndex = $index)" ng-repeat="item in ::(CtrlDashboard.visibilitySettings) track by $index">
+									<a href="#" ng-click="scope = item.value">
+										<span ng-bind="::item.name"></span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<a
+						ng-click="CtrlDashboard.resetAllPrivacy('player')"
+						class="section-button warning medium animated pull-right"
+						role="button"
+					>
+						<ul>
+							<li><i class="icon ion-eye"></i></li>
+							<li>Reset All</li>
+						</ul>
+					</a>
+
+					<span class="current-privacy" ng-bind="CtrlDashboard.visibilitySettings[CtrlDashboard.currentPrivacy.selectedVisibilityIndex].hint"></span>
+
+					<h3>Private fields:</h3>
+
+					<ul class="settings-list">
+						<li class="setting noselect"
+							ng-repeat="setting in ::CtrlDashboard.operatorPrivacySettings track by setting.value"
+							ng-click="CtrlDashboard.togglePrivacySetting(setting.value)"
+							ng-class="{'selected': CtrlDashboard.inArray(setting.value, CtrlDashboard.currentPrivacy.currentPrivacySettings), 'active': (CtrlDashboard.inArray(setting.value, CtrlDashboard.playerInfo.privateFields) && CtrlDashboard.inArray(setting.value, CtrlDashboard.currentPrivacy.currentPrivacySettings))}"
+						>
+							<i class="icon info" ng-class="::(setting.icon)"></i>
+							<span ng-bind="::(setting.name)"></span>
+							<i
+								popover-trigger="'mouseenter'"
+								popover-class="tooltip"
+								uib-popover="{{::setting.hint}}"
+								class="icon ion-help-circled hint"
+							>
+							</i>
+						</li>
+					</ul>
+
+					<div class="save flip-animation" ng-if="CtrlDashboard.checkForChanges()" ng-cloak>
+						<span>You have unsaved changes.</span>
+						<a
+							ng-click="CtrlDashboard.undoPrivacyChanges('player')"
+							class="section-button warning medium animated"
+							role="button"
+						>
+							<ul>
+								<li><i class="icon ion-reply"></i></li>
+								<li>Undo</li>
+							</ul>
+						</a>
+						<a
+							ng-click="CtrlDashboard.savePrivacySettings()"
+							class="section-button medium animated"
+							role="button"
+						>
+							<ul>
+								<li><i class="icon ion-checkmark"></i></li>
+								<li>Save</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

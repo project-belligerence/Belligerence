@@ -1,34 +1,792 @@
 
 #signup-page {
+	overflow-x: hidden;
 	// background: url("/images/bg-1.jpg") no-repeat 100%;
 
-	@include factor-property(padding-top, 10);
-	@include factor-property(min-height, 100);
+	@include factor-property(padding-top, 5);
+	@include factor-property(padding-bottom, 10);
 
-	position: relative;
-	top: -50px;
+	@include breakpoint('small') { @include factor-property(padding-top, 0); }
 
-	#signup-intro {
-		text-align: center;
+	#signup-view {
+		@include transition(height 1s);
+
+		&.step-0 {
+			height: 500px;
+
+			@include breakpoint('medium') { height: 620px; }
+			@include breakpoint('small') { height: 650px; }
+		}
+		&.step-1 {
+			height: 850px;
+			@include breakpoint('small') { height: 700px; }
+
+			&.no-steam {
+				height: 600px;
+				@include breakpoint('small') { height: 500px; }
+			}
+		}
+		&.step-2 {
+			height: 750px;
+			@include breakpoint('small') { height: 1100px; }
+		}
+		&.step-3 {
+			height: 950px;
+			@include breakpoint('medium') { height: 1150px; }
+			@include breakpoint('small') { height: 2000px; }
+		}
+		&.step-4 {
+			height: 700px;
+			@include breakpoint('medium') { height: 900px; }
+		}
+		&.step-5 {
+			height: 550px;
+		}
+
+		&.new-outfit {
+			&.step-0 {
+				height: 500px;
+
+				@include breakpoint('medium') { height: 450px; }
+				@include breakpoint('small') { height: 400px; }
+			}
+			&.step-1 {
+				height: 700px;
+			}
+			&.step-2 {
+				height: 850px;
+				@include breakpoint('small') { height: 1100px; }
+			}
+		}
+
+		.signup-block {
+			text-align: center;
+
+			#access-key-block {
+				position: relative;
+				top: 60px;
+				display: block;
+				@include factor-property(margin-top, 1);
+
+				.form-group {
+					display: inline-block;
+					vertical-align: top;
+					input {
+						@include size(350px, 45px);
+						@include breakpoint("small") { width: 290px; }
+					}
+				}
+
+				.new-key-btn {
+					@include factor-property(margin-left, 2);
+					@include breakpoint("small") { margin-left: 0; }
+				}
+
+				#access-key-unlocked {
+					text-align: center;
+					display: inline-block;
+
+					.access-key-unlocked-container {
+						float: left;
+
+						.top-section {
+							height: 130px;
+							@include factor-property(margin-bottom, 2);
+							display: block;
+
+							.icon-section {
+								text-align: center;
+								@include size(130px);
+								display: inline-block;
+								background-color: #fff;
+								border-radius: 7px;
+								float: left;
+
+								.icon {
+									color: #111;
+									@include font-size(factor(13));
+								}
+							}
+
+							.text-section {
+								text-align: left;
+								display: inline-block;
+								@include factor-property(margin-left, 3);
+								vertical-align: top;
+								float: left;
+
+								h2 { line-height: 0.8; }
+							}
+
+							@include breakpoint('small') {
+								height: 80px;
+
+								.icon-section {
+									@include size(80px);
+
+									.icon {
+										@include font-size(factor(7));
+										top: 5px;
+										position: relative;
+									}
+								}
+							}
+						}
+
+						.properties-section {
+							@include font-size(factor(2.5));
+							text-align: left;
+
+							.grant-text {
+								@include font-size(factor(3));
+								font-family: $main_font;
+								border-left: factor(1) solid $main_color;
+								padding-left: factor(1);
+							}
+
+							.property-list {
+								@include factor-property(margin-top, 1);
+								display: inline-block;
+								.property {
+									@include factor-property(margin-top, 1);
+
+									.icon {
+										@include font-size(factor(3));
+										width: factor(6);
+										display: inline-block;
+										text-align: center;
+										background-color: $main_color;
+										color: white;
+										padding: factor(1);
+										line-height: 0.8;
+									}
+									.text {
+										display: inline-block;
+										@include factor-property(margin-left, 1);
+									}
+								}
+							}
+
+							@include breakpoint('small') {
+								@include font-size(factor(2));
+
+								.icon {
+									@include font-size(factor(2));
+									width: factor(4);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			.block {
+				@include factor-property(margin-top, 5);
+				text-shadow: 0px 0px 5px #000, 0px 0px 2px #000;
+
+				font-family: $main_font;
+				@include font-size(factor(3));
+
+				#steam-login-button {
+					@include factor-property(margin-top, 12);
+					a { border-bottom: none; cursor: pointer; }
+				}
+
+				.explanation {
+					@include font-size(factor(2.5));
+					font-style: italic;
+				}
+			}
+
+			@include breakpoint('small') {
+				h2 { @include font-size(factor(4)); }
+				.block {
+					@include factor-property(margin-top, 4);
+					@include font-size(factor(2));
+
+					.explanation {
+						@include font-size(factor(2));
+					}
+				}
+			}
+
+			#unit-info {
+				@include factor-property(margin-top, 8);
+
+				.unit-info-change-avatar-button {
+					@include transition(background-color .25s);
+					@include factor-property(margin-top, 4);
+
+					cursor: pointer;
+
+					background-color: $main_color;
+					padding: 0 10px;
+
+					&:hover { background-color: $main_color_dark; }
+
+					i {
+						cursor: pointer;
+						@include font-size(factor(4));
+						color: white;
+						text-shadow: 0px 0px 10px #222;
+						@include factor-property(margin-right, 1.5);
+					}
+					span {
+						position: relative;
+						top: -4px;
+						font-family: $main_font;
+						text-transform: uppercase;
+					}
+				}
+
+				#unit-avatar-container {
+					@include breakpoint('small') {
+						@include factor-property(margin-bottom, 4);
+					}
+				}
+
+				#unit-info-form-container {
+					@include transition(opacity .25s);
+
+					#unit-info-form {
+						.form-group {
+							@include transition(box-shadow .25s);
+
+							.form-control {
+								&.username {
+									float: left;
+									width: 75%;
+								}
+								&.good {
+									box-shadow: 0px 0px 15px #2F990E;
+								}
+								&.bad {
+									box-shadow: 0px 0px 30px #D12222;
+								}
+							}
+							label {
+								span {
+									float: right;
+									position: relative;
+									top: -7px;
+									left: 30px;
+									padding: 17px;
+									padding-bottom: 12px;
+									background-color: $main_color;
+								}
+
+								@include breakpoint("small") {
+									float: left;
+									@include factor-property(margin-top, 3);
+									span {
+										float: none;
+										top: -5px;
+										left: inherit;
+									}
+								}
+							}
+							textarea {
+								border-radius: 0px;
+							}
+							.characters-left {
+								float: left;
+								@include breakpoint("medium") {
+									@include font-size(factor(1.9));
+								}
+							}
+
+							.dropdown-section {
+								display: inline-block;
+								float: left;
+
+								.btn { padding: 8px 12px; }
+							}
+						}
+						.section-button.username {
+							float: right;
+							ul li { padding-bottom: 12px;
+								i {position:relative;top:4px}
+							}
+						}
+					}
+				}
+
+				#avatar-upload-form-container {
+					@include transition(opacity .25s);
+
+					.crop-area {
+						@include transition(border 0.25s);
+						overflow: hidden;
+						width: auto;
+						height: 400px;
+
+						border: 7px dashed #ddd;
+
+						&:hover { border: 7px dashed $main_color; }
+
+						.upload-text {
+							position: relative;
+							top: 40%;
+						}
+
+						img-crop {
+							position: relative;
+							top: -70px;
+							height: 390px;
+							width: auto;
+						}
+					}
+					a.section-button {
+						@include factor-property(margin-bottom, 5);
+					}
+				}
+
+				#preview-image {
+					img {
+						width: 100%;
+						box-shadow: 0px 0px 30px black;
+					}
+					&.good img { box-shadow: 0px 0px 15px #0E8026; }
+					&.bad img {	box-shadow: 0px 0px 30px #D12222; }
+				}
+			}
+
+			#player-card {
+				@include prefix(transform, rotate(0.5deg), webkit moz ms o);
+				@include factor-property(margin-top, 10);
+				display: inline-block;
+				box-shadow: 10px 10px 5px rgba(0,0,0,.2);
+
+				border: 5px solid white;
+				border-radius: 5px;
+
+				.main {
+					padding: factor(3);
+					min-height: 300px;
+
+					background: url("/images/cardbg.png") repeat 100%;
+					color: #222;
+					text-shadow: 0px 1px 0px white;
+
+					#card-avatar {
+						width: 250px;
+						display: inline-block;
+						float: left;
+						@include factor-property(margin-right, 3);
+						@include factor-property(margin-top, 1);
+
+						.hexagon {
+							position: relative;
+							left: 15px;
+
+							width: 218px;
+							height: 250px;
+							#card-preview-image img {
+								width: auto;
+								box-shadow: 0px 0px 30px black;
+								height: 250px;
+								position: relative;
+								left: -15px;
+							}
+						}
+					}
+
+					#card-info {
+						display: inline-block;
+						top: 5px;
+						position: relative;
+						width: 300px;
+
+						font-family: $main_font;
+						word-break: break-word;
+						text-align: left;
+
+						.alias {
+							line-height: 35px;
+							@include font-size(factor(6));
+							color: $main_color;
+						}
+
+						hr { border: 1px dotted #777; }
+						.playerclass { @include font-size(factor(3)); }
+						.description { font-family: $sub_font; font-weight: 800; }
+					}
+
+					.class-stamp {
+						background: url("/images/class-stamps.png") no-repeat;
+
+						height: 120px;
+						width: 120px;
+
+						position: absolute;
+						top: 125px;
+						right: 15px;
+						z-index: 999;
+
+						&.co { background-position-x: 0px; }
+						&.sl { background-position-x: -244px; }
+						&.fc { background-position-x: -122px; }
+					}
+				}
+
+				.bottom {
+					height: 70px;
+					background-color: $main_color;
+					@include factor-property(padding, 2);
+
+					#card-cred {
+						#contract-agree-form {
+							float: left;
+							display: inline-block;
+							input[type=checkbox]:checked ~ label .body.check {
+								color: white;
+								.box {
+									background-color: white;
+									i { color: $main_color;	}
+								}
+							}
+							.body.check {
+								i { cursor: pointer; }
+								.text-thing {
+									text-align: left;
+									display: inline-block;
+									span {
+										@include font-size(factor(2));
+										a { color: white; }
+									}
+								}
+
+							}
+						}
+						#card-stamp {
+							display: inline-block;
+							border-radius: 2px;
+							background-color: white;
+
+							position: relative;
+							top: -10px;
+
+							padding: 4px factor(1);
+							box-shadow: 0px 0px 5px rgba(0,0,0,.2);
+
+							.info-container {
+								@include font-size(13px);
+								display: inline-block;
+								.info {
+									text-align: left;
+									color: black;
+									width: 110px;
+									font-weight: bold;
+
+									span.info-data {
+										font-weight: 500;
+										letter-spacing: -1px;
+										border-bottom: 1px solid #888;
+										word-break: break-all;
+									}
+								}
+							}
+						}
+
+						#card-code {
+							display: inline-block;
+							padding: 4px factor(1);
+							width: 210px;
+							height: 100px;
+							word-break: break-all;
+
+							position: relative;
+							top: -10px;
+
+							font-family: $main_font;
+							@include font-size(factor(2.5));
+							text-align: left;
+
+							overflow-y: hidden;
+
+							color: #aaa;
+							text-shadow:
+									-1px -1px 0px #fff,
+									1px 1px 0px #000,
+									0px 0px 3px rgba(0,0,0,1),
+									0px 0px 5px rgba(0,0,0,1);
+
+							letter-spacing: 0px;
+							line-height: 19px;
+
+							span.steam-id {
+								@include font-size(factor(2));
+								letter-spacing: 2px;
+							}
+						}
+
+						#barcode-img {
+							height: 55px;
+							display: inline-block;
+							float: right;
+
+							position: relative;
+							top: -6px;
+						}
+					}
+				}
+
+				.top {
+					border-top-left-radius: 2px;
+					border-top-right-radius: 2px;
+
+					padding: factor(1) 0;
+
+					background-color: $main_color;
+					color: white;
+					text-align: left;
+
+					#logo-img {
+						margin-left: 7px;
+						height: 40px;
+					}
+
+					.card-date {
+						float: right;
+						@include font-size(factor(3));
+						@include factor-property(margin-right, 2);
+					}
+
+					span {
+						@include font-size(factor(2));
+						font-weight: 700;
+						color: darken($main_color_dark, 10%);
+						text-shadow: 0px 1px 0px $main_color_light;
+						&.be {
+							margin-left: 10px;
+							margin-right: 5px;
+							color: white;
+						}
+					}
+				}
+
+				@include breakpoint("small") {
+					width: 100%;
+					.main {
+						padding: factor(1);
+						.class-stamp { top: 320px; right: 10px; }
+						#card-avatar {
+							width: 200px;
+							display: inline-block;
+							float: none;
+							text-align: center;
+							.hexagon {
+								height: 200px;
+								width: 175px;
+								#card-preview-image img { height: 200px; }
+							}
+						}
+						#card-info {
+							width: 100%;
+							.alias, .playerclass, .email {text-align: center;}
+							.description { padding-bottom: factor(2); }
+						}
+					}
+					.top {
+						height: 100%;
+						padding-bottom: factor(4);
+						img { float: left; @include factor-property(margin-right, 1); }
+						span { display: block; margin-left: 10px; }
+						.card-date {
+							@include font-size(factor(2));
+							float: left;
+							@include factor-property(margin-left, 1);
+						}
+					}
+					.bottom {
+						height: auto;
+						padding: 0;
+						#card-cred {
+							@include factor-property(padding-bottom, 1);
+							#contract-agree-form {
+								text-align: left;
+								width: 100%;
+								display: block;
+								@include factor-property(margin-left, 1);
+								@include factor-property(margin-bottom, 2);
+								.input-label {
+									.text-thing {
+										position: relative;
+										top: 5px;
+										width: 170px;
+										line-height: 15px;
+									}
+								}
+							}
+							#card-code {
+								height: auto;
+								@include factor-property(margin-top, 2);
+								width: 70%;
+								float: left;
+								@include factor-property(margin-left, 1);
+								span.steam-id { letter-spacing: 1px; }
+							}
+							#barcode-img {
+								@include factor-property(margin-top, 2);
+								@include factor-property(margin-right, 1);
+								float: none;
+							}
+						}
+					}
+				}
+			}
+
+			#outfit-card {
+				@include factor-property(margin-top, 5);
+
+				.top {
+					@include factor-property(padding, 2);
+					background: url("/images/honeybg_red.png") repeat 100%;
+					color: white;
+
+					.card-date {
+						@include font-size(factor(2.5));
+						font-family: $main_font;
+						text-shadow: 0px 0px 5px #000, 0px 0px 10px #000;
+					}
+
+					h2 { color: white; }
+				}
+
+				.main {
+					@include factor-property(padding-top, 3);
+					background: url("/images/cardbg.png") repeat 100%;
+
+					@include font-size(factor(3));
+					color: #111;
+
+					#card-avatar {
+						@include prefix(filter, drop-shadow(0px 0px 5px rgba(0,0,0,.5)));
+						margin-left: auto;
+						margin-right: auto;
+						width: 270px;
+						float: none;
+						position: relative;
+
+						img { width: 250px;	}
+					}
+
+					.info {
+						@include factor-property(padding, 3);
+
+						.motto {
+							margin-left: auto;
+							margin-right: auto;
+							@include factor-property(margin-top, 2);
+							float: none;
+							width: 80%;
+							@include factor-property(padding, 2);
+							background: url("/images/honeybg_red.png") repeat 100%;
+							color: white;
+						}
+
+						.description {
+							@include factor-property(margin-top, 3);
+							font-weight: 800;
+						}
+					}
+				}
+
+				.bottom {
+					.form-group {
+						margin-bottom: 0px;
+					}
+					@include factor-property(padding, 3);
+					background: url("/images/cardbg_inverted.png") repeat 100%;
+				}
+			}
+		}
+
+		#steam-view {
+			display: inline-block;
+			a {border-bottom: none;}
+			text-align: center;
+
+			#steam-profile {
+				@include factor-property(margin-top, 7);
+				height: 184px;
+				width: 184px;
+
+				#steam-items {
+					font-family: $main_font;
+					position: relative;
+					top: 20px;
+
+					#steam-name {
+						span {
+							padding: 0px 10px;
+							@include font-size(factor(4));
+							color: #fff;
+							background-color: $main_color;
+							box-shadow: 0px 0px 5px #000;
+						}
+						margin-bottom: 30px;
+					}
+
+					#steam-status {
+						#steam-status-icon {
+							@include transition(background-color .25s);
+
+							padding: 5px 20px;
+							@include font-size(factor(7));
+							color: #fff;
+							background-color: #333;
+							border-radius: 5px;
+							box-shadow: 0px 0px 5px #000;
+
+							&.ion-checkmark { background-color: #11bb33; }
+							&.ion-close { background-color: #bb0000; }
+						}
+					}
+				}
+			}
+
+			#logout-button {
+				cursor: pointer;
+				margin-top: 25px;
+				span {
+					@include transition(background-color .2s);
+					padding: 15px 7px;
+					color: #fff;
+					background-color: $main_color;
+					box-shadow: 0px 0px 5px #000;
+				}
+
+				&:hover {
+					span {background-color: $main_color_dark};
+				}
+			}
+		}
+
 	}
 
 	#signup-buttons {
 		text-align: center;
-		@include factor-property(margin-top, 10);
 
 		.section-button {
 			@include factor-property(margin-right, 5);
+
+			@include breakpoint('small') {
+				@include factor-property(margin-top, 4);
+				@include factor-property(margin-right, 2);
+			}
+			@include breakpoint('tiny') {
+				position: relative;
+				left: 60px;
+				&.muted { left: -50px; }
+			}
 		}
 	}
 
-	.block {
-		@include factor-property(margin-top, 5);
-		text-shadow: 0px 0px 5px #000, 0px 0px 2px #000;
-
-		font-family: $main_font;
-		@include font-size(factor(3));
+	h2 {
+		text-shadow: 0px 0px 10px #000;
+		@include font-size(factor(8));
+		margin: 0;
 	}
-
-	h2 { @include font-size(factor(8)); }
 	.section-button ul li.icon { padding: factor(1) factor(3);}
 }

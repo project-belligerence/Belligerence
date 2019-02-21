@@ -1,7 +1,7 @@
 
 <ul class="radial-menu noselect">
 	<li
-		class="radial-item" ng-repeat="item in newList"
+		class="radial-item" ng-repeat="item in newList track by $index"
 
 		data-item-id="{{$index}}"
 		ng-click="buttonInteraction($index)"

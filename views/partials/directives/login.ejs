@@ -1,77 +1,119 @@
 
-<div class="row" id="fp-warning-container">
-	<div class="col-md-8 col-sm-7 col-xs-9">
-		<div class="animation" ng-if="(displayWarning)" ng-cloak>
-			<div class="warning-container">
-				<div class="alert alert-dismissible" role="alert" ng-class="alertClass">
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span class="close-alert" aria-hidden="true">&times;</span>
-					</button>
-					<i class="icon" ng-class="iconClass"></i> {{ loginAlertMessage }}
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<div ng-if="LoginFormCtrl.displayLoginForm" ng-cloak>
 
-<div class="row ng-login-animation" id="fp-login-form" ng-if="displayLogin" ng-cloak>
-	<form name="loginForm" ng-submit="submitLoginForm(loginForm)">
+	<div class="row" id="fp-warning-container">
 		<div class="col-md-8 col-sm-7 col-xs-9">
-			<div class="form-group">
-				<div class="input-group">
-					<div class="input-group-addon">
-						<i class="icon ion-person"></i>
+			<div class="animation" ng-if="(displayWarning)" ng-cloak>
+				<div class="warning-container">
+					<div class="alert alert-dismissible" role="alert" ng-class="alertClass">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span class="close-alert" aria-hidden="true">&times;</span>
+						</button>
+						<i class="icon" ng-class="iconClass"></i> <span ng-bind="::(loginAlertMessage)"></span>
 					</div>
-					<input type="text" class="form-control" id="loginInputUsername" ng-model="loginForm.username" placeholder="User"  ng-minlength="5" ng-maxlength="12" ng-required="true">
 				</div>
 			</div>
-			<div class="form-group">
-				<div class="input-group">
-					<div class="input-group-addon">
-						<i class="icon ion-locked"></i>
-					</div>
-					<input type="password" class="form-control" id="loginInputPassword" ng-model="loginForm.password" placeholder="Password" ng-required="true">
-				</div>
-			</div>
-			<div class="form-group-inline">
+		</div>
+	</div>
 
-				<div class="extra-input noselect">
-					<input type="checkbox" id="loginInputRemember" ng-model="loginForm.remember">
-					<label class="input-label" for="loginInputRemember">
-						<div class="body check">
-							<div class="box"><i class="icon ion-checkmark small"></i></div>
-							<span>Remember me</span>
+	<div class="row ng-login-animation" id="fp-login-form" ng-if="displayLogin" ng-cloak>
+		<form name="loginForm" ng-submit="submitLoginForm(loginForm)">
+			<div class="col-md-8 col-sm-9 col-xs-9">
+				<div class="form-group">
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="icon ion-person"></i>
 						</div>
-					</label>
+						<input type="text" class="form-control" id="loginInputUsername" ng-model="loginForm.username" placeholder="User"  ng-minlength="5" ng-maxlength="12" ng-required="true">
+					</div>
 				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="icon ion-locked"></i>
+						</div>
+						<input type="password" class="form-control" id="loginInputPassword" ng-model="loginForm.password" placeholder="Password" ng-required="true">
+					</div>
+				</div>
+				<div class="form-group-inline">
 
-				<a class="btn btn-default" href="#" style="margin-top: 25px">Forgot password?</a>
-
-				<div class="pull-right">
+					<div class="extra-input noselect" id="loginRememberForm">
+						<input type="checkbox" id="loginInputRemember" ng-model="loginForm.remember">
+						<label class="input-label" for="loginInputRemember">
+							<div class="body check">
+								<div class="box"><i class="icon ion-checkmark small"></i></div>
+								<span class="body-text">Remember me</span>
+							</div>
+						</label>
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="col-md-3 col-sm-3 col-xs-3" id="submitDiv">
-			<button type="submit" id="loginInputSubmit" class="btn btn-default" ng-disabled="!(loginForm.$valid)">
-				<i ng-if="!(loading)" class="icon ion-log-in large animation button-icon"></i>
-				<img ng-if="(loading)" class="animation button-icon img" src="svg-loaders/oval.svg" />
-			</button>
-		</div>
-	</form>
+			<div class="col-md-3 col-sm-3 col-xs-3" id="submitDiv">
+				<button type="submit" id="loginInputSubmit" class="btn btn-default" ng-disabled="!(loginForm.$valid) || (loading)">
+					<i ng-if="!(loading)" class="icon ion-log-in large animation button-icon"></i>
+					<img ng-if="(loading)" class="animation button-icon img" src="svg-loaders/oval.svg" />
+				</button>
+			</div>
+		</form>
+	</div>
 
-	<div class="col-md-12">
+	<div id="fp-join-call">
+		<div class="ng-login-animation" ng-if="displayLogin2" ng-cloak>
+			<span id="join-call-text">Interested? Join the action.</span>
+			<a href="/signup" role="button" class="section-button medium">
+				<ul>
+					<li><i class="icon ion-shuffle"></i></li>
+					<li>SIGN UP</li>
+				</ul>
+			</a>
+		</div>
 	</div>
 </div>
 
-<div id="fp-join-call">
-	<div class="ng-login-animation" ng-if="displayLogin2" ng-cloak>
-		<span id="join-call-text">Interested? Join the action.</span>
-		<a href="#" role="button" class="section-button medium">
-			<ul>
-				<li><i class="icon ion-shuffle"></i></li>
-				<li>SIGN UP {{myLoginValue}}</li>
-			</ul>
-		</a>
+<div class="ng-login-animation" ng-if="(!(LoginFormCtrl.displayLoginForm) && LoginFormCtrl.displayPlayerInfo)" id="loggedInForm" ng-cloak>
+
+	<div class="logged-in-container">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="logged-column">
+					<h2>Welcome back,</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3 col-sm-4 col-xs-4">
+					<div class="row">
+						<div class="square player-avatar">
+							<div class="medium-2" ac-background-image background-image="images/avatars/players/main_{{::(LoginFormCtrl.selfInfo.hashField)}}.jpg">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-7 col-sm-5 col-xs-8 self-info-column" ng-class="(LoginFormCtrl.applyControlledClass(LoginFormCtrl.selfSide))">
+					<div class="row">
+						<div class="logged-column short">
+							<div class="info-name" ng-bind="::(LoginFormCtrl.selfInfo.aliasField)"></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="detail-column" ng-init="contract = LoginFormCtrl.displayContract(LoginFormCtrl.selfInfo.contractType);">
+							<div class="info-contract">
+								<i class="icon" ng-class="::(contract.icon)"></i>
+								<div class="name" ng-bind="::(contract.name)"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="button-section">
+					<a class="route-button" ng-repeat="rb in LoginFormCtrl.quickRoutes track by $index" ui-sref="{{::(rb.route)}}">
+						<i class="icon" ng-class="::(rb.icon)"></i>
+						<div class="description" ng-bind="::(rb.name)"></div>
+					</a>
+				</div>
+			</div>
+		</div>
 	</div>
+
 </div>

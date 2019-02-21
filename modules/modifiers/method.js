@@ -41,7 +41,6 @@
 	}
 
 	function setActive(req, res) {
-
 		var modifier = req.body.modifier;
 		if (!API.methods.validate(req, res, [modifier])) { return 0; }
 
@@ -84,7 +83,8 @@
 
 		if (!API.methods.validateParameter(req, res, [
 			[[req.body.d_all, req.body.d_market, req.body.d_items, req.body.d_weapons, req.body.d_vehicles,
-			req.body.d_upgrades, req.body.d_bureaucracy, req.body.d_missions_all, req.body.b_missions_all],
+			req.body.d_static, req.body.d_upgrades, req.body.d_bureaucracy, req.body.d_missions_all,
+			req.body.b_missions_all],
 			'number']
 		])) { return 0; }
 
@@ -99,6 +99,7 @@
 			if (req.body.d_items) update.discountItems = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_items);
 			if (req.body.d_weapons) update.discountWeapons = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_weapons);
 			if (req.body.d_vehicles) update.discountVehicles = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_vehicles);
+			if (req.body.d_static) update.discountStatic = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_static);
 			if (req.body.d_upgrades) update.discountUpgrades = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_upgrades);
 			if (req.body.d_bureaucracy) update.discountBureaucracy = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_bureaucracy);
 			if (req.body.d_missions_all) update.discountMissionsAll = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_missions_all);
@@ -114,7 +115,8 @@
 
 		if (!API.methods.validateParameter(req, res, [
 			[[req.body.d_all, req.body.d_market, req.body.d_items, req.body.d_weapons, req.body.d_vehicles,
-			req.body.d_upgrades, req.body.d_bureaucracy, req.body.d_missions_all, req.body.b_missions_all],
+			req.body.d_static, req.body.d_upgrades, req.body.d_bureaucracy, req.body.d_missions_all,
+			req.body.b_missions_all],
 			'number']
 		])) { return 0; }
 
@@ -129,6 +131,7 @@
 			if (req.body.d_items) update.discountItems = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_items);
 			if (req.body.d_weapons) update.discountWeapons = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_weapons);
 			if (req.body.d_vehicles) update.discountVehicles = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_vehicles);
+			if (req.body.d_static) update.discountStatic = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_static);
 			if (req.body.d_upgrades) update.discountUpgrades = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_upgrades);
 			if (req.body.d_bureaucracy) update.discountBureaucracy = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_bureaucracy);
 			if (req.body.d_missions_all) update.discountMissionsAll = API.methods.minMax(config.numbers.modules.modifiers.minDiscount, config.numbers.modules.modifiers.maxDiscount, req.body.d_missions_all);

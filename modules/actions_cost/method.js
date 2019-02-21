@@ -70,7 +70,8 @@
 		mainModel.findOne({where: {"activeField": true}}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
 			var r = entry[property];
-			API.methods.sendResponse(req, res, (r), config.messages().return_entry, r);
+
+			API.methods.sendResponse(req, res, !(API.methods.isUndefinedOrNull(r)), "Returning cost for " + property + ".", r);
 		});
 	}
 
@@ -105,9 +106,7 @@
 			if (req.body.name) update.nameField = req.body.name;
 			if (req.body.c_InvitesPlayer) update.costInvitesPlayer = API.methods.minMax(0, 999999, req.body.c_InvitesPlayer);
 			if (req.body.c_InvitesPMC) update.costInvitesPMC = API.methods.minMax(0, 999999, req.body.c_InvitesPMC);
-			if (req.body.c_PostIntelPlayer) update.costPostIntelPlayer = API.methods.minMax(0, 999999, req.body.c_PostIntelPlayer);
-			if (req.body.c_PostIntelPMC) update.costPostIntelPMC = API.methods.minMax(0, 999999, req.body.c_PostIntelPMC);
-			if (req.body.c_PostIntelAnonymous) update.costPostIntelAnonymous = API.methods.minMax(0, 999999, req.body.c_PostIntelAnonymous);
+			if (req.body.c_PostIntelBase) update.costPostIntelBase = API.methods.minMax(0, 999999, req.body.c_PostIntelBase);
 			if (req.body.c_BuyPrestigePlayer) update.costBuyPrestigePlayer = API.methods.minMax(0, 999999, req.body.c_BuyPrestigePlayer);
 			if (req.body.c_BuyPrestigePMC) update.costBuyPrestigePMC = API.methods.minMax(0, 999999, req.body.c_BuyPrestigePMC);
 			if (req.body.c_UpgradeSizePMC) update.costUpgradeSizePMC = API.methods.minMax(0, 999999, req.body.c_UpgradeSizePMC);
@@ -130,9 +129,7 @@
 			if (req.body.name) update.nameField = req.body.name;
 			if (req.body.c_InvitesPlayer) update.costInvitesPlayer = API.methods.minMax(0, 999999, req.body.c_InvitesPlayer);
 			if (req.body.c_InvitesPMC) update.costInvitesPMC = API.methods.minMax(0, 999999, req.body.c_InvitesPMC);
-			if (req.body.c_PostIntelPlayer) update.costPostIntelPlayer = API.methods.minMax(0, 999999, req.body.c_PostIntelPlayer);
-			if (req.body.c_PostIntelPMC) update.costPostIntelPMC = API.methods.minMax(0, 999999, req.body.c_PostIntelPMC);
-			if (req.body.c_PostIntelAnonymous) update.costPostIntelAnonymous = API.methods.minMax(0, 999999, req.body.c_PostIntelAnonymous);
+			if (req.body.c_PostIntelBase) update.costPostIntelBase = API.methods.minMax(0, 999999, req.body.c_PostIntelBase);
 			if (req.body.c_BuyPrestigePlayer) update.costBuyPrestigePlayer = API.methods.minMax(0, 999999, req.body.c_BuyPrestigePlayer);
 			if (req.body.c_BuyPrestigePMC) update.costBuyPrestigePMC = API.methods.minMax(0, 999999, req.body.c_BuyPrestigePMC);
 			if (req.body.c_UpgradeSizePMC) update.costUpgradeSizePMC = API.methods.minMax(0, 999999, req.body.c_UpgradeSizePMC);

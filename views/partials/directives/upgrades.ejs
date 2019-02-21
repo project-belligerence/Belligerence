@@ -1,0 +1,18 @@
+
+<span ng-init="Directive = CtrlDirectiveUpgrades;"></span>
+<div class="upgrade-directive-container" ng-if="::(Directive.upgradeInfo)" ng-cloak>
+		<div
+			class="upgrade-body"
+			ng-class="::(Directive.upgradeClass)"
+			popover-trigger="'mouseenter'"
+			popover-popup-delay="500"
+			popover-class="tooltip"
+			uib-popover="{{::(Directive.upgradeInfo.nameField)}}"
+		>
+			<a class="upgrade-icon-container" href="upgrade/{{::(Directive.upgradeInfo.hashField)}}" >
+				<div class="background-hexagon"></div>
+				<div class="main-upgrade-icon" ng-style="::(Directive.getUpgradeIcon())"></div>
+				<div class="rank-field" ng-bind="::(Directive.upgradeInfo.rankField)"></div>
+			</a>
+		</div>
+</div>

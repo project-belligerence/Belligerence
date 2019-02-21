@@ -1,4 +1,174 @@
 
+<div id="upgrades-container">
 
-	[x] faggot
-	[ ] not be a faggot
+	<div class="meta text-center">
+		<span>Featured Upgrades</span>
+		<i
+			class="icon ion-help-circled helper small small-block"
+			popover-trigger="'mouseenter'"
+			popover-class="tooltip"
+			popover-placement="bottom"
+			uib-popover="The Upgrades which will be displayed in your Unit page, and your favorite, which will be featured alongside you in most places."
+		></i>
+	</div>
+
+	<div id="upgrades-view">
+
+		<ul class="upgrade-list main-upgrades">
+			<li
+				class="single-upgrade fade-animation-fast-stagger"
+				ng-class="::(CtrlDashboard.prominenceClass(upgrade))"
+				ng-repeat="upgrade in CtrlDashboard.ownedUpgrades.prominent | orderBy:'-owned_upgrade.prominentField' track by $index"
+			>
+				<div class="action-icons-container">
+					<div class="action-icons">
+						<i
+							class="icon left"
+							ng-click="CtrlDashboard.toggleProminentVisible(upgrade, 2)"
+							ng-class="(CtrlDashboard.prominenceClass(upgrade, 2))"
+						></i>
+						<i
+							class="icon right"
+							ng-click="CtrlDashboard.toggleProminentVisible(upgrade, 1)"
+							ng-class="(CtrlDashboard.prominenceClass(upgrade, 1))"
+						></i>
+					</div>
+				</div>
+				<div class="upgrade-object-container">
+					<img class="upgrade-img" ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" />
+					<div class="rank-container">
+						<div class="rank" ng-class="::(CtrlDashboard.rankComplete(upgrade))">
+							<span class="current" ng-bind="::(upgrade.owned_upgrade.rankField)"></span>/<span ng-bind="::(upgrade.maxTier)"></span>
+						</div>
+					</div>
+					<a href="upgrade/{{::(upgrade.hashField)}}">
+						<div class="name-container">
+							<div class="name" ng-bind="::(upgrade.nameField)"></div>
+						</div>
+					</a>
+					<div class="usable-ui-container noselect" ng-if="::(upgrade.hasUIField)" ng-click="CtrlDashboard.callUpgradeFunc(upgrade.slugField);">
+						<i class="icon ion-flash"></i>
+						<div class="text">ACTIVATE</div>
+					</div>
+				</div>
+			</li>
+			<li
+				class="single-upgrade empty fade-animation-fast-stagger"
+				ng-if="(CtrlDashboard.upgradesSettings.showFreeSlots)"
+				ng-repeat="rank in CtrlDashboard.numberToArray((5 - CtrlDashboard.ownedUpgrades.prominent.length)) track by $index"
+			>
+				<div class="upgrade-object-container blank">
+					<div class="blank-upgrade"></div>
+				</div>
+			</li>
+		</ul>
+
+		<div class="regular-upgrades-view">
+
+			<div class="meta text-center">
+				<span>Owned Upgrades</span>
+				<i
+					class="icon ion-help-circled helper small small-block"
+					popover-trigger="'mouseenter'"
+					popover-class="tooltip"
+					uib-popover="Your currently owned Upgrades. You may also favorite or select them to become visible on your profile."
+				></i>
+			</div>
+
+			<div class="editable">
+				<div class="editable-field no-margin">
+
+					<div class="text-filter">
+						<label for="upgradeFilterInput"><i class="icon ion-search"></i></label>
+						<input type="text" id="upgradeFilterInput" class="form-control" placeholder="Upgrade filter"
+						ng-model="CtrlDashboard.upgradesSettings.queryText">
+					</div>
+
+					<div class="dropdown-section block">
+						<div class="dropdown">
+							<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+								Filter by:
+								<strong><span ng-bind="CtrlDashboard.upgradesInfo.upgradesTypes[CtrlDashboard.upgradesSettings.queryKind].text"></span></strong>
+							</button>
+							<ul class="dropdown-menu">
+								<li ng-click="CtrlDashboard.refreshSelfUpgrades($index)" ng-repeat="item in ::(CtrlDashboard.upgradesInfo.upgradesTypes) track by $index">
+									<a href="#" ng-click="scope = item">
+										<span ng-bind="::(CtrlDashboard.upgradesInfo.upgradesTypes[$index].text)"></span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<a  role="button"
+						class="section-button hide-button medium animated"
+						ng-click="CtrlDashboard.resetAllVisibility()"
+					>
+						<ul>
+							<li><i class="icon ion-eye-disabled"></i></li>
+							<li>Hide all</li>
+						</ul>
+					</a>
+
+				</div>
+			</div>
+
+			<hr />
+
+			<ul class="upgrade-list current">
+
+				<div class="empty-upgrades message-animation" ng-if="((CtrlDashboard.ownedUpgrades.current.length === 0) && (CtrlDashboard.upgradesSettings.showEmpty))">
+					<i class="icon ion-flash-off"></i>
+					<div class="text">
+						You have no <strong><span ng-bind="::(CtrlDashboard.upgradesInfo.upgradesTypes[CtrlDashboard.upgradesSettings.queryKind].text)"></span></strong> Upgrades.
+					</div>
+				</div>
+
+				<li
+					class="single-upgrade flip-animation-stagger-fast"
+					ng-class="::(CtrlDashboard.prominenceClass(upgrade))"
+					ng-if="(CtrlDashboard.ownedUpgrades.current.length > 0)"
+					ng-repeat="upgrade in CtrlDashboard.ownedUpgrades.current | filter:{ nameField: CtrlDashboard.upgradesSettings.queryText } | orderBy:'-owned_upgrade.updatedAt'"
+				>
+					<div class="action-icons-container">
+						<div class="action-icons">
+							<i
+								class="icon left"
+								ng-click="CtrlDashboard.toggleProminentVisible(upgrade, 2)"
+								ng-class="(CtrlDashboard.prominenceClass(upgrade, 2))"
+							></i>
+							<i
+								class="icon right"
+								ng-click="CtrlDashboard.toggleProminentVisible(upgrade, 1)"
+								ng-class="(CtrlDashboard.prominenceClass(upgrade, 1))"
+							></i>
+						</div>
+					</div>
+
+					<div class="upgrade-object-container">
+						<img class="upgrade-img" ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" />
+						<div class="rank-container">
+							<div class="rank" ng-class="::(CtrlDashboard.rankComplete(upgrade))">
+								<span class="current" ng-bind="::(upgrade.owned_upgrade.rankField)"></span>/<span ng-bind="::(upgrade.maxTier)"></span>
+							</div>
+						</div>
+						<a href="upgrade/{{::(upgrade.hashField)}}">
+							<div class="name-container">
+								<div class="name" ng-bind="::(upgrade.nameField)"></div>
+							</div>
+						</a>
+						<div class="usable-ui-container" ng-if="::(upgrade.hasUIField)" ng-click="CtrlDashboard.callUpgradeFunc(upgrade.slugField);">
+							<i class="icon ion-flash"></i>
+							<div class="text">ACTIVATE</div>
+						</div>
+					</div>
+
+				</li>
+
+			</ul>
+
+		</div>
+
+	</div>
+
+</div>

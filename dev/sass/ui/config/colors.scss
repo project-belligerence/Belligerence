@@ -5,17 +5,29 @@
 	========================================
 */
 
-$main_color: #9a1818;
+$main_color: #9A1818;
 $main_color_light: lighten($main_color, 10%);
 $main_color_dark: darken($main_color, 10%);
 
-$sub_color: #337ab7;
+$sub_color: #337AB7;
 $sub_color_light: lighten($sub_color, 10%);
 $sub_color_dark: darken($sub_color, 10%);
 
-$muted_color: #ddd;
+$muted_color: #DDD;
 $muted_color_light: lighten($muted_color, 10%);
 $muted_color_dark: darken($muted_color, 10%);
+
+$success_color: #409819;
+$success_color_light: lighten($success_color, 10%);
+$success_color_dark: darken($success_color, 10%);
+
+$warning_color: #E3B823;
+$warning_color_light: lighten($warning_color, 10%);
+$warning_color_dark: darken($warning_color, 10%);
+
+$danger_color: #9A1818;
+$danger_color_light: lighten($danger_color, 10%);
+$danger_color_dark: darken($danger_color, 10%);
 
 /* BACKGROUND COLORS */
 
@@ -31,14 +43,53 @@ $main_text_color: #eee;
 	========================================
 */
 
+$hover_percentage: 10%;
+$focus_percentage: 0%;
+$active_percentage: 0%;
+
 /* DEFAULT BUTTON */
 $main_button_background_color: $main_color;
-	$main_button_background_color_active: $main_color_light;
-	$main_button_background_color_focus: $main_color_light;
-	$main_button_background_color_hover: $main_color_light;
+	$main_button_background_color_hover: lighten($main_button_background_color, $hover_percentage);
+	$main_button_background_color_focus: lighten($main_button_background_color, $focus_percentage);
+	$main_button_background_color_active: lighten($main_button_background_color, $active_percentage);
 
 /* SUCCESS BUTTON */
-$success_button_background_color: $main_color;
-	$success_button_background_color_active: $main_color_light;
-	$success_button_background_color_focus: $main_color_light;
-	$success_button_background_color_hover: $main_color_light;
+$success_button_background_color: $success_color;
+	$success_button_background_color_hover: lighten($success_button_background_color, $hover_percentage);
+	$success_button_background_color_focus: lighten($success_button_background_color, $focus_percentage);
+	$success_button_background_color_active: lighten($success_button_background_color, $active_percentage);
+
+/* WARNING BUTTON */
+$warning_button_background_color: $warning_color;
+	$warning_button_background_color_hover: lighten($warning_button_background_color, $hover_percentage);
+	$warning_button_background_color_focus: lighten($warning_button_background_color, $focus_percentage);
+	$warning_button_background_color_active: lighten($warning_button_background_color, $active_percentage);
+
+/* DANGER BUTTON */
+$danger_button_background_color: $danger_color;
+	$danger_button_background_color_hover: lighten($danger_button_background_color, $hover_percentage);
+	$danger_button_background_color_focus: lighten($danger_button_background_color, $focus_percentage);
+	$danger_button_background_color_active: lighten($danger_button_background_color, $active_percentage);
+
+/*
+========================================
+			SIDE COLORS
+========================================
+*/
+
+$opfor_color: #cc0606;
+$opfor_color_light: lighten($opfor_color, 10%);
+$opfor_color_dark: darken($opfor_color, 10%);
+
+$blufor_color: #255bb2;
+$blufor_color_light: lighten($blufor_color, 10%);
+$blufor_color_dark: darken($blufor_color, 10%);
+
+$indfor_color: #45a004;
+$indfor_color_light: lighten($indfor_color, 10%);
+$indfor_color_dark: darken($indfor_color, 10%);
+
+%color_neutral { @include prefix(filter, contrast(200%) grayscale(100%)); }
+%color_op {	@include prefix(filter, contrast(200%) saturate(300%) hue-rotate(240deg)); }
+%color_blu { @include prefix(filter, saturate(100%) hue-rotate(100deg)); }
+%color_ind { @include prefix(filter, saturate(100%) hue-rotate(0deg)); }

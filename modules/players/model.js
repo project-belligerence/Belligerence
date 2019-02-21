@@ -40,14 +40,19 @@
 					field: 'bio'
 				},
 				locationField: {
-					type: DataTypes.STRING,
-					field: 'location',
-					defaultValue: 'International'
+					type: DataTypes.INTEGER,
+					field: 'player_location',
+					defaultValue: 0
 				},
 				contractType: {
 					type: DataTypes.INTEGER,
 					field: 'contract',
 					defaultValue: config.enums.contract.FREELANCER
+				},
+				sideField: { // The Player's current side aligned, BLUFOR, OPFOR, etc
+					type: DataTypes.INTEGER,
+					field: 'side',
+					defaultValue: 0
 				},
 				missionsWonNum: {
 					type: DataTypes.INTEGER,
@@ -74,6 +79,11 @@
 					field: 'funds',
 					defaultValue: 0
 				},
+				networthField: {
+					type: DataTypes.FLOAT,
+					field: 'networth',
+					defaultValue: 0
+				},
 				tagsField: {
 					type: DataTypes.TEXT,
 					field: 'tags',
@@ -88,8 +98,8 @@
 				},
 				playerPrestige: { // The amount of Prestige, used to shop in stores and other things
 					type: DataTypes.INTEGER,
-					field: 'prestige',
-					defaultValue: 0
+					field: 'player_prestige',
+					defaultValue: 1
 				},
 				playerPrivilege: { // The player Privilege, which determines what meta-actions the player can do - aka moderator, admin, janitor, etc
 					type: DataTypes.INTEGER,
@@ -143,26 +153,26 @@
 						switch (mode) {
 							case 'query': {
 								switch (role) {
-									case 'admin': { return []; }
-									case 'user': { return ['id', 'updatedAt', 'emailField', 'currentFunds', 'lastIPField', 'privateFields', 'privateVisibility', 'PMCId']; }
-									default: { return []; }
+									case 'admin': { return []; } break;
+									case 'user': { return ['id', 'updatedAt', 'emailField', 'currentFunds', 'networthField', 'lastIPField', 'privateFields', 'privateVisibility', 'PMCId']; } break;
+									default: { return []; } break;
 								}
 							} break;
-							case 'creation': { return 'emailField,currentFunds,steamIDField'; }
+							case 'creation': { return 'emailField,currentFunds,steamIDField'; } break;
 						}
 					},
 					whitelistProperties: function(mode, role) {
 						switch (mode) {
 							case 'query': {
 								switch (role) {
-									case 'admin': { return []; }
+									case 'admin': { return []; } break;
 									case 'user': {
  									return [
-										'contractField', 'bioField','missionsWonNum','missionsFailedNum',
-										'playerTier', 'playerStatus', 'currentFunds', 'playerPrestige', 'playerPrivilege',
-										'steamIDField', 'locationField', 'hideComments', 'blockComments', 'PMC'
-									]; }
-									default: { return []; }
+										'contractType', 'bioField','missionsWonNum','missionsfailedNum', 'blockUpgrades',
+										'playerTier', 'playerStatus', 'currentFunds', 'playerPrestige', 'playerPrivilege', "tagsField",
+										'steamIDField', 'locationField', 'hideComments', 'blockComments', 'blockInvites', 'blockMessages', 'PMC', 'createdAt'
+									]; } break;
+									default: { return []; } break;
 								}
 							} break;
 						}
@@ -183,15 +193,16 @@
 					},
 					spendFunds: function(amount, done) {
 						var funds = this.currentFunds,
-							rObject = {
-								neededFunds: amount,
-								currentFunds: funds,
-								valid: (funds >= amount)
-							};
+							rObject = { neededFunds: amount, currentFunds: funds, valid: (funds >= amount) };
 
 						if (funds >= amount) {
 							this.update({ currentFunds: (funds - amount) }).then(function() { return done(rObject); });
 						} else { return done(rObject); }
+					},
+					addFunds: function(amount, done) {
+						var funds = this.currentFunds,
+							rObject = { currentFunds: (funds + amount) };
+						this.update({ currentFunds: (funds + amount) }).then(function() { return done(rObject); });
 					},
 					getAllTransactions: function(done) {
 						var TransactionHistoryModel = require('./../index.js').getModels().transaction_history,
@@ -223,13 +234,25 @@
 							return done(transactions);
 						});
 					},
-					addNewItem: function(p_itemHash, amount, deployed, done) {
+					getActiveContractsAmount: function(done) {
+						var ContractsModel = require('./../index.js').getModels().contracts,
+							thisId = this.getDataValue('id'),
+							whereQuery = { ContractedId: thisId, redeemedField: false	};
+						ContractsModel.findAll({ where: whereQuery }).then(function(contracts) { return done(contracts.length); });
+					},
+					addNewItem: function(p_itemHash, p_itemClassname, p_itemType, p_itemClass, amount, deployed_amount, done) {
 						var PlayerItems = require('./../index.js').getModels().player_items,
 							thisHash = this.getDataValue('hashField');
 
-						PlayerItems.create({ownerHash: thisHash, itemHash: p_itemHash, amountField: amount, deployedField: (deployed || false)}).then(function(ownedItem) {
-							return done(ownedItem);
-						});
+						PlayerItems.create({
+								ownerHash: thisHash,
+								itemHash: p_itemHash,
+								itemType: p_itemType,
+								itemClass: p_itemClass,
+								itemClassname: p_itemClassname,
+								amountField: amount,
+								deployedAmount: deployed_amount
+							}).then(function(ownedItem) { return done(ownedItem); });
 					},
 					getItems: function(done) {
 						var PlayerItems = require('./../index.js').getModels().player_items,
@@ -292,12 +315,15 @@
 								os = require("os"),
 								requireMachineValidation = settings.requireMachineValidation,
 								validMachines = settings.validMachines;
-
-							var isAllowedMachine = requireMachineValidation ? (API.methods.findInArray(os.hostname().toUpperCase(), validMachines)[0]) : true;
-
-							var securityCheck = (isAllowedMachine);
-
-							return done(securityCheck);
+							return done(requireMachineValidation ? (API.methods.findInArray(os.hostname().toUpperCase(), validMachines)[0]) : true);
+						});
+					},
+					canChangeClass: function(done) {
+						var ContractsModel = require('./../index.js').getModels().contracts,
+							ModelId = this.getDataValue("id"),
+							whereQuery = { where: { redeemedField: false, ContractedId: ModelId } };
+						ContractsModel.findAll(whereQuery).then(function(contracts) {
+							return done((contracts.length <= 0));
 						});
 					}
 				},
@@ -305,7 +331,7 @@
 			}
 		);
 
-		PlayerModel.afterCreate(function(model, options) { return model.makeSettings(); });
+		PlayerModel.afterCreate(function(model, options) { return model.makeSettings(function(d){}); });
 
 		return PlayerModel;
 	};

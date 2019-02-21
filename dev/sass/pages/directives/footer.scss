@@ -1,0 +1,115 @@
+
+#footer-container {
+	display: block;
+	position: relative;
+	width: 100%;
+	bottom: 0;
+
+	z-index: 100;
+
+	vertical-align: bottom;
+
+	.footer-bar {
+		color: #fff;
+		padding: factor(4) 0;
+		@include factor-property(padding-top, 7);
+		box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+
+		background: url("/images/cardbg_inverted.png") repeat 100%;
+
+		@include factor-property(min-height, 60);
+
+		.logo-container {
+			width: 145px;
+			text-align: center;
+			margin-right: auto;
+			margin-left: auto;
+
+			@include factor-property(margin-bottom, 5);
+
+			.logo-belligerence-footer {
+				@include size(100px);
+				@include factor-property(margin-bottom, 2);
+				@include factor-property(margin-left, 1);
+			}
+
+			.logo-text {
+				font-family: $main_font;
+				@include font-size(factor(3));
+				text-transform: uppercase;
+				font-weight: 800;
+				border-bottom: 1px solid #eee;
+				@include factor-property(margin-bottom, .5);
+			}
+
+			.logo-sub-text { }
+		}
+
+		.column-section-container {
+			@include factor-property(padding-left, 3);
+
+			.column-section {
+				vertical-align: top;
+				display: inline-block;
+				@include factor-property(margin-right, 4);
+
+				&.no-margin { margin-right: 0; }
+
+				.section {
+					@include factor-property(margin-bottom, 5);
+					font-family: $main_font;
+
+					a {
+						color: #fff;
+						border: none;
+						&:hover { color: $main_color; }
+					}
+
+					.icon { @include factor-property(margin-right, 1); }
+
+					.section-title {
+						@include factor-property(margin-bottom, 1);
+						@include factor-property(padding-left, 2);
+						@include font-size(factor(3));
+						text-shadow: 0px 0px 5px #000;
+
+						border-left: 5px solid $main_color;
+						line-height: 25px;
+
+						.icon {
+							@include factor-property(margin-right, .5);
+							color: #fff;
+						}
+					}
+
+					.section-list {
+						@include factor-property(margin-top, 3);
+
+						.section-item {
+							@include font-size(factor(2.5));
+							@include factor-property(margin-bottom, 1);
+						}
+					}
+
+					.section-about {
+						font-family: $sub_font;
+						line-height: 2;
+						@include font-size(factor(2));
+						line-height: 1.8;
+					}
+				}
+			}
+		}
+
+		.disclaimer-line {
+			font-style: italic;
+			@include factor-property(padding-top, 1);
+			@include font-size(factor(2));
+
+			.belli {
+				font-family: $main_font;
+				font-weight: 800;
+			}
+		}
+	}
+}

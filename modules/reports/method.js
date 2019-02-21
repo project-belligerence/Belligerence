@@ -8,6 +8,12 @@
 		UpgradesModel = require('./../index.js').getModels().upgrades,
 		IntelModel = require('./../index.js').getModels().intel,
 		StoresModel = require('./../index.js').getModels().stores,
+		MapsModel = require('./../index.js').getModels().maps,
+		LocationsModel = require('./../index.js').getModels().locations,
+		FactionsModel = require('./../index.js').getModels().factions,
+		ObjectivesModel = require('./../index.js').getModels().objectives,
+		ConflictsModel = require('./../index.js').getModels().conflicts,
+		MissionsModel = require('./../index.js').getModels().missions,
 		CommentsModel = require('./../index.js').getModels().comments,
 		ReportsModel = require('./../index.js').getModels().reports,
 		config = require('./../../config.js'),
@@ -20,13 +26,14 @@
 	exports.get = get;
 	exports.getAll = getAll;
 	exports.toggleResolved = toggleResolved;
+	exports.deleteReport = deleteReport;
 
 	function queryValues(req) {
 		return {
 			folderName: require('path').basename(__dirname),
 			allowedSortValues: ['createdAt'],
 			allowedPostValues: {
-				contentValues: ['player', 'pmc', 'intel', 'item', 'store', 'upgrade', 'comment'],
+				contentValues: ['player', 'pmc', 'intel', 'item', 'store', 'upgrade', 'comment', "map", "location", "faction", "objective", "conflict", "mission"],
 				typeValues: ['harassment', 'rules', 'illegal', 'bug']
 			},
 			generateWhereQuery:	function(req) {
@@ -76,20 +83,29 @@
 
 		var subjectModel = (function(v) {
 			switch (v) {
-				case "item": { return ItemModel; }
-				case "upgrade": { return UpgradesModel; }
-				case "intel": { return IntelModel; }
-				case "player": { return PlayerModel; }
-				case "store": { return StoresModel; }
-				case "comments": { return CommentsModel; }
-				case "pmc": { return PMCModel; }
+				case "item": { return ItemModel; } break;
+				case "upgrade": { return UpgradesModel; } break;
+				case "intel": { return IntelModel; } break;
+				case "player": { return PlayerModel; } break;
+				case "store": { return StoresModel; } break;
+				case "comments": { return CommentsModel; } break;
+				case "pmc": { return PMCModel; } break;
+				case "map": { return MapsModel; } break;
+				case "location": { return LocationsModel; } break;
+				case "faction": { return FactionsModel; } break;
+				case "objective": { return ObjectivesModel; } break;
+				case "conflict": { return ConflictsModel; } break;
+				case "mission": { return MissionsModel; } break;
 			}
 		})(req.body.content);
 
 		PlayerModel.findOne({where:{hashField: req.playerInfo.hashField}}).then(function(player) {
 			if(!API.methods.validate(req, res, [player])) { return 0; }
 
-			subjectModel.findOne({where:{hashField: req.body.reported}}).then(function(subject) {
+			var subjectQuery = {where: {}};
+			subjectQuery.where[req.body.hashProperty] = req.body.reported;
+
+			subjectModel.findOne(subjectQuery).then(function(subject) {
 				if(!API.methods.validate(req, res, [subject])) { return 0; }
 
 				mainModel.findOne({where:{issuerHash: req.playerInfo.hashField, reportedHash: req.body.reported}}).then(function(report) {
@@ -108,6 +124,18 @@
 						API.methods.sendResponse(req, res, true, "The report has been filed.", 'entry');
 					});
 				});
+			});
+		});
+	}
+
+	function deleteReport(req, res) {
+		var objectID = req.params.Hash;
+
+		mainModel.findOne({where: {'hashField': objectID}}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(req.params.Hash))) { return 0; }
+
+			entry.destroy().then(function(rowDeleted) {
+				API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
 			});
 		});
 	}

@@ -1,0 +1,165 @@
+<div class="container-fluid top-spacer-double" id="single-upgrade-container"
+	ng-init="upgradeInfo = CtrlSingleUpgrade.upgradeInfo; matchedUpgrade = CtrlSingleUpgrade.matchedUpgrade;"
+>
+	<div class="container">
+		<div id="single-upgrade-top" class="col-md-12">
+			<div class="row">
+				<div id="top-image" class="col-md-5 col-sm-5">
+					<div class="row">
+						<div class="image-container" ng-class="{'completed': (matchedUpgrade.rankField >= upgradeInfo.maxTier)}">
+
+							<img class="upgrade-image"
+							ng-src="images/modules/upgrades/main_{{::(upgradeInfo.iconName)}}.png" />
+
+							<div class="rank-level">
+								<ul class="rank-list">
+									<li class="rank" ng-repeat="rank in CtrlSingleUpgrade.numberToArray(upgradeInfo.maxTier) track by $index">
+										<i class="icon"
+										ng-class="{'ion-android-checkbox-outline-blank': ($index >= matchedUpgrade.rankField), 'ion-android-checkbox-blank': ($index < matchedUpgrade.rankField)}"></i>
+									</li>
+								</ul>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div id="top-description" class="col-md-7 col-sm-7">
+					<div class="row">
+
+						<h2 class="top-name" ng-bind="::(upgradeInfo.nameField)"></h2>
+
+						<div class="top-sub-section">
+							<div class="top-kind">
+								<i class="icon ion-flash"></i>
+								<span ng-bind="::(CtrlSingleUpgrade.upgradesData.upgradesTypes[upgradeInfo.kindField].text)">
+								</span>
+							</div>
+							<div class="separator" ng-if="::(upgradeInfo.typeField > 0)">
+								<span class="dot">.</span>
+								<div class="top-type" ng-class="{'warning': !(CtrlSingleUpgrade.validUpgradeType)}">
+									<i class="icon ion-alert"></i>
+									<span ng-bind="::(CtrlSingleUpgrade.upgradesData.upgradesOwner[upgradeInfo.typeField].text) + 's only'">
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="top-flavortext" ng-bind="::(upgradeInfo.flavortextField)"></div>
+
+						<hr />
+
+						<div id="top-related-upgrades" class="col-md-12" ng-if="::(CtrlSingleUpgrade.hasRelatedUpgrades)" ng-cloak>
+							<div class="row">
+								<div class="col-md-6 col-sm-6" ng-if="::(upgradeInfo.requiredUpgrades.length > 0)" ng-cloak>
+									<div class="row">
+										<div class="related-upgrade-text required">Required</div>
+										<div class="related-container">
+											<a
+												ng-href="upgrade/{{::(upgrade.hashField)}}"
+												class="single-upgrade"
+												ng-repeat="upgrade in upgradeInfo.requiredUpgrades track by $index"
+												ng-init= "matchedInner = CtrlSingleUpgrade.matchOwnedUpgrade(upgrade.hashField)"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												popover-popup-delay="250"
+												popover-append-to-body="true"
+												uib-popover="{{::(upgrade.nameField)}}"
+											>
+												<img ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" />
+												<div class="rank-container">
+													<div class="upgrade-rank" ng-class="{'warning': (matchedInner.rankField < upgrade.Rank)}">
+														<span ng-bind="::(matchedInner.rankField || '-')"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+													</div>
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 col-sm-6" ng-if="::(upgradeInfo.blacklistedUpgrades.length > 0)" ng-cloak>
+									<div class="row">
+										<div class="related-upgrade-text blacklisted">Conflicting</div>
+										<div class="related-container">
+											<a
+												ng-href="upgrade/{{::(upgrade.hashField)}}"
+												class="single-upgrade"
+												ng-repeat="upgrade in upgradeInfo.blacklistedUpgrades track by $index"
+												ng-init= "matchedInner = CtrlSingleUpgrade.matchOwnedUpgrade(upgrade.hashField)"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												popover-popup-delay="250"
+												popover-append-to-body="true"
+												uib-popover="{{::(upgrade.nameField)}}"
+											>
+												<img ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" />
+												<!-- <div class="related-name" ng-bind="::(upgrade.nameField)"></div> -->
+												<div class="rank-container">
+													<div class="upgrade-rank" ng-class="{'failed': (matchedInner.rankField >= upgrade.Rank)}">
+														<span ng-bind="::(matchedInner.rankField || '-')"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+													</div>
+												</div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="single-upgrade-bottom" class="col-md-12">
+			<div class="row">
+
+				<div class="col-md-8 col-sm-7">
+					<div class="current-rank" ng-if="::(matchedUpgrade.rankField > 0)">
+						<h2>CURRENT</h2>
+						<h3 ng-bind="::(upgradeInfo.flavortextUpgradesField[(matchedUpgrade.rankField - 1)])"></h3>
+					</div>
+					<div class="next-rank" ng-if="::(matchedUpgrade.rankField < upgradeInfo.maxTier)">
+						<h2>NEXT</h2>
+						<h3 ng-bind="::(upgradeInfo.flavortextUpgradesField[(matchedUpgrade.rankField)])"></h3>
+					</div>
+				</div>
+
+				<div class="col-md-4 col-sm-5">
+					<div class="purchase-section">
+
+						<div class="final-cost-label">Upgrade cost</div>
+
+						<div class="upgrade-cost">
+							<i class="icon ion-flash"></i>
+							<div class="current-cost" ng-bind="CtrlSingleUpgrade.finalUpgradePrice | currency :'D$ ': 0">
+							</div>
+						</div>
+
+						<div class="funds-container">
+							<i class="icon ion-cash"></i>
+							<div class="current-funds" ng-bind="CtrlSingleUpgrade.currentFunds | currency :'D$ ': 0"></div>
+						</div>
+
+						<hr />
+
+						<div class="remaining-funds-container">
+							<i class="icon ion-arrow-swap"></i>
+							<div class="remaining-funds" ng-bind="(CtrlSingleUpgrade.currentFunds - CtrlSingleUpgrade.finalUpgradePrice) | currency :'D$ ': 0"></div>
+						</div>
+
+						<hr />
+
+						<a ng-click="CtrlSingleUpgrade.askPurchaseUpgrade()" class="section-button success medium" role="button" a-disabled="!(CtrlSingleUpgrade.allowPurchase)">
+							<ul>
+								<li><i class="icon ion-skip-forward"></i></li>
+								<li>UPGRADE</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<footer-directive></footer-directive>

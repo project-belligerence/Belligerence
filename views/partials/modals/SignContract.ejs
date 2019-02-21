@@ -1,0 +1,181 @@
+
+<div class="modal-window">
+	<div class="modal-header">
+		<i class="icon" ng-class="::(ModalController.modalSettings.ui.header.icon)"></i>
+		<h2 class="modal-title" ng-bind="::(ModalController.modalSettings.ui.header.text)"></h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
+	</div>
+
+	<div class="modal-body">
+		<div class="modal-body" id="modal-body">
+			<div class="contract-display">
+
+				<div class="mission-name">
+					<div class="operation">Operation</div>
+					<div class="name" ng-bind="::(ModalController.missionDetails.nameField)"></div>
+				</div>
+
+				<hr/>
+
+				<div ng-if="::(ModalController.modalSettings.ui.info === 0)" ng-cloak>
+					<div class="party" ng-class="::(ModalController.applyControlledClass(ModalController.validInfo[ModalController.selfProperties.side]))">
+						<div class="object-name">Signee</div>
+						<div class="square unit-avatar">
+							<div class="medium"
+							ac-background-image background-image="images/avatars/{{::(ModalController.selfProperties.image)}}/main_{{::(ModalController.validInfo.hashField)}}.jpg">
+							</div>
+						</div>
+						<div class="name" ng-bind="::(ModalController.validInfo[ModalController.selfProperties.name])"></div>
+					</div>
+
+					<div class="party">
+						<div class="object-name">Objective</div>
+						<div class="square unit-avatar">
+							<div class="medium"
+							ac-background-image background-image="images/modules/objectives/main_{{::(ModalController.missionDetails.Objective.iconName)}}.png">
+							</div>
+						</div>
+						<div class="name" ng-bind="::(ModalController.missionDetails.Objective.nameField)"></div>
+					</div>
+
+					<div class="party flag" ng-class="::(ModalController.applyControlledClass(ModalController.clientFaction.sideField))">
+						<div class="object-name">Client</div>
+						<div class="square unit-avatar">
+							<div class="medium"
+							ac-background-image background-image="images/modules/factions/main_{{::(ModalController.clientFaction.hashField)}}.png">
+							</div>
+						</div>
+						<div class="name" ng-bind="::(ModalController.clientFaction.nameField)"></div>
+					</div>
+				</div>
+
+				<div ng-if="::(ModalController.modalSettings.ui.info === 1)" ng-cloak>
+
+					<div class="party" ng-class="::(ModalController.applyControlledClass(ModalController.validInfo[ModalController.selfProperties.side]))">
+						<div class="object-name">Employer</div>
+						<div class="square unit-avatar">
+							<div class="medium"
+							ac-background-image background-image="images/avatars/pmc/main_{{::(ModalController.negotiationDetails.employer.hashField)}}.jpg">
+								<i class="icon ion-arrow-return-right turn" ng-if="::(ModalController.ui.negotiation.details.turn === 0)" popover-trigger="'mouseenter'" popover-popup-delay="100" popover-class="tooltip"
+						uib-popover="This party may either accept the current share or propose a new one."></i>
+							</div>
+						</div>
+						<div class="name" ng-bind="::(ModalController.negotiationDetails.employer.display_name)"></div>
+					</div>
+
+					<div class="party" ng-class="::(ModalController.applyControlledClass(ModalController.negotiationTarget.sideField))">
+						<div class="object-name">Reward Share</div>
+						<div class="share">
+							<span class="number" ng-bind="::(ModalController.negotiationDetails.percentField)"></span><span class="percent-sign">%</span>
+						</div>
+					</div>
+
+					<div class="party" ng-class="::(ModalController.applyControlledClass(ModalController.negotiationTarget.sideField))">
+						<div class="object-name">Operator</div>
+						<div class="square unit-avatar">
+							<div class="medium"
+							ac-background-image background-image="images/avatars/players/main_{{::(ModalController.negotiationDetails.operator.hashField)}}.jpg">
+								<i class="icon ion-arrow-return-left turn" ng-if="::(ModalController.ui.negotiation.details.turn === 1)" popover-trigger="'mouseenter'" popover-popup-delay="100" popover-class="tooltip"
+						uib-popover="This party may either accept the current share or propose a new one."></i>
+							</div>
+						</div>
+						<div class="name" ng-bind="::(ModalController.negotiationDetails.operator.aliasField)"></div>
+					</div>
+
+				</div>
+
+				<div class="contract-fee" ng-if="::(ModalController.options.mode === 'sign')" ng-cloak>
+					<span class="fee-text object-name">Contract fee</span>
+					<div class="fee-values">
+						<span class="currency">D$</span> <div class="final-value" ng-bind="::(ModalController.ui.contract.finalFee | number)"></div>
+						(<div class="fee-value" ng-bind="::(ModalController.ui.contract.percentage)"></div><span class="percentage">%</span>)
+					</div>
+				</div>
+
+				<div class="slider dark fade-animation-slow" ng-if="::((ModalController.options.mode === 'interest') || (ModalController.options.mode === 'negotiation'))" ng-cloak>
+
+					<div ng-if="(ModalController.ui[ModalController.options.mode].details.show_counter)">
+
+						<div class="slider-header">
+							<h3>Contract Markup</h3>
+							<i class="icon ion-help help-icon" popover-trigger="'mouseenter'" popover-popup-delay="100" popover-class="tooltip"
+							uib-popover="This percentage will be deducted from the final Outfit reward as payment."
+							></i>
+						</div>
+
+						<div class="slider-container" ng-class="::{'short': (ModalController.options.mode === 'negotiation') }">
+							<rzslider rz-slider-model="ModalController.ui[ModalController.options.mode].model.min" rz-slider-high="ModalController.ui[ModalController.options.mode].model.max" rz-slider-options="ModalController.ui[ModalController.options.mode].options">
+							</rzslider>
+						</div>
+
+						<a class="section-button medium" role="button" ng-click="ModalController.closeModal(((ModalController.negotiationDetails.roundField === 0) ? 3 : 3.5))" ng-if="::((ModalController.options.mode === 'negotiation') && (ModalController.ui[ModalController.options.mode].details.show_counter))" popover-trigger="'mouseenter'" popover-popup-delay="100" popover-class="tooltip"
+							uib-popover="Propose a new Contract share and wait for the other party to answer." ng-cloak>
+							<ul>
+								<li><i class="icon ion-forward"></i></li>
+								<li>Offer</li>
+							</ul>
+						</a>
+
+					</div>
+
+				</div>
+
+				<div class="counter-offer fade-animation-slow" ng-if="((ModalController.options.mode === 'negotiation') && !(ModalController.ui[ModalController.options.mode].details.show_counter))">
+
+					<a class="section-button medium" role="button" popover-trigger="'mouseenter'" popover-popup-delay="100" popover-class="tooltip"
+						uib-popover="Open a negotiation with the other party over the final reward share." a-disabled="!(ModalController.canCounterOffer())" ng-click="ModalController.flipNegotiation()">
+						<ul>
+							<li><i class="icon ion-arrow-swap"></i></li>
+							<li>Counter-offer</li>
+						</ul>
+					</a>
+
+				</div>
+
+				<div class="warning" ng-if="::(ModalController.currentConditions.hasError)" ng-cloak>
+					<hr/>
+					<div class="w-icon">
+						<i class="icon ion-android-close"></i>
+					</div>
+					<div class="message" ng-bind="::(ModalController.currentConditions.message)"></div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+
+		<a class="section-button medium muted" role="button" ng-click="ModalController.closeModal(0)">
+			<ul>
+				<li><i class="icon ion-arrow-left-c"></i></li>
+				<li>Return</li>
+			</ul>
+		</a>
+
+		<a class="section-button medium warning" role="button" ng-if="::((ModalController.options.mode === 'negotiation') && (ModalController.negotiationDetails.roundField > 0))" ng-click="ModalController.closeModal(4)" ng-cloak>
+			<ul>
+				<li><i class="icon ion-trash-a"></i></li>
+				<li>Reject</li>
+			</ul>
+		</a>
+
+		<a class="section-button medium warning" role="button" ng-if="::(ModalController.options.mode === 'interest') && (ModalController.hasInterest)" ng-click="ModalController.closeModal(1)" ng-cloak>
+			<ul>
+				<li><i class="icon ion-heart-broken"></i></li>
+				<li>Cancel</li>
+			</ul>
+		</a>
+
+		<a class="section-button medium" role="button" ng-class="::(ModalController.modalSettings.ui.ok.class)" ng-click="ModalController.closeModal(2)" a-disabled="ModalController.currentConditions.hasError">
+			<ul>
+				<li><i class="icon" ng-class="ModalController.modalSettings.ui.ok.icon"></i></li>
+				<li ng-bind="::(ModalController.modalSettings.ui.ok.text)"></li>
+			</ul>
+		</a>
+
+	</div>
+</div>

@@ -10,6 +10,14 @@
 		PMC = Methods.pmc,
 		Upgrades = Methods.upgrades,
 		Messages = Methods.messages,
+		Maps = Methods.maps,
+		Factions = Methods.factions,
+		Advisories = Methods.advisories,
+		Objectives = Methods.objectives,
+		Conflicts = Methods.conflicts,
+		Contracts = Methods.contracts,
+		Negotiations = Methods.negotiations,
+		Locations = Methods.locations,
 		Stores = Methods.stores,
 		StoresLines = Methods.store_lines,
 		Items = Methods.items,
@@ -18,6 +26,7 @@
 		Transactions = Methods.transactions,
 		TransactionHistory = Methods.transaction_history,
 		Intel = Methods.intel,
+		Interest = Methods.interest,
 		ActionsCost = Methods.actions_cost,
 		Cheers = Methods.cheers,
 		Upload = Methods.upload,
@@ -26,7 +35,14 @@
 		CommentsMethods = Methods.comments,
 		Reports = Methods.reports,
 		Bans = Methods.bans,
+		Loadouts = Methods.loadouts,
+		Missions = Methods.missions,
+		AccessKeys = Methods.access_keys,
 
+		SimpleAirdrops = Methods.simple_airdrop,
+		SimpleMissions = Methods.simple_mission,
+
+		passport = require('passport'),
 		bodyParser = require('body-parser'),
 		config = require('./../config.js'),
 		API = require('./api.js');
@@ -37,6 +53,7 @@
 	function renderStatic(req, res) { res.render(config.folders.static + req.params.static); }
 	function renderPartial(req, res) { res.render(config.folders.partials + '/' + req.params.partial); }
 	function renderDashboard(req, res) { res.render(config.folders.partials + '/dashboard/' + req.params.partial); }
+	function renderAdmin(req, res) { res.render(config.folders.partials + '/admin/' + req.params.partial); }
 	function renderDirective(req, res) { res.render(config.folders.directives + '/' + req.params.directive); }
 	function renderModal(req, res) { res.render(config.folders.partials + '/' + 'modals/' + req.params.modal); }
 
@@ -85,7 +102,13 @@
 
 				API.methods.sendResponse(req, res, true, API.methods.getType(true), "All valid!");
 			})
+
+			.get('/steamStuff', function(req, res) {
+				API.methods.sendResponse(req, res, true, "req.user", req.user);
+			})
+
 			.use(API.methods.authenticateToken)
+
 			.post('/getPlayerTransactions', function(req, res) {
 				Models.players.findOne({ where: {"hashField":req.playerInfo.hashField}}).then(function(entry) {
 					entry.getAllTransactions(function(transactions){
@@ -110,89 +133,10 @@
 			.post('/updateItemsValue', Items.updateItemsValue)
 		;
 
-		// playersRouter //
-		// 	.get('/:Hash', Players.getPlayer)
-		// 	.post('/auth', Players.authPlayer)
-		// 	.post('/', Players.newPlayer)
-		// 	.use(API.methods.authenticateToken)
-		// 	.get('/', Players.getAll)
-		// 	.get('/get/self', Players.getSelf)
-		// 	.put('/:Hash', Players.putPlayer)
-		// 	.post('/set/pmc', Players.setPMC);
-
-		// PMCRouter //
-		// 	.get('/:Hash', PMC.getPMC)
-		// 	.use(API.methods.authenticateToken)
-		// 	.get('/', PMC.getAllPMC)
-		// 	.post('/', PMC.newPMC)
-		// 	.put('/:Hash', PMC.putPMC);
-
-		ItemsRouter //
-			.get('/:Hash', Items.get)
-			.use(API.methods.authenticateToken)
-			.get('/', Items.getAll)
-			.post('/', Items.post)
-			.put('/:Hash', Items.put)
-			.get('/player/:Hash', Items.getPlayer)
-			.get('/pmc/:Hash', Items.getPMC)
-			.put('/set/pmc', Items.putPMC);
-
-		UpgradesRouter //
-			.get('/:Hash', Upgrades.get)
-			.use(API.methods.authenticateToken)
-			.get('/', Upgrades.getAll)
-			.put('/:Hash', Upgrades.put)
-			.put('/set/pmc', Upgrades.putPMC)
-			.put('/set/player', Upgrades.putPlayer)
-			.post('/pmc', Upgrades.postPMC)
-			.post('/player', Upgrades.postPlayer)
-			.post('/', Upgrades.post);
-
-		MessagesRouter //
-			.use(API.methods.authenticateToken)
-			.get('/', Messages.getAll)
-			.get('/sent', Messages.getSent)
-			.get('/received', Messages.getReceived)
-			.get('/:Hash', Messages.get)
-			.put('/:Hash', Messages.put)
-			.post('/', Messages.post);
-
-		InvitesRouter
-			.use(API.methods.authenticateToken)
-			.get('/', Invites.getAll)
-			.get('/:Hash', Invites.get)
-			.get('/sent/player', Invites.getSentPlayer)
-			.get('/received/player', Invites.getReceivedPlayer)
-			.get('/sent/pmc', Invites.getSentPMC)
-			.get('/received/pmc', Invites.getReceivedPMC)
-			.post('/', Invites.post)
-			.post('/resolve/:Hash', Invites.resolve);
-
-		ModifiersRouter
-			.get('/:Name', Modifiers.get)
-			.use(API.methods.authenticateToken)
-			.get('/', Modifiers.getAll)
-			.post('/', Modifiers.post)
-			.put('/:Name', Modifiers.put)
-			.post('/setActive', Modifiers.setActive);
-
-		StoresRouter
-			.get('/:Hash', Stores.get)
-			.get('/getStoreStock/:Hash', Stores.getStoreStock)
-			.get('/getRandomStoreLine/:Hash', StoresLines.getRandomStoreLine)
-			.use(API.methods.authenticateToken)
-			.get('/', Stores.getAll)
-			.post('/', Stores.post)
-			.put('/:Hash', Stores.put)
-			.get('/getStoreLines/:Hash', StoresLines.getStoreLines)
-			.post('/addStoreStock/:Hash', Stores.addStoreStock)
-			.put('/updateStoreStock/:Hash', Stores.updateStoreStock)
-			.post('/addStoreLine/:Hash', StoresLines.post)
-			.put('/updateStoreLine/:Hash', StoresLines.put);
-
 		PlayerActionsRouter // For actions that are specifically related to the player.
 
-			.post('/auth', Players.authPlayer)
+				.post('/auth', Players.authPlayer)
+				.post('/findPlayerByProperty', Players.findPlayerByProperty)
 
 			.use(API.methods.authenticateToken)
 			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.user))
@@ -206,13 +150,19 @@
 				.put('/updateSelf', Players.putPlayerSelf)
 				.get('/getFriendsSelf', Friends.getFriendsPlayerRead)
 				.post('/removeFriend', Friends.removeFriend)
+				.post('/confirmPassword', Players.confirmPassword)
 
+				.get('/getMachineName', PlayerSettings.getMachineName)
 				.get('/getSettingsSelf', PlayerSettings.getSettingSelf)
 				.put('/updateSettingsSelf', PlayerSettings.updateSettingSelf)
 				.post('/addAllowedMachine', PlayerSettings.addAllowedMachine)
 				.post('/removeAllowedMachine', PlayerSettings.removeAllowedMachine)
 
-				/* Contract */
+				.get('/getAllOperationsSelf', GeneralMethods.getAllOperationsSelf)
+
+				.post('/claimNetworth', Players.claimNetworth)
+
+				/* Job Status */
 				.post('/playerGoFreelancerSelf', Players.playerSelfGoFreelancer)
 				.post('/playerGoSoldierSelf', Players.playerSelfGoSoldier)
 
@@ -223,9 +173,30 @@
 				.get('/getSentMessagesSelf', Messages.getSent)
 				.get('/getReceivedMessagesSelf', Messages.getReceived)
 
+				/* Intel */
+				.post('/uploadIntelPicture/:intelHash', Upload.uploadIntelPicture)
+
 				/* Invites */
 				.get('/getReceivedInvitesSelf', Invites.getReceivedPlayer)
 				.get('/getSentInvitesSelf', Invites.getSentPlayer)
+
+				/* Contracts */
+				.get('/getSignedContractsSelf', Contracts.getSignedContracts)
+				.get('/getLastSignedContractSelf', Contracts.getLastSignedContract)
+				.delete('/removeContract/:Hash', Contracts.deleteEntry)
+				.get('/getContractedPercentage', Contracts.getContractedPercentage)
+				.post('/redeemContract/:Hash', Contracts.redeemContract)
+
+				/* Negotiations */
+				.get('/getNegotiationsSelf', Negotiations.getNegotiationsSelf)
+				.get('/getNegotiation', Negotiations.getNegotiation)
+				.post('/acceptContract/:Hash', Negotiations.acceptContract)
+				.delete('/cancelNegotiation/:Hash', Negotiations.deleteEntry)
+
+				/* Interest */
+				.get('/getMarkedInterestsSelf', Interest.getMarkedInterests)
+				.post('/addInterestToMission', Interest.post)
+				.delete('/removeInterest/:Hash', Interest.deleteEntry)
 		;
 
 		PMCActionsRouter // For actions only players in a PMC can perform.
@@ -240,16 +211,25 @@
 				.get('/getSelf', PMC.getSelf)
 				.get('/getSelfPMCPlayers', PMC.getSelfPMCPlayers)
 				.get('/getFriendsSelf', Friends.getFriendsPMCRead)
+				.get('/getPMCSizeCost', PMC.getPMCSizeCost)
 
 			.use(API.methods.validatePlayerPMCTier(config.privileges().tiers.janitor))
-
-
 
 			.use(API.methods.validatePlayerPMCTier(config.privileges().tiers.moderator))
 
 				/* Invites */
 				.get('/getReceivedInvitesPMC', Invites.getReceivedPMC)
 				.get('/getSentInvitesPMC', Invites.getSentPMC)
+
+				/* Alliances */
+				.post('/removeAlliance', Friends.removeAlliance)
+
+				/* Contracts */
+				.post('/signContract', Contracts.post)
+				.delete('/deleteContract/:Hash', Contracts.deleteEntry)
+
+				/* Negotiations */
+				.post('/startNegotiation', Negotiations.post)
 
 			.use(API.methods.validatePlayerPMCTier(config.privileges().tiers.admin))
 
@@ -268,29 +248,91 @@
 
 		GeneralActionsRouter // Actions that can be performed regardless of your context.
 
+				.post('/checkKeyValidity/', AccessKeys.checkKeyValidity)
+
 			.use(API.methods.checkToken)
 
 				/* Items */
 				.get('/getItems', Items.getAllLimited)
+				.get('/getItemsTypeahead', Items.getAllTypeHead)
 				.get('/getItem/:Hash', Items.get)
+				.get('/getItemsTypeClass', Items.getItemsTypeClass)
+				.get('/getItemContent', Items.getItemContent)
+
+				/* Maps */
+				.get('/getMaps', Maps.getLimited)
+				.get('/getMap/:Hash', Maps.get)
+				.get('/getClimates', Maps.getClimates)
+				.get('/getMapList', Maps.getMapList)
+
+				/* Factions */
+				.get('/getFactions', Factions.getLimited)
+				.get('/getFaction/:Hash', Factions.get)
+				.get('/getPolicies', Factions.getPolicies)
+				.get('/getDoctrines', Factions.getDoctrines)
+
+				/* Conflicts */
+				.get('/getConflicts', Conflicts.getLimited)
+				.get('/getActiveConflicts', Conflicts.getActiveConflicts)
+				.get('/getActiveFactionConflicts', Conflicts.getActiveFactionConflicts)
+				.get('/getConflict/:Hash', Conflicts.get)
+				.get('/getBelligerents/:Hash', Conflicts.getBelligerents)
+				.get('/getConflictStatus', Conflicts.getConflictStatus)
+
+				/* Advisories */
+				.get('/getAdvisories', Advisories.getLimited)
+				.post('/getAdvisoriesSimple', Advisories.getSimpleList)
+				.get('/getAdvisory/:Hash', Advisories.get)
+
+				/* Objectives */
+				.get('/getObjectives', Objectives.getLimited)
+				.post('/getObjectivesSimple', Objectives.getSimpleList)
+				.get('/getObjective/:Hash', Objectives.get)
+				.get('/getObjectivesList', Objectives.getObjectiveList)
+
+				/* Missions */
+				.get('/getMissions', Missions.getLimited)
+				.get('/getMission/:Hash', Missions.get)
+				.get('/getMissionParticipants/:Hash', Missions.getMissionParticipants)
+				.get('/getSignatureFee', Missions.getSignatureFee)
+				.get('/getInterestedPlayers/:Hash', Interest.getInterestedPlayers)
+
+				/* Contracts */
+				.get('/getMissionContracts/:Hash', Contracts.getMissionContracts)
+
+				/* Locations */
+				.get('/getLocations', Locations.getLimited)
+				.get('/getLocation/:Hash', Locations.get)
+				.get('/getLocationTypes', Locations.getLocationTypes)
 
 				/* Upgrades */
 				.get('/getUpgrades', Upgrades.getAll)
 				.get('/getUpgrade/:Hash', Upgrades.get)
+				.get('/getUpgradesSimple', Upgrades.getAllSimple)
+				.get('/getUpgradeTree', Upgrades.getUpgradeTree)
 
 				.get('/getUpgradesPlayer/:Hash', Upgrades.getUpgradesPlayer)
 				.get('/getUpgradesPMC/:Hash', Upgrades.getUpgradesPMC)
+				.get('/getUpgradesData', Upgrades.getUpgradesData)
 
 				/* Economy */
 				.get('/getStores', Stores.getAll)
 				.get('/getStore/:Hash', Stores.get)
 				.get('/getStoreStock/:Hash', Stores.getStoreStock)
+				.get('/getStoreFromItem/:Hash', Stores.getStoreFromItem)
+				.post('/getStoresAndItems', Stores.getStoresAndItems)
 				.get('/getStoreLines/:Hash', StoresLines.getStoreLines)
 				.get('/getRandomStoreLine/:Hash', StoresLines.getRandomStoreLine)
+
+				/* Stores */
+				.get('/getStoreSpecializations', Stores.getStoreSpecializations)
+				.get('/getStoreStatuses', Stores.getStoreStatuses)
 
 				/* Intel */
 				.get('/getIntel/:Hash', Intel.get)
 				.get('/getIntel', Intel.getAll)
+				.post('/getIntelPrice', Intel.returnIntelPrice)
+				.post('/getIntelPricePartial', Intel.returnIntelPricePartial)
 
 				/* Actions Cost */
 				.get('/getCostTableProperty/:Data', ActionsCost.getProperty)
@@ -306,13 +348,34 @@
 				.get('/getPMC/:Hash', PMC.getPMC)
 				.get('/getAllPMC', PMC.getAllPMC)
 				.get('/getPMCPlayers/:Hash', PMC.getPMCPlayers)
+				.get('/getPMCTiers/:Hash', PMC.getPMCTiers)
+
+				/* All */
+				.post('/resetSideAlignment', GeneralMethods.resetSideAlignment)
+				.get('/getSideAlignment', GeneralMethods.getSideAlignment)
 
 				/* Comments */
 				.get('/getComments/:type/:subject', CommentsMethods.getComments)
 
+				/* Steam Session */
+				.get('/getSteamSession', GeneralMethods.getSteamSession)
+				.post('/getSteamValid', GeneralMethods.getSteamValid)
+				.post('/destroySteamSession', GeneralMethods.destroySteamSession)
+
+				/* General */
+				.get('/getSides', GeneralMethods.getSides)
+				.get('/getRegions', GeneralMethods.getRegions)
+
 			.use(API.methods.authenticateToken)
 			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.user))
 			.use(API.methods.getBannedStatus)
+
+				/* Access Key */
+				.post('/redeemAccessKey', AccessKeys.redeemAccessKey)
+
+				/* Rank */
+				.post('/upgradePrestigeRank', GeneralMethods.upgradePrestigeRank)
+				.get('/getPrestigeRankCost', GeneralMethods.getPrestigeRankCost)
 
 				/* Reports */
 				.post('/postReport', Reports.postReport)
@@ -324,20 +387,25 @@
 				/* Messages */
 				.post('/sendMessage', Messages.post)
 				.get('/countMessagesInvitesReceived', GeneralMethods.countMessagesInvitesReceived)
+				.get('/countActiveOperations', GeneralMethods.countActiveOperations)
 
 				/* Items */
 				.post('/buyItem', GeneralMethods.buyItem)
 				.get('/getInventorySelf', Items.getInventorySelf)
+				.post('/deployItem/:Hash', Items.deployItem)
 
 				/* Upgrades */
 				.get('/getUpgradesSelf', Upgrades.getUpgradesSelf)
-				.post('/toggleUpgradeVisibility', GeneralMethods.toggleUpgradeVisibility)
+				.get('/getProminentUpgradesSelf', Upgrades.getProminentUpgradesSelf)
+				.post('/reSpecTree/:Hash', Upgrades.reSpecTree)
+				.get('/checkUpgradeOwned/:Hash/:Rank', Upgrades.checkUpgradeOwned)
 				.post('/toggleUpgradeProminence', GeneralMethods.toggleUpgradeProminence)
-				.post('/setUpgradeVisibilityAll', GeneralMethods.setUpgradeVisibilityAll)
+				.post('/setUpgradesInvisibleAll', GeneralMethods.setUpgradeVisibilityAll)
 				.post('/buyUpgrade', GeneralMethods.buyUpgrade)
 
 				/* Intel */
 				.post('/postIntel', Intel.post)
+				.put('/editIntel/:Hash', Intel.put)
 				.delete('/removeIntel/:Hash', Intel.deleteEntry)
 
 				/* Invites */
@@ -351,10 +419,39 @@
 				/* Economy */
 				.get('/getTransactionsSelf', TransactionHistory.getTransactionsSelf)
 				.get('/getTransaction/:Hash', TransactionHistory.get)
+				.get('/getCurrentFundsSelf', GeneralMethods.getCurrentFundsSelf)
 
 				/* Comments */
 				.post('/postComment', CommentsMethods.postComment)
 				.post('/deleteComment', CommentsMethods.deleteComment)
+
+				/* Message */
+				.get('/readMessage/:Hash', Messages.get)
+				.delete("/deleteMessage/:Hash", Messages.deleteMessage)
+
+				/* Negotiations */
+				.post('/counterNegotiation/:Hash', Negotiations.counterOffer)
+
+				/* Loadouts */
+				.get('/getSelfLoadouts', Loadouts.getSelfLoadouts)
+				.post('/addLoadout', Loadouts.post)
+				.put('/editLoadout/:Hash', Loadouts.put)
+				.delete('/deleteLoadout/:Hash', Loadouts.deleteLoadout)
+				.post('/deployLoadout/:Hash', Loadouts.deployLoadout)
+				.post('/toggleLoadoutBookmark/:Hash', Loadouts.toggleLoadoutBookmark)
+				.post('/resetDeployedItems', Items.resetDeployedItems)
+
+				// ========= PRESENTATION STUFF ============================
+
+				/* Airdrops */
+				.post("/sendObjectAirdrop", SimpleAirdrops.post)
+
+				/* Missions */
+				.get("/getSimpleMissions", SimpleMissions.getAll)
+				.post("/postSimpleMission", SimpleMissions.post)
+				.put("/updateSimpleMission/:Hash", SimpleMissions.updateMissionStatus)
+				.post("/signContractSimpleMission/:Hash", SimpleMissions.signContract)
+				.post("/claimRewardSimpleMission/:Hash", SimpleMissions.claimReward)
 		;
 
 		AdminRouter // Actions that only those with certain privileges can perform.
@@ -369,15 +466,61 @@
 				.post('/addItem', Items.post)
 				.post('/duplicateItem/:Hash', Items.duplicateItem)
 				.put('/editItem/:Hash', Items.put)
+				.delete('/deleteEntry/:Hash', Items.deleteEntry)
+
+				/* Maps */
+				.post('/addMap', Maps.post)
+				.put('/editMap/:Hash', Maps.put)
+				.delete('/deleteMap/:Hash', Maps.deleteEntry)
+
+				/* Locations */
+				.post('/addLocation', Locations.post)
+				.put('/editLocation/:Hash', Locations.put)
+				.delete('/deleteLocation/:Hash', Locations.deleteEntry)
+
+				/* Advisories */
+				.post('/addAdvisory', Advisories.post)
+				.post('/duplicateAdvisory/:Hash', Advisories.duplicateEntry)
+				.put('/editAdvisory/:Hash', Advisories.put)
+				.delete('/deleteAdvisory/:Hash', Advisories.deleteEntry)
+
+				/* Objectives */
+				.post('/addObjective', Objectives.post)
+				.post('/duplicateObjective/:Hash', Objectives.duplicateEntry)
+				.put('/editObjective/:Hash', Objectives.put)
+				.delete('/deleteObjective/:Hash', Objectives.deleteEntry)
+
+				/* Factions */
+				.post('/addFaction', Factions.post)
+				.post('/duplicateFaction/:Hash', Factions.duplicateEntry)
+				.put('/editFaction/:Hash', Factions.put)
+				.delete('/deleteFaction/:Hash', Factions.deleteEntry)
+
+				/* Missions */
+				.post('/addMission', Missions.post)
+				.put('/editMission/:Hash', Missions.put)
+				.delete('/deleteMission/:Hash', Missions.deleteEntry)
+				.post('/cleanUpMissions', Missions.cleanUpMissions)
+
+				/* Conflicts */
+				.post('/addConflict', Conflicts.post)
+				.post('/addBelligerent/:Hash', Conflicts.addBelligerent)
+				.post('/removeBelligerent/:Hash', Conflicts.removeBelligerent)
+				.put('/editBelligerent/:Hash', Conflicts.editBelligerent)
+				.put('/editConflict/:Hash', Conflicts.put)
+				.delete('/deleteConflict/:Hash', Conflicts.deleteEntry)
 
 				/* Bans */
+				.get('/getBans', Bans.getAll)
 				.post('/banPlayer', Bans.post)
 				.put('/editBan/:Hash', Bans.put)
+				.delete('/liftBan/:Hash', Bans.deleteBan)
 
 				/* Upgrades */
 				.post('/addUpgrade', Upgrades.post)
 				.post('/duplicateUpgrade', Upgrades.duplicateUpgrade)
 				.put('/editUpgrade/:Hash', Upgrades.put)
+				.delete('/deleteUpgrade/:Hash', Upgrades.deleteUpgrade)
 
 				/* Invites */
 				.get('/getInvite/:Hash', Invites.get)
@@ -400,9 +543,13 @@
 				/* Stores */
 				.post('/addStore', Stores.post)
 				.get('/getStores', Stores.getAll)
+				.get('/getStoreStockAdmin/:Hash', Stores.getStoreStockAdmin)
 				.put('/editStore/:Hash', Stores.put)
 				.post('/addStoreStock/:Hash', Stores.addStoreStock)
+				.post('/removeStoreStock/:Hash', Stores.removeStoreStock)
 				.put('/updateStoreStock/:Hash', Stores.updateStoreStock)
+				.put('/updateStoreStockRecursive/:Hash', Stores.updateStoreStockRecursiveRoute)
+				.post('/resupplyStoreStock/:Hash', Stores.resupplyStore)
 
 				/* Store Lines */
 				.get('/getStoreLines', StoresLines.getAll)
@@ -412,9 +559,12 @@
 				/* Reports */
 				.get('/getReports/', Reports.getAll)
 				.post('/toggleResolved/:Hash', Reports.toggleResolved)
+				.delete('/deleteReport/:Hash', Reports.deleteReport)
 
 				/* Uploads */
 				.post('/uploadModulePicture/:Type/:Hash', Upload.uploadModulePicture)
+				.get('/getImagesInFolder', Upload.getImagesInFolder)
+				.post('/deleteImageinFolder', Upload.deleteImageinFolder)
 
 			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.admin))
 
@@ -445,14 +595,24 @@
 				.put('/editPMC/:Hash', PMC.putPMC)
 
 			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.owner))
+
+				.get('/getAccessKeys/', AccessKeys.getAll)
+				.post('/generateAccessKey/', AccessKeys.post)
+				.delete('/deleteAccessKey/:Seed', AccessKeys.deleteKey)
 		;
 
 		// DEFAULT ROUTES
 		app.get('/', renderIndex);
 		app.get('/partial/:partial', renderPartial);
 		app.get('/dashboard/:partial', renderDashboard);
+		app.get('/admin-tools/:partial', renderAdmin);
 		app.get('/directive/:directive', renderDirective);
 		app.get('/modals/:modal', renderModal);
+
+		app.get('/auth/steam', passport.authenticate('steam'), function(req, res) {});
+		app.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: '/' }),
+			function(req, res) { res.redirect('/signup?step=steam'); }
+		);
 
 		// MOUNT API ROUTES
 		app.use(bodyParser.urlencoded({extended: true}));

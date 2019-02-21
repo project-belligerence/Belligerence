@@ -1,0 +1,880 @@
+<div class="container-fluid top-spacer generic-object single no-margin-bottom" id="single-mission-container" ng-init="Controller = CtrlSingleMission; objectInfo = Controller.objectInfo;">
+	<div class="container">
+		<div class="fade-animation-slow" ng-if="(Controller.showObject)" ng-cloak>
+			<div class="row">
+
+				<div class="header">
+					<div class="col-md-12">
+						<div class="row pull-left">
+							<a ng-click="Controller.askReportObject(objectInfo)" class="section-button warning muted" role="button">
+								<ul>
+									<li><i class="icon ion-alert-circled"></i></li>
+									<li>Report {{::(Controller.objectSettings.name)}}</li>
+								</ul>
+							</a>
+						</div>
+						<div class="row pull-right" ng-if="(Controller.selfInfo.playerPrivilege <= 1)" ng-cloak>
+							<a ng-href="admin?menu=content&section={{::(Controller.objectSettings.name).toLowerCase()}}&editHash={{::(objectInfo[Controller.objectSettings.hash_property])}}" class="section-button warning small" role="button">
+								<ul>
+									<li><i class="icon ion-edit"></i></li>
+									<li>Edit {{::(Controller.objectSettings.name)}}</li>
+								</ul>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="body">
+					<div
+						class="row display-object"
+						ng-class="::(Controller.applyControlledClass(objectInfo.sideField))"
+					>
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-12 object-details">
+
+									<div class="mission-contract flip-animation" ng-if="Controller.missionSigned" ng-class="::(Controller.applyControlledClass(Controller.missionSigned.sideField))" ng-if="::(!(objectInfo.expiredField))" ng-cloak>
+										<div class="contract-text">
+											<i class="icon ion-checkmark"></i>
+											You have signed for this Mission as <span class="side" ng-bind="Controller.sidesData[Controller.missionSigned.sideField].text"></span>.
+										</div>
+									</div>
+
+									<div class="mission-contract flip-animation" ng-if="Controller.missionInterest" ng-class="::(Controller.applyControlledClass(Controller.missionInterest.sideField))" ng-if="::(!(objectInfo.expiredField))" ng-cloak>
+										<div class="contract-text">
+											<i class="icon ion-checkmark"></i>
+											You have marked interest for this Mission as <span class="side" ng-bind="Controller.sidesData[Controller.missionInterest.sideField].text"></span> with a <strong ng-bind="Controller.missionInterest.percentField"></strong>% markup.
+										</div>
+									</div>
+
+									<div class="mission-contract expired" ng-if="::(objectInfo.expiredField)">
+										<div class="contract-text">
+											<i class="icon ion-alert-circled"></i>
+											<div class="text">This Mission has expired and is no longer available.</div>
+										</div>
+									</div>
+
+									<div class="top mission-title">
+										<h3 class="h3-2">OPERATION</h3>
+										<h2 ng-bind="::(objectInfo.nameField)"></h2>
+									</div>
+
+									<div class="mission-details text-center">
+
+										<div class="rating">
+											<div class="label">
+												<div class="description">Difficulty rating</div>
+												<i
+													class="icon ion-help help"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													uib-popover="How challenging is the objective."
+												></i>
+											</div>
+											<ul class="rating-container" >
+												<li
+													class="rating-icon"
+													ng-repeat="rating in [1,2,3,4,5] track by $index"
+												>
+													<i class="icon" ng-class="::(Controller.getRatingIcon(rating))"></i>
+												</li>
+											</ul>
+										</div>
+
+										<div class="time-limit" ng-if="::(!(objectInfo.expiredField))" ng-cloak>
+											<div class="label">
+												<div class="description">Time Left</div>
+												<i
+													class="icon ion-help help"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													uib-popover="The aproximate time left to complete the mission."
+												></i>
+											</div>
+
+											<div class="number-container">
+												<span class="number" ng-bind="(objectInfo.timeLeft.hours)"></span>
+												<span class="text">h</span>
+												<span class="number" ng-bind="(objectInfo.timeLeft.minutes)"></span>
+												<span class="text">m</span>
+											</div>
+										</div>
+
+										<div class="mission-tags">
+											<div class="mission-tag" ng-if="::(objectInfo.Objective.adversarialField)" ng-cloak>
+												<div class="label">
+													<div class="description">Adversarial</div>
+													<i
+														class="icon ion-help help"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="This Mission is available for both sides and conflict between Contractors may occur."
+													></i>
+												</div>
+												<i class="tag-icon ion-arrow-shrink"></i>
+											</div>
+
+											<div class="mission-tag" ng-if="::(objectInfo.Objective.captureField)" ng-cloak>
+												<div class="label">
+													<div class="description">Zone Control</div>
+													<i
+														class="icon ion-help help"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="Upon completed, the location will then belong to the winning side."
+													></i>
+												</div>
+												<i class="tag-icon icon ion-ios-flag"></i>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="pages">
+										<a class="section-button default medium first" role="button" ng-click="Controller.changeTab('info')" a-disabled="(Controller.currentTab === 'info')">
+											<ul>
+												<li><i class="icon ion-document-text"></i></li>
+												<li>Info</li>
+											</ul>
+										</a>
+										<a class="section-button default medium" role="button" ng-click="Controller.changeTab('participants')" a-disabled="(Controller.currentTab === 'participants')">
+											<ul>
+												<li><i class="icon ion-person-stalker"></i></li>
+												<li ng-bind="(objectInfo.totalUnits)"></li>
+												<li>Participants</li>
+											</ul>
+										</a>
+									</div>
+
+									<div class="body mission-tab-section slide-sides-fade" ng-if="(Controller.currentTab === 'loading')" ng-cloak>
+
+										<div class="loading-section section">
+											<div class="col-md-12">
+												<div class="row">
+													<img src="svg-loaders/grid.svg" />
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="body mission-tab-section slide-sides-fade" ng-if="(Controller.currentTab === 'participants')" ng-cloak>
+
+										<div class="faction-section section">
+											<div class="col-md-12">
+												<div class="row">
+
+													<div class="col-md-4 col-sm-5 pull-left faction-container">
+														<div class="row">
+
+															<div class="faction client top-spaced" ng-init="factionA = objectInfo.FactionA;" ng-class="::(Controller.applyControlledClass(factionA.sideField))">
+
+																<div class="name align-right">Client</div>
+
+																<a ng-href="faction/{{::(factionA.hashField)}}" class="picture flag">
+																	<div class="name" ng-bind="::(factionA.nameField)"></div>
+																	<img
+																		class="picture-img"
+																		ng-src="images/modules/factions/main_{{::(factionA.hashField)}}.png"
+																		width="100%"
+																	/>
+																</a>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-md-4 col-sm-5 pull-right faction-container">
+														<div class="row">
+
+															<div class="faction target" ng-init="factionB = objectInfo.FactionB;" ng-class="[(Controller.applyControlledClass(factionB.sideField)), { 'top-spaced': (objectInfo.Objective.adversarialField) }]">
+
+																<div class="name">Target</div>
+
+																<a ng-href="faction/{{::(factionB.hashField)}}" class="picture flag">
+																	<div class="name" ng-bind="::(factionB.nameField)"></div>
+																	<img
+																		class="picture-img"
+																		ng-src="images/modules/factions/main_{{::(factionB.hashField)}}.png"
+																		width="100%"
+																	/>
+																</a>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+
+										<div
+											class="participant-section section"
+											ng-if="((Controller.participantsData.models.interest.a.length > 0) || (Controller.participantsData.models.interest.b.length > 0))"
+										ng-cloak>
+											<div class="col-md-12">
+												<div class="row">
+
+													<div class="info">
+														<div class="header">Interested Freelancers</div>
+														<i
+														class="icon ion-help help"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="These Freelancers have demonstrated an interest in this Mission and are looking to be hired."
+														></i>
+													</div>
+
+													<hr/>
+
+													<div class="col-md-6 col-sm-12 pull-left participant client" ng-if="(Controller.participantsData.models.interest.a.length > 0)" ng-cloak>
+														<div class="row">
+															<units-directive
+																interaction-options="Controller.participantsData.interaction.interest"
+																player-info="Controller.selfInfo"
+																pmc-info="Controller.pmcInfo"
+																units-list="Controller.participantsData.models.interest.a"
+																friends-list="Controller.selfFriends"
+																display-mode="interest"
+																style-class="medium"
+															></units-directive>
+														</div>
+													</div>
+
+													<div class="col-md-6 col-sm-12 pull-right participant target" ng-if="(Controller.participantsData.models.interest.b.length > 0)" ng-cloak>
+														<div class="row">
+															<units-directive
+																interaction-options="Controller.participantsData.interaction.interest"
+																player-info="Controller.selfInfo"
+																pmc-info="Controller.pmcInfo"
+																units-list="Controller.participantsData.models.interest.b"
+																friends-list="Controller.selfFriends"
+																display-mode="interest"
+															></units-directive>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="participant-section section">
+											<div class="col-md-12">
+												<div class="row">
+
+													<div class="info">
+														<div class="header">Active Contractors</div>
+														<i
+														class="icon ion-help help"
+														popover-trigger="'mouseenter'"
+														popover-class="tooltip"
+														uib-popover="The currently active Outfits taking part in the mission, and the Freelancers contracted with them."
+														></i>
+													</div>
+
+													<hr/>
+
+													<div class="col-md-6 col-sm-12 pull-left participant client" ng-class="::(Controller.applyControlledClass(objectInfo.FactionA.sideField))">
+														<div class="row">
+
+															<div class="meta-tag section-title visible-sm visible-xs">
+																<i class="icon ion-information-circled"></i>
+																<span ng-bind="::(Controller.getSideName(objectInfo.FactionA.sideField))"><
+															</div>
+
+															<div class="contract-container">
+																<div class="contract" ng-repeat="contract in Controller.participantsData.models.contracts.a | orderBy:'-PMCPrestige':true track by $index">
+																	<a
+																		class="outfit-container"
+																		ng-href="outfit/{{::(contract.Employer.hashField)}}"
+																	>
+																		<div class="name-tag"
+																		ng-bind="::(contract.Employer.displaynameField)"></div>
+																		<div class="square unit-avatar border">
+																			<div class="medium" ac-background-image
+																				background-image="images/avatars/pmc/main_{{::(contract.Employer.hashField)}}.jpg"
+																			>
+																			<upgrades-directive unit="contract.Employer" mode="outfit-mission"></upgrades-directive>
+																				<div class="info-container">
+																					<div class="single-info help">
+																						<div
+																							popover-trigger="'mouseenter'"
+																							popover-class="tooltip"
+																							uib-popover="Outfit Prestige."
+																							popover-popup-delay="1000"
+																						>
+																							<i class="icon ion-star"></i>
+																							<div class="info-text" ng-bind="::(contract.Employer.PMCPrestige)"></div>
+																						</div>
+																					</div>
+																					<div class="single-info tight help">
+																						<div
+																							popover-trigger="'mouseenter'"
+																							popover-class="tooltip"
+																							uib-popover="Outfit Soldiers."
+																							popover-popup-delay="100"
+																						>
+																							<i class="icon ion-ios-people"></i>
+																							<div class="info-text" ng-bind="::(contract.Employer.players.length)"></div> /
+																							<div class="info-text" ng-bind="::(contract.Employer.sizeTier)"></div> <div class="info-text" ng-if="::(contract.Contractors.length > 0)" ng-bind="::(' + (' + contract.Contractors.length + ')')"></div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</a>
+
+																	<div class="meta-tag" ng-if="::(contract.Contractors.length > 0)" ng-cloak>
+																		<i class="icon ion-person-stalker"></i>
+																		FREELANCERS
+																	</div>
+
+																	<div class="freelancers-container" ng-if="::(contract.Contractors.length > 0)" ng-cloak>
+																		<div class="freelancer" ng-repeat="contractor in contract.Contractors | orderBy:'-playerPrestige' track by $index">
+																			<a class="freelancer-single-container" href="operator/{{::(contractor.hashField)}}" >
+																				<div class="info-container stacked short">
+																					<div class="single-info">
+																						<i class="icon ion-star"></i>
+																						<div class="info-text" ng-bind="::(contractor.playerPrestige)">
+																						</div>
+																					</div>
+																				</div>
+																				<div class="square unit-avatar">
+																					<upgrades-directive unit="contractor" mode="operator-small"></upgrades-directive>
+																					<div
+																						class="small"
+																						ac-background-image
+																						background-image="images/avatars/players/main_{{::(contractor.hashField)}}.jpg"
+																						popover-trigger="'mouseenter'"
+																						popover-class="tooltip"
+																						uib-popover="{{::(contractor.aliasField)}}"
+																						popover-popup-delay="1000"
+																					></div>
+																				</div>
+																			</a>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+														</div>
+													</div>
+
+													<div class="col-md-6 col-sm-12 pull-right participant target" ng-class="::(Controller.applyControlledClass(objectInfo.FactionB.sideField))">
+														<div class="row">
+
+															<div class="meta-tag section-title visible-sm visible-xs">
+																<i class="icon ion-information-circled"></i>
+																<span ng-bind="::(Controller.getSideName(objectInfo.FactionB.sideField))"><
+															</div>
+
+															<div class="contract-container">
+																<div class="contract" ng-repeat="contract in Controller.participantsData.models.contracts.b | orderBy:'-PMCPrestige':true track by $index">
+																	<a
+																		class="outfit-container"
+																		ng-href="outfit/{{::(contract.Employer.hashField)}}"
+																	>
+																		<div class="name-tag"
+																		ng-bind="::(contract.Employer.displaynameField)"></div>
+																		<div class="square unit-avatar border">
+																			<div class="medium" ac-background-image
+																				background-image="images/avatars/pmc/main_{{::(contract.Employer.hashField)}}.jpg"
+																			>
+																				<div class="info-container">
+																					<div class="single-info help">
+																						<div
+																							popover-trigger="'mouseenter'"
+																							popover-class="tooltip"
+																							uib-popover="Outfit Prestige."
+																							popover-popup-delay="1000"
+																						>
+																							<i class="icon ion-star"></i>
+																							<div class="info-text" ng-bind="::(contract.Employer.PMCPrestige)"></div>
+																						</div>
+																					</div>
+																					<div class="single-info tight help">
+																						<div
+																							popover-trigger="'mouseenter'"
+																							popover-class="tooltip"
+																							uib-popover="Outfit Soldiers."
+																							popover-popup-delay="100"
+																						>
+																							<i class="icon ion-ios-people"></i>
+																							<div class="info-text" ng-bind="::(contract.Employer.players.length)"></div> /
+																							<div class="info-text" ng-bind="::(contract.Employer.sizeTier)"></div> <div class="info-text" ng-if="::(contract.Contractors.length > 0)" ng-bind="::(' + (' + contract.Contractors.length + ')')"></div>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</a>
+
+																	<div class="meta-tag" ng-if="::(contract.Contractors.length > 0)" ng-cloak>
+																		<i class="icon ion-person-stalker"></i>
+																		FREELANCERS
+																	</div>
+
+																	<div class="freelancers-container" ng-if="::(contract.Contractors.length > 0)" ng-cloak>
+																		<div class="freelancer" ng-repeat="contractor in contract.Contractors | orderBy:'-playerPrestige' track by $index">
+																			<a class="freelancer-single-container" href="operator/{{::(contractor.hashField)}}" >
+																				<div class="info-container stacked short">
+																					<div class="single-info">
+																						<i class="icon ion-star"></i>
+																						<div class="info-text" ng-bind="::(contractor.playerPrestige)">
+																						</div>
+																					</div>
+																				</div>
+																				<div class="square unit-avatar">
+																					<div
+																						class="small"
+																						ac-background-image
+																						background-image="images/avatars/players/main_{{::(contractor.hashField)}}.jpg"
+																						popover-trigger="'mouseenter'"
+																						popover-class="tooltip"
+																						uib-popover="{{::(contractor.aliasField)}}"
+																						popover-popup-delay="1000"
+																					></div>
+																				</div>
+																			</a>
+																		</div>
+																	</div>
+																</div>
+															</div>
+
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="body mission-tab-section slide-sides-fade" ng-if="(Controller.currentTab === 'info')" ng-cloak>
+
+										<div class="locations-section section">
+											<div class="col-md-12">
+												<div class="row">
+
+													<div class="header">AREA OF OPERATIONS</div>
+													<hr/>
+
+													<div class="col-md-4 col-sm-6 col-xs-12">
+														<div class="row">
+															<div class="label">
+																<div class="description">MAP</div>
+															</div>
+															<maps-directive
+																object-list="[objectInfo.Map]">
+															</maps-directive>
+														</div>
+													</div>
+													<div class="col-md-3 col-sm-5">
+														<div class="row">
+															<div class="label">
+																<div class="description">LOCATION</div>
+															</div>
+															<locations-directive
+																object-list="[objectInfo.Location]"
+																column-size="[12, 12, 12]"
+																map-info="objectInfo.Map"
+															></locations-directive>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="objective-section section" ng-init="objective = objectInfo.Objective;">
+
+											<div class="header">Objective</div>
+											<hr/>
+
+											<a
+												class="objective-container"
+												href="objective/{{::(objective.hashField)}}"
+											>
+												<div class="col-md-2 col-sm-3 col-xs-12">
+													<div class="row">
+														<img class="big-icon objective" src="images/modules/objectives/main_{{::(objective.iconName)}}.png" width="100%">
+													</div>
+												</div>
+												<div class="col-md-9 col-sm-7 col-xs-12 col-md-offset-1 col-sm-offset-1">
+													<div class="row">
+														<div class="col-md-12 col-sm-12">
+															<div class="row">
+																<div class="single-property">
+																	<h3 class="h3-2" ng-bind="::(objective.nameField)"></h3>
+																	<div class="property long" ng-bind="::(objective.descriptionField)" ></div>
+																</div>
+															</div>
+														</div>
+														<div class="col-md-12 col-sm-12">
+															<div class="row">
+																<div class="col-md-6 col-sm-12">
+																	<div class="row">
+																		<div class="single-property">
+																			<div class="label">
+																				<div class="description">Completion condition</div>
+																			</div>
+																			<div class="property long description success" ng-bind="::(objective.successDescField)" ></div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-12">
+																	<div class="row">
+																		<div class="single-property">
+																			<div class="label">
+																				<div class="description">Failure Condition</div>
+																			</div>
+																			<div class="property long description" ng-bind="::(objective.failureDescField)"></div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</a>
+										</div>
+
+										<div class="faction-section section">
+											<div class="col-md-12">
+												<div class="row">
+
+													<div class="header">Factions</div>
+													<hr/>
+
+													<div class="col-md-4 col-sm-5 pull-left faction-container">
+														<div class="row">
+
+															<div class="faction client top-spaced" ng-init="factionA = objectInfo.FactionA;" ng-class="::(Controller.applyControlledClass(factionA.sideField))">
+
+																<div class="name align-right">Client</div>
+
+																<a ng-href="faction/{{::(factionA.hashField)}}" class="picture flag">
+																	<div class="name" ng-bind="::(factionA.nameField)"></div>
+																	<img
+																		class="picture-img"
+																		ng-src="images/modules/factions/main_{{::(factionA.hashField)}}.png"
+																		width="100%"
+																	/>
+																</a>
+
+																<div class="reward">
+																	<div class="label">
+																		<div class="description">REWARD OFFERED</div>
+																	</div>
+																	<span class="text">D$</span>
+																	<span class="number" ng-bind="::(objectInfo.rewardAField | number)"></span>
+																</div>
+															</div>
+
+															<div class="contract-buttons client" ng-if="::(!(objectInfo.expiredField))" ng-cloak>
+
+																<hr />
+
+																<div class="slots-left-container">
+																	<div class="label">
+																		<div class="description">REMAINING SLOTS</div>
+																	</div>
+																	<div class="slots-available" ng-class="(Controller.slotsClass(objectInfo.signedUnits.a))">
+																		<i class="icon ion-person"></i>
+																		<div class="number"
+																			ng-bind="(objectInfo.Objective.unitLimit - objectInfo.signedUnits.a)">
+																		</div>
+																	</div>
+																</div>
+
+																<div class="contract-warning flip-animation"
+																	ng-if="(!(Controller.contractStatus.a.errorMsg.hide))"
+																ng-cloak>
+																	<div class="w-icon">
+																		<i class="icon" ng-class="(Controller.contractStatus.a.errorMsg.icon)"></i>
+																	</div>
+																	<div class="message" ng-bind="(Controller.contractStatus.a.errorMsg.text)"></div>
+																</div>
+																<a
+																	class="section-button medium button-fade-absolute"
+																	ng-class="(Controller.contractStatus.a.buttonProp.btnClass)"
+																	role="button"
+																	ng-click="Controller.contractStatus.a.buttonProp.func(objectInfo.FactionA, 'a')"
+																	ng-if="(!(Controller.contractStatus.a.buttonProp.hide))"
+																>
+																	<ul>
+																		<li><i class="icon" ng-class="Controller.contractStatus.a.buttonProp.icon"></i></li>
+																		<li ng-bind="Controller.contractStatus.a.buttonProp.text"></li>
+																	</ul>
+																</a>
+															</div>
+
+															<div class="faction-upgrades upgrades">
+																<div class="col-md-12 slide-sides-fade" ng-if="(Controller.displayUpgrades.a)">
+																	<div class="row">
+																		<div class="col-md-6 upgrade-list">
+																			<div class="row">
+																				<h3>Required:</h3>
+
+																				<div
+																					class="single-upgrade"
+																					popover-trigger="'mouseenter'"
+																					popover-class="tooltip"
+																					popover-popup-delay="500"
+																					popover-append-to-body="true"
+																					uib-popover="{{::(upgrade.nameField)}}"
+																					ng-repeat="upgrade in objectInfo.FactionA.requiredUpgrades track by $index"
+																					ng-init="requiredStatus = Controller.checkSingleUpgrade(upgrade, 1);"
+																				>
+																					<a href="upgrade/{{::upgrade.hashField}}" >
+																						<img class="upgrade-icon" ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+
+																						<div class="rank-container">
+																							<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+																								<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+																							</div>
+																						</div>
+																					</a>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="col-md-6 upgrade-list">
+																			<div class="row">
+																				<h3>Conflicting:</h3>
+
+																				<div
+																					class="single-upgrade"
+																					popover-trigger="'mouseenter'"
+																					popover-class="tooltip"
+																					popover-popup-delay="500"
+																					popover-append-to-body="true"
+																					uib-popover="{{::(upgrade.nameField)}}"
+																					ng-repeat="upgrade in objectInfo.FactionA.blacklistedUpgrades track by $index"
+																					ng-init="requiredStatus = Controller.checkSingleUpgrade(upgrade, 2);"
+																				>
+																					<a href="upgrade/{{::upgrade.hashField}}" >
+																						<img class="upgrade-icon" ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+
+																						<div class="rank-container">
+																							<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+																								<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+																							</div>
+																						</div>
+																					</a>
+
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<div class="col-md-4 col-sm-5 pull-right faction-container">
+														<div class="row">
+
+															<div class="faction target" ng-init="factionB = objectInfo.FactionB;" ng-class="[(Controller.applyControlledClass(factionB.sideField)), { 'top-spaced': (objectInfo.Objective.adversarialField) }]">
+
+																<div class="name">Target</div>
+
+																<a ng-href="faction/{{::(factionB.hashField)}}" class="picture flag">
+																	<div class="name" ng-bind="::(factionB.nameField)"></div>
+																	<img
+																		class="picture-img"
+																		ng-src="images/modules/factions/main_{{::(factionB.hashField)}}.png"
+																		width="100%"
+																	/>
+																</a>
+
+																<div ng-if="::(objectInfo.Objective.adversarialField)" ng-cloak>
+																	<div class="reward">
+																		<div class="label">
+																			<div class="description">REWARD OFFERED</div>
+																		</div>
+																		<span class="text">D$</span>
+																		<span class="number" ng-bind="::(objectInfo.rewardBField | number)"></span>
+																	</div>
+																</div>
+															</div>
+
+															<div class="contract-buttons target" ng-if="::(objectInfo.Objective.adversarialField && !(objectInfo.expiredField))" ng-cloak>
+
+																<hr />
+
+																<div class="slots-left-container">
+																	<div class="label">
+																		<div class="description">REMAINING SLOTS</div>
+																	</div>
+																	<div class="slots-available" ng-class="(Controller.slotsClass(objectInfo.signedUnits.b))">
+																		<i class="icon ion-person"></i>
+																		<div class="number"
+																			ng-bind="(objectInfo.Objective.unitLimit - objectInfo.signedUnits.b)">
+																		</div>
+																	</div>
+																</div>
+
+																<div class="contract-warning flip-animation"
+																	ng-if="(!(Controller.contractStatus.b.errorMsg.hide))"
+																ng-cloak>
+																	<div class="w-icon">
+																		<i class="icon" ng-class="(Controller.contractStatus.b.errorMsg.icon)"></i>
+																	</div>
+																	<div class="message" ng-bind="(Controller.contractStatus.b.errorMsg.text)"></div>
+																</div>
+
+																<a
+																	class="section-button medium button-fade-absolute"
+																	ng-class="(Controller.contractStatus.b.buttonProp.btnClass)"
+																	role="button"
+																	ng-click="Controller.contractStatus.b.buttonProp.func(objectInfo.FactionB, 'b')"
+																	ng-if="(!(Controller.contractStatus.b.buttonProp.hide))"
+																>
+																	<ul>
+																		<li><i class="icon" ng-class="Controller.contractStatus.b.buttonProp.icon"></i></li>
+																		<li ng-bind="Controller.contractStatus.b.buttonProp.text"></li>
+																	</ul>
+																</a>
+															</div>
+
+															<div class="faction-upgrades upgrades" ng-if="::(objectInfo.Objective.adversarialField)" ng-cloak>
+																<div class="col-md-12 slide-sides-fade" ng-if="(Controller.displayUpgrades.b)">
+																	<div class="row">
+																		<div class="col-md-6 upgrade-list">
+																			<div class="row">
+																				<h3>Required:</h3>
+
+																				<div
+																					class="single-upgrade"
+																					popover-trigger="'mouseenter'"
+																					popover-class="tooltip"
+																					popover-popup-delay="500"
+																					popover-append-to-body="true"
+																					uib-popover="{{::(upgrade.nameField)}}"
+																					ng-repeat="upgrade in objectInfo.FactionB.requiredUpgrades track by $index"
+																					ng-init="requiredStatus = Controller.checkSingleUpgrade(upgrade, 1);"
+																				>
+																					<a href="upgrade/{{::upgrade.hashField}}" >
+																						<img class="upgrade-icon" ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+
+																						<div class="rank-container">
+																							<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+																								<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+																							</div>
+																						</div>
+																					</a>
+																				</div>
+																			</div>
+																		</div>
+																		<div class="col-md-6 upgrade-list">
+																			<div class="row">
+																				<h3>Conflicting:</h3>
+
+																				<div
+																					class="single-upgrade"
+																					popover-trigger="'mouseenter'"
+																					popover-class="tooltip"
+																					popover-popup-delay="500"
+																					popover-append-to-body="true"
+																					uib-popover="{{::(upgrade.nameField)}}"
+																					ng-repeat="upgrade in objectInfo.FactionB.blacklistedUpgrades track by $index"
+																					ng-init="requiredStatus = Controller.checkSingleUpgrade(upgrade, 2);"
+																				>
+																					<a href="upgrade/{{::upgrade.hashField}}" >
+																						<img class="upgrade-icon" ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+
+																						<div class="rank-container">
+																							<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+																								<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+																							</div>
+																						</div>
+																					</a>
+
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="advisories-section section">
+											<div class="col-md-12">
+												<div class="row">
+													<div class="header">ADVISORIES</div>
+													<hr/>
+												</div>
+											</div>
+										</div>
+
+									</div>
+
+									<div class="visible-lg-block visible-md-block visible-sm-block col-md-12 bottom-properties">
+										<div class="row object-details">
+
+											<div class="body">
+												<div class="single-property" ng-cloak ng-repeat="property in Controller.objectSettings.simpleProperties track by $index">
+													<div class="label">
+														<div class="description" ng-bind="::(property.label)"></div>
+														<i
+															class="icon ion-help help"
+															popover-trigger="'mouseenter'"
+															popover-class="tooltip"
+															uib-popover="{{::(property.tooltip)}}"
+														></i>
+													</div>
+													<a
+														ng-if="::(property.query_property)"
+														ng-href="{{::(Controller.generateLink(property.query_property, property.model_property))}}"
+													>
+														<div class="property" ng-bind="::(Controller.displayProperty(property))"></div>
+													</a>
+													<div
+														class="property"
+														ng-if="::(!(property.query_property))"
+														ng-bind="::(Controller.displayProperty(property))">
+													</div>
+												</div>
+											</div>
+
+											<div
+												class="body spaced-half"
+												ng-repeat="property in Controller.objectSettings.matchedIndexProperties track by $index"
+												ng-if="::(objectInfo[property.model_property].length > 0)"
+											ng-cloak>
+
+												<div class="single-property block spaced-half">
+													<div class="label">
+														<a ng-href="{{::(Controller.generateLink(property.query_property, property.model_property))}}">
+															<div class="description" ng-bind="::(property.label)"></div>
+														</a>
+														<i
+															class="icon ion-help help"
+															popover-trigger="'mouseenter'"
+															popover-class="tooltip"
+															uib-popover="{{::(property.tooltip)}}"
+														></i>
+													</div>
+													<div class="matched-property"
+													ng-repeat="object in ::(property.model()) track by $index">
+														<a ng-href="objectives?{{::(property.query_property)}}={{::(object.data)}}">
+															<div class="property" ng-bind="::(object.text)"></div>
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

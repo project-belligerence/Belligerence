@@ -1,17 +1,15 @@
 (function() {
 	'use strict';
 
-	NavServicesFunction.$inject = [];
+	NavServicesFunction.$inject = ["$rootScope"];
 
-	function NavServicesFunction() {
+	function NavServicesFunction($rootScope) {
 
 		var methods = {
-			NavFunction: NavFunction
+			callEvent: callEvent
 		};
 
-		function NavFunction() {
-			return true;
-		}
+		function callEvent(event) {	$rootScope.$emit(("navbar:" + event)); }
 
 		return methods;
 	}

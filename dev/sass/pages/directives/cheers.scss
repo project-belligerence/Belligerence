@@ -8,6 +8,13 @@
 		top: 2px;
 	}
 
+	display: inline-block;
+
+	&.tiny { min-width: 60px; }
+	&.small { }
+	&.medium { }
+	&.big { }
+
 	ul {
 		&:active > li, &:focus > li { box-shadow: 0px 0px 0px 0px $bg_dark_color;	}
 

@@ -6,11 +6,11 @@
 	@include breakpoint('medium') { overflow-x: hidden; }
 
 	@include factor-property(margin-top, 5);
-	@include factor-property(margin-bottom, 5);
+	@include factor-property(margin-bottom, 20);
+
+	min-height: 500px;
 
 	position: relative;
-
-	// @include factor-property(height, 120);
 
 	h1, h2, h3 {
 		padding: 0;
@@ -62,19 +62,179 @@
 		}
 	}
 
+	.checkbox-form {
+		margin: factor(1) factor(0.5);
+		margin-right: factor(2);
+		display: inline-grid;
+
+		.box {
+			position: relative;
+			top: 1px;
+			padding: 10px !important;
+		}
+		.label-text {
+			left: -10px;
+			background-color: #ddd;
+			position: relative;
+			@include font-size(factor(2));
+			display: inline-block;
+			padding: factor(1) factor(1.5);
+			@include font-size(factor(3));
+			font-family: $main_font;
+		}
+
+		.hint {
+			color: #333;
+		}
+
+		@include breakpoint("medium") { top: 22px; margin: 0 factor(0.5); }
+		@include breakpoint("small") {
+			top: 0px;
+			display: block;
+			@include font-size(factor(2));
+			left: -4px;
+		}
+	}
+
+	.filter-containers {
+		cursor: default;
+		display: block;
+		@include transition(height .25s);
+		@include factor-property(margin-bottom, 4);
+		height: 50px;
+
+		.search {
+			@include factor-property(margin-left, 1);
+			@include breakpoint("small") {
+				@include factor-property(margin-top, 1);
+				@include factor-property(margin-left, 0);
+			}
+		}
+
+		&.long {
+			height: 100px; @include factor-property(margin-bottom, 12);
+			@include breakpoint("medium") { height: 100px; }
+			@include breakpoint("small") { height: 300px; }
+		}
+
+		a.section-button {
+			@include breakpoint("small") {
+				@include factor-property(margin-bottom, 1);
+			}
+		}
+
+		.intel-filters {
+			display: block;
+			@include factor-property(margin-top, 3);
+
+			a, .dropdown, .text-filters, .form-group, .editable-field { display: inline-block; }
+
+			.dropdown-section {
+				display: inline-block;
+				.dropdown {
+					position: relative;
+					top: -3px;
+					.btn span {@include font-size(factor(2));}
+					.btn { padding: factor(1) factor(2); }
+
+					@include breakpoint("small") {
+						@include factor-property(margin-bottom, 2);
+					}
+				}
+			}
+
+			.editable-field {
+				@include factor-property(margin-left, 1);
+				@include factor-property(margin-right, 1);
+
+			}
+
+			.form-group {
+				@include breakpoint("medium") {
+					@include factor-property(margin-bottom, 5);
+				}
+				@include breakpoint("small") {
+					@include factor-property(margin-bottom, 6);
+				}
+				height: 14px;
+				.input-group {
+					input { height: 46px; }
+				}
+			}
+			.order {
+				$muted_color: #ddd;
+
+				position: relative;
+				top: -3px;
+				padding: factor(1.7) factor(2.5);
+				background-color: $muted_color;
+				color: #111;
+				box-shadow: 0px 2px 0px #ccc;
+
+				i { @include font-size(factor(2));}
+
+				@include hafStates((
+					(background-color, (darken($muted_color, 10%)), (darken($muted_color, 10%)), (darken($muted_color, 10%))),
+					(color, (#111, #111, #111)),
+					(box-shadow, (0px 2px 0px 0px #ccc, 0px 0px 0px 0px #ccc, 0px 0px -2px 0px #ccc))
+				));
+			}
+		}
+	}
+
+	#intel-col {
+		@include factor-property(margin-bottom, 0);
+	}
+
+	.no-results {
+		text-align: center;
+		position: relative;
+		top: 70px;
+		@include font-size(factor(5));
+
+		@include breakpoint("small") {
+			left: 25%;
+		}
+	}
+
 	.intel-list {
-		@include factor-property(min-height, 95);
 		@include breakpoint('medium') { @include factor-property(margin-top, 5); }
 
 		.single-intel-container {
+			* {i{cursor:inherit;}}
+
+			@include transition(top, .25s);
+			position: relative;
+			top: 0px;
+			&:hover {
+				top: -25px;
+			}
+
+			.single-intel-width {
+				@include breakpoint("tiny") {
+					padding-left: 0px;
+					padding-right: 20px;
+				}
+			}
 
 			.box {
-				@include breakpoint('medium') {
-					@include factor-property(margin-bottom, 10);
-					@include factor-property(padding-bottom, 10);
+				@include factor-property(padding-bottom, 10);
+				.intel-top {
+					*{cursor: pointer;}
+					.hexagon-container {
+						width: 220px;
+						margin-left: auto;
+						margin-right: auto;
+						height: 290px;
+					}
+					@include breakpoint('medium') {
+						@include factor-property(margin-bottom, 5);
+						@include factor-property(padding-bottom, 5);
 
-					border-bottom: 1px solid #ddd;
+						border-bottom: 1px solid #ddd;
+					}
 				}
+				@include breakpoint('medium') {	@include factor-property(margin-bottom, 2); }
 			}
 
 			.main-icon {
@@ -99,10 +259,10 @@
 
 				@include factor-property(margin-top, 4);
 				@include factor-property(margin-bottom, 2);
-				@include factor-property(max-height, 9);
-				padding: 10px 0px;
+				padding: 10px 10px;
 
-				overflow-y: hidden;
+				// @include factor-property(max-height, 9);
+				// overflow-y: hidden;
 			}
 
 			.date {
@@ -132,6 +292,7 @@
 				}
 
 				a {
+					display: inline-block;
 					margin-left: 2px;
 					padding: 3px 5px;
 					color: $main_background_color;
@@ -164,9 +325,15 @@
 						margin-right: 5px;
 					}
 					.btn {
+						padding: factor(0.85) factor(1);
 						background-color: $main_color_dark;
 					}
 				}
+			}
+
+			.extra-options {
+				@include factor-property(padding-top, 6);
+				hr { border-color: #ccc; }
 			}
 		}
 	}
@@ -224,28 +391,42 @@
 	}
 
 	.hexagon {
-		width: 200px;
-		height: 400px;
+		@include prefix(filter, drop-shadow(0px 0px 5px rgba(0,0,0,.5)));
+		height: 320px;
+		width: 220px;
 
-		@include breakpoint('medium') {
-			width: 180px;
-			height: 380px;
-		}
+		.in2 {
+			background-color: white;
 
-		margin: -70px 0 -70px 25px;
+			i {
+				position: absolute;
+				top: 20%;
+				left: 22%;
+				@include font-size(factor(20));
+				color: #111;
+				z-index: 9999;
 
-		@include breakpoint('medium') { margin: -110px 0 -70px 85px; }
-		@include breakpoint('small') { margin: -110px 0 -70px 100px; }
-		@include breakpoint('tiny') { margin: -110px 0 -70px 55px; }
+				&.ion-clipboard { left: 30%; }
+			}
 
-		i {
-			position: absolute;
-			left: 29%;
-			top: 33%;
-			font-size: 100px;
-			color: #222;
+			&.has-picture {
+				background-color: #ddd;
+				i {
+					top: 50% !important;
+					left: 41% !important;
+					color: white;
+					text-shadow: 0px 0px 10px #000;
+					font-size: factor(10) !important;
+				}
 
-			&.ion-clipboard { left: 33%; }
+				img {
+					width: 254px;
+					height: auto;
+					left: -15px;
+					top: 33px;
+					position: relative;
+				}
+			}
 		}
 	}
 
@@ -280,7 +461,9 @@
 .pagination > li:last-child > a { border-radius: 0px; }
 
 #intel-pagination {
-
+	@include transition(margin-top, .25s);
+	margin-top: 0px;
+	&.empty { display: none; }
 	&.fixed {
 		position: fixed;
 		width: 360px;

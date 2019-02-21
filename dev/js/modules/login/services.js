@@ -1,19 +1,22 @@
 (function() {
 	'use strict';
 
-	LoginServicesFunction.$inject = ['apiServices', '$rootScope', 'uiServices'];
+	LoginServicesFunction.$inject = ["$state", "$cookies", 'apiServices', '$rootScope', 'uiServices', 'marketServices'];
 
-	function LoginServicesFunction(apiServices, $rootScope, uiServices) {
+	function LoginServicesFunction($state, $cookies, apiServices, $rootScope, uiServices, marketServices) {
 
 		var methods = {
 			LoginFunction: LoginFunction,
 			submitLoginForm: submitLoginForm,
-			askLogout: askLogout
+			askLogout: askLogout,
+			callLoginSimple: callLoginSimple,
+			confirmSelfPassword: confirmSelfPassword
 		};
 
 		function LoginFunction() { return true; }
 
 		function callLogin(data) {
+			$rootScope.routeError = null;
 			var	i, request = {
 					url: "/api/playeractions/auth",
 					data: data,
@@ -22,12 +25,29 @@
 					cache: false
 				}
 			;
+			return apiServices.requestPOST(request).then(function(data) {
+				if (apiServices.statusError(data)) return false;
+				return data.data;
+			});
+		}
+
+		function callLoginSimple(data, callback) {
+			$rootScope.routeError = null;
+			var	i, request = { url: "/api/playeractions/auth", data: data, cache: false };
 
 			return apiServices.requestPOST(request).then(function(data) {
-
 				if (apiServices.statusError(data)) return false;
+				$cookies.put('loggedInToken', data.data.data.token);
+				return callback(data.data);
+			});
+		}
 
-				return data.data;
+		function confirmSelfPassword(data, callback) {
+			var	i, request = { url: "/api/playeractions/confirmPassword", data: data };
+
+			return apiServices.requestPOST(request).then(function(data) {
+				if (apiServices.statusError(data)) return false;
+				return callback(data.data);
 			});
 		}
 
@@ -37,8 +57,8 @@
 					header: { text: 'Sign out?', icon: 'ion-log-out' },
 					body: {	text: 'Do you want to sign out of your account and end the current session?' },
 					choices: {
-						yes: { text: 'Confirm', icon: 'ion-checkmark', class: 'btn-default' },
-						no: { text: 'Cancel', icon: 'ion-arrow-left-c', class: 'btn-default' }
+						yes: { text: 'Confirm', icon: 'ion-checkmark' },
+						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
 					}
 				},
 				newModal = uiServices.createModal('GenericYesNo', modalOptions)
@@ -50,7 +70,11 @@
 		}
 
 		function doLogOut() {
-
+			$cookies.remove('loggedInToken');
+			marketServices.clearCart();
+			$state.go("app.public.frontpage");
+			$rootScope.$broadcast("navbar:refreshDirective");
+			$rootScope.$broadcast("logoutEvent");
 		}
 
 		function handleLogin(response) {

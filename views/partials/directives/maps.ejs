@@ -1,0 +1,36 @@
+
+<span ng-init="Directive = CtrlDirectiveMaps;"></span>
+
+<div class="row intel-filter-animation" ng-if="Directive.displayDirective()" ng-cloak>
+	<div class="maps-list" ng-class="::(Directive.classSingleMap())">
+		<div class="map-object card-animation-stagger" ng-repeat="object in objectList track by $index">
+
+			<a ng-href="map/{{::(object.classnameField)}}" class="inner-card">
+				<div class="top-section">
+					<div class="side-left">
+						<div class="picture"
+							ac-background-image background-image="images/modules/maps/main_{{::(object.classnameField)}}.jpg"
+						></div>
+					</div>
+					<div class="side-right">
+						<div class="title" ng-bind="::(object.nameField)"></div>
+						<div class="description" ng-bind="::(Directive.limitDescription(object.descriptionField))"></div>
+					</div>
+				</div>
+				<div class="bottom-section">
+					<ul class="info">
+						<li>
+							<span class="text medium" ng-bind="::(object.squarekmField)"></span> km²
+						</li>
+						<li>
+							<span class="text medium" ng-bind="::(object.latitudeField)"></span>'N <span class="text dark medium" ng-bind="::(object.longitudeField)"></span>'E
+						</li>
+						<li>
+							<span class="text medium" ng-bind="::(Directive.climateTypes[object.climateField].text)"></span> climate
+						</li>
+					</ul>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>

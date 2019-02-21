@@ -1,124 +1,289 @@
 
-<div class="intel-container noselect" ng-swipe-right="movePage('p')" ng-swipe-left="movePage('n')">
-	<div class="row">
+<div class="intel-container noselect">
 
-		<div class="nav-arrows anm-all hidden-sm hidden-xs">
-			<div class="arrow arrow-right" ng-click="movePage('n')" ng-class="{'disabled': isMinPage}">
-				<i class="ion ion-chevron-right"></i>
-			</div>
-			<div class="arrow arrow-left" ng-click="movePage('p')" ng-class="{'disabled': isMaxPage}">
-				<i class="ion ion-chevron-left"></i>
-			</div>
-		</div>
+	<div class="filter-containers" ng-class="{'long': (displayFilters)}">
+		<a class="section-button muted medium animated" role="button" ng-click="toggleFilter()">
+			<ul>
+				<li><i class="icon ion-funnel"></i></li>
+				<li>{{(displayFilters ? "Hide filters" : "Show filters")}}</li>
+			</ul>
+		</a>
 
-		<ul class="intel-list">
-			<li ng-repeat="intel in currentData" class="single-intel-container ng-intel-animation">
-				<div class="col-xs-12 col-sm-6 col-md-3">
-					<div class="box">
-
-						<div
-							class="hexagon"
-							uib-popover="{{intel.intelDetails.type}}"
-							popover-popup-delay="250"
-							popover-trigger="'mouseenter'"
-							popover-class="tooltip intel-tooltip"
+		<form
+			class="checkbox-form"
+			popover-trigger="'mouseenter'"
+			popover-class="tooltip"
+			popover-popup-delay="250"
+			popover-append-to-body="true"
+			uib-popover="Will automatically refresh this list once a new Intel is posted."
+		>
+			<div class="form-group">
+				<div class="input-group">
+					<div class="extra-input noselect">
+						<input
+							type="checkbox" id="inputOpen"
+							ng-model="autoRefresh"
 						>
-							<div class="in1"><div class="in2">
-								<i ng-class="intel.intelDetails.icon"></i>
-							</div></div>
-						</div>
-
-						<div class="title">
-							<h3>
-								<span ng-bind="::intel.titleField"
-									popover-popup-delay="650"
-									popover-trigger="'mouseenter'"
-									popover-class="tooltip"
-									uib-popover="{{intel.titleField}}"
-								></span>
-							</h3>
-						</div>
-
-						<div class="date">
-							<i class="icon ion-ios-calendar-outline"></i>
-							<div class="text" ng-bind="::intel.createdAt | date"></div>
-						</div>
-
-						<div class="poster">
-							Posted by
-							<a ng-href="operator/{{::intel.posterHash}}">
-								<i class="icon" ng-class="{
-									'ion-person': (intel.displayAs === 'player'),
-									'ion-ios-people': (intel.displayAs === 'pmc'),
-									'ion-help-circled': (intel.displayAs === 'anonymous')
-								}"></i>
-								<strong><span ng-bind="::intel.posterDetails.alias"></span></strong>
-							</a>
-						</div>
-
-						<div class="body" ng-scrollbar rebuild-on-resize rebuild-on="rebuild">
-							<p><span ng-bind="::intel.bodyField"></span></p>
-						</div>
-
-						<div class="bottom">
-							<cheers-directive
-								initial-cheers="{{intel.cheersDetails.amount}}"
-								initial-cheered="{{ intel.cheersDetails.cheered }}"
-								cheer-target="{{ intel.hashField }}"
-								cheer-type="intel"
-								class="pull-left"
-							></cheers-directive>
-
-							<div class="comments pull-right">
-								<a class="btn btn-default" role="button"
-									popover-popup-delay="1050"
-									popover-trigger="'mouseenter'"
-									popover-class="tooltip"
-									uib-popover="Comments"
-								>
-									<i class="icon ion-chatbox-working"></i> <span ng-bind="::intel.totalComments"></span>
-								</a>
+						<label class="input-label" for="inputOpen">
+							<div class="body check">
+								<div class="box"><i class="icon ion-loop small"></i></div>
+								<div class="label-text">Auto-refresh</div>
 							</div>
-						</div>
-
+						</label>
 					</div>
 				</div>
+			</div>
+		</form>
 
-				<div ng-if="($index % 2 == 1)" class="clearfix visible-sm-block"></div>
+		<a class="section-button search warning medium intel-filter-animation" role="button" ng-click="refreshIntel()"
+		ng-if="(displayFilters)" ng-cloak>
+			<ul>
+				<li><i class="icon ion-search"></i></li>
+				<li>Apply</li>
+			</ul>
+		</a>
 
-			</li>
+		<div class="intel-filters intel-filter-animation" ng-if="displayFilters" ng-cloak>
 
-		</ul>
+			<form class="text-filters" ng-submit="refreshIntel()">
+				<div class="form-group title">
+					<div class="input-group">
+						<input
+							type="text"
+							class="form-control"
+							ng-model="$parent.filterInputsTitle"
+							name="filterInputsTitle"
+							placeholder="Title (optional)"
+						/>
+					</div>
+				</div>
+				<div class="form-group body">
+					<div class="input-group">
+						<input
+							type="text"
+							class="form-control"
+							ng-model="$parent.filterInputsBody"
+							name="filterInputsBodyfilterInputsBody"
+							placeholder="Content (optional)"
+						/>
+					</div>
+				</div>
+				<input type="submit" id="submit" value="Submit"/ style="display:none;">
+			</form>
+
+			<div class="dropdown-section">
+				<div class="dropdown">
+					<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+						<i class="icon" ng-class="currentType.icon"></i> <span ng-bind="currentType.type"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li ng-click="changeSortType($index)" ng-repeat="item in ::typesDropdown track by $index">
+							<a href="#" ng-click="scope = item.type">
+								<i class="icon" ng-class="::item.icon"></i>
+								<span ng-bind="::item.type"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="dropdown">
+					<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+						<i class="icon" ng-class="currentPostedAs.icon"></i> <span ng-bind="currentPostedAs.type"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li ng-click="changePostedAsMethod($index)" ng-repeat="item in ::postedAsDropdown track by $index">
+							<a href="#" ng-click="scope = item.type">
+								<i class="icon" ng-class="::item.icon"></i>
+								<span ng-bind="::item.type"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="dropdown">
+					<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+						<i class="icon" ng-class="currentVisibility.icon"></i> <span ng-bind="currentVisibility.type"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li ng-click="changeVisibilityType($index)" ng-repeat="item in ::visibilityDropdown track by $index">
+							<a href="#" ng-click="scope = item.type">
+								<i class="icon" ng-class="::item.icon"></i>
+								<span ng-bind="::item.type"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="dropdown">
+					<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+						<i class="icon" ng-class="currentRank.icon"></i> <span ng-bind=currentRank.name></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li ng-click="changeSortMethod(item.value)" ng-repeat="item in ::sortingMethods track by $index">
+							<a href="#" ng-click="scope = item.value">
+								<i class="icon" ng-class="::item.icon"></i>
+								<span ng-bind="::item.name"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<a class="btn default order" ng-click="changeFilterOrder()"><i class="icon" ng-class="(currentOrder === 'ASC') ? 'ion-arrow-up-b' : 'ion-arrow-down-b'"></i></a>
+			<hr/>
+		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-sm-12 text-center anm-all">
-			<nav aria-label="Page navigation">
-				<ul
-					uib-pagination
+	<div ng-swipe-right="movePage('p')" ng-swipe-left="movePage('n')">
+		<div class="row">
 
-					id="intel-pagination"
-					class="pagination"
+			<div class="nav-arrows anm-all hidden-sm hidden-xs">
+				<div class="arrow arrow-right" ng-click="movePage('n')" ng-class="{'disabled': isMinPage}">
+					<i class="ion ion-chevron-right"></i>
+				</div>
+				<div class="arrow arrow-left" ng-click="movePage('p')" ng-class="{'disabled': isMaxPage}">
+					<i class="ion ion-chevron-left"></i>
+				</div>
+			</div>
 
-					ng-change="movePage(-1)"
+			<div id="intel-col" class="col-md-12">
+				<div class="no-results intel-filter-animation" ng-if="(currentData.length <= 0) && !(isLoading)" ng-cloak>
+					No results.
+				</div>
+				<ul class="intel-list">
+					<li ng-repeat="intel in currentData track by intel.id" class="single-intel-container ng-intel-animation" ng-if="(currentData.length > 0)" ng-cloak>
+						<div class="single-intel-width col-md-3 col-sm-6 col-xs-12">
+							<div class="box">
+								<a class="intel-top" ng-href="{{::setURL(intel.hashField)}}">
+									<div class="hexagon-container">
+										<div
+											class="hexagon"
+											uib-popover="{{intel.intelDetails.type}}"
+											popover-popup-delay="250"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip intel-tooltip"
+										>
+											<div class="in1">
+												<div class="in2"
+													ng-class="{'has-picture': !(intel.backgroundType === 'color')}"
+													ng-style="::genIconColors(intel).hexagon"
+												>
+												<i
+													ng-class="::(intel.intelDetails.icon)"
+													ng-style="::genIconColors(intel).icon"
+												></i>
 
-					first-text="&laquo;"
-					last-text="&raquo;"
-					next-text="&#9656;"
-					previous-text="&#9666;"
+												<img
+													ng-if="::(intel.backgroundType !== 'color')"
+													ng-src="{{::genBackgroundPicture(intel)}}"
+												ng-cloak>
+											</div></div>
+										</div>
+									</div>
 
-					force-ellipses="true"
-					rotate="true"
+									<div class="title">
+										<h3>
+											<span ng-bind="::intel.titleField"
+												popover-popup-delay="650"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												uib-popover="{{intel.titleField}}"
+											></span>
+										</h3>
+									</div>
+								</a>
 
-					total-items="totalItems"
-					items-per-page="perPage"
-					ng-model="currentPage"
-					max-size="1"
+								<div class="date">
+									<i class="icon ion-ios-calendar-outline"></i>
+									<div class="text" ng-bind="::intel.createdAt | date"></div>
+								</div>
 
-					boundary-links="false"
-					boundary-link-numbers="true"
-				></ul>
-			</nav>
+								<div class="poster" ng-if="::(intel.hashField !== '???')" ng-cloak>
+									Posted by
+									<a ng-href="{{::intel.posterUrl}}">
+										<i class="icon" ng-class="{
+											'ion-person': (intel.displayAs === 'player'),
+											'ion-ios-people': (intel.displayAs === 'pmc'),
+											'ion-help-circled': (intel.displayAs === 'anonymous')
+										}"></i>
+										<strong><span ng-bind="::intel.posterDetails.alias"></span></strong>
+									</a>
+								</div>
+
+								<div class="body" ng-scrollbar rebuild-on-resize rebuild-on="rebuild" ng-if="::(intel.hashField !== '???')" ng-cloak>
+									<p><span ng-bind="::intel.bodyField"></span></p>
+								</div>
+
+								<div class="bottom" ng-if="::(intel.hashField !== '???')" ng-cloak>
+									<cheers-directive
+										initial-cheers="{{intel.cheersDetails.amount}}"
+										initial-cheered="{{ intel.cheersDetails.cheered }}"
+										cheer-target="{{ intel.hashField }}"
+										cheer-type="intel"
+										class="pull-left"
+									></cheers-directive>
+
+									<div class="comments pull-right">
+										<a class="btn btn-default" role="button" ng-href="intel/view/{{::intel.hashField}}?comments"
+											popover-popup-delay="1050"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											uib-popover="Comments"
+										>
+											<i class="icon ion-chatbox-working"></i> <span ng-bind="::intel.totalComments"></span>
+										</a>
+									</div>
+								</div>
+								<div class="extra-options" ng-if="::(getPermissions(playerInfo, intel))">
+									<hr/>
+									<a ui-sref="app.private.intel-edit({intelHash: intel.hashField})" class="section-button warning small pull-left" role="button">
+										<ul>
+											<li><i class="icon ion-edit"></i></li>
+											<li>Edit</li>
+										</ul>
+									</a>
+									<a class="section-button muted small pull-right" role="button" ng-click="askDeleteIntel(intel.hashField)">
+										<ul>
+											<li><i class="icon ion-trash-a"></i></li>
+											<li>Delete</li>
+										</ul>
+									</a>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center anm-all">
+				<nav aria-label="Page navigation">
+					<ul
+						uib-pagination
+
+						id="intel-pagination"
+						class="pagination"
+						ng-class="{'empty': (totalItems <= 1)}"
+
+						ng-change="movePage(-1)"
+
+						first-text="&laquo;"
+						last-text="&raquo;"
+						next-text="&#9656;"
+						previous-text="&#9666;"
+
+						force-ellipses="true"
+						rotate="true"
+
+						total-items="totalItems"
+						items-per-page="perPage"
+						ng-model="currentPage"
+						max-size="1"
+
+						boundary-links="false"
+						boundary-link-numbers="true"
+					></ul>
+				</nav>
+			</div>
 		</div>
 	</div>
 </div>

@@ -2,18 +2,19 @@
 <div class="anm-all container">
 	<div class="row">
 		<div class="col-xs-12 col-sm-10" id="page-alerts-container">
-			<a class="animation btn" ng-click="resetAlerts()" ng-if="(showClose)" id="close-alerts">
+			<a class="animation btn btn-muted" ng-click="CtrlAlerts.resetAlerts()" ng-if="(CtrlAlerts.showClose)" id="close-alerts">
 				<i class="icon ion-close-round"></i>
 				Close All Alerts
 			</a>
 			<div id="page-alerts-messages">
 				<div
+					ng-repeat="alert in CtrlAlerts.alerts"
 					class="page-alerts animation"
+					ng-init="CtrlAlerts.setHeight($index, this, alert)"
 					uib-alert
-					ng-repeat="alert in alerts"
-					dismiss-on-timeout="5000"
-					ng-class="'alert-' + (alert.type || 'warning')"
-					close="closeAlert($index)">
+					dismiss-on-timeout="7000"
+					close="CtrlAlerts.closeAlert($index, this, alert)"
+					ng-class="'alert-' + (alert.type || 'warning')">
 						<i
 							class="icon"
 							ng-class="
@@ -23,8 +24,8 @@
 									'ion-alert': (alert.type == 'warning'),
 									'ion-alert-circled': (alert.type == 'danger')
 								}"
-							></i>
-						{{alert.msg}}
+						></i>
+						<div class="alert-msg" ng-bind="::(alert.msg)"></div>
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,275 @@
+
+<div id="upgrade-short-view">
+	<div class="view-container slide-in-out" ng-if="(CtrlUpgrades.showSingle)">
+
+		<div class="close-button">
+			<a class="btn btn-default" ng-click="CtrlUpgrades.closeUpgradeView()">
+				<i class="icon ion-close"></i>
+			</a>
+		</div>
+
+		<div class="upgrade-main-body">
+
+			<a class="anchor-container" ng-href="upgrade/{{::(CtrlUpgrades.singleUpgrade.hashField)}}">
+				<div class="upgrade-name-container">
+					<div class="upgrade-name" ng-bind="::(CtrlUpgrades.singleUpgrade.nameField)"></div>
+				</div>
+
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="row">
+								<div class="upgrade-image-top" ng-class="::({'completed': (CtrlUpgrades.matchedUpgrade.rankField >= CtrlUpgrades.singleUpgrade.maxTier)})">
+									<div class="upgrade-image">
+										<img ng-src="images/modules/upgrades/main_{{::CtrlUpgrades.singleUpgrade.iconName}}.png" />
+									</div>
+									<div class="rank-level">
+										<ul class="rank-list">
+											<li class="rank" ng-repeat="rank in ::CtrlUpgrades.numberToArray(CtrlUpgrades.singleUpgrade.maxTier) track by $index">
+												<i class="icon"
+												ng-class="{'ion-android-checkbox-outline-blank': ($index >= CtrlUpgrades.matchedUpgrade.rankField), 'ion-android-checkbox-blank': ($index < CtrlUpgrades.matchedUpgrade.rankField)}"></i>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6">
+							<div class="row">
+								<div class="upgrade-description">
+									<div class="title">EFFECT</div>
+									<div class="text">
+										<span ng-bind="::(CtrlUpgrades.singleUpgrade.flavortextField)"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+
+			<div class="upgrade-details">
+				<div class="upgrade-kind">
+					<i class="icon ion-flash"></i>
+					<span ng-bind="::(CtrlUpgrades.upgradesData.upgradesTypes[CtrlUpgrades.singleUpgrade.kindField].text)">
+					</span>
+				</div>
+				<div class="separator" ng-if="::(CtrlUpgrades.singleUpgrade.typeField > 0)">
+					<div class="upgrade-type" ng-class="{'warning': !(CtrlUpgrades.validUpgradeType)}">
+						<i class="icon ion-alert"></i>
+						<span ng-bind="::(CtrlUpgrades.upgradesData.upgradesOwner[CtrlUpgrades.singleUpgrade.typeField].text) + 's only'">
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<hr />
+
+			<div class="col-md-12 col-sm-6 upgrade-ranks">
+				<div class="row">
+					<div class="col-md-6 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="current-rank" ng-if="::(CtrlUpgrades.matchedUpgrade.rankField > 0)">
+								<div class="title">CURRENT</div>
+								<div class="text" ng-bind="::(CtrlUpgrades.singleUpgrade.flavortextUpgradesField[(CtrlUpgrades.matchedUpgrade.rankField - 1)])"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-sm-12 col-xs-12">
+						<div class="row">
+							<div class="next-rank" ng-if="::(CtrlUpgrades.matchedUpgrade.rankField < CtrlUpgrades.singleUpgrade.maxTier)">
+								<div class="title">NEXT</div>
+								<div class="text" ng-bind="::(CtrlUpgrades.singleUpgrade.flavortextUpgradesField[(CtrlUpgrades.matchedUpgrade.rankField)])"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="upgrade-related-upgrades" ng-if="::(CtrlUpgrades.singleUpgrade.hasRelatedUpgrades)" ng-cloak>
+
+				<div class="col-md-12 col-sm-6 col-xs-12">
+					<div class="row">
+
+						<div ng-if="::(CtrlUpgrades.singleUpgrade.requiredUpgrades.length > 0)" ng-cloak>
+							<div class="col-md-6 col-sm-12 col-xs-6 related-row">
+								<div class="row">
+									<div class="related-upgrade-text required">Required</div>
+									<div class="related-container">
+										<div
+											class="single-upgrade"
+											ng-repeat="upgrade in CtrlUpgrades.singleUpgrade.requiredUpgrades track by $index"
+											ng-click="CtrlUpgrades.openUpgradeView(upgrade)"
+											ng-init= "matchedInner = CtrlUpgrades.matchOwnedUpgrade(upgrade.hashField)"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-popup-delay="250"
+											popover-append-to-body="true"
+											uib-popover="{{::(upgrade.nameField)}}"
+										>
+											<img ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" />
+
+											<div class="rank-container">
+												<div class="upgrade-rank" ng-class="{'warning': (matchedInner.rankField < upgrade.Rank)}">
+													<span ng-bind="::(matchedInner.rankField || '-')"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div ng-if="::(CtrlUpgrades.singleUpgrade.blacklistedUpgrades.length > 0)" ng-cloak>
+							<div class="col-md-6 col-sm-12 col-xs-6">
+								<div class="row">
+									<div class="related-upgrade-text blacklisted">Conflicting</div>
+									<div class="related-container">
+										<a
+											class="single-upgrade"
+											ng-repeat="upgrade in CtrlUpgrades.singleUpgrade.blacklistedUpgrades track by $index"
+											ng-click="CtrlUpgrades.openUpgradeView(upgrade)"
+											ng-init= "matchedInner = CtrlUpgrades.matchOwnedUpgrade(upgrade.hashField)"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-popup-delay="250"
+											popover-append-to-body="true"
+											uib-popover="{{::(upgrade.nameField)}}"
+										>
+											<img ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" width=32 />
+
+											<div class="rank-container">
+												<div class="upgrade-rank" ng-class="{'warning': (matchedInner.rankField >= upgrade.Rank)}">
+													<span ng-bind="::(matchedInner.rankField || '-')"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+												</div>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="purchase-section">
+
+				<div class="col-md-12">
+					<div class="row">
+
+						<div class="col-md-6 col-sm-6 col-xs-5">
+							<div class="row">
+								<div class="upgrade-cost">
+									<i class="icon ion-flash"></i>
+									<div class="current-cost" ng-bind="::(CtrlUpgrades.finalUpgradePrice | currency :'D$ ': 0)">
+									</div>
+								</div>
+
+								<div class="funds-container">
+									<i class="icon ion-cash"></i>
+									<div class="current-funds" ng-bind="::(CtrlUpgrades.currentFunds | currency :'D$ ': 0)"></div>
+								</div>
+
+								<hr />
+
+								<div class="remaining-funds-container">
+									<i class="icon ion-arrow-swap"></i>
+									<div class="remaining-funds" ng-bind="::((CtrlUpgrades.currentFunds - CtrlUpgrades.finalUpgradePrice) | currency :'D$ ': 0)"></div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6 col-sm-6 col-xs-5">
+							<div class="row">
+								<div class="upgrade-interactions">
+									<a ng-click="CtrlUpgrades.askPurchaseUpgrade()" class="section-button success small" role="button" a-disabled="!(CtrlUpgrades.singleUpgrade.allowPurchase)">
+										<ul>
+											<li><i class="icon ion-skip-forward"></i></li>
+											<li>UPGRADE</li>
+										</ul>
+									</a>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+			<div class="bottom-interaction" ng-if="::(CtrlUpgrades.matchedUpgrade.rankField > 0)">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="center-button">
+							<a
+								ng-click="CtrlUpgrades.askRespecTree()"
+								class="section-button danger small"
+								role="button" a-disabled="(CtrlUpgrades.matchedUpgrade.rankField === 0)"
+							>
+								<ul>
+									<li><i class="icon ion-refresh"></i></li>
+									<li>RESPEC</li>
+								</ul>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<div id="mobile-navigation" ng-init="move = CtrlUpgrades.moveZoomScreen;">
+	<div id="direction-pad">
+		<div id="direction-container">
+			<div class="direction nw" ng-click="move(2,2)"><i class="icon ion-arrow-up-c"></i></div>
+			<div class="direction n" ng-click="move(2,0)"><i class="icon ion-arrow-up-c"></i></div>
+			<div class="direction ne" ng-click="move(2,-2)"><i class="icon ion-arrow-up-c"></i></div>
+			<div class="direction e" ng-click="move(0,-2)"><i class="icon ion-arrow-up-c"></i></div>
+			<div class="direction se" ng-click="move(-2,-2)"><i class="icon ion-arrow-up-c"></i></div>
+			<div class="direction s" ng-click="move(-2,0)"><i class="icon ion-arrow-up-c"></i></div>
+			<div class="direction sw" ng-click="move(-2,2)"><i class="icon ion-arrow-up-c"></i></div>
+			<div class="direction w" ng-click="move(0,2)"><i class="icon ion-arrow-up-c"></i></div>
+		</div>
+	</div>
+	<div id="zoom-input">
+		<div class="zoom" ng-click="move(0,0,-1)">
+			<i class="icon ion-plus"></i>
+		</div>
+		<div class="zoom" ng-click="move(0,0,1)">
+			<i class="icon ion-minus"></i>
+		</div>
+	</div>
+</div>
+
+<div class="fade-animation-fast" id="tree-selector" ng-if="(CtrlUpgrades.renderScreen)">
+	<div class="dropdown-section">
+		<div class="dropdown">
+			<button class="btn medium dropdown-toggle" type="button" data-toggle="dropdown">
+				<img ng-src="images/modules/upgrades/main_{{CtrlUpgrades.currentTreeUpgrade.iconName}}.png" width=64 />
+				<div class="current-upgrade" ng-bind="CtrlUpgrades.currentTreeUpgrade.nameField"></div>
+			</button>
+			<ul class="dropdown-menu">
+				<li ng-repeat="upgrade in CtrlUpgrades.mainParentUpgrades track by $index">
+					<a class="upgrade-choice" href="#" ng-click="CtrlUpgrades.renderTreeView(upgrade.hashField, true)">
+						<img ng-src="images/modules/upgrades/main_{{::upgrade.iconName}}.png" />
+						<span ng-bind="::(upgrade.nameField)"></span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="vignette-overlay">
+	<div id="upgrades-canvas" class="upgrade-render-animation" ng-hide="(!CtrlUpgrades.renderScreen)">
+		<div id="upgrades-main-page" class="noselect">
+			<div id="upgrades-zoom-area">
+				<div id="upgrades-translate-area">
+					<div id="upgrades-render"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

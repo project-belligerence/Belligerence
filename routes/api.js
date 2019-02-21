@@ -6,6 +6,8 @@
 	var	config = require('../config.js'),
 		PlayerModel = require('./../modules/index.js').getModels().players,
 		PMCModel = require('./../modules/index.js').getModels().pmc,
+		PlayerItems = require('./../modules/index.js').getModels().player_items,
+		PMCItems = require('./../modules/index.js').getModels().pmc_items,
 		jwt = require('jsonwebtoken'),
 
 		sentMessage, sentResponse;
@@ -19,11 +21,15 @@
 		getType: getType,
 		toUpperFirstChar: toUpperFirstChar,
 		toCamelCase: toCamelCase,
+		isValidJSON: isValidJSON,
 		findInArray: findInArray,
+		inArray: inArray,
 		sumArray: sumArray,
 		minMax: minMax,
 		minMaxArray: minMaxArray,
+		dateTimeDifference: dateTimeDifference,
 		getRandomInt: getRandomInt,
+		getSideName: getSideName,
 		getPseudoArray: getPseudoArray,
 		setPseudoArray: setPseudoArray,
 		setDoublePseudoArray: setDoublePseudoArray,
@@ -35,7 +41,9 @@
 		getBannedStatus: getBannedStatus,
 		cloneArray: cloneArray,
 		addIfNew: addIfNew,
+		isValid: isValid,
 		arrayLike: arrayLike,
+		isUndefinedOrNull: isUndefinedOrNull,
 		generateRegexp: generateRegexp,
 		limitString: limitString,
 		sharedArrayFromArray: sharedArrayFromArray,
@@ -51,6 +59,13 @@
 		generatePaginatedQuery: generatePaginatedQuery
 	};
 
+	function getPlayerObject(hash) {
+		return {
+			where: { 'hashField': hash },
+			include: [ { model: PMCModel, as: 'PMC', attributes: ['id', 'hashField', 'PMCPrestige', 'sideField'] } ]
+		};
+	}
+
 	function checkToken(req, res, next) {
 		var token = ((req.body.token) || (req.query.token) || (req.headers['x-access-session-token']));
 
@@ -62,10 +77,7 @@
 					// res.status(403).json(new config.methods.generateResponse(err.message, '', false));
 				} else {
 					req.decoded = decoded;
-					PlayerModel.findOne({
-						where: {'hashField': decoded.hash},
-						include: [ { model: PMCModel, as: 'PMC', attributes: ['id', 'hashField', 'PMCPrestige'] } ]
-					}).then(function(player) {
+					PlayerModel.findOne(getPlayerObject(decoded.hash)).then(function(player) {
 						if (!validate(req, res, [player], config.messages().bad_permission, '', 403)) { return 0; }
 						req.playerInfo = player.dataValues;
 						return next();
@@ -74,11 +86,7 @@
 			});
 		} else {
 			// USER IS A GUEST
-
-			req.playerInfo = {
-				hashField: '123456789',
-				id: 0
-			};
+			req.playerInfo = { hashField: '123456789', id: 0 };
 
 			return next();
 		}
@@ -97,10 +105,7 @@
 					// res.status(403).json(new config.methods.generateResponse(err.message, '', false));
 				} else {
 					req.decoded = decoded;
-					PlayerModel.findOne({
-						where: {'hashField': decoded.hash},
-						include: [ { model: PMCModel, as: 'PMC', attributes: ['id', 'hashField', 'PMCPrestige'] } ]
-					}).then(function(player) {
+					PlayerModel.findOne(getPlayerObject(decoded.hash)).then(function(player) {
 					if (!validate(req, res, [player], config.messages().bad_permission, '', 403)) { return 0; }
 						req.playerInfo = player.dataValues;
 						player.validateSecuritySettings(req, function(valid) {
@@ -130,7 +135,7 @@
 							expiration: entries[i].expirationDate
 						};
 						var r_status = config.enums.response_status;
-						return sendResponse(req, res, false, config.messages().banned, banObject, r_status.forbidden, r_status.sub_code.banned);
+						return sendResponse(req, res, false, config.messages().banned, banObject, r_status.unauthorized, r_status.sub_code.banned);
 					}
 					return next();
 				}
@@ -147,21 +152,28 @@
 
 	function getMainEntity(req) {
 		var hasPMC = (req.playerInfo.PMC || false),
-			entityType = hasPMC ? "pmc" : "player",
-			entityTypeName = hasPMC ? "PMC" : "Player",
-			entityModel = hasPMC ? PMCModel : PlayerModel,
-			entityHash = hasPMC ? req.playerInfo.PMC.hashField : req.playerInfo.hashField,
-			entityId = hasPMC ? req.playerInfo.PMC.id : req.playerInfo.id;
+			entityType = (hasPMC ? "pmc" : "player"),
+			entityTypeName = (hasPMC ? "PMC" : "Player"),
+			entityModel = (hasPMC ? PMCModel : PlayerModel),
+			entityInventory = (hasPMC ? PMCItems : PlayerItems),
+			entity = (hasPMC ? req.playerInfo.PMC : req.playerInfo),
+			entityHash = entity.hashField,
+			entitySide = entity.sideField,
+			entityId = entity.id;
 
 		return {
 			hasPMC: hasPMC,
 			entityType: entityType,
 			entityTypeName: entityTypeName,
 			entityModel: entityModel,
+			entityInventory: entityInventory,
 			entityHash: entityHash,
+			entitySide: entitySide,
 			entityId: entityId
 		};
 	}
+
+	function getSideName(side) { return Object.keys(config.enums.sides)[side]; }
 
 	function retrieveModelsRecursive(modelFolders, hashesObject, attributesArr, done, loopNumber, returnObject) {
 		var loopNumberActual = (loopNumber || 0),
@@ -254,7 +266,7 @@
 		}
 	}
 
-	function minMax(min, max, value) { return Math.min(Math.max(parseInt(value), min), max); }
+	function minMax(min, max, value) { return parseInt(Math.min(Math.max(parseInt(value), min), max)); }
 
 	function minMaxArray(min, max, array) {
 		var returnArray = [];
@@ -263,6 +275,27 @@
 			returnArray[i] = minMax(min, max, array[i]);
 		}
 		return returnArray;
+	}
+
+	function multiplyArray(array) {
+		var sum = 1;
+		for (var i = array.length - 1; i >= 0; i--) { sum *= array[i]; }
+		return sum;
+	}
+
+	function dateTimeDifference(date, time) {
+		// https://stackoverflow.com/a/2627493
+		var _ = require("lodash"),
+			timeFrame = (function(t) {
+				switch(t) {
+					case "day": { return [24, 60, 60, 1000]; } break;
+					case "hour": { return [60, 60, 1000]; } break;
+					default: { return [24, 60, 60, 1000]; }
+				}
+			})(time),
+			oneDay = multiplyArray(timeFrame),
+			currentDate = new Date();
+		return (Math.round(Math.abs((date.getTime() - currentDate.getTime())/(oneDay))));
 	}
 
 	function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
@@ -279,16 +312,19 @@
 		return string;
 	}
 
-	function getPseudoArray(pString) {
+	function getPseudoArray(pString, number) {
 		var string = (pString || '');
 		if (string.indexOf(',') === -1) {
 			string = [string];
-			if (string[0] == [""]) { string = []; }
+			if (string[0] == [""]) {
+				string = [];
+			} else { if (number) string[0] = parseInt(string[0]); }
 		} else {
 			var commaReg = new RegExp(config.stringAlias().comma, "g");
 			string = string.split(",");
 			for (var i=0; i < string.length; i++) {
 				string[i] = string[i].replace(commaReg, ',');
+				if (number) string[i] = parseInt(string[i]);
 			}
 		}
 		return string;
@@ -359,6 +395,12 @@
 		});
 	}
 
+	// https://stackoverflow.com/a/3710226
+	function isValidJSON(v) {
+		try { JSON.parse(v); } catch (e) { return false; }
+		return true;
+	}
+
 	function addIfNew(value, array) {
 		var newArray = array;
 		if (!(findInArray(value, array)[0])) newArray.push(value);
@@ -373,18 +415,23 @@
 		return r;
 	}
 
+	function inArray(value, array) { return (array.indexOf(value) > -1); }
+
 	function sumArray(array) {
 		var n = 0;
 		for (var i=0; i < array.length; i++) { n = n + parseInt(array[i]); }
 		return n;
 	}
 
+	function isUndefinedOrNull(val) { return ((val === undefined ) || (val === null)); }
+	function isValid(val) { return !(isUndefinedOrNull(val)); }
+
 	function toUpperFirstChar(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
 
-	function getBoolean(value) {
+	function getBoolean(value, number) {
 		switch(value) {
-			case "true": { return true; } break;
-			case "false": { return false; } break;
+			case "true": { return (number ? 1 : true); } break;
+			case "false": { return (number ? 0 : false); } break;
 			default: { return -1; } break;
 		}
 	}
@@ -395,6 +442,47 @@
 		var rVal = [true],
 			vStrict = (strict === null) ? false : strict,
 			vMiddleware = (middleware === null) ? false : middleware;
+
+		for (var i = 0, len = params.length; i < len; i++) {
+			var goodCheck = true;
+
+			if (rVal[0]) {
+				// Function will take array with [[value, type(string)/length(number), type(string)/length(number)], [***]]
+
+				var value = (getType(params[i][0]) == "array") ? params[i][0] : [params[i][0]],
+					const1 = (params[i][1]),
+					const2 = (params[i].length > 2) ? (params[i][2]) : null;
+
+				for (var j = 0; j < value.length; j++) {
+					if (goodCheck) {
+						var curVal = value[j];
+
+						switch (true) {
+							case (isUndefinedOrNull(curVal) && !vStrict): {
+								rVal = [true];
+							} break;
+							case (isUndefinedOrNull(curVal)): {
+								goodCheck = false;
+								rVal = [false, config.messages().modules.api.valueUndefined(curVal)];
+							} break;
+							default: {
+								if (!(isNaN(curVal))) { curVal = parseInt(curVal); }
+
+								switch(curVal) {
+									case "true": { curVal = true; } break;
+									case "false": { curVal = false; } break;
+								}
+
+								rVal = compareValue(const1, curVal);
+								if (const2 && (rVal[0])) { rVal = compareValue(const2, curVal); }
+
+								goodCheck = (rVal[0]);
+							} break;
+						}
+					}
+				}
+			}
+		}
 
 		function compareValue(constr, value) {
 			var fr = true;
@@ -454,49 +542,7 @@
 					}
 				} break;
 			}
-
 			return fr;
-		}
-
-		for (var i = 0, len = params.length; i < len; i++) {
-			var goodCheck = true;
-
-			if (rVal[0]) {
-				// Function will take array with [[value, type(string)/length(number), type(string)/length(number)], [***]]
-
-				var value = (getType(params[i][0]) == "array") ? params[i][0] : [params[i][0]],
-					const1 = (params[i][1]),
-					const2 = (params[i].length > 2) ? (params[i][2]) : null;
-
-				for (var j = 0; j < value.length; j++) {
-					if (goodCheck) {
-						var curVal = value[j];
-
-						switch (true) {
-							case (!curVal && !vStrict): {
-								rVal = [true];
-							} break;
-							case (!curVal): {
-								goodCheck = false;
-								rVal = [false, config.messages().modules.api.valueUndefined(curVal)];
-							} break;
-							default: {
-								if (!(isNaN(curVal))) { curVal = parseInt(curVal); }
-
-								switch(curVal) {
-									case "true": { curVal = true; } break;
-									case "false": { curVal = false; } break;
-								}
-
-								rVal = compareValue(const1, curVal);
-								if (const2 && (rVal[0])) { rVal = compareValue(const2, curVal); }
-
-								goodCheck = (rVal[0]);
-							} break;
-						}
-					}
-				}
-			}
 		}
 
 		if (!vMiddleware) {
@@ -534,7 +580,8 @@
 	}
 
 	function generateRawQuery(req, res, baseTable, selectString, extraStatement, whereHook, queryData, callback) {
-		var	Sequelize = require('sequelize'),
+		var	_ = require('lodash'),
+			Sequelize = require('sequelize'),
 			sequelize = new Sequelize(config.db.newConnection()),
 			qSort = queryData.order[0][0],
 			qOrder = queryData.order[0][1],
@@ -556,7 +603,7 @@
 				whereAnd = " ",
 				doValidate = "";
 
-			if (getType(curSubValue) === "array") {
+			if (_.indexOf(["Pl", "Pm"], curSubValue[1]) > -1) {
 				curMainKey = curSubValue[1] + "." + curMainKey;
 				curSubValue = curSubValue[0];
 			}
@@ -565,6 +612,7 @@
 				case "$literal": { whereAddValue = curMainKey + " " + curSubValue; } break;
 				case "$dliteral": { whereAddValue = curSubValue; } break;
 				case "$like": {	whereAddValue = curMainKey + " LIKE '" + curSubValue + "'";	} break;
+				case "$notLike": { whereAddValue = curMainKey + " NOT LIKE '" + curSubValue + "'";	} break;
 				case "$gt": { doValidate = 'number'; whereAddValue = curMainKey + " > " + parseInt(curSubValue) + ""; } break;
 				case "$gte": { doValidate = 'number'; whereAddValue = curMainKey + " >= " + parseInt(curSubValue) + ""; } break;
 				case "$lt": { doValidate = 'number'; whereAddValue = curMainKey + " < " + parseInt(curSubValue) + ""; } break;

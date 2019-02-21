@@ -1,0 +1,119 @@
+<div class="row">
+	<hr />
+</div>
+<div class="fade-animation-fast" ng-if="(CtrlAdmin.contentSubController.pageState !== 'null')" ng-cloak>
+	<div class="row">
+
+		<h2>Access Keys</h2>
+		<h3>With these keys, potential users will be able to register without a valid Steam account.</h3>
+
+		<div id="new-key-form">
+			<form class="form-inline" ng-submit="CtrlAdmin.contentSubController.generateNewKey()">
+				<div class="form-group">
+					<label class="sr-only" for="keyNameInput">Key Name</label>
+					<input ng-model="CtrlAdmin.contentSubController.ui.formValues.nameField" type="text" class="form-control" id="keyNameInput" placeholder="Key Name">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="seedNameInput">Seed Value</label>
+					<input ng-model="CtrlAdmin.contentSubController.ui.formValues.seedField" type="text" class="form-control" id="seedNameInput" placeholder="Seed Value">
+				</div>
+				<div class="form-group desc">
+					<label class="sr-only" for="keyDescriptionInput">Description</label>
+					<input ng-model="CtrlAdmin.contentSubController.ui.formValues.descriptionField" type="text" class="form-control" id="keyDescriptionInput" placeholder="Description">
+				</div>
+				<div class="form-group">
+					<label class="sr-only" for="fundsInput">Starting Funds</label>
+					<input ng-model="CtrlAdmin.contentSubController.ui.formValues.fundsField" type="text" class="form-control" id="fundsInput" placeholder="Starting Funds">
+				</div>
+				<div class="form-group">
+					<div class="dropdown-section">
+						<div class="dropdown">
+							<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+								Privilege:
+								<strong ng-bind="CtrlAdmin.contentSubController.displayPrivilege(CtrlAdmin.contentSubController.ui.formValues.privilegeField).name"></strong>
+							</button>
+							<ul class="dropdown-menu">
+								<li ng-click="CtrlAdmin.contentSubController.ui.formValues.privilegeField = item" ng-repeat="item in CtrlAdmin.contentSubController.ui.privilegeValues track by $index">
+									<a href="#" ng-click="scope = item">
+										<span ng-bind="CtrlAdmin.contentSubController.displayPrivilege(item).name"></span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<div class="extra-input noselect">
+							<input type="checkbox" id="inputOpen" ng-model="CtrlAdmin.contentSubController.ui.formValues.skipSteamField">
+							<label class="input-label" for="inputOpen">
+								<div class="body check">
+									<div class="box"><i class="icon ion-checkmark small"></i></div>
+									<div class="label-text">Skip Steam Validation</div>
+								</div>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="new-key-btn">
+					<a class="section-button medium animated success" role="button" ng-click="CtrlAdmin.contentSubController.generateNewKey()">
+						<ul>
+							<li><i class="icon ion-key"></i></li>
+							<li>Create new key</li>
+						</ul>
+					</a>
+				</div>
+				<button type="submit" style="display: none;"></button>
+			</form>
+		</div>
+
+		<div id="access-key-table">
+			<div class="table-responsive">
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Seed</th>
+							<th>Privilege</th>
+							<th>Description</th>
+							<th>Funds</th>
+							<th>Generated</th>
+							<th>Used</th>
+							<th>Skip Steam</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="comment-animation" ng-repeat="keyObject in CtrlAdmin.contentSubController.contentData track by $index" ng-click="(CtrlAdmin.contentSubController.displayKey(keyObject))">
+							<td ng-bind="::(keyObject.nameField)"></td>
+							<td ng-bind="::(keyObject.seedField)"></td>
+							<td ng-init="privInfo = CtrlAdmin.contentSubController.displayPrivilege(keyObject.privilegeField)">
+								<i class="icon privInfo.icon"></i>
+								<span ng-bind="::(privInfo.name)"></span>
+							</td>
+							<td class="desc" ng-bind="::(keyObject.descriptionField)"></td>
+							<td ng-bind="::('D$ ' + (keyObject.fundsField | number))"></td>
+							<td><time-ago from-time='{{::keyObject.createdAt}}'></time-ago></td>
+							<td>
+								<i class="icon" ng-class="::((keyObject.usedField) ? 'ion-checkmark' : 'ion-close')">
+								</i>
+							</td>
+							<td>
+								<i class="icon" ng-class="::((keyObject.skipSteamField) ? 'ion-checkmark' : 'ion-close')"></i>
+							</td>
+							<td>
+								<a ng-click="CtrlAdmin.contentSubController.askDeleteAccessKey(keyObject.seedField)" class="section-button muted small animated" role="button">
+									<ul>
+										<li><i class="icon ion-trash-a"></i></li>
+										<li>Delete</li>
+									</ul>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>

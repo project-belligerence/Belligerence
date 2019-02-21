@@ -1,0 +1,146 @@
+
+<div class="modal-window" id="image-upload-form-container">
+
+	<div class="modal-header short">
+		<i class="icon ion-images"></i>
+		<h2>Manage <span ng-bind="::(ModalController.options.name)"></span> Images</h2>
+
+		<div class="close-container" ng-click="closeModal()">
+			<i class="icon ion-close"></i>
+		</div>
+	</div>
+
+	<div class="modal-main-body">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-5 col-sm-5 col-sm-12" id="upload-side" ng-init="options = ModalController.options; size = options.dimensions;">
+					<a
+						class="section-button small animated select-picture" role="button"
+
+						ngf-select
+						ngf-drop
+						ngf-change="ModalController.imageChange($file)"
+						ng-model="ModalController.currentUploadedImage"
+						ngf-pattern="'image/{{options.extension}}'"
+						ngf-accept="'image/{{options.extension}}'"
+						ngf-max-size="1MB"
+						ngf-min-height="size.hMin" ngf-max-height="size.hMax"
+						ngf-min-width="size.wMin" ngf-max-width="size.wMax"
+					>
+						<ul>
+							<li><i class="icon ion-ios-camera"></i></li>
+							<li>Select image</li>
+						</ul>
+					</a>
+					<div id="image-upload-form">
+						<form name="imagePictureForm" enctype="multipart/form-data">
+							<div
+								ngf-drop
+								ngf-change="ModalController.imageChange($file)"
+								ng-model="ModalController.currentUploadedImage"
+								ngf-pattern="'image/{{options.extension}}'"
+								ngf-accept="'image/{{options.extension}}'"
+								ngf-max-size="1MB"
+								ngf-min-height="size.hMin" ngf-max-height="size.hMax"
+								ngf-min-width="size.wMin" ngf-max-width="size.wMax"
+							>
+								<div class="upload-text" ng-if="(ModalController.cachedImage.length === 0)">
+									<i class="icon medium ion-arrow-down-a"></i><br>
+									Drag and drop/paste your image here.
+									<div class="image-specs">
+										<div class="dimensions">
+											<span class="ext-text" ng-bind="::(options.dimensions.wMax)"></span> x <span class="ext-text" ng-bind="::(options.dimensions.hMax)"></span>
+										</div>
+										<div class="extension">
+											Allowed extension: <span class="ext-text" ng-bind="::(options.extension)"></span>
+										</div>
+									</div>
+								</div>
+								<img class="current-upload pulse-drop-shadow-black-slow-soft" ngf-thumbnail="ModalController.currentUploadedImage">
+							</div>
+						</form>
+					</div>
+					<form id="image-input-form" ng-if="(ModalController.cachedImage.length !== 0)" ng-submit="ModalController.uploadPicture()">
+						<div class="form-group">
+							<div class="input-group">
+								<input type="text" class="form-control" ng-model="ModalController.currentUploadName" ng-change="ModalController.applyFilenameFilter('currentUploadName')">
+								<a type="button" class="btn btn-default" ng-click="ModalController.resetSelectedImage()"><i class="icon small ion-close"></i></a>
+							</div>
+							<div class="character-limit" ng-if="::(options.filenameLimit)" ng-cloak>
+								<span class="min-char" ng-class="ModalController.getCharLimitClass('min')" ng-bind="::(options.filenameLimit.min)"></span>/
+								<span class="current-char" ng-bind="ModalController.currentUploadName.length"></span>/
+								<span class="max-char" ng-class="ModalController.getCharLimitClass('max')" ng-bind="::(options.filenameLimit.max)"></span> character limit.
+							</div>
+						</div>
+					</form>
+					<a 	role="button"
+						class="section-button small animated upload-picture"
+						ng-class="ModalController.checkInputExists() ? 'warning' : 'success'"
+
+						ng-click="ModalController.uploadPicture()"
+
+						ng-if="((ModalController.cachedImage.length !== 0))"
+						a-disabled="(ModalController.allowForUpload())"
+					>
+						<ul>
+							<li><i class="icon ion-upload"></i></li>
+							<li ng-bind="(ModalController.checkInputExists() ? 'Overwrite Image' : 'Upload')"></li>
+						</ul>
+					</a>
+				</div>
+
+				<div class="col-md-7 col-sm-7 col-sm-12" id="images-side">
+					<form id="images-filter">
+						<div class="form-group">
+							<div class="input-group">
+								<i class="icon small ion-search"></i>
+								<input type="text" ng-change="ModalController.applyFilenameFilter('imageSearchFilter')" class="form-control" ng-model="ModalController.imageSearchFilter">
+							</div>
+						</div>
+					</form>
+
+					<hr />
+
+					<ul class="image-list">
+						<li class="image-single comment-animation" ng-class="{'selected': (ModalController.checkSelected(image))}" ng-repeat="image in (ModalController.currentFolderImages | filter:ModalController.imageSearchFilter:strict) track by $index" ng-init="deleteMode = false;">
+
+							<div ng-click="ModalController.selectImage(image)">
+								<div class="image-container">
+									<div
+										class="image-render"
+										ng-class="{'pulse-drop-shadow-black-fast': (ModalController.checkSelected(image))}"
+										ac-background-image background-image="images/{{options.folder}}/thumb_{{image}}.{{options.extension}}"
+									>
+									</div>
+								</div>
+								<div class="image-text" ng-class="{'warning': (ModalController.currentUploadName === image)}" ng-bind="image"></div>
+							</div>
+							<div class="delete-button" ng-if="options.allowDeletion" ng-cloak>
+								<a class="btn delete-btn tiny" ng-class="{'btn-warning': !(deleteMode)}" role="button"
+								ng-click="deleteMode ? ModalController.deleteImageinFolder(image) : deleteMode = true;">
+									<i class="icon ion-trash-a"></i>
+								</a>
+							</div>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+		<div class="col-md-12">
+			<div class="row">
+				<a class="section-button success" role="button"
+				ng-click="closeModal()" a-disabled="(ModalController.selectedImage === '')">
+					<ul>
+						<li><i class="icon ion-checkmark"></i></li>
+						<li>Select <span ng-if="(ModalController.selectedImage !== '')" ng-bind="'<' + (ModalController.selectedImage | uppercase) + '>'"></span></li>
+					</ul>
+				</a>
+			</div>
+		</div>
+	</div>
+
+</div>

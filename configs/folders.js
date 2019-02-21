@@ -2,6 +2,7 @@
 	'use strict';
 
 	module.exports = {
+		config: 'configs',
 		views: 'views',
 		static: 'static',
 		partials: 'partials',
@@ -9,7 +10,8 @@
 		dev: 'dev',
 		public: 'public',
 		uploads: 'uploads',
-		uploads_images: 'images'
+		uploads_images: 'images',
+		modules: "modules"
 	};
 
 })();

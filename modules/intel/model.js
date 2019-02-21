@@ -49,6 +49,16 @@
 					field: 'visibility',
 					defaultValue: 'everyone'
 				},
+				backgroundField: {
+					type: DataTypes.STRING,
+					field: 'background_field',
+					defaultValue: '#fff'
+				},
+				backgroundType: {
+					type: DataTypes.STRING,
+					field: 'background_type',
+					defaultValue: 'color'
+				},
 				hashField: {
 					type: DataTypes.STRING,
 					defaultValue: ''

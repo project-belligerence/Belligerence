@@ -1,52 +1,413 @@
 
-<div id="signup-page" class="container-fluid">
+<div id="signup-page" class="container-fluid top-spacer">
 	<div class="row">
 		<div class="container">
+			<div id="signup-view" ng-init="croppedDataUrl=''">
+				<div class="signup-block fade-animation-fast" id="intro-text-block" ng-if="(CtrlSignup.currentStep === 0)" ng-cloak>
+					<h2>There's a war out there.</h2>
 
-			<div id="signup-intro" class="fade-animation-fast" ng-if="(CtrlSignup.currentStep === 0)" ng-cloak>
-				<h2>There's a war out there.</h2>
+					<div class="block">
+						Thank you for your interest in the Belligerence® initiative.
+					</div>
+					<div class="block">
+						Established in 2028, our organization aims to provide stable and profitable employment to entrepreneurs of the security sector, respecting the individuality and freedom of its members.
+					</div>
+					<div class="block">
+						After the global crisis which followed the fall of the Samson Bloc, the ensuing apocalyptic economic scenario forced many countries into complete bankrupcy, and its now unemployed citizens were then forced to find ways to make ends meet. Thus began the boom of the private defense industry, which after many legal battles fought over the years, is now a fully fledged recognized part of many international protocols.
+					</div>
+					<div class="block">
+						We hope you will join us in a bold and exciting adventure, and secure the future you deserve.
+					</div>
+				</div>
 
-				<div class="block">
-					Thank you for your interest in the Belligerence® initiative.
-				</div>
-				<div class="block">
-					Established in 2028, our organization aims to provide stable and profitable employment to entrepreneurs of the security sector, respecting the individuality and freedom of its members.
-				</div>
-				<div class="block">
-					After the global crisis which followed the fall of Greater Israel, the ensuing apocalyptic economic scenario forced many countries into complete bankrupcy, and its now unemployed citizens were then forced to find ways to make ends meet. Thus began the boom of the private defense industry, which after many legal battles fought over the years, is now a fully fledged recognized part of many international protocols.
-				</div>
-				<div class="block">
-					We hope you will join us in a bold and exciting adventure, and secure the future you deserve.
-				</div>
-			</div>
+				<div class="signup-block fade-animation-fast" ng-if="(CtrlSignup.currentStep === 1)" ng-cloak>
+					<h2>VERIFICATION</h2>
 
-			<div id="signup-intro" class="fade-animation-fast" ng-if="(CtrlSignup.currentStep === 1)" ng-cloak>
-				<h2>VEFIFICATION</h2>
+					<div class="block">
+						Before getting started, we must verify some of your credentials and documentation.
+					</div>
 
-				<div class="block">
-					Before we get started, we must verify some of your credentials and documentation.
+					<div class="block fade-animation-fast" ng-if="(CtrlSignup.currentSteamSession === 0) && !((CtrlSignup.accessKeyData) && (CtrlSignup.accessKeyData.skipSteamField))" ng-cloak>
+						<div class="explanation">
+							Please log in with your Steam account in order to confirm you own ArmA 3.<br/>
+							<br/>
+							Belligerence is in no way associated with Valve, and cannot acquire any private details about your account. Signing in will be done within the official Steam page. <a href="https://developer.valvesoftware.com/wiki/Steam_Web_API" >Read more about the Steam Web API here.</a>
+						</div>
+
+						<div id="steam-login-button">
+							<a role="button" ng-click="CtrlSignup.authSteam()">
+								<img src="https://steamcommunity-a.akamaihd.net/public/images/signinthroughsteam/sits_landing.png" />
+							</a>
+						</div>
+					</div>
+
+					<div id="steam-view" ng-if="(CtrlSignup.currentSteamSession !== 0)  && !((CtrlSignup.accessKeyData) && (CtrlSignup.accessKeyData.skipSteamField))" ng-cloak>
+						<a href="http://steamcommunity.com/profiles/{{CtrlSignup.currentSteamSession.id}}" >
+							<div id="steam-profile" ng-style="{'background-image': 'url({{::CtrlSignup.currentSteamSession.photos[2].value}})'}">
+								<div id="steam-items">
+									<div id="steam-name">
+										<span ng-bind="CtrlSignup.currentSteamSession.displayName"></span>
+									</div>
+									<div
+										id="steam-status"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-placement="left"
+										uib-popover="{{CtrlSignup.steamStatusMsg}}"
+									>
+										<i id="steam-status-icon" class="icon ion-help"></i>
+									</div>
+								</div>
+							</div>
+						</a>
+						<div id="logout-button" role="button" ng-click="CtrlSignup.destroySteamStatus()">
+							<span>USE ANOTHER ACCOUNT</span>
+						</div>
+					</div>
+
+					<div id="access-key-block" class="fade-animation-fast" ng-cloak>
+						<div id="access-key-form" class="fade-animation-fast" ng-if="!(CtrlSignup.accessKeyData)" ng-cloak>
+							<h3>If you have an Access Key, paste it here.</h3>
+							<form class="form-inline" ng-submit="CtrlSignup.validateAccessKey()">
+								<div class="form-group ">
+									<label class="sr-only" for="keyNameInput">Key Name</label>
+									<input ng-model="CtrlSignup.accessKeyValue" type="text" class="form-control" id="keyNameInput" placeholder="Key Name">
+								</div>
+								<a class="section-button medium animated success new-key-btn" role="button" ng-click="CtrlSignup.validateAccessKey()">
+									<ul>
+										<li><i class="icon ion-key"></i></li>
+										<li>Validate Key</li>
+									</ul>
+								</a>
+								<button type="submit" style="display: none;"></button>
+							</form>
+						</div>
+						<div id="access-key-unlocked" class="fade-animation-fast" ng-if="(CtrlSignup.accessKeyData)" ng-cloak>
+							<div class="access-key-unlocked-container">
+								<div class="top-section">
+									<div class="icon-section">
+										<i class="icon ion-unlocked"></i>
+									</div>
+									<div class="text-section">
+										<h2 ng-bind="::(CtrlSignup.accessKeyData.nameField)"></h2>
+										<h3 ng-bind="::(CtrlSignup.accessKeyData.descriptionField)"></h3>
+									</div>
+								</div>
+								<div class="properties-section">
+									<div class="grant-text">Grants:</div>
+									<ul class="property-list">
+										<li class="property" ng-if="::(CtrlSignup.accessKeyData.privilegeField <= 3)">
+											<i class="icon" ng-class="::(CtrlSignup.displayPrivilege(CtrlSignup.accessKeyData.privilegeField).icon)"></i>
+											<div class="text"><strong ng-bind="::(CtrlSignup.displayPrivilege(CtrlSignup.accessKeyData.privilegeField).name)"></strong> permissions</div>
+										</li>
+										<li class="property" ng-if="::(CtrlSignup.accessKeyData.fundsField > 0)">
+											<i class="icon ion-cash"></i>
+											<div class="text"><strong>D$ <span ng-bind="::CtrlSignup.accessKeyData.fundsField | number"></span></strong> starting funds</div>
+										</li>
+										<li class="property" ng-if="::(CtrlSignup.accessKeyData.skipSteamField)">
+											<i class="icon ion-steam"></i>
+											<div class="text"><strong>Skip</strong> Steam validation</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="block">
-					Please log in with your Steam account.
+
+				<div class="signup-block fade-animation-fast" ng-if="(CtrlSignup.currentStep === 2)" ng-cloak>
+					<h2>TELL US WHO YOU ARE</h2>
+
+					<div id="unit-info" class="col-lg-12 fade-animation-fast">
+
+						<div id="unit-avatar-container" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<div id="preview-image"><img ng-src="{{CtrlSignup.croppedDataUrl}}"/></div>
+
+							<div id="unit-info-change-avatar" class="unit-info-change-avatar-button" ng-click="CtrlSignup.switchUploadView()">
+
+								<div fade-animation-fast" ng-if="(CtrlSignup.viewAvatarUpload === 0)" ng-cloak>
+									<i class="icon ion-camera"></i>
+									<span>Select your profile picture</span>
+								</div>
+
+								<div fade-animation-fast" ng-if="(CtrlSignup.viewAvatarUpload === 1)" ng-cloak>
+									<i class="icon ion-checkmark"></i>
+									<span>Confirm</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+
+							<div id="unit-info-form-container" class="fade-animation-fast" ng-if="(CtrlSignup.viewAvatarUpload === 0)" ng-cloak>
+								<form id="unit-info-form" class="form-horizontal">
+									<div class="form-group" ng-repeat="input in CtrlSignup.formCharacters track by $index">
+										<label for="{{::input.class}}" class="col-sm-4 control-label">
+											<span>{{::input.name.toUpperCase()}}</span>
+										</label>
+										<div class="col-sm-7">
+											<input
+												ng-if="(input.type !== 'textarea') && (input.type !== 'dropdown')"
+												type="{{ input.type || 'text' }}"
+												class="form-control"
+												ng-class="{'username': (input.class === 'inputUnitUsername')}"
+												id="{{::input.class}}"
+												ng-model="input.text"
+												placeholder="{{::input.placeholder}}"
+												ng-blur="CtrlSignup.validateInputForm(input.class)"
+
+												ng-cloak
+											>
+											<textarea
+												ng-if="(input.type === 'textarea')"
+												class="form-control"
+												id="{{::input.class}}"
+												ng-model="input.text"
+												rows="3"
+												placeholder="{{::input.placeholder}}"
+												ng-blur="CtrlSignup.validateInputForm(input.class)"
+
+												ng-cloak
+											></textarea>
+											<div ng-if="(input.class === 'inputUnitUsername')" ng-cloak>
+												<a class="section-button medium animated username" role="button"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												popover-placement="left"
+												uib-popover="Checks for username availability."
+												ng-click="CtrlSignup.verifyUsernameButton()"
+												>
+													<ul><li><i class="icon ion-help"></i></li></ul>
+												</a>
+											</div>
+
+											<div class="dropdown-section" ng-if="(input.type === 'dropdown')" ng-cloak>
+												<div class="dropdown">
+													<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+														<span ng-bind="CtrlSignup.regionOptions[input.value]"></span>
+													</button>
+													<ul class="dropdown-menu">
+														<li ng-click="input.value = $index" ng-repeat="item in (CtrlSignup.regionOptions) track by $index">
+															<a href="#" ng-click="scope = item">
+																<span ng-bind="::(CtrlSignup.regionOptions[$index])"></span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+											<div ng-if="(input.type !== 'dropdown')">
+												<div class="characters-left" ng-if="(input.name.toUpperCase() !== 'PASSWORD') && (input.name.toUpperCase() !== 'CONFIRM')" ng-cloak>Between {{input.validation[0].params.min}} and {{input.validation[0].params.max}} characters. {{ CtrlSignup.getFieldLimit(input.class) }} left.</div>
+
+												<div class="characters-left" ng-if="(input.name.toUpperCase() === 'PASSWORD') || (input.name.toUpperCase() === 'CONFIRM')" ng-cloak>Between {{input.validation[0].params.min}} and {{input.validation[0].params.max}} <strong style="color: #11ffbb">letters and numbers</strong>. {{ CtrlSignup.getFieldLimit(input.class) }} left.</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+
+							<div id="avatar-upload-form-container"
+								class="fade-animation-fast"
+								ng-if="(CtrlSignup.viewAvatarUpload === 1)" ng-cloak>
+								<a
+									class="section-button medium animated" role="button"
+
+									ngf-select
+									ngf-drop
+
+									ng-model="CtrlSignup.currentUploadedAvatar"
+
+									ngf-pattern="'image/*'"
+									ngf-accept="'image/*'"
+									ngf-max-size="3MB"
+								>
+									<ul>
+										<li><i class="icon ion-ios-camera"></i></li>
+										<li>Select picture</li>
+									</ul>
+								</a>
+
+								<div id="avatar-upload-form">
+									<form name="avatarPictureForm" enctype="multipart/form-data">
+										<div ngf-drop ng-model="CtrlSignup.currentUploadedAvatar" ngf-pattern="image/*" class="crop-area">
+
+											<div class="upload-text">
+												<i class="icon medium ion-arrow-down-a"></i><br>
+												Or just drag and drop/paste your picture here.
+											</div>
+
+											<img-crop
+												image="CtrlSignup.currentUploadedAvatar | ngfDataUrl"
+												area-type="square"
+												result-image="CtrlSignup.croppedDataUrl"
+												result-image-size="350"
+											>
+											</img-crop>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="signup-block fade-animation-fast" ng-if="(CtrlSignup.currentStep === 3)" ng-cloak>
+					<div id="class-selection">
+						<h2>SELECT YOUR CLASS</h2>
+
+						<div class="block">
+							In Belligerence, all members are divided in three classes, all performing different roles to varying degrees of independence. It's up to you to decide which one better fits your profile.
+						</div>
+
+						<div class="col-md-12" id="class-selection-choices">
+							<div class="row row-centered">
+
+								<div class="class-choice commander noselect col-md-3 col-sm-3 col-xs-12"
+									ng-click="CtrlSignup.selectClass(1)"
+									ng-class="{'selected': (CtrlSignup.currentSelectedClass === 1)}"
+								>
+									<div class="hexagon-container">
+										<div class="hexagon">
+											<div class="in1"><div class="in2">
+												<div class="class-icon"></div>
+											</div></div>
+										</div>
+									</div>
+
+									<div class="title">Commander</div>
+									<hr>
+									<div class="description">
+										Tasked with leading an Outfit into dangerous missions, Commanders are responsible for orchestrating the flow of combat not only in the field, but by making diplomatic decisions, hiring Freelancers, managing equipment, among many other things. Recommended for those experienced with ArmA.
+									</div>
+									<div class="info">
+										You will be given credits to start your own Outfit with up to 3 hired Soldiers, and some basic equipment.
+									</div>
+								</div>
+
+								<div class="class-choice soldier noselect col-md-3 col-sm-3 col-xs-12"
+									ng-click="CtrlSignup.selectClass(2)"
+									ng-class="{'selected': (CtrlSignup.currentSelectedClass === 2)}"
+								>
+									<div class="hexagon-container">
+										<div class="hexagon">
+											<div class="in1"><div class="in2">
+												<div class="class-icon"></div>
+											</div></div>
+										</div>
+									</div>
+									<div class="title">Soldier</div>
+									<hr>
+									<div class="description">
+										Soldiers - although not an active diplomatic force - play a vital role in the battlefield, utilizing their skills and equipment in order to ensure victory for their Outfits. Recommended for players of all backgrounds.
+									</div>
+									<div class="info">
+										Your only duty is to fight. Find an Outfit that fits your standards, and jump straight into the action.
+									</div>
+								</div>
+								<div class="class-choice freelancer noselect col-md-3 col-sm-3 col-xs-12"
+									ng-click="CtrlSignup.selectClass(3)"
+									ng-class="{'selected': (CtrlSignup.currentSelectedClass === 3)}"
+								>
+									<div class="hexagon-container">
+										<div class="hexagon">
+											<div class="in1"><div class="in2">
+												<div class="class-icon"></div>
+											</div></div>
+										</div>
+									</div>
+									<div class="title">Freelancer</div>
+									<hr>
+									<div class="description">
+										The wild cards of the front, Freelancers aren't attached or commited to any cause, Outfit, or even any particular role. Usually specializing in a specific skill-set, they work on a contract-to-contract basis, always looking to upgrade their skills and improve their equipment.
+									</div>
+									<div class="info">
+										You will receive a small amount of credit, enough to purchase your basic equipment and get ready for your first contract. After that, it's all up to you.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="signup-block fade-animation-fast" ng-if="(CtrlSignup.currentStep === 4)" ng-cloak>
+					<h2>REVIEW YOUR APPLICATION</h2>
+
+					<div id="player-card" class="card-animation" ng-if="(CtrlSignup.displayPlayerCard)" ng-cloak>
+
+						<div class="top">
+							<img src="images/belligerence-logo-small-inv.png" id="logo-img" />
+							<span class="be">BELLIGERENCE</span> <span>☼ MEMBERSHIP CERTIFICATE</span>
+							<div class="card-date">{{ ::CtrlSignup.playerCard.issueDate | date:"MM/dd/yyyy"}}</div>
+						</div>
+						<div class="main">
+							<div id="card-avatar">
+								<div class="hexagon avatar-medium">
+									<div class="in1"><div class="in2">
+										<div id="card-preview-image"><img ng-src="{{CtrlSignup.croppedDataUrl}}" /></div>
+<!-- 										<div id="card-preview-image"><img ng-src="images/avatars/players/main_b915c8e84ae06a301e67.jpg" /></div> -->
+									</div></div>
+								</div>
+							</div>
+							<div class="class-stamp" ng-class="::CtrlSignup.playerCard.playerclass.class"></div>
+
+							<div id="card-info">
+								<div class="alias" ng-bind="::CtrlSignup.playerCard.alias"></div>
+								<div class="playerclass" ng-bind="::CtrlSignup.playerCard.playerclass.name"></div>
+								<div class="location">
+									<i class="icon ion-earth"></i>
+									<span ng-bind="::(CtrlSignup.regionOptions[CtrlSignup.playerCard.location])"></span>
+								</div>
+								<div class="email" ng-bind="::CtrlSignup.playerCard.email"></div>
+								<hr/>
+								<div class="description" ng-bind="::CtrlSignup.playerCard.description"></div>
+							</div>
+						</div>
+						<div class="bottom">
+							<div id="card-cred">
+								<div id="contract-agree-form" class="extra-input noselect">
+									<input type="checkbox" id="contract-agree" ng-model="CtrlSignup.acceptUseTerms">
+									<label class="input-label" for="contract-agree">
+										<div class="body check">
+											<div class="box"><i class="icon ion-checkmark small"></i></div>
+											<div class="text-thing">
+												<span>I accept the <a href="#">Belligerence terms of use</a>.</span>
+											</div>
+										</div>
+									</label>
+								</div>
+								<div id="card-code">
+									{{ ::CtrlSignup.playerCard.username }}<br/>
+									<span class="steam-id">{{ ::CtrlSignup.currentSteamSession.id }}</span>
+								</div>
+								<img src="images/chipcard.png" id="barcode-img" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="signup-block fade-animation-fast" ng-if="(CtrlSignup.currentStep === 5)" ng-cloak>
+					<h2>PLEASE WAIT...</h2>
 				</div>
 			</div>
 
 			<div id="signup-buttons">
-				<a class="section-button muted big" role="button" ng-click="CtrlSignup.changeStep(-1)"
-				ng-if="(CtrlSignup.currentStep > 0) || (CtrlSignup.currentStep === -1)" ng-cloak>
+				<a class="section-button muted big fade-animation-fast" role="button" ng-click="CtrlSignup.changeStep(-1)"
+				ng-if="(CtrlSignup.currentStep > 0) && (CtrlSignup.currentStep !== -1)" ng-cloak>
 					<ul>
-						<li class="icon"><i class="icon ion-chevron-left"></i></li>
 						<li>BACK</li>
+						<li class="icon"><i class="icon ion-chevron-left"></i></li>
 					</ul>
 				</a>
-				<a class="section-button big" role="button" ng-click="CtrlSignup.changeStep(1)" ng-if="(CtrlSignup.currentStep < 5)" ng-cloak>
+				<a role="button" class="section-button big fade-animation-fast"
+					ng-click="CtrlSignup.changeStep(1)"
+					ng-if="(CtrlSignup.currentStep < 6) && !(!(CtrlSignup.passedSteam) && (CtrlSignup.currentStep === 1)) && (CtrlSignup.currentStep !== -1)"
+				ng-cloak>
 					<ul>
 						<li class="icon"><i class="icon ion-chevron-right"></i></li>
-						<li>CONTINUE</li>
+						<li>NEXT</li>
 					</ul>
 				</a>
 			</div>
-
 		</div>
 	</div>
 </div>

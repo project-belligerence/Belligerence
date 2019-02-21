@@ -8,30 +8,215 @@
 	@include factor-property(padding-top, 4);
 
 	.main-column {
-		@include factor-property(margin-bottom, 10);
+		@include factor-property(margin-bottom, 1);
+
+		&.top-margin {
+			@include factor-property(margin-top, 4);
+		}
+
+		.comments-container {
+			position: relative;
+			top: -8px;
+		}
 	}
+
 	@include factor-property(padding-bottom, 20);
+
+	a { border-bottom: none; }
+
+
+	@include breakpoint("medium") {
+		@include factor-property(padding-top, 12);
+	}
+
+	@include breakpoint("small") {
+		@include factor-property(padding-top, 8);
+	}
 
 	#player-page { }
 	#pmc-page { }
 
-	#unit-avatar {
-		.avatar-large {}
-
-		@include breakpoint('small') {
-			.avatar-large {
-				width: 250px;
-				height: 300px;
-				.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 115%;	}
-			}
+	#player-page, #pmc-page {
+		#left-body {
+			padding: 0 factor(3);
 		}
 	}
 
+	#avatar-container {
+		width: 100%;
+
+		.unit-interactions {
+			z-index: 99;
+			display: inline-block;
+			position: absolute;
+			left: 0;
+			width: 100%;
+
+			@include breakpoint("medium") {
+				@include factor-property(margin-bottom, 5);
+			}
+
+			.interaction-list {
+				height: 213px;
+				text-align: left;
+
+				.interaction-button {
+					display: block;
+					@include factor-property(margin-bottom, 1);
+
+					&.report {
+						position: absolute;
+						bottom: 0;
+						margin-bottom: 0;
+					}
+				}
+			}
+
+			&.pmc {
+				.interaction-list {
+					height: 300px;
+
+					@include breakpoint("medium") {
+						height: 50px;
+					}
+				}
+			}
+
+			@include breakpoint("medium") {
+				top: 80px;
+				position: fixed;
+				width: 100%;
+				padding: 0 factor(1);
+				@include opacity(.8);
+
+				.interaction-list {
+					height: 100px;
+
+					.interaction-button {
+						display: inline-block;
+
+						&.report {
+							display: inline-block;
+							position: relative;
+							float: right;
+							.section-button { margin-right: 0; }
+						}
+
+						ul li { box-shadow: 0px 0px 5px #000; }
+					}
+				}
+			}
+
+			@include breakpoint("small") {
+				top: 65px;
+				padding: 0 factor(1);
+
+				.interaction-list {
+
+					.interaction-button {
+						&.report {
+							display: block;
+							margin: 0;
+							.section-button { margin-right: 0; }
+						}
+					}
+
+					li {
+						display: inline-block;
+
+						@include factor-property(margin-bottom, 0.5);
+						&.report { @include factor-property(margin-top, 1);}
+					}
+				}
+
+				.section-button {
+					@include factor-property(margin-right, .5);
+
+					li {
+						@include font-size(factor(2));
+						padding: 3px 7px;
+					}
+				}
+			}
+		}
+
+		#unit-avatar {
+			text-align: center;
+			margin-left: auto;
+			margin-right: auto;
+			left: 0 !important;
+			@include prefix(filter, drop-shadow(0px 0px 10px #000));
+
+			&.outfit {
+				width: 350px;
+				.hexagon { left: 0px; }
+
+				@include breakpoint("medium") {
+					width: 100%;
+					.hexagon {
+						@include size(330px, 270px);
+						margin-right: auto;
+						margin-left: auto;
+
+						left: -5px;
+					}
+
+
+				}
+			}
+			&.player { width: 200px; }
+
+			.hexagon { position: relative; left: -25px; }
+
+			@include breakpoint("small") {
+				.avatar-large {
+					.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 115%;	}
+				}
+			}
+		}
+
+	}
+
 	#header {
+		.prestige-container {
+			width: 100%;
+			position: absolute;
+
+			&.outfit {
+				height: 0px;
+				.prestige {
+					top: -35px;
+
+					i {
+						@include font-size(factor(6.5));
+					}
+				}
+			}
+
+			.prestige {
+				position: relative;
+				top: -27px;
+				right: -7px;
+
+				display: block;
+
+				i {
+					@include factor-property(margin-right, 1.5);
+					@include font-size(factor(5));
+					color: #fff;
+					display: inline-block;
+					text-shadow: 0px 0px 5px #000, 0px 0px 5px #000;
+				}
+			}
+		}
+
 		.alias {
-			@include font-size(factor(8));
-			padding: factor(3) factor(4);
-			@include factor-property(margin-bottom, 3);
+			@include font-size(factor(6));
+			padding: factor(2);
+			line-height: 1;
+
+			margin-top: 0;
+			@include factor-property(margin-bottom, 2);
 
 			background-color: $main_color;
 			color: #ddd;
@@ -40,88 +225,46 @@
 
 			display: inline-block;
 
-			@include breakpoint('small') {
+			@include breakpoint("small") {
 				@include font-size(factor(4));
 				padding: factor(3) factor(2);
 			}
+
+			&.neutral { background-color: #ddd; color: #111; text-shadow: none; }
+			&.blufor { background-color: $blufor_color; }
+			&.opfor { background-color: $opfor_color; }
+			&.indfor { background-color: $indfor_color; }
 		}
 
 		.motto {
 			font-family: $main_font;
-			@include font-size(factor(3.5));
-			@include factor-property(margin-bottom, 4);
+			@include font-size(factor(3));
+			@include factor-property(margin-top, 1);
+			@include factor-property(margin-bottom, 3);
+			letter-spacing: -1px;
 
-			@include breakpoint('small') {
+			@include breakpoint("small") {
 				@include font-size(factor(2.5));
 			}
 		}
 
-		.unit-interactions {
-			float: right;
-
-			.section-button {
-				position: relative;
-				z-index: 99;
-			}
-			.interaction-list {
-				text-align: right;
-				li {
-					@include factor-property(margin-bottom, 0.5);
-					&.report { @include factor-property(margin-top, 3); }
-				}
-			}
-		}
-
-		@include breakpoint('small') {
-			.unit-interactions {
-				float: none;
-				@include factor-property(margin-bottom, 5);
-
-				.section-button {
-					position: relative;
-					z-index: 99;
-
-					@include factor-property(margin-right, 1);
-
-					li {
-						@include font-size(factor(2));
-						padding: 3px 10px;
-					}
-				}
-
-				.interaction-list {
-					text-align: center;
-					li {
-						display: inline-block;
-
-						@include factor-property(margin-bottom, 0.5);
-						&.report { @include factor-property(margin-top, 1);}
-					}
-				}
-			}
-		}
-
 		.privilege-icon {
-			@include transition(color .25s, text-shadow .25s);
-			color: $main_color;
-			text-shadow: 0px 0px 5px $main_color_light;
+			cursor: help;
+			display: inline-block;
+			position: absolute;
 
-			&:hover {
-				color: #ddd;
-				text-shadow: 0px 0px 15px $main_color;
-			}
-
-			@include font-size(factor(6));
-			@include factor-property(margin-left, 2);
-		}
-
-		.bio {
-			@include font-size(factor(4));
-			@include factor-property(margin-top, 4);
-			@include factor-property(margin-bottom, 7);
-
-			@include breakpoint('small') {
-				@include font-size(factor(3));
+			.icon {
+				cursor: help;
+				display: inline-block;
+				@include transition(color .25s, text-shadow .25s);
+				color: $main_color;
+				@include font-size(factor(4));
+				line-height: 0;
+				position: relative;
+				right: 0px;
+				box-shadow: 0px 0px 10px #000;
+				padding: 0 factor(1);
+				background-color: #fff;
 			}
 		}
 
@@ -129,21 +272,71 @@
 			@include factor-property(margin-bottom, 3);
 			width: 100%;
 			display: block;
+			position: relative;
 
-			@include font-size(factor(4));
+			@include font-size(factor(3.5));
 
-			i { @include factor-property(margin-left, 1);}
+			i {
+				@include factor-property(margin-left, 1);
 
-			@include breakpoint('small') {
+				&.ion-ios-help-empty {
+					@include font-size(factor(10));
+					line-height: 0;
+					position: absolute;
+					bottom: 0px;
+					left: -30px;
+				}
+			}
+
+			.outfit-details {
+				letter-spacing: -1px;
+				@include font-size(factor(3));
+				display: inline-block;
+				.tier-name, .outfit-name { font-weight: 800; }
+				.tier-icon-name {
+					position: relative;
+					display: inline-block;
+					@include breakpoint("medium") {	display: block;	}
+				}
+				.outfit-name {
+					@include font-size(factor(3.5));
+					text-shadow: 0px 0px 5px #000, 0px 0px 5px #000;
+
+					&.neutral { color: #ddd; }
+					&.blufor { color: $blufor_color; }
+					&.opfor { color: $opfor_color; }
+					&.indfor { color: $indfor_color; }
+
+					&:hover {
+						&.neutral { color: #aaa; }
+						&.blufor { color: $blufor_color_light; }
+						&.opfor { color: $opfor_color_light; }
+						&.indfor { color: $indfor_color_light; }
+					}
+				}
+
+				padding: 0 factor(2);
+			}
+
+			@include breakpoint("small") {
 				@include font-size(factor(2.5));
 			}
 		}
 	}
 
+	#unit-info {
+		&.margin-top {
+			@include factor-property(margin-top, 6);
+		}
+
+		@include breakpoint("small") {
+			padding: 0 factor(2);
+		}
+	}
+
 	#tabs {
-		text-align: center;
-		@include factor-property(margin-top, 2);
-		@include factor-property(margin-bottom, 8);
+		text-align: left;
+		@include factor-property(margin-bottom, 2);
 
 		ul {
 			a {
@@ -154,14 +347,16 @@
 
 				&.active {
 					*{cursor: default;}
+					li { background-color: #ddd; color: #222; }
+				}
 
-					li {
-						background-color: #ddd;
-						color: $main_color;
-					}
+				&.disabled {
+					* {cursor: not-allowed; }
+					li { color: #eee; background-color: #333; }
 				}
 
 				li {
+					text-align: center;
 					@include transition(background-color, .25s);
 					display: inline-block;
 
@@ -171,25 +366,68 @@
 					color: #ddd;
 					background-color: $main_color;
 
-					padding: factor(2) factor(3);
-					@include factor-property(margin-right, 2);
+					padding: factor(2) factor(2);
+					@include factor-property(margin-right, 1);
+
+					line-height: 0.8;
+
+					text-transform: uppercase;
+
+					letter-spacing: -1px;
 
 					i {
-						@include font-size(factor(5));
-						display: block;
+						line-height: 0.8;
+						@include font-size(factor(4));
+						@include factor-property(margin-right, 2);
+						display: inline-block;
 					}
 				}
 			}
 		}
 	}
 
+	.bio {
+		text-align: center;
+		@include factor-property(margin-top, 4);
+		@include font-size(factor(2.5));
+		line-height: 1.2;
+
+		border-left: 4px solid $main_color;
+
+		padding: factor(1) factor(3);
+
+		&.outfit {
+			@include factor-property(margin-top, 0);
+			@include font-size(factor(3));
+			line-height: 1.5;
+		}
+
+		@include breakpoint("small") {
+			@include font-size(factor(3));
+		}
+	}
+
 	#body {
 		@include factor-property(min-height, 50);
+
+		#outfit-section {
+			@include factor-property(margin-top, 7);
+		}
+
+		@include breakpoint("medium") {
+			@include factor-property(padding-left, 4);
+		}
+
+		@include breakpoint("small") {
+			@include factor-property(padding-right, 4);
+		}
 	}
 
 	.static {
-		@include font-size(factor(3));
-		@include factor-property(margin-bottom, 5);
+		text-align: center;
+		@include font-size(factor(2.5));
+		letter-spacing: -1px;
+		color: #ccc;
 
 		i { @include factor-property(margin-right, 1); }
 
@@ -202,66 +440,130 @@
 		}
 	}
 
-	.stats {
-		display: inline-block;
+	.stats-container {
+		width: 100%;
+		text-align: center;
 
-		margin-left: 8%;
+		.stats {
+			vertical-align: top;
+			display: inline-block;
+			@include factor-property(margin-bottom, 2);
 
-		@include factor-property(margin-bottom, 2);
-		@include factor-property(margin-top, 1);
+			.single-stat {
+				width: 80px;
 
-		.single-stat {
-			width: 80px;
+				.text { @include font-size(factor(1.5)); }
+				.number {
+					@include font-size(factor(3));
+					font-family: $main_font;
+					color: $main_color;
+				}
+			}
+			i { @include font-size(factor(4)); }
+		}
 
-			.text { @include font-size(factor(2)); }
-			.number {
-				@include font-size(factor(3));
-				font-family: $main_font;
-				color: $main_color;
+		@include breakpoint("medium") {
+			@include factor-property(margin-top, 2);
+		}
+	}
+
+	.tag-column {
+		text-align: center;
+		@include factor-property(margin-bottom, 3);
+
+		.tags {
+			@include transition(background-color, .25s);
+			cursor: pointer;
+
+			@include font-size(factor(2));
+			font-family: $main_font;
+
+			background-color: $main_color;
+			color: #ddd;
+
+			@include factor-property(margin-top, 3);
+			@include factor-property(margin-right, 1);
+			@include factor-property(margin-bottom, 1);
+			padding: factor(1.3);
+
+			display: inline-block;
+
+			line-height: 0.8;
+
+			&:hover { background-color: $main_color_dark; }
+
+			.icon {
+				@include factor-property(margin-right, .5);
+				@include font-size(factor(2));
 			}
 		}
-		i { @include font-size(factor(4)); }
-	}
 
-	.tags {
-		@include transition(background-color, .25s);
-		cursor: pointer;
+		.no-tags {
+			@include factor-property(margin-top, 4);
+			text-align: center;
+			color: #111;
+			.icon {
+				line-height: 0;
+				padding: factor(1);
+				@include font-size(factor(2));
+				background: url("/images/cardbg.png") repeat 100%;
+			}
+			.text {
+				letter-spacing: -1px;
+				font-weight: 800;
+				padding: factor(1);
+				@include font-size(factor(2));
+				line-height: 0;
+				background: url("/images/cardbg_dark.png") repeat 100%;
+			}
 
-		@include font-size(factor(3));
-		font-family: $main_font;
-
-		background-color: $main_color;
-		color: #ddd;
-
-		@include factor-property(margin-right, 1);
-		@include factor-property(margin-bottom, 1);
-		padding: factor(1) factor(2);
-
-		display: inline-block;
-
-		&:hover {
-			background-color: $main_color_dark;
-			color: #ddd;
+			@include breakpoint("medium") {
+				@include factor-property(margin-top, 1);
+				@include factor-property(margin-bottom, 3);
+			}
 		}
 	}
 
-	.meta {
+	.meta-bar {
 		@include font-size(factor(3));
 		@include factor-property(margin-bottom, 2);
-		padding: factor(1) factor(3);
-
-		background-color: $main_color;
+		padding: 0 factor(2);
 		color: #ddd;
+		background: url("/images/cardbg_inverted_light.png") repeat 100%;
+		letter-spacing: -1px;
+
+		border-left: 3px solid #777;
+
+		text-shadow: 0px 0px 5px #000, 0px 0px 5px #000;
 
 		span {
 			font-family: $main_font;
-			text-transform: uppercase;
 			@include factor-property(margin-left, 1);
+			line-height: 2;
 		}
 
+		&.small { @include factor-property(padding, 1); }
 
-		&.small {
-			@include factor-property(padding, 1);
+		.helper { top: 3px; }
+
+		@include breakpoint("small") {
+			padding: factor(1);
+			text-align: center;
+			position: relative;
+			@include factor-property(margin-bottom, 8);
+
+			.helper {
+				line-height: 1;
+				display: block;
+				position: absolute;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				top: 0; left: 0; right: 0; bottom: 0;
+
+				padding-top: 17%;
+			}
 		}
 	}
 }

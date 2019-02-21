@@ -1,0 +1,26 @@
+<div class="container-fluid top-spacer generic-object" id="conflicts-list-container" ng-init="Controller = CtrlConflicts;">
+	<div ng-if="(Controller.displayPage)">
+
+		<div class="col-md-12 main-title">
+			<div class="row">
+				<div class="center">
+					<h2 ng-bind="::(Controller.pageValues.title)"></h2>
+					<h3 ng-bind="::(Controller.pageValues.description)"></h3>
+				</div>
+				<hr />
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<div class="row">
+				<conflicts-directive
+					object-list="Controller.objectData"
+					column-size="4"
+				></conflicts-directive>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<footer-directive></footer-directive>

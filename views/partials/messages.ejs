@@ -1,3 +1,198 @@
 
 
-<h2>You have <u>ZERO</u> messages cause ain't there nobody who cares about your dumb ass.</h2>
+<div class="container-fluid top-spacer" id="messages-container">
+	<h2>Messages & Invites</h2>
+	<h3>Your received mesages and requests/invitations.</h3>
+	<hr/>
+	<div class="row">
+		<div class="container-fluid">
+			<div class="col-sm-12" id="messages-buttons">
+				<div class="row">
+					<div class="dropdown">
+						<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+							<i class="icon" ng-class="CtrlMessages.viewOptions[CtrlMessages.cachedView].icon"></i>
+							<span class="items-left" ng-bind="CtrlMessages.currentReceivedData[CtrlMessages.cachedView] || '0'"></span>
+							<span ng-bind="CtrlMessages.viewOptions[CtrlMessages.cachedView].name"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li ng-click="CtrlMessages.changeView(item.value)" ng-repeat="item in ::CtrlMessages.viewOptions track by $index">
+								<a href="#" ng-click="(scope = item.value)" ng-if="!(item.value === 'outfitinvites' && !(CtrlMessages.outfitPermission))">
+									<i class="icon" ng-class="::item.icon"></i>
+									(<span ng-bind="CtrlMessages.currentReceivedData[item.value] || '0'">)</span>) <span ng-bind="::item.name"></span>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+					<div class="dropdown">
+						<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+							<i class="icon" ng-class="CtrlMessages.directionOptions[CtrlMessages.sentReceived].icon"></i>
+							<span ng-bind="CtrlMessages.directionOptions[CtrlMessages.sentReceived].name"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li ng-click="CtrlMessages.setMessageDirection(item.value)" ng-repeat="item in ::CtrlMessages.directionOptions track by $index">
+								<a href="#" ng-click="scope = item.value">
+									<i class="icon" ng-class="::item.icon"></i>
+									<span ng-bind="::item.name"></span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<a class="btn default" ng-click="CtrlMessages.switchOrder()">
+						<i class="icon" ng-class="(CtrlMessages.currentOrder === 'ASC') ? 'ion-arrow-up-b' : 'ion-arrow-down-b'"></i>
+					</a>
+
+					<hr/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="container-fluid">
+			<div id="messages-view" class="col-md-12">
+				<div id="listed-container" class="col-sm-5">
+					<div class="row">
+						<div id="listed-objects" class="col-sm-12">
+							<div
+								class="message-object col-sm-6 message-animation"
+								ng-click="CtrlMessages.readMessage(message.hashField, $index)"
+								ng-repeat="message in CtrlMessages.currentMessageList track by $index"
+								ng-class="{read: message.readField, selected: (CtrlMessages.currentIndexMessage === $index)}"
+								ng-if="(CtrlMessages.currentView === 'messages')"
+
+								ng-cloak>
+								<div class="message-status">
+									<i class="icon" ng-class="message.readField ?'ion-android-drafts':'ion-android-mail'">
+									</i>
+									<img class="avatar-img" ng-src="images/avatars/players/thumb_{{::message[CtrlMessages.getReSeMessage()].hashField}}.jpg">
+								</div>
+								<div class="message-info">
+									<div class="title" ng-bind="::message.titleField"></div>
+									<time-ago class="date" from-time='{{::message.createdAt}}'></time-ago>
+									<div class="alias" ng-bind="::message[CtrlMessages.getReSeMessage()].aliasField"></div>
+								</div>
+							</div>
+							<div class="empty-list message-animation" ng-if="((CtrlMessages.currentView === 'messages') && (CtrlMessages.cachedAmountMessages === 0) && (CtrlMessages.safetyOff))" ng-cloak>
+								You have no messages <span ng-bind="::CtrlMessages.sentReceived"></span>.
+								<i class="icon ion-android-sad"></i>
+							</div>
+
+							<div class="invite-object col-md-12 message-animation" ng-repeat="message in CtrlMessages.currentInvitesList track by $index" ng-class="{read: message.readField, selected: (CtrlMessages.currentIndexMessage === $index)}" ng-if="(CtrlMessages.currentView === 'invites') || (CtrlMessages.currentView === 'outfitinvites')" ng-cloak>
+								<div
+									class="invite-type"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip stretch"
+									popover-placement="bottom"
+									uib-popover="{{::message.description}}"
+								>
+									<i class="icon" ng-class="CtrlMessages.getInviteIcon(message.type)"></i>
+									<span ng-bind="CtrlMessages.getInviteType(message.type)"></span>
+								</div>
+								<div class="inviter">
+									<a href="{{::CtrlMessages.getInviteTarget(CtrlMessages.sentReceived, message.type).target}}/{{::message[CtrlMessages.getReSeInvite() + 'Hash']}}" >
+										<img ng-src="{{::message.avatarPicture}}">
+										<div class="sender" ng-bind="::message[CtrlMessages.getReSeInvite() + 'Name']"></div>
+									</a>
+								</div>
+								<div class="invite-details">
+									<div class="note" ng-bind="::(message.note)"></div>
+									<hr>
+									<div class="date-container">
+										<i class="icon ion-calendar"></i>
+										<span class="date"><span ng-bind="::((CtrlMessages.sentReceived === 'received') ? 'Received' : 'Sent')"></span> <time-ago from-time='{{::message.sentAt}}'></time-ago></span>
+									</div>
+									<div class="choices-wrapper">
+										<div class="choices">
+											<a class="btn default" ng-click="::CtrlMessages.askResolveInvite(message)" ng-if="::(message.direction === 'received')" ng-cloak><i class="icon ion-checkmark"></i></a>
+											<a class="btn default" ng-click="::CtrlMessages.askCancelInvite(message)"><i class="icon ion-close"></i></a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="empty-list message-animation" ng-if="((CtrlMessages.currentView === 'invites') || (CtrlMessages.currentView === 'outfitinvites')) && (CtrlMessages.cachedAmountInvites === 0) && (CtrlMessages.safetyOff)" ng-cloak>
+								You have no invites <span ng-bind="::CtrlMessages.sentReceived"></span>.
+								<i class="icon ion-android-sad"></i>
+							</div>
+
+							<div class="spinner fade-animation-fast" ng-if="CtrlMessages.currentView === ''"  ng-cloak>
+								<img src="svg-loaders/grid.svg" />
+							</div>
+						</div>
+
+						<div class="col-sm-12">
+							<div class="pagination-container">
+								<nav aria-label="Message navigation">
+									<ul
+										uib-pagination
+
+										id="message-pagination"
+										class="pagination"
+
+										ng-change="CtrlMessages.changeView(CtrlMessages.currentView)"
+
+										first-text="&laquo;"
+										last-text="&raquo;"
+										next-text="&#9656;"
+										previous-text="&#9666;"
+
+										force-ellipses="true"
+										rotate="true"
+
+										total-items="(CtrlMessages.getTotalItems())"
+
+										items-per-page="CtrlMessages.defaultQueryOptions.limit"
+										ng-model="CtrlMessages.currentPage"
+										max-size="1"
+
+										boundary-links="false"
+										boundary-link-numbers="true"
+									></ul>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-7 col-xs-12">
+					<div id="current-message-view" class="fade-animation-fast" ng-if="(CtrlMessages.currentDisplayedMessage !== null) && (CtrlMessages.cachedView === 'messages')" ng-cloak>
+
+						<a class="top-info" ng-href="/operator/{{::CtrlMessages.currentDisplayedMessage.senderHash}}">
+							<div>
+								<div class="sender-avatar"><img ng-src="images/avatars/players/
+								thumb_{{::CtrlMessages.currentDisplayedMessage.senderHash}}.jpg"></div>
+								<div class="unit-info">
+									<div class="sender" ng-bind="::CtrlMessages.currentDisplayedMessage.senderName"></div>
+									<div class="message-date" ng-bind="::CtrlMessages.currentDisplayedMessage.sentDate | date"></div>
+								</div>
+								<div class="triangle-isosceles"></div>
+							</div>
+						</a>
+						<div class="body-info">
+							<div class="message-title" ng-bind="::CtrlMessages.currentDisplayedMessage.title"></div>
+							<div class="message-body" ng-bind="::CtrlMessages.currentDisplayedMessage.body"></div>
+						</div>
+
+						<hr>
+
+						<a class="section-button small fade-animation-fast" role="button"
+						ng-click="CtrlMessages.writeReply()" ng-if="!(CtrlMessages.currentDisplayedMessage.selfSent)" ng-cloak>
+							<ul>
+								<li class="icon"><i class="icon ion-reply"></i></li>
+								<li>REPLY</li>
+							</ul>
+						</a>
+
+						<a class="section-button small fade-animation-fast" role="button"
+						ng-click="CtrlMessages.askDeleteMessage()" ng-cloak>
+							<ul>
+								<li class="icon"><i class="icon ion-trash-a"></i></li>
+								<li>DELETE</li>
+							</ul>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

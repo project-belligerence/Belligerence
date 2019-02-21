@@ -1,0 +1,170 @@
+
+#single-item-container {
+	@include factor-property(margin-top, 15);
+	@include factor-property(margin-bottom, 20);
+
+	.display-items {
+
+		.action-bar {
+			width: 100%;
+			display: inline-block;
+			@include factor-property(margin-bottom, 3);
+
+			margin-right: auto;
+			margin-left: 0;
+			text-align: center;
+
+			@include breakpoint("small") {
+				width: 105%;
+			}
+		}
+
+		.picture {
+			img {
+				border: 2px solid white;
+				box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+				border-radius: 5px;
+			}
+
+			.classname {
+				background: url("/images/honeybg_red.png") repeat 100%;
+				font-family: $main_font;
+				@include factor-property(margin-top, 2);
+				@include font-size(factor(3));
+				text-align: center;
+				@include factor-property(padding, 1);
+				color: #fff;
+				letter-spacing: -2px;
+				word-wrap: break-word;
+			}
+
+			.content-container {
+				text-align: center;
+				a {border-bottom: 0px solid white;}
+
+				.icon {
+					color: #fff;
+					position: relative;
+					top: 3px;
+					@include font-size(factor(4));
+					display: inline-block;
+					margin-right: 0px;
+				}
+				.content {
+					@include font-size(factor(3));
+					font-family: $main_font;
+					display: inline-block;
+					letter-spacing: -1px;
+				}
+			}
+		}
+
+		.item-details {
+			.top {
+				text-align: center;
+				h2 {
+					@include font-size(factor(8));
+					margin: 0px;
+					letter-spacing: -5px;
+					@include breakpoint("medium") { @include font-size(factor(6)); }
+				}
+
+				.classes {
+					font-weight: bold;
+					color: #333;
+					letter-spacing: -1px;
+					font-family: $main_font;
+					text-transform: uppercase;
+					border-left: 5px solid $main_color;
+					display: inline-block;
+					@include factor-property(margin-top, 1);
+					margin-right: auto;
+					margin-left: auto;
+					text-align: center;
+					padding: factor(1) factor(2);
+					@include font-size(factor(3));
+					background: url("/images/cardbg_light.png") repeat 100%;
+				}
+			}
+
+			.body {
+				@include font-size(factor(2.5));
+
+				.item-typeclass {
+					@include factor-property(margin-bottom, 2);
+
+					.type {
+						display: inline-block;
+					}
+					.classes {
+						display: inline-block;
+					}
+				}
+
+				.single-property {
+					@include factor-property(margin-bottom, 3);
+
+					.description {
+						border-left: 5px solid $main_color;
+						@include factor-property(margin-top, 2);
+						@include factor-property(padding-left, 1);
+						font-weight: bold;
+						@include font-size(factor(3));
+						text-transform: uppercase;
+						font-family: $main_font;
+						color: white;
+						letter-spacing: -1px;
+					}
+
+					.property {
+						margin-top: 10px;
+						line-height: 0px;
+						@include font-size(factor(4));
+						letter-spacing: -1px;
+						padding: 25px 15px;
+						background: url("/images/honeybg_red.png") repeat 100%;
+						color: white;
+						display: inline-block;
+
+						&.long {
+							color: #111;
+							border: 1px solid #ccc;
+							border-radius: 1px;
+							padding: 7px 7px 10px 11px;
+							background: none;
+							background-color: white;
+							letter-spacing: 0px;
+							@include factor-property(line-height, 4);
+							@include font-size(factor(2.5));
+							max-height: 200px;
+							overflow-y: auto;
+						}
+					}
+				}
+			}
+		}
+
+		.bottom-properties {
+			.item-details {
+				.single-property {
+					display: inline-block;
+					@include factor-property(margin-bottom, 1);
+					@include factor-property(margin-right, 2);
+					.description { @include font-size(factor(2.7)); }
+				}
+			}
+		}
+	}
+
+	.footer {
+		.row {
+			float: right;
+			@include factor-property(margin-top, 5);
+
+			.section-button.space-right {
+				@include factor-property(margin-right, 2);
+				@include factor-property(margin-bottom, 2);
+			}
+		}
+	}
+}

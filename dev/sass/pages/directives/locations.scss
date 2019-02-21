@@ -1,0 +1,135 @@
+
+.location-directive {
+	// display: inline-block;
+	// width: 100%;
+
+	.location-object {
+		font-family: $main_font;
+		border-radius: 5px;
+		height: 200px;
+		background-color: #333;
+		@include factor-property(margin-bottom, 5);
+		@include factor-property(margin-right, 3);
+		box-shadow: 0px 0px 25px #000, 0px 0px 10px #000;
+
+		$main_padding: factor(.5) factor(2);
+
+		&.neutral {
+			.location-icon { @extend %color_neutral; }
+		}
+
+		&.blufor {
+			background-color: $blufor_color;
+			.location-icon { @extend %color_blu; }
+		}
+
+		&.opfor {
+			background-color: $opfor_color;
+			.location-icon { @extend %color_op; }
+		}
+
+		&.indfor {
+			background-color: $indfor_color;
+			.location-icon { @extend %color_ind; }
+		}
+
+		.top {
+			.importance {
+				font-weight: 800;
+				@include factor-property(top, 1);
+				@include factor-property(right, 4);
+				position: absolute;
+				background-color: $warning_color;
+				@include font-size(factor(2));
+				padding: factor(.5) factor(1);
+				color: #111;
+			}
+			.name {
+				display: inline-block;
+				@include font-size(factor(3.5));
+				@include factor-property(margin-top, 3);
+				text-align: left;
+				padding: $main_padding;
+				letter-spacing: -2px;
+				font-weight: 800;
+				height: 45px;
+				white-space: nowrap;
+				background-color: #eee;
+				width: 100%;
+				color: #111;
+			}
+		}
+
+		.middle {
+			@include factor-property(margin-top, 1);
+			padding: $main_padding;
+			width: 100%;
+
+			.left {
+				display: inline-block;
+				width: 40%;
+
+				.info {
+					.map_name {
+						@include font-size(factor(3));
+						@include factor-property(padding-bottom, .5);
+						letter-spacing: -2px;
+						border-bottom: 1px solid white;
+						text-transform: uppercase;
+					}
+					.grid {
+						@include font-size(factor(2.5));
+						letter-spacing: -2px;
+						@include factor-property(margin-top, .5);
+					}
+				}
+				.properties {
+					display: inline-block;
+					.interactable {
+						@include factor-property(margin-top, 2);
+
+						.prop-icon {
+							display: inline-block;
+
+							i {
+								color: #000;
+								display: inline-block;
+								padding: 0 factor(.9);
+								@include font-size(factor(3));
+								background-color: $warning_color;
+								border-radius: 100%;
+								font-weight: 800;
+							}
+						}
+					}
+				}
+			}
+
+			.right {
+				display: inline-block;
+				float: right;
+
+				.location-icon {
+					@include size(80px);
+					background-color: white;
+
+					img {
+						padding-top: 10px;
+						display: block;
+						margin-left: auto;
+						margin-right: auto;
+						width: 60px;
+						height: auto;
+					}
+				}
+
+				.type {
+					@include factor-property(margin-top, 1);
+					text-transform: uppercase;
+					font-weight: 800;
+				}
+			}
+		}
+	}
+
+}

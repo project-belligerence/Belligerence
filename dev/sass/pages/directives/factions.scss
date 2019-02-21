@@ -1,0 +1,127 @@
+
+.factions-directive-container {
+	display: inline-block;
+	width: 100%;
+
+	.factions-directive {
+
+		.faction-object {
+			font-family: $main_font;
+			@include factor-property(margin-bottom, 5);
+			@include factor-property(margin-right, 3);
+			box-shadow: 0px 0px 25px #000, 0px 0px 10px #000;
+
+			background-image: url('/images/cardbg.png');
+
+			$main_padding: factor(.5) factor(2);
+
+			&.neutral {
+				.top-section .picture .name { background-color: #eee; color: #111; }
+			}
+
+			&.blufor {
+				.top-section .picture .name { background-color: $blufor_color; color: #eee; }
+			}
+
+			&.opfor {
+				.top-section .picture .name { background-color: $opfor_color; color: #eee; }
+			}
+
+			&.indfor {
+				.top-section .picture .name { background-color: $indfor_color; color: #eee; }
+			}
+
+			&:hover .footer-section	.modifiers-container { @include prefix(filter, saturate(100%)); }
+
+			.top-section {
+				.picture {
+					vertical-align: top;
+					width: auto;
+					height: 159px;
+
+					@include breakpoint("medium") {
+						height: 112px;
+					}
+
+					.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 100%;	}
+
+					.name {
+						z-index: 99;
+						display: inline-block;
+						@include font-size(factor(3));
+						@include factor-property(margin-top, 3);
+						padding: $main_padding;
+						letter-spacing: -1px;
+						font-weight: 800;
+						background-color: #eee;
+						color: #111;
+						max-width: 90%;
+
+						position: relative;
+						top: 55%;
+						left: 12px;
+						box-shadow: 0px 0px 7px #000;
+						text-shadow: 0px 0px 3px #111;
+
+						@include breakpoint("medium") {
+							@include font-size(factor(2));
+							top: 45%;
+							max-width: 90%;
+						}
+					}
+				}
+			}
+
+			.body-section {
+				padding: factor(2) factor(2);
+				@include factor-property(margin-bottom, 2);
+
+				.description {
+					font-family: $sub_font;
+					@include font-size(factor(2));
+					color: #111;
+					@include factor-property(line-height, 4);
+
+					@include breakpoint("medium") {
+						@include factor-property(line-height, 3.5);
+					}
+				}
+			}
+
+			.footer-section {
+				.modifiers-container {
+					background-image: url('/images/cardbg_dark.png');
+
+					@include transition(filter .25s);
+					@include prefix(filter, saturate(0%));
+
+					@include breakpoint("medium") { @include prefix(filter, saturate(100%)); }
+
+					.modifier-list {
+						text-align: center;
+						padding: factor(1) 0;
+
+						.modifier {
+							display: inline-block;
+							padding: factor(1) factor(2);
+							@include font-size(factor(3));
+							margin-right: 1px;
+							text-shadow: 0px 0px 2px #000;
+
+							@include breakpoint("medium") {
+								@include font-size(factor(2));
+							}
+
+							&.awful { background-color: #e30b0b; color: #eee; }
+							&.poor { background-color: #da5317; color: #eee; }
+							&.average { background-color: #eaae0b; color: #eee; }
+							&.great { background-color: #0889f6; color: #eee; }
+							&.extraordinary { background-color: #32a313; color: #eee; }
+						}
+					}
+				}
+			}
+		}
+
+	}
+}

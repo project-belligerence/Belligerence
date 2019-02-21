@@ -15,8 +15,10 @@
 	exports.post = post;
 	exports.duplicateItem = duplicateItem;
 	exports.getAll = getAll;
+	exports.getAllTypeHead = getAllTypeHead;
 	exports.getAllLimited = getAllLimited;
 	exports.get = get;
+	exports.deleteEntry = deleteEntry;
 	exports.put = put;
 	exports.getPlayer = getPlayer;
 	exports.putPlayer = putPlayer;
@@ -26,6 +28,11 @@
 	exports.postPMC = postPMC;
 	exports.addItemRecursive = addItemRecursive;
 	exports.updateItemsValue = updateItemsValue;
+	exports.getItemsTypeClass = getItemsTypeClass;
+	exports.getItemContent = getItemContent;
+	exports.deployItem = deployItem;
+	exports.deployItemsRecursiveFUNC = deployItemsRecursiveFUNC;
+	exports.resetDeployedItems = resetDeployedItems;
 
 	exports.getInventorySelf = getInventorySelf;
 	exports.getInventoryPlayer = getInventoryPlayer;
@@ -37,38 +44,70 @@
 		return {
 			folderName: require('path').basename(__dirname),
 			allowedSortValues: [
-				'createdAt', 'name', 'description', 'type', 'classname', 'class', 'value', 'current_price', 'discount',
+				'createdAt', 'name', 'description', 'type', 'classname', 'content', 'class', 'value', 'current_price', 'discount',
 				'deployable', 'info', 'production_year', 'detail_1', 'detail_2', 'detail_3', 'detail_4', 'detail_5',
 				'totalComments'],
 			allowedPostValues: {
-				typesValue: [0,1,2,3,4,5,6],
-				classesValue: [1,2,3,4,  11,12,13]
+				typesValue: [0,1,2,3,4,5,6,7,8,9],
+				classesValue: [
+					1,2,3,4,5,6,7,8,9,901,
+					11,12,13,14,15,
+					21,22,23,24,25,
+					31,32,33,34,35,
+					41,42,43,44,45,
+					51,52,53,54,55,
+					61,62,63,64,65,
+					71,72,73,74,75,
+					81,82,83,84,85,
+					91,92,93,94,95
+				]
 			},
 			generateWhereQuery:	function(req) {
 				var object = {};
 
-				if (req.query.qName) { object.name = { $like: "%" + req.query.qName + "%" }; }
-				if (req.query.qClassname) { object.classname = { $like: "%" + req.query.qClassname + "%" }; }
-				if (req.query.qDescription) { object.description = { $like: "%" + req.query.qDescription + "%" }; }
-				if (req.query.qType) { object.type = { $like: "%" + req.query.qType + "%" }; }
-				if (req.query.qClass) { object.class = { $like: "%" + req.query.qClass + "%" }; }
-				if (req.query.qValue) { object.value = { $between: [(req.query.qValue.min || 0), (req.query.qValue.max || 9999999)]}; }
-				if (req.query.qDeployable) { object.deployable = { $like: "%" + req.query.qDeployable + "%" }; }
-				if (req.query.qInfo) { object.info = { $like: "%" + req.query.qInfo + "%" }; }
-				if (req.query.qName) { object.name = { $like: "%" + req.query.qName + "%" }; }
-				if (req.query.qDetail1) { object.detail_1 = { $like: "%" + req.query.qDetail1 + "%" }; }
-				if (req.query.qDetail2) { object.detail_2 = { $like: "%" + req.query.qDetail2 + "%" }; }
-				if (req.query.qDetail3) { object.detail_3 = { $like: "%" + req.query.qDetail3 + "%" }; }
-				if (req.query.qDetail4) { object.detail_4 = { $like: "%" + req.query.qDetail4 + "%" }; }
-				if (req.query.qDetail5) { object.detail_5 = { $like: "%" + req.query.qDetail5 + "%" }; }
+				if (API.methods.isValid(req.query.qName)) { object.name = { $like: "%" + req.query.qName + "%" }; }
+				if (API.methods.isValid(req.query.qClassname)) { object.classname = { $like: "%" + req.query.qClassname + "%" }; }
+				if (API.methods.isValid(req.query.qContent)) { object.content = { $like: "%" + req.query.qContent + "%" }; }
+				if (API.methods.isValid(req.query.qDescription)) { object.description = { $like: "%" + req.query.qDescription + "%" }; }
+				if (API.methods.isValid(req.query.qType)) { object.type = { $like: req.query.qType }; }
+				if (API.methods.isValid(req.query.qClass)) { object.class = { $like: req.query.qClass }; }
+				if (API.methods.isValid(req.query.qValue)) { req.query.qValue = JSON.parse(req.query.qValue); object.value = { $between: [(req.query.qValue.min || 0), (req.query.qValue.max || 9999999)]}; }
+				if (API.methods.isValid(req.query.qDeployable)) { object.deployable = { $like: API.methods.getBoolean(req.query.qDeployable, true) }; }
+				if (API.methods.isValid(req.query.qInfo)) { object.info = { $like: "%" + req.query.qInfo + "%" }; }
+				if (API.methods.isValid(req.query.qDetail1)) { object.detail_1 = { $like: req.query.qDetail1 }; }
+				if (API.methods.isValid(req.query.qDetail2)) { object.detail_2 = { $like: "%" + req.query.qDetail2 + "%" }; }
+				if (API.methods.isValid(req.query.qDetail3)) { object.detail_3 = { $like: "%" + req.query.qDetail3 + "%" }; }
+				if (API.methods.isValid(req.query.qDetail4)) { object.detail_4 = { $like: "%" + req.query.qDetail4 + "%" }; }
+				if (API.methods.isValid(req.query.qDetail5)) { object.detail_5 = { $like: "%" + req.query.qDetail5 + "%" }; }
 
-				if (req.query.qCurrentPrice) { object.current_price = { $between: [(req.query.qCurrentPrice.min || 0), (req.query.qCurrentPrice.max || 9999999)]}; }
-				if (req.query.qDiscount) { object.discount = { $between: [(req.query.qDiscount.min || 0), (req.query.qDiscount.max || 9999999)]}; }
-				if (req.query.qYear) { object.production_year = { $between: [(req.query.qYear.min || 0), (req.query.qYear.max || 9999999)]}; }
+				if (API.methods.isValid(req.query.qCurrentPrice)) { req.query.qCurrentPrice = JSON.parse(req.query.qCurrentPrice); object.current_price = { $between: [(req.query.qCurrentPrice.min || 0), (req.query.qCurrentPrice.max || 9999999)]}; }
+				if (API.methods.isValid(req.query.qDiscount)) { req.query.qDiscount = JSON.parse(req.query.qDiscount); object.discount = { $between: [(req.query.qDiscount.min || 0), (req.query.qDiscount.max || 9999999)]}; }
+				if (API.methods.isValid(req.query.qYear)) { req.query.qYear = JSON.parse(req.query.qYear); object.production_year = { $between: [(req.query.qYear.min || 0), (req.query.qYear.max || 9999999)]}; }
 
 				return object;
 			}
 		};
+	}
+
+	function getItemContent(req, res) {
+		var allMods = [
+			"Vanilla", "APEX",
+			"Karts DLC", "Helicopters DLC", "Marksmen DLC",
+			"Jets DLC", "Laws of War DLC", "TAC-OPS DLC", "Tanks DLC",
+			"RHS",
+			"CUP",
+			"HLC",
+			"R3F",
+			"Project_OPFOR",
+			"TRYK",
+			"RDS",
+			"TF47",
+			"FHQ",
+			"Infinite_AIO",
+			"KA"
+		], rObject = [];
+		for (var i in allMods) { var cMod = allMods[i];	rObject.push({text: cMod, data: i}); }
+		API.methods.sendResponse(req, res, true, config.messages().return_entries, rObject);
 	}
 
 	function getAll(req, res) {
@@ -77,12 +116,21 @@
 		});
 	}
 
+	function getAllTypeHead(req, res) {
+		req.serverValues = {};
+		req.serverValues.overriddenContext = true;
+		req.serverValues.contextLimit = 6;
+		getAllLimited(req, res);
+	}
+
 	function getAllLimited(req, res) {
+		if (!req.serverValues) req.serverValues = {};
+		if (!req.serverValues.overriddenContext) req.serverValues.contextLimit = 21;
 
 		var InventoryTable = 'items_tables',
 			generatedQueryValues = queryValues(req),
-			baseAttributes = "name as nameField, classname as classnameField, description as descriptionField, " +
-							 "type as typeField, class as classField, " +
+			baseAttributes = "name as nameField, classname as classnameField, content as contentField, " +
+							 "description as descriptionField, type as typeField, class as classField, " +
 							 "value as valueField, current_price as currentPrice, discount as discountField, deployable as deployableField, " +
 							 "info as infoField, production_year as productionYear, " +
 							 "detail_1 as detailField1, detail_2 as detailField2, detail_3 as detailField3, detail_4 as detailField4, detail_5 as detailField5, " +
@@ -107,17 +155,102 @@
 
 		mainModel.findOne({where: {"hashField": req.params.Hash}}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
+			API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
+		});
+	}
 
-			CommentsMethods.getEntityComments(req, res, "items_tables", entry.hashField, function(comments) {
-				entry.dataValues.comments = comments;
+	function getItemsTypeClass(req, res) {
+		var rObject = {};
+		rObject.typeField = config.enums.types;
+		rObject.classField = config.enums.classes;
+		API.methods.sendResponse(req, res, true, config.messages().return_entry, rObject);
+	}
 
-				API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
+	function resetDeployedItems(req, res) {
+		var hasPMC =  req.playerInfo.PMC,
+			InventoryModel = req.playerInfo.PMC ? PMCItems : PlayerItems,
+			purchaserHash = req.playerInfo.PMC ? req.playerInfo.PMC.hashField : req.playerInfo.hashField;
+
+		InventoryModel.findAll({ where: {"ownerHash": purchaserHash}}).then(function(entries) {
+			if (!API.methods.validate(req, res, [entries], config.messages().no_entry)) { return 0; }
+
+			Promise.all(entries.map(function(object) {
+				return object.update({"deployedAmount": 0});
+			})).then(function(result) {
+				API.methods.sendResponse(req, res, true, "Deployed items reset.");
 			});
 		});
 	}
 
-	function getInventorySelf(req, res) {
+	function deployItem(req, res) {
+		deployItemFUNC(req, res, function(nEntry) {
+			API.methods.sendResponse(req, res, true, config.messages().return_entry, nEntry);
+		});
+	}
 
+	function deployItemFUNC(req, res, callback) {
+		var hasPMC =  req.playerInfo.PMC,
+			InventoryModel = req.playerInfo.PMC ? PMCItems : PlayerItems,
+			purchaserHash = req.playerInfo.PMC ? req.playerInfo.PMC.hashField : req.playerInfo.hashField;
+
+		InventoryModel.findOne({ where: {"ownerHash": purchaserHash, "itemHash": req.params.Hash}}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
+			entry.update({"deployedAmount": req.body.amount }).then(function(nEntry) {
+				return callback(nEntry);
+			});
+		});
+	}
+
+	function deployItemsRecursiveFUNC(req, res, items, callback) {
+		var hasPMC =  req.playerInfo.PMC,
+			InventoryModel = req.playerInfo.PMC ? PMCItems : PlayerItems,
+			purchaserHash = req.playerInfo.PMC ? req.playerInfo.PMC.hashField : req.playerInfo.hashField;
+
+		InventoryModel.findAll({ where: {"ownerHash": purchaserHash}}).then(function(entries) {
+			if (!API.methods.validate(req, res, [entries], config.messages().no_entry)) { return 0; }
+
+			Promise.all(entries.map(function(object) {
+				return object.update({"deployedAmount": 0});
+			})).then(function(result) {
+				deployItemRecursiveLoopFUNC(req, res, items, entries, function(done) {
+					return callback(done);
+				});
+			});
+		});
+	}
+
+	function deployItemRecursiveLoopFUNC(req, res, items, inventoryList, done) {
+		var loopItems = items,
+			loopInventory = inventoryList;
+
+		if (loopItems.length > 0) {
+			var curItem = loopItems[0],
+				curHash = curItem[0],
+				curAmount = curItem[1],
+				foundEntry;
+
+			for (var i in loopInventory) {
+				var cInv = inventoryList[i];
+				if (cInv.itemHash === curHash) {
+					foundEntry = cInv;
+					break;
+				}
+			}
+
+			loopItems.splice(0, 1);
+			loopInventory.splice(0, 1);
+
+			if (foundEntry) {
+				foundEntry.update({"deployedAmount": Math.min(curAmount, foundEntry.amountField) }).then(function(nEntry) {
+					return deployItemRecursiveLoopFUNC(req, res, loopItems, loopInventory, done);
+				});
+			} else { return deployItemRecursiveLoopFUNC(req, res, loopItems, loopInventory, done); }
+		} else { return done(true); }
+	}
+
+	function getInventorySelf(req, res) {
+		req.serverValues = {};
+		req.serverValues.contextLimit = 999;
 		req.query.SINGLE_MODE = true;
 
 		var queryObject = {
@@ -188,12 +321,12 @@
 			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
 
 			var generatedQueryValues = queryValues(req),
-				baseAttributes = "name as nameField, classname as classnameField, description as descriptionField, " +
-								 "type as typeField, class as classField, " +
+				baseAttributes = "items_tables.id as itemId, name as nameField, classname as classnameField, content as contentField, " +
+								 "description as descriptionField, type as typeField, class as classField, " +
 								 "value as valueField, current_price as currentPrice, discount as discountField, deployable as deployableField, " +
 								 "info as infoField, production_year as productionYear, " +
 								 "detail_1 as detailField1, detail_2 as detailField2, detail_3 as detailField3, detail_4 as detailField4, detail_5 as detailField5, " +
-								 "hashField, " + InventoryTable + ".amount as amountOwned, " + InventoryTable + ".deployed as isDeployed, items_tables.createdAt as ownedSince",
+								 "hashField, " + InventoryTable + ".amount as amountOwned, " + InventoryTable + ".deployed_amount as deployedAmount, items_tables.createdAt as ownedSince",
 				countQuery =	"(SELECT COUNT(*) FROM `comments_tables`" +
 							 	"WHERE comments_tables.subjectField = items_tables.hashField" +
 								") AS totalComments";
@@ -204,7 +337,7 @@
 				InventoryTable,
 				baseAttributes + ", " + countQuery + " ",
 				"LEFT JOIN `items_tables` ON " + InventoryTable + ".item = items_tables.hashField",
-				"(items_tables.value > 0) AND (" + InventoryTable + ".owner = '" + purchaserHash + "')",
+				"(items_tables.value > 0) AND (" + InventoryTable + ".amount > 0) AND (" + InventoryTable + ".owner = '" + purchaserHash + "')",
 				API.methods.generatePaginatedQuery(req, res, generatedQueryValues),
 				function(data) { done(data); });
 		});
@@ -245,81 +378,43 @@
 	}
 
 	function post(req, res) {
-
 		if (!API.methods.validateParameter(req, res, [
-			[req.body.name, 'string'],
-			[req.body.description, 'string', config.numbers.modules.items.descriptionLength],
-			[req.body.type, 'number', [queryValues(req).allowedPostValues.typesValue[0], queryValues(req).allowedPostValues.typesValue[(queryValues(req).allowedPostValues.typesValue.length)-1]]],
-			[req.body.class, 'number', [queryValues(req).allowedPostValues.classesValue[0], queryValues(req).allowedPostValues.classesValue[(queryValues(req).allowedPostValues.classesValue.length)-1]]],
-			[[req.body.value, req.body.year], 'number', [0, 999999]],
-			[req.body.deployable, 'boolean'],
-			[[req.body.classname, req.body.info], 'string']
+			[req.body.nameField, 'string'],
+			[req.body.descriptionField, 'string', config.numbers.modules.items.descriptionLength],
+			[req.body.typeField, 'number', queryValues(req).allowedPostValues.typesValue],
+			[req.body.classField, 'number', queryValues(req).allowedPostValues.classesValue],
+			[[req.body.valueField, req.body.contentField, req.body.productionYear], 'number', [0, 999999]],
+			[[req.body.classnameField, req.body.infoField], 'string']
 		], true)) { return 0; }
 
-		mainModel.findOne({where:{'nameField': req.body.name}}).then(function(entry) {
-			if (!API.methods.validate(req, res, [!entry], config.messages().entry_exists(req.body.name))) { return 0; }
+		var ITEMS_FUNC_QUERY = { where: {} };
+		ITEMS_FUNC_QUERY.where.$or = [{ 'nameField': req.body.nameField }, { 'classnameField': req.body.classnameField }];
+
+		mainModel.findOne(ITEMS_FUNC_QUERY).then(function(entry) {
+			if (!API.methods.validate(req, res, [!entry], config.messages().entry_exists(req.body.nameField))) { return 0; }
 
 			var update = {};
 
-			if (req.body.name) update.nameField = req.body.name;
-			if (req.body.classname) update.classnameField = req.body.classname;
-			if (req.body.description) update.descriptionField = req.body.description;
-			if (req.body.type) update.typeField = req.body.type;
-			if (req.body.class) update.classField = req.body.class;
-			if (req.body.value) update.valueField = req.body.value;
-			if (req.body.deployable) update.deployableField = req.body.deployable;
-			if (req.body.info) update.infoField = req.body.info;
-			if (req.body.year) update.productionYear = req.body.year;
-			if (req.body.detail1) update.detailField1 = req.body.detail1;
-			if (req.body.detail2) update.detailField2 = req.body.detail2;
-			if (req.body.detail3) update.detailField3 = req.body.detail3;
-			if (req.body.detail4) update.detailField4 = req.body.detail4;
-			if (req.body.detail5) update.detailField5 = req.body.detail5;
+			if (API.methods.isValid(req.body.nameField)) update.nameField = req.body.nameField;
+			if (API.methods.isValid(req.body.classnameField)) update.classnameField = req.body.classnameField;
+			if (API.methods.isValid(req.body.contentField)) update.contentField = req.body.contentField;
+			if (API.methods.isValid(req.body.descriptionField)) update.descriptionField = req.body.descriptionField;
+			if (API.methods.isValid(req.body.typeField)) update.typeField = req.body.typeField;
+			if (API.methods.isValid(req.body.classField)) update.classField = req.body.classField;
+			if (API.methods.isValid(req.body.valueField)) update.valueField = req.body.valueField;
+			if (API.methods.isValid(req.body.deployableField)) update.deployableField = req.body.deployableField;
+			if (API.methods.isValid(req.body.infoField)) update.infoField = req.body.infoField;
+			if (API.methods.isValid(req.body.productionYear)) update.productionYear = req.body.productionYear;
+			if (API.methods.isValid(req.body.detailField1)) update.detailField1 = req.body.detailField1;
+			if (API.methods.isValid(req.body.detailField2)) update.detailField2 = req.body.detailField2;
+			if (API.methods.isValid(req.body.detailField3)) update.detailField3 = req.body.detailField3;
+			if (API.methods.isValid(req.body.detailField4)) update.detailField4 = req.body.detailField4;
+			if (API.methods.isValid(req.body.detailField5)) update.detailField5 = req.body.detailField5;
 
 			mainModel.sync({force: false}).then(function() {
-				mainModel.create(update).then(function(entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, entry); });
-			});
-		});
-	}
-
-	function duplicateItem(req, res) {
-
-		if (!API.methods.validateParameter(req, res, [[req.body.name, 'string']], true)) { return 0; }
-
-		if (!API.methods.validateParameter(req, res, [
-			[req.body.description, 'string', config.numbers.modules.items.descriptionLength],
-			[req.body.type, 'number', [queryValues(req).allowedPostValues.typesValue[0], queryValues(req).allowedPostValues.typesValue[(queryValues(req).allowedPostValues.typesValue.length)-1]]],
-			[req.body.class, 'number', [queryValues(req).allowedPostValues.classesValue[0], queryValues(req).allowedPostValues.classesValue[(queryValues(req).allowedPostValues.classesValue.length)-1]]],
-			[[req.body.value, req.body.year], 'number', [0, 999999]],
-			[req.body.deployable, 'boolean'],
-			[[req.body.classname, req.body.info], 'string']
-		])) { return 0; }
-
-		mainModel.findOne({where:{nameField: req.body.name}}).then(function(clone) {
-			if (!API.methods.validate(req, res, [!clone], config.messages().entry_exists(req.body.name))) { return 0; }
-
-			mainModel.findOne({where:{hashField: req.params.Hash}}).then(function(entry) {
-				if (!API.methods.validate(req, res, [entry])) { return 0; }
-				var update = {};
-
-				update.nameField = req.body.name;
-				update.classnameField = (req.body.classname || entry.classnameField);
-				update.descriptionField = (req.body.description || entry.descriptionField);
-				update.typeField = (req.body.type || entry.typeField);
-				update.classField = (req.body.class || entry.classField);
-				update.valueField = (req.body.value || entry.valueField);
-				update.deployableField = (req.body.deployable || entry.deployableField);
-				update.infoField = (req.body.info || entry.infoField);
-				update.productionYear = (req.body.year || entry.productionYear);
-				update.detailField1 = (req.body.detail1 || entry.detailField1);
-				update.detailField2 = (req.body.detail2 || entry.detailField2);
-				update.detailField3 = (req.body.detail3 || entry.detailField3);
-				update.detailField4 = (req.body.detail4 || entry.detailField4);
-				update.detailField5 = (req.body.detail5 || entry.detailField5);
-
-				mainModel.sync({force: false}).then(function() {
-					mainModel.create(update).then(function(nEntry) {
-						API.methods.sendResponse(req, res, true, config.messages().new_entry, nEntry);
+				mainModel.create(update).then(function(entry) {
+					updateItemsValue("", function(done) {
+						API.methods.sendResponse(req, res, true, config.messages().new_entry, entry);
 					});
 				});
 			});
@@ -327,15 +422,13 @@
 	}
 
 	function put(req, res) {
-
 		if (!API.methods.validateParameter(req, res, [
-			[req.body.name, 'string'],
-			[req.body.description, 'string', config.numbers.modules.items.descriptionLength],
-			[req.body.type, 'number', [queryValues(req).allowedPostValues.typesValue[0], queryValues(req).allowedPostValues.typesValue[(queryValues(req).allowedPostValues.typesValue.length)-1]]],
-			[req.body.class, 'number', [queryValues(req).allowedPostValues.classesValue[0], queryValues(req).allowedPostValues.classesValue[(queryValues(req).allowedPostValues.classesValue.length)-1]]],
-			[[req.body.value, req.body.year], 'number', [0, 999999]],
-			[req.body.deployable, 'boolean'],
-			[[req.body.classname, req.body.info], 'string']
+			[req.body.nameField, 'string'],
+			[req.body.descriptionField, 'string', config.numbers.modules.items.descriptionLength],
+			[req.body.typeField, 'number', queryValues(req).allowedPostValues.typesValue],
+			[req.body.classField, 'number', queryValues(req).allowedPostValues.classesValue],
+			[[req.body.valueField, req.body.contentField, req.body.productionYear], 'number', [0, 999999]],
+			[[req.body.classnameField, req.body.infoField], 'string']
 		])) { return 0; }
 
 		mainModel.findOne({where:{'hashField': req.params.Hash}}).then(function(entry) {
@@ -343,35 +436,112 @@
 
 			var update = {};
 
-			if (req.body.name) update.nameField = req.body.name;
-			if (req.body.classname) update.classnameField = req.body.classname;
-			if (req.body.description) update.descriptionField = req.body.description;
-			if (req.body.type) update.typeField = req.body.type;
-			if (req.body.class) update.classField = req.body.class;
-			if (req.body.value) update.valueField = req.body.value;
-			if (req.body.deployable) update.deployableField = req.body.deployable;
-			if (req.body.info) update.infoField = req.body.info;
-			if (req.body.year) update.productionYear = req.body.year;
-			if (req.body.detail1) update.detailField1 = req.body.detail1;
-			if (req.body.detail2) update.detailField2 = req.body.detail2;
-			if (req.body.detail3) update.detailField3 = req.body.detail3;
-			if (req.body.detail4) update.detailField4 = req.body.detail4;
-			if (req.body.detail5) update.detailField5 = req.body.detail5;
+			if (API.methods.isValid(req.body.nameField)) update.nameField = req.body.nameField;
+			if (API.methods.isValid(req.body.classnameField)) update.classnameField = req.body.classnameField;
+			if (API.methods.isValid(req.body.contentField)) update.contentField = req.body.contentField;
+			if (API.methods.isValid(req.body.descriptionField)) update.descriptionField = req.body.descriptionField;
+			if (API.methods.isValid(req.body.typeField)) update.typeField = req.body.typeField;
+			if (API.methods.isValid(req.body.classField)) update.classField = req.body.classField;
+			if (API.methods.isValid(req.body.valueField)) update.valueField = req.body.valueField;
+			if (API.methods.isValid(req.body.deployableField)) update.deployableField = req.body.deployableField;
+			if (API.methods.isValid(req.body.infoField)) update.infoField = req.body.infoField;
+			if (API.methods.isValid(req.body.productionYear)) update.productionYear = req.body.productionYear;
+			if (API.methods.isValid(req.body.detailField1)) update.detailField1 = req.body.detailField1;
+			if (API.methods.isValid(req.body.detailField2)) update.detailField2 = req.body.detailField2;
+			if (API.methods.isValid(req.body.detailField3)) update.detailField3 = req.body.detailField3;
+			if (API.methods.isValid(req.body.detailField4)) update.detailField4 = req.body.detailField4;
+			if (API.methods.isValid(req.body.detailField5)) update.detailField5 = req.body.detailField5;
 
-			mainModel.findOne({where:{'nameField': req.body.name}}).then(function(duplicate) {
-				if (!API.methods.validate(req, res, [!duplicate], config.messages().entry_param_exists('item name'))) { return 0; }
+			var ITEMS_FUNC_QUERY = { where: {} };
+			ITEMS_FUNC_QUERY.where.$or = [{ 'nameField': req.body.nameField }, { 'classnameField': req.body.classnameField }];
+
+			mainModel.findOne(ITEMS_FUNC_QUERY).then(function(duplicate) {
+				if (!API.methods.validate(req, res, [(duplicate ? (entry.hashField === duplicate.hashField) : true)], config.messages().entry_exists(req.body.nameField))) { return 0; }
 
 				entry.update(update).then(function() {
 					mainModel.sync({force: false}).then(function() {
-						API.methods.sendResponse(req, res, true, config.messages().entry_updated(entry.displaynameField), entry);
+						updateItemsValue("", function(done) {
+							API.methods.sendResponse(req, res, true, config.messages().entry_updated(entry.displaynameField), entry);
+						});
 					});
 				});
 			});
 		});
 	}
 
-	function getPlayer(req, res) {
+	function duplicateItem(req, res) {
+		mainModel.findOne({where:{hashField: req.params.Hash}}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry])) { return 0; }
+			var update = {};
 
+			update.nameField = entry.nameField + " (copy)";
+			update.classnameField = (req.body.classname || entry.classnameField);
+			update.contentField = (req.body.content || entry.contentField);
+			update.descriptionField = (req.body.description || entry.descriptionField);
+			update.typeField = (req.body.type || entry.typeField);
+			update.classField = (req.body.class || entry.classField);
+			update.valueField = (req.body.value || entry.valueField);
+			update.deployableField = (req.body.deployable || entry.deployableField);
+			update.infoField = (req.body.info || entry.infoField);
+			update.productionYear = (req.body.year || entry.productionYear);
+			update.detailField1 = (req.body.detail1 || entry.detailField1);
+			update.detailField2 = (req.body.detail2 || entry.detailField2);
+			update.detailField3 = (req.body.detail3 || entry.detailField3);
+			update.detailField4 = (req.body.detail4 || entry.detailField4);
+			update.detailField5 = (req.body.detail5 || entry.detailField5);
+
+			update.classnameField = update.classnameField + "_copy";
+
+			mainModel.sync({force: false}).then(function() {
+				mainModel.create(update).then(function(nEntry) {
+
+					var destination = config.folders.uploads + "/" + config.folders.uploads_images + "/" + config.folders.modules + "/" + "items/",
+						filename = destination + "main_" + req.params.Hash + ".jpg",
+						filenameThumb = destination + "thumb_" + req.params.Hash + ".jpg",
+						filename_new = destination + "main_" + nEntry.hashField + ".jpg",
+						filenameThumb_new = destination + "thumb_" + nEntry.hashField + ".jpg",
+						fs = require('fs');
+
+					fs.stat(filename, function(err, stat) {
+						if (err === null) {
+							fs.createReadStream(filename).pipe(fs.createWriteStream(filename_new));
+							fs.createReadStream(filenameThumb).pipe(fs.createWriteStream(filenameThumb_new));
+						}
+
+						updateItemsValue("", function(done) {
+							API.methods.sendResponse(req, res, true, config.messages().new_entry, nEntry);
+						});
+					});
+				});
+			});
+		});
+	}
+
+	function deleteEntry(req, res) {
+		var objectID = req.params.Hash,
+			fs = require('fs');
+
+		mainModel.findOne({where: { "hashField": objectID }}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
+
+			var destination = config.folders.uploads + "/" + config.folders.uploads_images + "/" + config.folders.modules + "/" + "items/",
+				filename = destination + "main_" + req.params.Hash + ".jpg",
+				filenameThumb = destination + "thumb_" + req.params.Hash + ".jpg";
+
+			fs.stat(filename, function(err, stat) {
+				if (err === null) {
+					fs.unlink(filename);
+					fs.unlink(filenameThumb);
+				}
+
+				entry.destroy().then(function() {
+					API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
+				});
+			});
+		});
+	}
+
+	function getPlayer(req, res) {
 		var ID = req.params.Hash;
 
 		if(!API.methods.validate(req, res, [ID])) { return 0; }
@@ -410,7 +580,7 @@
 		} else { return done(true); }
 	}
 
-	function methodItemPlayer(req, res, entry, player, p_amount, done) {
+	function methodItemPlayer(req, res, entry, player, p_amount,  done) {
 
 		var amount = (p_amount || 0);
 
@@ -426,7 +596,7 @@
 						return done(true);
 					});
 				} else {
-					item.update({ amountField: finalAmount}).then(function() {
+					item.update({ amountField: finalAmount }).then(function() {
 						PlayerItems.sync({force: false}).then(function() {
 							return done(true);
 						});
@@ -435,13 +605,12 @@
 			} else {
 				if(!API.methods.validate(req, res, [(amount > 0)])) { return 0; }
 
-				player.addNewItem(entry.hashField, amount, true, function(newItem) { return done(true); });
+				player.addNewItem(entry.hashField, entry.classnameField, entry.typeField, entry.classField, amount, 0, function(newItem) { return done(true); });
 			}
 		});
 	}
 
 	function methodItemPMC(req, res, entry, pmc, p_amount, done) {
-
 		var amount = (p_amount || 0);
 
 		if(!API.methods.validate(req, res, [entry, pmc])) { return 0; }
@@ -465,13 +634,12 @@
 			} else {
 				if(!API.methods.validate(req, res, [(amount > 0)])) { return 0; }
 
-				pmc.addNewItem(entry.hashField, amount, true, function(newItem) { return done(true);});
+				pmc.addNewItem(entry.hashField, entry.classnameField, entry.typeField, entry.classField, amount, 0, function(newItem) { return done(true);});
 			}
 		});
 	}
 
 	function postPlayer(req, res) {
-
 		var ID = req.body.item,
 			ID2 = req.body.player,
 			amount = (req.body.amount || 0);
@@ -500,7 +668,7 @@
 			ID2 = req.body.player,
 			update = {};
 
-		if (!API.methods.validate(req, res, [ID, ID2, (req.body.amount || req.body.deployed)])) { return 0; }
+		if (!API.methods.validate(req, res, [ID, ID2, (req.body.amount || req.body.deployed_amount)])) { return 0; }
 
 		if (!API.methods.validate(req, res, [(
 			(req.playerInfo.hashField == ID2) ||
@@ -508,7 +676,7 @@
 		)], config.messages().bad_permission)) { return 0; }
 
 		if (req.body.amount) update.amountField = req.body.amount;
-		if (req.body.deployed) update.deployedField = req.body.deployed;
+		if (req.body.deployed_amount) update.deployedAmount = req.body.deployed_amount;
 
 		ItemModel.findOne({where:{'hashField': ID}}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(ID))) { return 0; }
@@ -517,7 +685,7 @@
 		PlayerItems.findOne({where:{'itemId': entry.id, 'PlayerId': player.id}}).then(function(item){
 			if (!API.methods.validate(req, res, [item], 'The player does not own this item.')) { return 0; }
 
-			item.update({ amountField:(item.amountField + parseInt(update.amountField)), deployedField: (update.deployedField || item.deployedField) }).then(function() {
+			item.update({ amountField:(item.amountField + parseInt(update.amountField)), deployedAmount: parseInt(update.deployedAmount)}).then(function() {
 				PlayerItems.sync({force: false}).then(function() {
 					API.methods.sendResponse(req, res, true, config.messages().entry_updated(entry.nameField), item);
 				});
@@ -585,10 +753,10 @@
 			ID2 = req.body.pmc,
 			update = {};
 
-		if (!API.methods.validate(req, res, [ID, ID2, (req.body.amount || req.body.deployed)])) { return 0; }
+		if (!API.methods.validate(req, res, [ID, ID2, (req.body.amount || req.body.deployed_amount)])) { return 0; }
 
 		if (req.body.amount) update.amountField = req.body.amount;
-		if (req.body.deployed) update.deployedField = req.body.deployed;
+		if (req.body.deployed_amount) update.deployedAmount = req.body.deployed_amount;
 
 		ItemModel.findOne({where:{'hashField': ID}}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(ID))) { return 0; }
@@ -603,7 +771,7 @@
 		PMCItems.findOne({where:{'itemId': entry.id, 'PMCId': pmc.id}}).then(function(item){
 			if (!API.methods.validate(req, res, [item], 'The PMC does not own this item.')) { return 0; }
 
-			item.update({ amountField:(item.amountField + parseInt(update.amountField)), deployedField: (update.deployedField || item.deployedField) }).then(function() {
+			item.update({ amountField:(item.amountField + parseInt(update.amountField)), deployedAmount: parseInt(update.deployedAmount)}).then(function() {
 				PMCItems.sync({force: false}).then(function() {
 					API.methods.sendResponse(req, res, true, config.messages().entry_updated(entry.nameField), item);
 				});

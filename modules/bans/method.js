@@ -14,6 +14,7 @@
 	exports.getAll = getAll;
 	exports.get = get;
 	exports.put = put;
+	exports.deleteBan = deleteBan;
 
 	exports.queryValues = queryValues;
 
@@ -68,17 +69,29 @@
 		PlayerModel.findOne({where:{'hashField': req.body.banned}}).then(function(player) {
 			if (!API.methods.validate(req, res, [player], config.messages().entry_not_found(req.body.banned))) { return 0; }
 
-			var update = {},
-				expirationDate = new Date();
+			mainModel.findOne({where:{'bannedHash': player.hashField, 'activeField': true}}).then(function(active_ban) {
+				var newBan = {},
+					expirationDate = new Date(),
+					alreadyBanned = active_ban;
 
-			update.bannedHash = req.body.banned;
-			update.issuerHash = req.playerInfo.hashField;
-			update.reasonField = (req.body.reason || config.messages().modules.bans.no_reason);
+				newBan.bannedHash = req.body.banned;
+				newBan.issuerHash = req.playerInfo.hashField;
+				newBan.reasonField = (req.body.reason || config.messages().modules.bans.no_reason);
 
-			update.expirationDate = expirationDate.setHours(expirationDate.getHours() + (req.body.days * 24));
+				newBan.expirationDate = expirationDate.setHours(expirationDate.getHours() + (req.body.days * 24));
 
-			mainModel.sync({force: false}).then(function() {
-				mainModel.create(update).then(function(entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, entry); });
+				mainModel.sync({force: false}).then(function() {
+					if (alreadyBanned) {
+						var update = {};
+
+						if (req.body.days) update.expirationDate = newBan.expirationDate;
+						if (req.body.reason) update.reasonField = (req.body.reason || config.messages().modules.bans.no_reason);
+
+						alreadyBanned.update(update).then(function(entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, entry); });
+					} else {
+						mainModel.create(newBan).then(function(entry) { API.methods.sendResponse(req, res, true, config.messages().new_entry, entry); });
+					}
+				});
 			});
 		});
 	}
@@ -107,6 +120,18 @@
 				mainModel.sync({force: false}).then(function() {
 					API.methods.sendResponse(req, res, true, config.messages().entry_updated(req.params.Hash), entry);
 				});
+			});
+		});
+	}
+
+	function deleteBan(req, res) {
+		var objectID = req.params.Hash;
+
+		mainModel.findOne({where: {'hashField': objectID}}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(req.params.Hash))) { return 0; }
+
+			entry.destroy().then(function(rowDeleted) {
+				API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
 			});
 		});
 	}

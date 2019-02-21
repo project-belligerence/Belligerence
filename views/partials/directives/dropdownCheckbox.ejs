@@ -1,0 +1,30 @@
+
+<div class="dropdowncheck">
+	<button class="dropdownbtn btn btn-muted medium" type="button" ng-click="displayMenuFunction()">
+		<span ng-bind="::(buttonName)"></span>
+	</button>
+	<div class="checklist">
+		<ul class="checklist-list">
+			<li class="checklist-item" ng-repeat="item in options track by $index">
+				<div class="checkbox-form">
+					<div class="form-group">
+						<div class="input-group">
+							<div class="extra-input noselect" ng-class="{'no-icon': !(item.icon)}" ng-init="iIndex = (item.data ? item.data : $index);">
+								<input type="checkbox" id="{{ $id + 'model' + iIndex }}" ng-click="addToModel(iIndex)" ng-model="innerModel['value' + iIndex]">
+								<label class="input-label" for="{{ $id + 'model' + iIndex }}">
+									<div class="body check">
+										<div class="box"><i class="icon ion-checkmark small"></i></div>
+										<div class="choices">
+											<i class="icon" ng-class="(item.icon)" ng-if="(item.icon)"></i>
+											<div class="label-text" ng-bind="(item.text || item.name)"></div>
+										</div>
+									</div>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

@@ -1,11 +1,10 @@
-<div class="cheers-button">
+<div class="cheers-button" ng-class="CheersController.doButtonSize">
 	<a
-	class="section-button animated" role="button" ng-click="doCheer()" ng-class="{'active': (isCheered), {{doButtonSize}}: true}" ng-if="!(isLoading)"
-	ng-cloak>
+	class="section-button animated" role="button" ng-click="CheersController.doCheer()" ng-class="{'active': (CheersController.isCheered), {{CheersController.doButtonSize}}: true}" ng-if="!(CheersController.isLoading)" ng-cloak>
 		<ul>
-			<li class="cheers-status"><i class="icon" ng-class="{ 'ion-thumbsup': (isCheered), 'ion-minus': !(isCheered) }"></i></li>
-			<li class="cheers-text" ng-if="(showText === true)" ng-cloak>Cheers!</li>
-			<li class="cheers-amount"><div ng-bind="cheersAmount"></div></li>
+			<li class="cheers-status"><i class="icon" ng-class="{'ion-thumbsup': (CheersController.isCheered), 'ion-minus': !(CheersController.isCheered)}"></i></li>
+			<li class="cheers-text" ng-if="(CheersController.showText)" ng-cloak>Cheers!</li>
+			<li class="cheers-amount"><div ng-bind="CheersController.cheersAmount"></div></li>
 		</ul>
 	</a>
 </div>

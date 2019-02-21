@@ -3,10 +3,10 @@
 				MIXINS
 ===================================== */
 
-@mixin generate_background_image($icon, $height, $width) {
-	width: 100%;
+@mixin generate_background_image($icon, $height: 100%, $width: 100%) {
+	width: $width;
 	background-image: $icon;
-	background-size: 100% auto;
+	background-size: $width auto;
 	background-repeat: no-repeat;
 }
 
@@ -21,6 +21,18 @@ $logo_belligerence_small_inverted: url("/images/belligerence-logo-small-inv.png"
 
 $logo_belligerence_small_height: 265px;
 $logo_belligerence_small_width: 265px;
+
+$header_background: url('/images/bg/main_bg.jpg');
+
+$first_background: url('/images/bg/1_bg.png');
+$second_background: url('/images/bg/2_bg.png');
+$third_background: url('/images/bg/3_bg.png');
+$fourth_background: url('/images/bg/4_bg.png');
+$fifth_background: url('/images/bg/5_bg.png');
+
+$factions_icon: url('/images/icons/factions-icon.png');
+$city_icon: url('/images/icons/city-icon.png');
+$mission_icon: url('/images/icons/mission-icon.png');
 
 /* ================= */
 
@@ -45,3 +57,9 @@ $logo_belligerence_small_width: 265px;
 .logo-belligerence-small-inverted {
 	@include generate_background_image($logo_belligerence_small_inverted, $logo_belligerence_small_height, $logo_belligerence_small_width);
 }
+
+.fp_first_section_bg { @include generate_background_image($first_background); }
+.fp_second_section_bg { @include generate_background_image($second_background); }
+.fp_third_section_bg { @include generate_background_image($third_background); }
+.fp_fourth_section_bg { @include generate_background_image($fourth_background); }
+.fp_fifth_section_bg { @include generate_background_image($fifth_background); }

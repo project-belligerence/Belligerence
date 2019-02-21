@@ -1,0 +1,110 @@
+
+<span ng-init="Directive = CtrlDirectiveObjectives;"></span>
+
+<div class="objectives-directive-container" ng-if="(Directive.displayDirective())" ng-cloak>
+	<div class="objectives-directive">
+		<div class="objective-col col-md-2 col-sm-4 col-xs-12 message-animation" ng-repeat="object in objectList track by $index">
+			<div class="row">
+
+					<div class="objective-object" ng-class="::(Directive.applyControlledClass(object.sideField))">
+						<a class="a-col" ng-href="objective/{{::(object.hashField)}}">
+						<div class="top-section">
+							<div class="stats top">
+								<div
+									class="stat"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-append-to-body="true"
+									popover-popup-delay="100"
+									uib-popover="Comission chance"
+								><span ng-bind="::(object.chanceField + '%')"></span></div>
+
+								<div
+									class="stat pull-right"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-append-to-body="true"
+									popover-popup-delay="100"
+									uib-popover="Unit Limit"
+								>
+									<i class="icon ion-person-stalker"></i>
+									<span ng-bind="::(object.unitLimit)"></span>
+								</div>
+
+							</div>
+							<div class="picture" ac-background-image
+								background-image="images/modules/objectives/thumb_{{::(object.iconName)}}.png">
+							</div>
+							<div class="name" ng-bind="::(object.nameField)"></div>
+						</div>
+						<div class="body-section">
+							<div class="description" ng-bind="::(object.descriptionField)"></div>
+
+							<div class="stats">
+								<div
+									class="stat"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-append-to-body="true"
+									popover-popup-delay="100"
+									uib-popover="Difficulty rating"
+								>
+									<i class="icon ion-thermometer"></i>
+									<span ng-bind="::(object.difficultyField)"></span>
+								</div>
+								<div
+									class="stat"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-append-to-body="true"
+									popover-popup-delay="100"
+									uib-popover="Base Reward"
+								>
+									<i class="icon ion-social-usd"></i>
+									<span ng-bind="::(object.baseRewardField)"></span>
+								</div>
+								<div
+									class="stat"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-append-to-body="true"
+									popover-popup-delay="100"
+									uib-popover="Time Limit (hours)"
+								>
+									<i class="icon ion-clock"></i>
+									<span ng-bind="::(object.hourLimitField + ' hrs')"></span>
+								</div>
+							</div>
+						</div>
+						<div class="footer-section" ng-if="::(object.adversarialField || object.captureField)" ng-cloak>
+							<ul class="modifiers">
+								<li
+									class="modifier"
+									ng-if="::(object.adversarialField)"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-append-to-body="true"
+									popover-popup-delay="100"
+									uib-popover="Adversarial - both sides allowed"
+								>
+									<i class="icon ion-arrow-shrink"></i>
+								</li>
+								<li
+									class="modifier"
+									ng-if="::(object.captureField)"
+									popover-trigger="'mouseenter'"
+									popover-class="tooltip"
+									popover-append-to-body="true"
+									popover-popup-delay="100"
+									uib-popover="Will capture the Location"
+								>
+									<i class="icon ion-ios-flag"></i>
+								</li>
+							</ul>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

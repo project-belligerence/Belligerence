@@ -1,0 +1,252 @@
+<div class="container-fluid top-spacer generic-object" id="missions-list-container" ng-init="Controller = CtrlMissions;">
+	<div ng-if="Controller.displayPage">
+		<div class="col-md-12">
+			<div class="row">
+				<h2 ng-bind="::(Controller.pageValues.title)"></h2>
+				<h3 ng-bind="::(Controller.pageValues.description)"></h3>
+				<hr />
+				<div class="row filters">
+					<div class="col-md-12">
+						<div class="filter-containers">
+
+							<div class="top-filters">
+
+								<form class="form-inline main-filters" ng-submit="Controller.reloadQueryState()">
+									<div class="form-group">
+										<a class="section-button search muted medium"
+											role="button"
+											ng-click="Controller.toggleDisplayFilter()"
+										>
+											<ul>
+												<li><i class="icon ion-search"></i></li>
+												<li ng-bind="((Controller.displayFilter === true) ? 'Hide filters' : 'Display filters')"></li>
+											</ul>
+										</a>
+									</div>
+									<div class="apply form-group">
+										<a class="section-button search warning medium"
+											role="button"
+											ng-click="Controller.reloadQueryState()"
+										>
+											<ul>
+												<li><i class="icon ion-search"></i></li>
+												<li>Apply</li>
+											</ul>
+										</a>
+									</div>
+									<div class="form-group">
+
+										<div class="dropdown-section">
+											<div class="dropdown">
+												<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+													Sort by:
+													<strong ng-bind="Controller.filterValues.sortList[Controller.qSortIndex].text"></strong>
+												</button>
+												<ul class="dropdown-menu">
+													<li ng-click="Controller.qSortIndex = $index" ng-repeat="item in (Controller.filterValues.sortList) track by $index">
+														<a href="#" ng-click="scope = item">
+															<span ng-bind="(item.text)"></span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<a class="btn btn-default medium order" ng-click="Controller.changeFilterOrder()">
+											<i style="margin-right: 3px;" class="icon" ng-class="(Controller.basicQuery.order === 'ASC') ? 'ion-arrow-up-b' : 'ion-arrow-down-b'"></i>
+											<span ng-bind="(Controller.basicQuery.order === 'ASC') ? 'Ascending' : 'Descending'"></span>
+										</a>
+									</div>
+
+									<div class="form-group">
+										<a class="section-button reset danger medium hidden-sm hidden-xs intel-filter-animation" role="button" ng-dblclick="Controller.resetFilters(true)"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-append-to-body="true"
+										popover-popup-delay="500"
+										uib-popover="Double-click to reset filters"
+										ng-cloak>
+											<ul>
+												<li><i class="icon ion-trash-a"></i></li>
+												<li>Reset</li>
+											</ul>
+										</a>
+
+										<a class="section-button reset danger medium intel-filter-animation hidden-lg hidden-md" role="button" ng-click="Controller.resetFilters(true)"
+										popover-trigger="'mouseenter'"
+										popover-class="tooltip"
+										popover-append-to-body="true"
+										popover-popup-delay="500"
+										uib-popover="Double-click to reset filters"
+										ng-cloak>
+											<ul>
+												<li><i class="icon ion-trash-a"></i></li>
+												<li>Reset</li>
+											</ul>
+										</a>
+									</div>
+
+								</form>
+							</div>
+
+							<hr />
+
+							<div class="bottom-filters tall" ng-class="{'displaying': Controller.displayFilter}">
+
+								<form class="form-inline main-filters" ng-submit="Controller.reloadQueryState()">
+
+									<div class="query-section" ng-repeat="section in Controller.querySections track by $index">
+										<div class="query-section-label" ng-bind="::(section.name)"></div>
+
+										<div class="form-group" ng-repeat="queryObject in Controller.queryValues track by $index">
+
+											<div ng-if="::(queryObject.section === section.id)" class="single-filter">
+
+												<input type="text" class="form-control" ng-class="::(queryObject.class)" placeholder="{{::(queryObject.name)}}" ng-if="::(queryObject.type === 'text')" ng-model="queryObject.model" ng-cloak>
+
+												<div ng-if="::(queryObject.type === 'dropdownCheckbox')" ng-cloak>
+													<dropdown-checkbox
+														button-name="queryObject.name"
+														options="Controller.filterValues[queryObject.options]"
+														model="queryObject.model"
+														do-reset="queryObject.onReset"
+													></dropdown-checkbox>
+												</div>
+
+												<div class="slider" ng-class="::(queryObject.class)" ng-if="::(queryObject.type === 'slider')" ng-cloak>
+													<span class="slider-label noselect" ng-bind="::(queryObject.name)"></span>
+													<rzslider rz-slider-model="queryObject.model.min" rz-slider-high="queryObject.model.max" rz-slider-options="queryObject.options">
+													</rzslider>
+												</div>
+
+												<div class="bool-slider" ng-class="::(queryObject.class)" ng-if="::(queryObject.type === 'bool-slider')" ng-cloak>
+													<span class="slider-label noselect" ng-bind="::(queryObject.name)">
+													</span>
+													<rzslider rz-slider-model="queryObject.model" rz-slider-options="queryObject.options">
+													</rzslider>
+												</div>
+
+												<div class="dropdown-section" ng-class="::(queryObject.class)" ng-if="::(queryObject.type === 'dropdown')" ng-cloak>
+													<div class="dropdown">
+														<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+															<span ng-bind="::(queryObject.label + ':')"></span> <strong ng-bind="(Controller.filterValues[queryObject.ref][queryObject.model].text || 'All')"></strong>
+														</button>
+														<ul class="dropdown-menu">
+															<li ng-click="queryObject.model = null">
+																<a href="#" ng-click="scopre = item">
+																	<span>All</span>
+																</a>
+															</li>
+															<li ng-click="queryObject.model = $index" ng-repeat="item in ::(Controller.filterValues[queryObject.ref]) track by $index">
+																<a href="#" ng-click="scope = item">
+																	<span ng-bind="::(item.text)"></span>
+																</a>
+															</li>
+														</ul>
+													</div>
+												</div>
+
+												<div class="typeahead-section" ng-class="::(queryObject.class)" ng-if="::(queryObject.type === 'typeahead')" ng-cloak>
+
+													<div class="input-filter">
+														<i class="icon" ng-class="::(queryObject.input_icon)"></i>
+														<div class="typehead">
+															<input
+																type="text"
+																ng-model="asyncSelected"
+																placeholder="{{::(queryObject.name)}}"
+																uib-typeahead="address for address in queryObject.typeaheadFunction($viewValue)"
+																typeahead-input-formatter="null"
+																typeahead-on-select="queryObject.typeaheadSelectFunction($item)"
+																typeahead-template-url="{{queryObject.template}}.html"
+																class="form-control"
+															>
+														</div>
+														<a class="btn btn-warning medium fade-animation-fast" ng-click="Controller.resetQueryModel(queryObject.property);" ng-if="(Controller.queryModels[queryObject.property])" ng-cloak>
+															<i class="icon ion-close"></i>
+														</a>
+													</div>
+
+													<div class="comment-animation single-property" ng-if="(Controller.queryModels[queryObject.property])" ng-cloak>
+														<div ng-init="object = Controller.queryModels[queryObject.property];">
+															<div ng-if="::(queryObject.icon)"
+																class="property-icon" ac-background-image
+																background-image="images/modules/{{::(queryObject.icon)}}/thumb_{{::object[queryObject.icon_prop]}}.{{::(queryObject.icon_ext)}}"
+															></div>
+															<div ng-if="::(!queryObject.icon)" class="property-icon empty"></div>
+															<div class="property-text" ng-bind="::(object.nameField)"></div>
+														</div>
+													</div>
+
+												</div>
+
+											</div>
+
+										</div>
+
+									</div>
+
+									<input type="submit" id="submit" value="Submit"/ style="display:none;">
+
+								</form>
+
+								<hr />
+
+							</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<div class="row">
+				<missions-directive object-list="Controller.objectData"></missions-directive>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<div class="row" id="pagination-container">
+				<div class="text-center intel-filter-animation" ng-if="Controller.showPagination" ng-cloak>
+					<nav aria-label="Page navigation">
+						<ul
+							uib-pagination
+
+							id="items-pagination"
+							class="pagination"
+
+							ng-change="Controller.movePage('a')"
+
+							first-text="&laquo;"
+							last-text="&raquo;"
+							next-text="&#9656;"
+							previous-text="&#9666;"
+
+							force-ellipses="true"
+							rotate="true"
+
+							total-items="Controller.objectListCount"
+							items-per-page="Controller.filterValues.perPage"
+							ng-model="Controller.basicQuery.page"
+							max-size="1"
+
+							boundary-links="false"
+							boundary-link-numbers="true"
+						></ul>
+						<form class="pagination-form" ng-submit="Controller.callQuery()">
+							<div class="form-group">
+								<input type="text" id="page-input" ng-change="Controller.inputPageChange()" class="form-control" ng-model="Controller.basicQuery.page">
+							</div>
+							<input type="submit" style="display:none;" />
+						</form>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

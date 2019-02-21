@@ -1,0 +1,566 @@
+
+#operations-container {
+
+	a { border: none; }
+
+	.menu-buttons {
+		.menu-button {
+			display: inline-block;
+			@include factor-property(margin-right, 2);
+
+			@include breakpoint("small") {
+				@include factor-property(margin-bottom, 1);
+			}
+		}
+	}
+
+	.content-display {
+		@include factor-property(min-height, 60);
+		@include factor-property(margin-bottom, 20);
+
+		@include breakpoint("small") { @include factor-property(min-height, 120); }
+
+		.meta {
+			@include transition(background .25s, color .25s);
+
+			text-transform: uppercase;
+			@include font-size(factor(2));
+			@include factor-property(margin-bottom, 1);
+			font-family: $main_font;
+			vertical-align: top;
+			display: inline-block;
+			letter-spacing: -1px;
+			background: url("/images/bg_test_light.png") repeat 100%;
+			color: #111;
+			font-weight: 800;
+			padding: 3px 8px;
+			border-radius: 2px;
+
+			.icon {	margin-right: 3px; }
+
+			&.red, &.green { color: #fff; }
+
+			&.red { background: url("/images/honeybg_red.png") repeat 100%; }
+			&.green { background: url("/images/honeybg_green.png") repeat 100%; }
+
+			&.dark {
+				background: url("/images/cardbg_inverted_light.png") repeat 100%;
+				color: #fff;
+			}
+
+			&.long {
+				width: 100%;
+				text-align: center;
+				padding: 1px 0px;
+			}
+
+			&.action {
+				cursor: pointer;
+
+				&:hover { background: url("/images/cardbg_dark.png") repeat 100%; }
+				&.selected {
+					cursor: default;
+					background: url("/images/cardbg_inverted_light.png") repeat 100%;
+					color: #fff;
+				}
+			}
+
+			&.align-sm {
+				@include breakpoint("medium") {
+					text-align: center;
+				}
+			}
+		}
+
+		.object-avatar {
+			@include size(50px);
+			.ac-bg-img__full-size, .ac-bg-img__placeholder { background-size: 100%; }
+
+			&.medium {
+				@include size(70px);
+			}
+
+			&.neutral { border-color: white; }
+			&.opfor { border-color: $opfor_color; }
+			&.blufor { border-color: $blufor_color; }
+			&.indfor { border-color: $indfor_color; }
+		}
+
+		.picture {
+			background-size: 100%;
+			display: inline-block;
+
+			&.objective {
+				@include size(30px);
+				@include prefix(filter, drop-shadow(0px 0px 3px #000));
+			}
+
+			&.flag {
+				@include transition(box-shadow .25s);
+				display: block;
+				width: auto;
+				height: 50px;
+
+				border-left: factor(1) solid blue;
+
+				box-shadow: 0px 0px 0px #000;
+				&:hover { box-shadow: 0px 0px 10px #000; }
+
+				@include breakpoint("medium") { width: 100%; height: auto; }
+				@include breakpoint("small") { width: auto; height: 50px; }
+			}
+
+			&.object-avatar {
+				@include transition(box-shadow .25s);
+				box-shadow: 0px 0px 0px #000;
+				&:hover { box-shadow: 0px 0px 5px #000; }
+			}
+		}
+
+		.operation-object {
+			.operation {
+				vertical-align: text-top;
+				width: 20%;
+				display: inline-block;
+
+				@include factor-property(margin-right, 2);
+				@include factor-property(margin-bottom, 2);
+
+				@include breakpoint("medium") { width: 31%; }
+				@include breakpoint("small") { width: 100%; }
+
+				&.success {
+					@include prefix(animation, pulse-drop-shadow-success-2 ($duration_time_slow / 2) ease-in-out infinite);
+				}
+
+				&.failed {
+					@include prefix(animation, pulse-drop-shadow-main-2 ($duration_time_slow / 2) ease-in-out infinite);
+				}
+
+				.header-anchor {
+					&:hover .header { background-size: 105%; }
+
+					.header {
+						@include factor-property(padding-top, 3);
+						@include factor-property(padding-bottom, 1);
+						@include transition(background-size .2s ease-out);
+
+						border-top-right-radius: 2px;
+						border-top-left-radius: 2px;
+						background-size: 100%;
+						background-position: center;
+
+						.info-container {
+							vertical-align: top;
+							display: inline-block;
+							width: 60%;
+
+							text-align: center;
+
+							.mission-name {
+								color: #fff;
+								@include font-size(factor(2.5));
+								font-weight: 800;
+								font-family: $main_font;
+								letter-spacing: -1px;
+								background-color: $main_color;
+								padding: 1px 10px;
+								display: inline-block;
+							}
+
+							.rating-container {
+								text-align: center;
+								.rating-icon {
+									color: #ddd;
+									display: inline-block;
+									@include factor-property(margin-right, 1);
+									@include font-size(factor(3));
+
+									text-shadow: 0px 0px 5px #000, 0px 0px 10px #111;
+								}
+							}
+						}
+
+						.time-limit {
+							display: inline-block;
+							width: 35%;
+
+							.big-text {
+								display: inline-block;
+								@include font-size(factor(2));
+								background: url("/images/bg_test_light.png") repeat 100%;
+								font-family: $main_font;
+								color: #111;
+								font-weight: 800;
+								letter-spacing: -1px;
+								padding: 3px 7px;
+
+								@include breakpoint("medium") { @include font-size(factor(1.5)); }
+								@include breakpoint("small") { @include font-size(factor(2)); }
+							}
+
+							.timer-container {
+								@include factor-property(margin-top, 1);
+								display: block;
+
+								.time {
+									@include factor-property(margin-right, 1);
+									display: inline-block;
+									@include font-size(factor(2.5));
+									letter-spacing: -2px;
+									color: #fff;
+
+									.number {
+										font-family: $main_font;
+										background-color: $main_color;
+										color: #fff;
+										padding: 0px 5px;
+									}
+
+									.t {
+										text-shadow: 0px 0px 5px #000, 0px 0px 5px #111;
+										font-weight: 800;
+										@include font-size(factor(2));
+									}
+
+									@include breakpoint("medium") {
+										margin-right: 0px;
+										.t { @include font-size(factor(1.5)); }
+									}
+
+									@include breakpoint("small") {
+										@include factor-property(margin-right, 1);
+										.t { @include font-size(factor(2)); }
+									}
+								}
+							}
+						}
+
+						.objective-container {
+							@include factor-property(margin-top, 2);
+							text-align: center;
+
+							.icon-container {
+								display: inline-block;
+							}
+
+							.name {
+								position: relative;
+								top: 3px;
+								@include font-size(factor(2));
+								color: #ffff;
+								font-family: $main_font;
+								vertical-align: top;
+								display: inline-block;
+								letter-spacing: -1px;
+								background-color: $main_color;
+								padding: 1px 8px;
+							}
+						}
+					}
+				}
+
+				.body {
+					width: 100%;
+					display: inline-block;
+					color: #000;
+					background: url("/images/cardbg_light.png") repeat 100%;
+
+					@include factor-property(padding, 1);
+					@include factor-property(padding-bottom, 2);
+
+					border-bottom-right-radius: 1px;
+					border-bottom-left-radius: 1px;
+
+					.separator {
+						border-top: solid 1px #999;
+						@include factor-property(margin-top, 1);
+						@include factor-property(padding-top, 1.5);
+					}
+
+					.unit {
+						&.pull-right {
+							.object-avatar { float: right; }
+							.turn-icon {
+								left: auto;
+								right: 17px;
+							}
+						}
+					}
+
+					.negotiation-actions {
+						.accept, .negotiate, .cancel {
+							display: inline-block;
+						}
+						.cancel {
+							position: relative;
+							top: -1px;
+						}
+						.negotiate { float: right; }
+
+						@include breakpoint("medium") {
+							.cancel {
+								@include factor-property(margin-bottom, 1);
+								display: block;
+							}
+							.section-button { ul li { padding: 6px 7px; } }
+						}
+
+						@include breakpoint("small") {
+							.section-button { ul li { padding: 7px 10px; } }
+						}
+					}
+
+					.interest-container {
+						position: relative;
+						top: 14px;
+
+						.interest {
+							left: -10px;
+							width: 100px;
+							display: inline-block;
+							position: absolute;
+							font-family: $main_font;
+							color: $main_color;
+
+							.number {
+								cursor: help;
+								display: inline-block;
+
+								font-weight: bold;
+								letter-spacing: -5px;
+								@include font-size(factor(6));
+							}
+
+							.pct {
+								color: #111;
+								@include font-size(factor(3));
+								display: inline-block;
+							}
+						}
+
+						&.static {
+							width: 85%;
+							text-align: right;
+							top: 0px;
+							display: inline-block;
+
+							.interest {
+								position: relative;
+								left: 0px;
+								width: auto;
+
+								line-height: 1;
+
+								.number {
+									cursor: auto;
+									@include font-size(factor(8));
+								}
+							}
+
+							@include breakpoint("medium") {
+								.interest .number {
+									@include font-size(factor(7));
+								}
+							}
+
+							@include breakpoint("small") {
+								@include font-size(factor(6));
+							}
+
+						}
+					}
+
+					.contractor-container {
+						.turn-icon {
+							position: absolute;
+							z-index: 99;
+							left: 17px;
+
+							.icon {
+								@include font-size(factor(7));
+								color: #fff;
+								text-shadow: 0px 0px 10px #000, 0px 0px 5px #000;
+							}
+						}
+
+						.contractor-info-container {
+							vertical-align: top;
+							display: inline-block;
+
+							@include font-size(factor(2.21));
+
+							.info {
+								background-color: $main_color;
+								@include factor-property(margin-bottom, 0.8);
+								color: #fff;
+								display: table;
+								padding: 0px 5px;
+
+								.icon { @include factor-property(margin-right, .5);	}
+								.icon, .number { display: inline-block; }
+							}
+						}
+					}
+
+					.freelancers-container {
+
+						.freelancer-list {
+							display: block;
+
+							.single-freelancer {
+								@include factor-property(margin-right, 0);
+								display: inline-block;
+
+								.rank-container {
+									text-align: center;
+									padding: 5px 5px;
+									color: #fff;
+									background-color: $main_color;
+									vertical-align: top;
+									display: inline-block;
+								}
+
+								.avatar-anchor {
+									&:hover .object-avatar { box-shadow: 0px 0px 5px #000; }
+
+									.percentage-container {
+										float: right;
+										position: relative;
+										z-index: 99;
+										display: inline-block;
+
+										.percentage {
+											top: 10px;
+											right: 15px;
+											float: right;
+											position: absolute;
+
+											@include font-size(factor(2.5));
+											font-weight: 800;
+											color: #fff;
+											text-shadow: 0px 0px 5px #000, 0px 0px 10px #000;
+											letter-spacing: -2px;
+											font-family: $main_font;
+										}
+									}
+									.picture { left: -4px; }
+								}
+							}
+						}
+
+						.reward-stack {
+							@include factor-property(margin-bottom, 1);
+
+							.progress {
+								@include factor-property(margin-top, 2);
+								height: 25px;
+								background-color: #ccc;
+								margin-bottom: 0px;
+
+								.progress-bar {
+									line-height: 25px;
+									cursor: help;
+
+									.bar-number {
+										cursor: help;
+										@include font-size(factor(2.5));
+										letter-spacing: -2px;
+										font-family: $main_font;
+										text-shadow: 0px 0px 5px #000, 0px 0px 5px #000;
+									}
+								}
+							}
+						}
+					}
+
+					.reward-container {
+						.reward-value {
+							display: block;
+							font-family: $main_font;
+							color: #fff;
+							font-weight: bold;
+							letter-spacing: -2px;
+							text-align: left;
+
+							.text {
+								@include font-size(factor(3));
+								display: inline-block;
+								color: #333;
+								@include factor-property(margin-right, .5);
+							}
+
+							.number {
+								display: inline-block;
+								padding: factor(0) factor(1);
+								@include font-size(factor(3.3));
+								text-shadow: 0px 0px 5px #000;
+								background: url("/images/honeybg_green.png") repeat 100%;
+							}
+
+							.button-container { display: block;	}
+
+							@include breakpoint("medium") {
+								.text { @include font-size(factor(2)); }
+								.number { @include font-size(factor(3.3)); }
+							}
+						}
+
+						&.negotiation {
+							display: inline-block;
+							width: 125px;
+							text-align: center;
+							position: relative;
+							top: 57px;
+							right: 40px;
+
+							.reward-value {
+								display: inline-block;
+								text-align: center;
+
+								.text {
+									@include font-size(factor(2.5));
+									color: #333;
+								}
+
+								.number {
+									color: #111;
+									@include font-size(factor(4));
+									background: none;
+									text-shadow: none;
+									padding: 0px;
+								}
+							}
+						}
+					}
+
+					.factions {
+						.faction {
+							&.neutral { .flag { border-color: white; } }
+							&.opfor { .flag { border-color: $opfor_color; } }
+							&.blufor { .flag { border-color: $blufor_color; } }
+							&.indfor { .flag { border-color: $indfor_color; } }
+						}
+
+						&.negotiation {
+							text-align: center;
+							@include factor-property(margin-bottom, 1);
+							.picture { display: inline-block; }
+
+							@include factor-property(min-height, 12);
+
+							@include breakpoint("medium") {
+								@include factor-property(min-height, 15);
+
+								.flag {
+									height: auto;
+									width: 130px;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

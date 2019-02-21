@@ -1,0 +1,119 @@
+.upgrade-directive-container {
+	position: relative;
+	height: 100%;
+
+	.upgrade-body {
+		@include prefix(filter, drop-shadow(0px 0px 5px #000));
+		z-index: 50;
+		position: absolute;
+
+		@include size(60px);
+		right: -4px;
+		bottom: -15px;
+
+		.upgrade-icon-container {
+			position: relative;
+			height: inherit;
+			width: inherit;
+
+			.background-hexagon, .main-upgrade-icon { background-repeat: no-repeat; }
+
+			.rank-field {
+				z-index: 10;
+
+				display: inline-block;
+				position: relative;
+				top: 65%;
+				bottom: 0;
+				right: 6%;
+
+				font-family: $main_font;
+				padding: factor(.5);
+				@include font-size(factor(2.5));
+				color: #fff;
+				line-height: 0.8;
+				font-weight: 800;
+
+				background-color: $main_color;
+				border-radius: 2px;
+				box-shadow: 0px 0px 5px #111;
+
+				float: right;
+			}
+
+			.main-upgrade-icon {
+				@include prefix(filter, drop-shadow(0px 0px 2px #000));
+				position: absolute;
+
+				height: inherit;
+				width: inherit;
+				background-size: 100%;
+			}
+
+			.background-hexagon {
+				@include prefix(filter, saturate(0%));
+
+				position: absolute;
+				//bottom: 0;
+
+				height: inherit;
+				width: inherit;
+				background-image: url(/images/upgrade-bg-light.png);
+				background-size: 100%;
+			}
+		}
+
+		&.operator-small {
+			@include size(40px);
+			right: -7px;
+			top: 40px;
+			.upgrade-icon-container .rank-field {
+				padding: factor(.5);
+				@include font-size(factor(2));
+			}
+		}
+
+		&.outfit {
+			@include size(90px);
+			.upgrade-icon-container .rank-field {
+				padding: factor(1);
+				@include font-size(factor(3));
+			}
+		}
+
+		&.outfit-mission {
+			@include size(80px);
+			right: 0;
+			bottom: 4px;
+			.upgrade-icon-container .rank-field {
+				padding: factor(1);
+				@include font-size(factor(3));
+			}
+		}
+
+		&.player-card, &.outfit-card, &.operator-small {
+			&, .upgrade-icon-container .main-upgrade-icon {
+				@include prefix(filter, drop-shadow(0px 0px 0px rgba(0,0,0,0)));
+			}
+			.upgrade-icon-container .rank-field {
+				box-shadow: 0px 0px 0px #111; text-shadow: 0px 0px 0px #111;
+			}
+		}
+
+		&.outfit-card {
+			.rank-field { @include font-size(factor(3)); }
+			@include size(70px);
+			top: 81px;
+			bottom: 0;
+			right: 7px;
+		}
+
+		&.player-card {
+			.rank-field { @include font-size(factor(2)); }
+			@include size(50px);
+			top: 55px;
+			bottom: 0;
+			right: -5px;
+		}
+	}
+}

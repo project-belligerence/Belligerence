@@ -1,0 +1,655 @@
+<div class="container-fluid top-spacer">
+	<div id="market-page" class="container">
+
+		<div class="row fade-animation-fast" id="{{::(('view-') + CtrlMarket.pageViews.main) }}"
+			ng-if="((CtrlMarket.currentView === CtrlMarket.pageViews.main) && (CtrlMarket.displayPage))"
+		ng-cloak>
+
+			<div class="col-md-12" >
+				<h1>THE EXCHANGE</h1>
+
+				<div class="text-block">
+					<p>Welcome to the marketplace.</p>
+					<p>
+						Across our long years of service, we have formed a wide-array of associated sales partners from all over the globe who will prove themselves invaluable assets in assisting your operations.
+					</p>
+					<p>
+						Please keep in mind that some partners will require a determined Prestige level before conducting business.
+					</p>
+				</div>
+			</div>
+
+			<div class="col-md-12" id="hexagon-intro">
+
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="hexagon-container medium noselect rotate a">
+						<div class="hexagon">
+							<div class="in1">
+								<a href="market/buy">
+									<div class="in2">
+										<i class="icon ion-android-cart"></i>
+										<div class="text">Buy</div>
+									</div>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="hexagon-container medium noselect rotate a disabled">
+						<div class="hexagon">
+							<div class="in1">
+								<div class="in2">
+									<i class="icon ion-arrow-swap"></i>
+									<div class="text">Sell</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4 col-sm-4 col-xs-12">
+					<div class="hexagon-container medium noselect rotate a disabled">
+						<div class="hexagon">
+							<div class="in1">
+								<div class="in2">
+									<i class="icon ion-stats-bars"></i>
+									<div class="text">Stats</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row fade-animation-fast" id="{{::(('view-') + CtrlMarket.pageViews.buy) }}"
+			ng-if="((CtrlMarket.currentView === CtrlMarket.pageViews.buy) && (CtrlMarket.displayPage))"
+		ng-cloak>
+
+			<a class="section-button default medium animated" role="button" href="market">
+				<ul>
+					<li><i class="icon ion-arrow-return-left"></i></li>
+					<li>Back</li>
+				</ul>
+			</a>
+			<hr />
+
+			<h2>Stores</h2>
+			<hr />
+
+			<div class="row filters">
+				<div class="col-md-12">
+					<div class="filter-containers">
+
+						<a class="section-button search warning medium"
+							role="button"
+							ng-click="CtrlMarket.filterQueryInputsStore()"
+						>
+							<ul>
+								<li><i class="icon ion-search"></i></li>
+								<li>Apply</li>
+							</ul>
+						</a>
+
+						<div class="bottom-filters">
+
+							<div class="main-filters">
+
+								<form class="single-filter" ng-submit="CtrlMarket.filterQueryInputsStore()">
+									<div class="form-group title">
+										<div class="input-group">
+											<input
+												type="text"
+												class="form-control"
+												ng-model="CtrlMarket.queryValues.qName"
+												name="filterInputsAlias"
+												placeholder="Store name"
+											/>
+										</div>
+									</div>
+									<input type="submit" id="submit" value="Submit"/ style="display:none;">
+								</form>
+
+								<div class="single-filter" ng-if="(CtrlMarket.viewData.storeSpecializations.length > 0)" ng-cloak>
+									<dropdown-checkbox
+										button-name="'Specializations'"
+										options="CtrlMarket.viewData.storeSpecializations"
+										model="CtrlMarket.queryValues.qTypes"
+									></dropdown-checkbox>
+								</div>
+
+								<div class="single-filter slider">
+									<span class="slider-label noselect">Required prestige</span>
+									<rzslider rz-slider-model="CtrlMarket.queryValues.qReqPrestige.min" rz-slider-high="CtrlMarket.queryValues.qReqPrestige.max" rz-slider-options="CtrlMarket.filterValues.prestige"></rzslider>
+								</div>
+							</div>
+
+							<div class="input-filter">
+
+								<i class="f-typehead icon ion-search"></i>
+
+								<div class="typeahead">
+									<input
+										type="text"
+										ng-model="asyncSelected"
+										placeholder="Enter the item name"
+										uib-typeahead="item for item in CtrlMarket.typeaheadFunction($viewValue)"
+										typeahead-input-formatter="null"
+										typeahead-on-select="CtrlMarket.typeaheadSelectFunction($item)"
+										typeahead-template-url="storeItemsTypeahead.html"
+										class="form-control"
+									>
+								</div>
+
+								<div class="filtering" ng-if="(CtrlMarket.viewData.filterToItem)" ng-cloak>
+
+									<div class="title">
+										<h3>Filtering stores for:</h3>
+										<button class="btn btn-default" ng-click="CtrlMarket.clearStoreItemFilters()">
+											<i class="icon ion-close"></i>
+										</button>
+									</div>
+
+									<items-directive
+										item-list="[CtrlMarket.viewData.filterToItem]"
+										display-mode="single"
+									></items-directive>
+
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+					<hr />
+				</div>
+			</div>
+
+			<div class="stores-container">
+
+				<div id="store-card-container" class="fade-animation-fast"
+					ng-click="CtrlMarket.storeCardClickEvent($event)"
+					ng-if="(CtrlMarket.viewData.showOverlay)"
+					ng-init="cStore = CtrlMarket.viewData.storeZoom;"
+				ng-cloak>
+
+					<div id="store-card" class="fade-animation-fast" ng-if="(CtrlMarket.viewData.showCard)" ng-cloak>
+
+						<div class="col-md-12 col-sm-12 col-xs-12 window-top">
+							<div class="window-title">Related Upgrades</div>
+							<a class="btn btn-warning" type="button" ng-click="CtrlMarket.closeStoreCard()">
+								<i class="icon ion-close"></i>
+							</a>
+						</div>
+						<div class="col-md-12 col-sm-12 col-xs-12 store-zoom-content">
+							<div class="row">
+								<div class="col-md-4 col-sm-3 col-xs-12">
+									<div class="hexagon-container shadow small noselect rotate">
+										<div class="hexagon stretch">
+											<div class="in1">
+												<div class="in2">
+													<div class="image" ac-background-image
+													background-image="images/modules/stores/main_{{::cStore.hashField}}.jpg"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-7 col-sm-9 col-xs-12">
+
+									<div class="content">
+										<div class="name" ng-bind="::(cStore.nameField)"></div>
+									</div>
+
+									<div class="upgrades">
+										<div class="required" ng-if="::(cStore.requiredUpgrades.length>0)" ng-cloak>
+											<div class="back">
+												<div class="text">Required</div>
+											</div>
+											<ul class="upgrade-list short">
+												<li
+													class="single-upgrade"
+													ng-repeat="upgrade in cStore.requiredUpgrades track by $index"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													popover-popup-delay="500"
+													popover-append-to-body="true"
+													uib-popover="{{::(upgrade.nameField)}}"
+													ng-init="requiredStatus = CtrlMarket.checkSingleUpgrade(upgrade, 1);"
+												>
+													<img ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+													<div class="rank-container">
+														<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+															<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+										<div class="blocked" ng-if="::(cStore.blacklistedUpgrades.length > 0)" ng-cloak>
+											<div class="back">
+												<div class="text">Conflicting</div>
+											</div>
+											<ul class="upgrade-list short">
+												<li
+													class="single-upgrade"
+													ng-repeat="upgrade in cStore.blacklistedUpgrades track by $index"
+													popover-trigger="'mouseenter'"
+													popover-class="tooltip"
+													popover-popup-delay="500"
+													popover-append-to-body="true"
+													uib-popover="{{::(upgrade.nameField)}}"
+													ng-init="requiredStatus = CtrlMarket.checkSingleUpgrade(upgrade, 2);"
+												>
+													<img ng-src="images/modules/upgrades/thumb_{{::(upgrade.iconName)}}.png" width="64" />
+													<div class="rank-container">
+														<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+															<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row" id="stores-tier-container" ng-if="(CtrlMarket.viewData.storeData.length > 0)" ng-class="{'do-blur': (CtrlMarket.viewData.showOverlay)}" ng-cloak>
+
+					<ul class="store-tier col-md-12" ng-repeat="storeTier in CtrlMarket.viewData.storeTiers track by $index" ng-class="{'under-prestige': (storeTier[0].prestigeRequired > CtrlMarket.currentPrestige)}">
+						<div class="store-prestige">
+							<h1>
+								<span class="prestige">PRESTIGE TIER</span>
+								<div class="rank">
+									<span class="number" ng-bind="storeTier[0].prestigeRequired"></span>
+									<i class="icon ion-star"></i>
+								</div>
+							</h1>
+						</div>
+
+						<div class="row">
+							<div ng-repeat="store in storeTier track by store.hashField" ng-init="validStore = CtrlMarket.validateStoreUpgrades(store)">
+								<div class="store-column col-lg-4 col-md-6 col-sm-6 col-xs-12">
+									<div class="toggle-card" ng-click="CtrlMarket.loadStoreView(store)" ng-if="::(validStore.status > 0)" ng-cloak>
+										<div class="icons pulse-text-shadow-black-fast">
+											<i class="icon" ng-class="((validStore.status < 3) ? 'ion-flash-off' : 'ion-flash')"></i>
+										</div>
+									</div>
+									<li class="store-single" ng-class="CtrlMarket.getStoreStatusStyle(store.statusField, validStore)">
+										<a class="store-object" ng-href="market/store/{{::(store.hashField)}}">
+											<div class="hexagon-container shadow small noselect rotate">
+												<div class="hexagon stretch">
+													<div class="in1">
+														<div class="in2">
+															<div
+																class="status-icon"
+																popover-trigger="'mouseenter'"
+																popover-class="tooltip"
+																popover-append-to-body="true"
+																popover-popup-delay="500"
+																uib-popover="{{::(CtrlMarket.getStoreStatusMessage(store.statusField)).text}}"
+															>
+																<i class="icon" ng-class="::(CtrlMarket.getStoreStatusMessage(store.statusField)).icon"></i>
+															</div>
+															<div class="image" ac-background-image
+															background-image="images/modules/stores/main_{{::store.hashField}}.jpg"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="content">
+												<h2 class="name" ng-bind="::(store.nameField)"></h2>
+
+												<ul class="specializations-container">
+													<li class="specializations-single" ng-repeat="storeType in store.typesField track by $index">
+														<i class="icon" ng-class="::(CtrlMarket.viewData.storeSpecializations[storeType].icon)"></i>
+														<div class="spec" ng-bind="::(CtrlMarket.viewData.storeSpecializations[storeType].name)"></div>
+													</li>
+												</ul>
+											</div>
+											<div class="item-filter" ng-if="CtrlMarket.viewData.filterToItem" ng-cloak>
+												This Store owns
+												<span class="amount" ng-bind="::('x' + store.store_stock.amountField)"></span> discounted at
+												<span class="discount" ng-bind="::(store.store_stock.discountField + '%')"></span>.
+											</div>
+										</a>
+									</li>
+								</div>
+							</div>
+						</div>
+						<hr />
+					</ul>
+				</div>
+
+				<div class="row no-stores" ng-if="(CtrlMarket.viewData.storeData.length === 0)" ng-cloak>
+					<div class="no-store-match">
+						<i class="icon ion-ios-cart-outline"></i>
+						<div class="text">No Stores found.</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="row fade-animation-fast" id="{{::(('view-') + CtrlMarket.pageViews.store) }}"
+			ng-if="((CtrlMarket.currentView === CtrlMarket.pageViews.store) && (CtrlMarket.displayPage))"
+			ng-class="::(CtrlMarket.getStoreStatusStyle(CtrlMarket.viewData.currentStore.statusField))"
+			ng-init="ownedUpgradeStatus = CtrlMarket.viewData.ownedUpgradeStatus;"
+		ng-cloak>
+
+			<a class="section-button default medium animated" role="button" href="market/buy">
+				<ul>
+					<li><i class="icon ion-arrow-return-left"></i></li>
+					<li>Back</li>
+				</ul>
+			</a>
+			<hr />
+
+			<div class="col-md-12 top-buttons">
+				<div class="row pull-right">
+					<a ng-click="CtrlMarket.askReportStore(CtrlMarket.viewData.currentStore)" class="section-button warning small" role="button">
+						<ul>
+							<li><i class="icon ion-alert-circled"></i></li>
+							<li>Report Store</li>
+						</ul>
+					</a>
+				</div>
+				<div class="row pull-left" ng-if="(CtrlMarket.selfInfo.playerPrivilege <= 1)" ng-cloak>
+					<a ng-href="admin?menu=content&section=store&editHash={{::(CtrlMarket.viewData.currentStore.hashField)}}" class="section-button warning small" role="button">
+						<ul>
+							<li><i class="icon ion-edit"></i></li>
+							<li>Edit Store</li>
+						</ul>
+					</a>
+					<a ng-click="CtrlMarket.askReRollStore(CtrlMarket.viewData.currentStore)" class="section-button small" role="button">
+						<ul>
+							<li><i class="icon ion-loop"></i></li>
+							<li>Resupply Store</li>
+						</ul>
+					</a>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+
+					<div class="store-message warning" ng-if="!(CtrlMarket.hasRequiredPrestige)">
+						<i class="icon ion-alert-circled"></i>
+						WARNING: You do not have the Prestige Rank required to purchase items in this Store.
+					</div>
+
+					<div class="store-message status" ng-if="(CtrlMarket.viewData.currentStore.statusField > 0)">
+						<i class="icon ion-alert-circled"></i>
+						<span ng-bind="::(CtrlMarket.getStoreStatusMessage(CtrlMarket.viewData.currentStore.statusField)).text"></span>
+					</div>
+
+					<div class="store-top">
+						<div class="name" ng-bind="::(CtrlMarket.viewData.currentStore.nameField)"></div>
+
+						<ul class="specializations-container">
+							<li class="specializations-single" ng-repeat="storeType in CtrlMarket.viewData.currentStore.typesField track by $index">
+								<i class="icon" ng-class="::(CtrlMarket.viewData.storeSpecializations[storeType].icon)"></i>
+								<div class="spec" ng-bind="::(CtrlMarket.viewData.storeSpecializations[storeType].name)"></div>
+							</li>
+						</ul>
+
+						<div class="col-md-offset-1 col-sm-offset-1 col-md-4 col-sm-3">
+							<div class="hexagon-container big noselect rotate">
+								<div class="hexagon stretch">
+									<div class="in1">
+										<div class="in2">
+											<div class="image" ac-background-image
+											background-image="images/modules/stores/main_{{::CtrlMarket.viewData.currentStore.hashField}}.jpg"></div>
+										</div>
+									</div>
+								</div>
+								<div ng-if="::(CtrlMarket.viewData.storeHasUpgrades)" ng-cloak>
+									<div class="display-upgrade visible-lg-block visible-md-block">
+										<a
+											ng-click="CtrlMarket.displayUpgrade()"
+											class="section-button medium"
+											role="button"
+											ng-class="::(ownedUpgradeStatus.button)"
+										>
+											<ul>
+												<li><i class="icon" ng-class="::(ownedUpgradeStatus.icon)"></i></li>
+												<li ng-bind="::(ownedUpgradeStatus.text)"></li>
+											</ul>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-5 col-sm-7">
+							<div class="speech-bubble">
+								<h3 ng-bind="::(CtrlMarket.viewData.currentStore.subTitleField)"></h3>
+								<div class="tri-container">
+									<div class="triangle"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="display-upgrade visible-sm-block visible-xs-block" ng-if="::(CtrlMarket.viewData.storeHasUpgrades)" ng-cloak>
+						<a
+							ng-click="CtrlMarket.displayUpgrade()"
+							class="section-button medium"
+							role="button"
+							ng-class="::(ownedUpgradeStatus.button)"
+						>
+							<ul>
+								<li><i class="icon" ng-class="::(ownedUpgradeStatus.icon)"></i></li>
+								<li ng-bind="::(ownedUpgradeStatus.text)"></li>
+							</ul>
+						</a>
+					</div>
+
+					<div class="store-upgrades" ng-if="::(CtrlMarket.viewData.storeHasUpgrades)" ng-cloak>
+						<div class="col-md-12 expand-height-animation" ng-hide="!(CtrlMarket.viewData.displayUpgrade)" ng-cloak>
+							<div class="upgrades">
+								<div class="required" ng-if="::(CtrlMarket.viewData.currentStore.requiredUpgrades.length>0)" ng-cloak>
+									<div class="back">
+										<div class="text">Required</div>
+									</div>
+									<ul class="upgrade-list short">
+										<li
+											class="single-upgrade"
+											ng-repeat="upgrade in CtrlMarket.viewData.currentStore.requiredUpgrades track by $index"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-popup-delay="500"
+											popover-append-to-body="true"
+											uib-popover="{{::(upgrade.nameField)}}"
+											ng-init="requiredStatus = CtrlMarket.checkSingleUpgrade(upgrade, 1);"
+										>
+											<img class="upgrade-icon" ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" />
+											<div class="rank-container">
+												<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+													<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+								<div class="blocked" ng-if="::(CtrlMarket.viewData.currentStore.blacklistedUpgrades.length > 0)" ng-cloak>
+									<div class="back">
+										<div class="text">Conflicting</div>
+									</div>
+									<ul class="upgrade-list short">
+										<li
+											class="single-upgrade"
+											ng-repeat="upgrade in CtrlMarket.viewData.currentStore.blacklistedUpgrades track by $index"
+											popover-trigger="'mouseenter'"
+											popover-class="tooltip"
+											popover-popup-delay="500"
+											popover-append-to-body="true"
+											uib-popover="{{::(upgrade.nameField)}}"
+											ng-init="requiredStatus = CtrlMarket.checkSingleUpgrade(upgrade, 2);"
+										>
+											<img class="upgrade-icon" ng-src="images/modules/upgrades/main_{{::(upgrade.iconName)}}.png" />
+											<div class="rank-container">
+												<div class="upgrade-rank" ng-class="::(requiredStatus.class)">
+													<span ng-bind="::(requiredStatus.currentRank)"></span> / <span ng-bind="::(upgrade.Rank)"></span>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="store-resupply">
+						<i class="icon ion-android-sync"></i>
+						Resupplies every
+						<div class="day-list" ng-repeat="day in (CtrlMarket.viewData.currentStore.resupplyDay) track by $index">
+							<div class="day" ng-bind="::('&nbsp' + (CtrlMarket.weekDays[day].text))"></div>
+							<div class="sep" ng-if="(($index+1) < CtrlMarket.viewData.currentStore.resupplyDay.length-1)">,</div>
+							<div class="sep" ng-if="($index === (CtrlMarket.viewData.currentStore.resupplyDay.length - 2))"> and </div>
+						</div>.
+					</div>
+
+				</div>
+			</div>
+
+			<div class="items-container" ng-if="(CtrlMarket.displayStoreItems)" ng-cloak>
+				<items-directive
+					item-list="CtrlMarket.viewData.currentStore.storeStock"
+					display-mode="purchase"
+					current-store="CtrlMarket.viewData.currentStore"
+					on-buy="CtrlMarket.addToCart"
+					remove-cart="CtrlMarket.removeFromCart"
+					enable-purchase="((CtrlMarket.hasRequiredPrestige) && (CtrlMarket.isAlive) && (ownedUpgradeStatus.valid))"
+				></items-directive>
+			</div>
+		</div>
+
+		<div class="row fade-animation-fast" id="{{::(('view-') + CtrlMarket.pageViews.checkout) }}"
+			ng-if="((CtrlMarket.currentView === CtrlMarket.pageViews.checkout) && (CtrlMarket.displayPage))"
+		ng-cloak>
+
+			<h2>Checkout</h2>
+
+			<hr />
+
+			<div style="text-align: center;">
+				<a ng-click="CtrlMarket.confirmClearCart()" class="section-button warning medium animated" role="button"">
+					<ul>
+						<li><i class="icon ion-ios-cart-outline"></i></li>
+						<li>EMPTY CART</li>
+					</ul>
+				</a>
+			</div>
+
+			<hr />
+
+			<div class="stores-container col-md-12"">
+				<div class="row">
+					<ul ng-repeat="storeItems in CtrlMarket.currentCart track by $index" ng-init="fStore = CtrlMarket.matchStoreObject(storeItems.store, 'stores');">
+
+						<div class="row">
+							<a ng-href="market/store/{{ ::(fStore.hashField) }}">
+								<div class="store-image col-md-4 col-sm-3">
+									<div class="checkout-store-name" ng-bind="::(fStore.nameField)"></div>
+									<div class="hexagon-container shadow big noselect rotate">
+										<div class="hexagon stretch">
+											<div class="in1">
+												<div class="in2">
+													<div class="image" ac-background-image
+													background-image="images/modules/stores/main_{{::(fStore.hashField)}}.jpg"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+
+
+							<div class="col-md-8 col-sm-8">
+								<div class="store-cost" ng-bind="::(CtrlMarket.viewData.storesCost[$index]) | currency :'D$ ': 0"></div>
+								<div class="store-items">
+									<items-directive
+										item-list="storeItems.items"
+										display-mode="checkout"
+										extra-functions="CtrlMarket.cartFunctions"
+										current-store="storeItems.store"
+										on-buy="CtrlMarket.addToCart"
+										remove-cart="CtrlMarket.removeFromCart"
+									></items-directive>
+								</div>
+							</div>
+						</div>
+
+						<hr />
+
+					</ul>
+				</div>
+			</div>
+
+			<div class="checkout-price">
+
+				<div class="final-cost-label">Final cost:</div>
+
+				<div class="cost-container">
+					<i class="icon ion-ios-cart"></i>
+					<div class="current-cost" ng-bind="CtrlMarket.viewData.currentCost | currency :'D$ ': 0"></div>
+				</div>
+
+				<div class="funds-container">
+					<i class="icon ion-cash"></i>
+					<div class="current-funds" ng-bind="CtrlMarket.viewData.currentFunds | currency :'D$ ': 0"></div>
+				</div>
+
+				<hr />
+
+				<div class="remaining-funds-container">
+					<i class="icon ion-arrow-swap"></i>
+					<div class="remaining-funds" ng-bind="(CtrlMarket.viewData.currentFunds - CtrlMarket.viewData.currentCost) | currency :'D$ ': 0"></div>
+				</div>
+
+				<hr />
+
+				<a
+					ng-click="CtrlMarket.confirmBuyItems()"
+					class="section-button success medium animated"
+					role="button"
+					a-disabled="(((CtrlMarket.viewData.currentFunds - CtrlMarket.viewData.currentCost) <= 0) || (CtrlMarket.viewData.holdPurchaseButton))"
+				>
+					<ul>
+						<li><i class="icon ion-card"></i></li>
+						<li>Confirm purchase</li>
+					</ul>
+				</a>
+
+			</div>
+
+		</div>
+
+		<div id="checkout-button" ng-if="((CtrlMarket.currentView !== CtrlMarket.pageViews.checkout) && (CtrlMarket.currentView !== '') && (CtrlMarket.currentCartSize > 0))"
+		ng-cloak>
+			<a
+				href="market/checkout"
+				class="section-button success medium animated"
+				role="button"
+			>
+				<ul>
+					<li><i class="icon ion-android-cart"></i></li>
+					<li ng-bind="CtrlMarket.currentCartSize"></li>
+					<li>Checkout</li>
+				</ul>
+			</a>
+		</div>
+
+	</div>
+</div>
+
+<footer-directive></footer-directive>

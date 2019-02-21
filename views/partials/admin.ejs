@@ -1,0 +1,39 @@
+<div class="container-fluid top-spacer">
+	<div id="admin-page" class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Admin Menu</h2>
+				<h3>All tools and options relating to the inner-workings of the System.</h3>
+				<hr />
+			</div>
+		</div>
+		<div class="col-md-12 fade-animation-fast" ng-if="(CtrlAdmin.pageState === 'main')" ng-cloak>
+			<div class="row">
+				<div class="actions col-md-3 col-sm-5 col-xs-12 noselect" ng-repeat="menuItem in CtrlAdmin.menuOptions" ng-class="{'muted': !(menuItem.enable) }" ng-click="(menuItem.fn ? menuItem.fn() : CtrlAdmin.changeState(menuItem.state))">
+					<div
+						class="row"
+						a-disabled="!(menuItem.enable)"
+						ui-sref="{{::(menuItem.route || 'app.admin.menu')}}"
+					>
+						<i class="icon" ng-class="::(menuItem.icon)"></i>
+						<div class="title" ng-bind="::(menuItem.title)"></div>
+						<hr />
+						<div class="description" ng-bind="::(menuItem.description)"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="back-button" class="fade-animation-fast" ng-if="(CtrlAdmin.pageState !== 'main') && (CtrlAdmin.pageState !== 'null')" ng-cloak>
+			<a ng-click="CtrlAdmin.clearEdit(); CtrlAdmin.changeState('main')"	class="section-button medium animated" role="button">
+				<ul>
+					<li><i class="icon ion-star"></i></li>
+					<li>Main Menu</li>
+				</ul>
+			</a>
+		</div>
+		<div id="content" class="col-md-12 fade-animation-fast" ng-if="(CtrlAdmin.pageState !== 'main') && (CtrlAdmin.pageState !== 'null') && (CtrlAdmin.currentViewHTML)" ng-html="CtrlAdmin.currentViewHTML" ng-cloak>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

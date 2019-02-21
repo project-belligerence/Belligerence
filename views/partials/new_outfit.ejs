@@ -1,0 +1,234 @@
+
+<div id="signup-page" class="container-fluid top-spacer">
+	<div class="row">
+		<div class="container">
+			<div class="new-outfit" id="signup-view" ng-init="croppedDataUrl=''">
+				<div class="signup-block fade-animation-fast" id="intro-text-block" ng-if="(CtrlSignupNewOutfit.currentStep === 0)" ng-cloak>
+
+					<h2>New Outfit</h2>
+
+					<div class="block">
+						Welcome to the Outfit creation page.
+					</div>
+
+					<div class="block">
+						Upon finishing filling up the form, please select your Emblem and confirm. You may input the remaining settings such as Tags and Privacy Settings once the creation is completed.
+					</div>
+					<div class="block">
+						Outfits are the main driving force within Belligerence®. We encourage you to look for unemployed Soldiers and hire them right away. As soon as you're ready to get started, head over to our marketplace to purchase some equipment and start taking on some Missions.
+					</div>
+					<div class="block">
+						We wish you the best of luck.
+					</div>
+				</div>
+
+				<div class="signup-block fade-animation-fast" ng-if="(CtrlSignupNewOutfit.currentStep === 1)" ng-cloak>
+					<h2>DESCRIBE YOUR OUTFIT</h2>
+
+					<div id="unit-info" class="col-lg-12 fade-animation-fast">
+
+						<div id="unit-avatar-container" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<div id="preview-image"><img ng-src="{{CtrlSignupNewOutfit.croppedDataUrl}}"/></div>
+
+							<div id="unit-info-change-avatar" class="unit-info-change-avatar-button" ng-click="CtrlSignupNewOutfit.switchUploadView()">
+
+								<div fade-animation-fast" ng-if="(CtrlSignupNewOutfit.viewAvatarUpload === 0)" ng-cloak>
+									<i class="icon ion-camera"></i>
+									<span>Select your emblem picture</span>
+								</div>
+
+								<div fade-animation-fast" ng-if="(CtrlSignupNewOutfit.viewAvatarUpload === 1)" ng-cloak>
+									<i class="icon ion-checkmark"></i>
+									<span>Confirm</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+
+							<div id="unit-info-form-container" class="fade-animation-fast" ng-if="(CtrlSignupNewOutfit.viewAvatarUpload === 0)" ng-cloak>
+								<form id="unit-info-form" class="form-horizontal">
+									<div class="form-group" ng-repeat="input in CtrlSignupNewOutfit.formCharacters track by $index">
+										<label for="{{::input.class}}" class="col-sm-4 control-label">
+											<span>{{::input.name.toUpperCase()}}</span>
+										</label>
+										<div class="col-sm-7">
+											<input
+												ng-if="(input.type !== 'textarea') && (input.type !== 'dropdown')"
+												type="{{ input.type || 'text' }}"
+												class="form-control"
+												ng-class="{'username': (input.class === 'inputUnitUsername')}"
+												id="{{::input.class}}"
+												ng-model="input.text"
+												placeholder="{{::input.placeholder}}"
+												ng-blur="CtrlSignupNewOutfit.validateInputForm(input.class)"
+
+												ng-cloak
+											>
+											<textarea
+												ng-if="(input.type === 'textarea')"
+												class="form-control"
+												id="{{::input.class}}"
+												ng-model="input.text"
+												rows="3"
+												placeholder="{{::input.placeholder}}"
+												ng-blur="CtrlSignupNewOutfit.validateInputForm(input.class)"
+
+												ng-cloak
+											></textarea>
+											<div ng-if="(input.class === 'inputUnitUsername')" ng-cloak>
+												<a class="section-button medium animated username" role="button"
+												popover-trigger="'mouseenter'"
+												popover-class="tooltip"
+												popover-placement="left"
+												uib-popover="Checks for username availability."
+												ng-click="CtrlSignupNewOutfit.verifyUsernameButton()"
+												>
+													<ul><li><i class="icon ion-help"></i></li></ul>
+												</a>
+											</div>
+
+											<div class="dropdown-section" ng-if="(input.type === 'dropdown')" ng-cloak>
+												<div class="dropdown">
+													<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
+														<span ng-bind="CtrlSignupNewOutfit.regionOptions[input.value]"></span>
+													</button>
+													<ul class="dropdown-menu">
+														<li ng-click="input.value = $index" ng-repeat="item in (CtrlSignupNewOutfit.regionOptions) track by $index">
+															<a href="#" ng-click="scope = item">
+																<span ng-bind="::(CtrlSignupNewOutfit.regionOptions[$index])"></span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+
+											<div ng-if="(input.type !== 'dropdown')">
+												<div class="characters-left" ng-if="(input.name.toUpperCase() !== 'PASSWORD') && (input.name.toUpperCase() !== 'CONFIRM')" ng-cloak>Between {{input.validation[0].params.min}} and {{input.validation[0].params.max}} characters. {{ CtrlSignupNewOutfit.getFieldLimit(input.class) }} left.</div>
+
+												<div class="characters-left" ng-if="(input.name.toUpperCase() === 'PASSWORD') || (input.name.toUpperCase() === 'CONFIRM')" ng-cloak>Between {{input.validation[0].params.min}} and {{input.validation[0].params.max}} <strong style="color: #11ffbb">letters and numbers</strong>. {{ CtrlSignupNewOutfit.getFieldLimit(input.class) }} left.</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+
+							<div
+								id="avatar-upload-form-container"
+								class="fade-animation-fast"
+								ng-if="(CtrlSignupNewOutfit.viewAvatarUpload === 1)"
+								ng-cloak>
+								<a
+									class="section-button medium animated" role="button"
+
+									ngf-select
+									ngf-drop
+
+									ng-model="CtrlSignupNewOutfit.currentUploadedAvatar"
+
+									ngf-pattern="'image/*'"
+									ngf-accept="'image/*'"
+									ngf-max-size="3MB"
+								>
+									<ul>
+										<li><i class="icon ion-ios-camera"></i></li>
+										<li>Select picture</li>
+									</ul>
+								</a>
+
+								<div id="avatar-upload-form">
+									<form name="avatarPictureForm" enctype="multipart/form-data">
+										<div ngf-drop ng-model="CtrlSignupNewOutfit.currentUploadedAvatar" ngf-pattern="image/*" class="crop-area">
+
+											<div class="upload-text">
+												<i class="icon medium ion-arrow-down-a"></i><br>
+												Or just drag and drop/paste your picture here.
+											</div>
+
+											<img-crop
+												image="CtrlSignupNewOutfit.currentUploadedAvatar | ngfDataUrl"
+												area-type="square"
+												result-image="CtrlSignupNewOutfit.croppedDataUrl"
+												result-image-size="350"
+											>
+											</img-crop>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="signup-block fade-animation-fast col-md-12" ng-if="(CtrlSignupNewOutfit.currentStep === 2)" ng-cloak>
+					<h2>REVIEW THE DETAILS</h2>
+
+					<div id="outfit-card" class="fade-animation-fast col-centered col-md-6 col-sm-12" ng-if="(CtrlSignupNewOutfit.displayOutfitCard)" ng-cloak>
+						<div class="row row-centered">
+							<div class="top">
+								<h2 ng-bind="::(CtrlSignupNewOutfit.outfitInfoCard.displayName)"></h2>
+								<div class="card-date">Since {{ ::(CtrlSignupNewOutfit.outfitInfoCard.issueDate) | date:"MM/dd/yyyy"}}</div>
+							</div>
+							<div class="main">
+								<div id="card-avatar">
+									<div class="hexagon avatar-medium">
+										<div class="in1"><div class="in2">
+											<div id="card-preview-image"><img ng-src="{{CtrlSignupNewOutfit.croppedDataUrl}}" /></div>
+										</div></div>
+									</div>
+								</div>
+
+								<div class="info">
+									<div class="location">
+										<i class="icon ion-earth"></i>
+										<span ng-bind="::(CtrlSignupNewOutfit.regionOptions[CtrlSignupNewOutfit.outfitInfoCard.location])"></span>
+									</div>
+									<div class="motto" ng-bind="::(CtrlSignupNewOutfit.outfitInfoCard.motto)"></div>
+									<div class="description" ng-bind="::(CtrlSignupNewOutfit.outfitInfoCard.description)"></div>
+								</div>
+							</div>
+
+							<div class="bottom">
+								<form class="editable-field">
+									<div class="form-group">
+										<div class="extra-input">
+											<input type="checkbox" id="input-1" ng-model="(CtrlSignupNewOutfit.confirmedCreation)">
+											<label class="input-label" for="input-1">
+												<div class="body check">
+													<div class="box"><i class="icon ion-checkmark small"></i></div>
+													<span>Confirm details</span>
+												</div>
+											</label>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="signup-block fade-animation-fast" ng-if="(CtrlSignupNewOutfit.currentStep === 3)" ng-cloak>
+					<h2>PLEASE WAIT...</h2>
+				</div>
+			</div>
+
+			<div id="signup-buttons">
+				<a class="section-button muted big" role="button" ng-click="CtrlSignupNewOutfit.changeStep(-1)"
+				ng-if="(CtrlSignupNewOutfit.currentStep > 0) || (CtrlSignupNewOutfit.currentStep === -1)" ng-cloak>
+					<ul>
+						<li>BACK</li>
+						<li class="icon"><i class="icon ion-chevron-left"></i></li>
+					</ul>
+				</a>
+				<a class="section-button big" role="button" ng-click="CtrlSignupNewOutfit.changeStep(1)"
+				ng-if="(CtrlSignupNewOutfit.currentStep < 6)" ng-cloak>
+					<ul>
+						<li class="icon"><i class="icon ion-chevron-right"></i></li>
+						<li>NEXT</li>
+					</ul>
+				</a>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>

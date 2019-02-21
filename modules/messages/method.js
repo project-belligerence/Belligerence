@@ -17,6 +17,8 @@
 	exports.getReceived = getReceived;
 	exports.put = put;
 	exports.countReceived = countReceived;
+	exports.deleteMessage = deleteMessage;
+
 
 	function queryValues(req) {
 		return {
@@ -49,6 +51,13 @@
 		};
 	}
 
+	initializeWebsocketEvents();
+
+	function initializeWebsocketEvents() {
+		var WebsocketEvent = new config.websocket.WebsocketEventObject();
+		config.websocket.registerEvent("NewMessage", WebsocketEvent);
+	}
+
 	function get(req, res) {
 		var objectID = req.params.Hash;
 
@@ -79,11 +88,37 @@
 					object.senderName = entry.Sender.aliasField;
 					object.receiverHash = entry.Receiver.hashField;
 					object.receiverName = entry.Receiver.aliasField;
+					object.sentDate = entry.createdAt;
 
 					if (req.playerInfo.hashField === object.receiverHash) object.read = entry.readField;
 
 					API.methods.sendResponse(req, res, true, config.messages().return_entry, object);
 				});
+			});
+		});
+	}
+
+	function deleteMessage(req, res) {
+		var objectID = req.params.Hash;
+
+		mainModel.findOne({
+			where: { "hashField": objectID },
+			attributes: { exclude: ['readField'] },
+			include: [
+				{ model: PlayerModel, as: 'Sender', attributes: ['aliasField', 'hashField'] },
+				{ model: PlayerModel, as: 'Receiver', attributes: ['aliasField', 'hashField'] }
+			]
+		}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
+
+			if (!API.methods.validate(req, res, [
+				(req.playerInfo.hashField == entry.Sender.hashField) ||
+				(req.playerInfo.hashField == entry.Receiver.hashField) ||
+				(req.playerInfo.playerPrivilege <= config.privileges().tiers.owner)
+			], config.messages().bad_permission)) { return 0; }
+
+			entry.destroy().then(function() {
+				API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
 			});
 		});
 	}
@@ -125,8 +160,10 @@
 	}
 
 	function getSent(req, res) {
-
 		req.query.PARAM_SENT = true;
+
+		req.serverValues = {};
+		req.serverValues.contextLimit = 6;
 
 		var queryValuesDone = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
 
@@ -155,6 +192,11 @@
 	function getReceived(req, res) {
 		req.query.PARAM_RECEIVED = true;
 
+		req.serverValues = {};
+		req.serverValues.contextLimit = 6;
+
+		if (req.query.qLimit) req.query.qLimit = Math.min(req.query.qLimit, req.serverValues.contextLimit);
+
 		var queryValuesDone = API.methods.generatePaginatedQuery(req, res, queryValues(req)),
 
 			queryValuesDoneMessage = queryValuesDone.where.object,
@@ -167,7 +209,7 @@
 			],
 			attributes: { exclude: ['bodyField'] },
 			where: queryValuesDoneMessage,
-			limit: parseInt(queryValuesDone.limit),
+			limit: parseInt((req.query.qLimit || queryValuesDone.limit)),
 			offset: queryValuesDone.offset,
 			order: queryValuesDone.order,
 		}).then(function(entries) {
@@ -193,17 +235,34 @@
 		if (req.body.title) update.titleField = req.body.title;
 		if (req.body.body) update.bodyField = req.body.body;
 
-		PlayerModel.findOne({where: {"hashField": req.playerInfo.hashField}}).then(function(sender) {
-		PlayerModel.findOne({where: {"hashField": req.body.receiver}}).then(function(receiver) {
+		PlayerModel.findOne({where: {"hashField": req.playerInfo.hashField}, include:[PMCModel] }).then(function(sender) {
+		PlayerModel.findOne({where: {"hashField": req.body.receiver}, include:[PMCModel] }).then(function(receiver) {
 
+			if (!API.methods.validate(req, res, [(req.body.receiver !== req.playerInfo.hashField)], config.messages().modules.messages.message_to_self)) { return 0; }
 			if (!API.methods.validate(req, res, [sender, receiver])) { return 0; }
 
-			mainModel.sync({force: false}).then(function() {
-				mainModel.create(update).then(function(entry) {
+			var FriendsMethods = require('./../index.js').getMethods().friends,
+				PlayerMethods = require('./../index.js').getMethods().players;
 
-					entry.setReceiver(receiver).then(function() {
-						entry.setSender(sender).then(function() {
-							API.methods.sendResponse(req, res, true, config.messages().modules.messages.new_message);
+			FriendsMethods.getFriendsAllFunc(req, res, function(friendsList) {
+				req.playerInfo.friendsList = friendsList;
+
+				var allowedPoster = PlayerMethods.getVisibility(req, (receiver.privateVisibility || "nobody"), receiver),
+					_ = require('lodash'),
+					blockMessages = (_.indexOf(receiver.privateFields, 'blockMessages') > -1),
+					canPost = false
+				;
+
+				if (!API.methods.validate(req, res, [(allowedPoster || !(blockMessages))], config.messages().bad_permission)) { return 0; }
+
+				mainModel.sync({force: false}).then(function() {
+					mainModel.create(update).then(function(entry) {
+
+						entry.setReceiver(receiver).then(function() {
+							entry.setSender(sender).then(function() {
+								config.websocket.broadcastEvent("NewMessage", [receiver.hashField]);
+								API.methods.sendResponse(req, res, true, config.messages().modules.messages.new_message);
+							});
 						});
 					});
 				});
