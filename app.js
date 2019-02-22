@@ -24,8 +24,6 @@
 			// Runs scheduled tasks.
 			scheduled = config.scheduled();
 
-	console.log(process.env.APP_PORT);
-
 	// CONNECTS TO DATABASE
 	var	sequelize = new Sequelize(config.db.newConnection());
 
@@ -43,9 +41,6 @@
 
 	// SETS UP ROUTES
 	routes.setup(app, express);
-
-	console.log(app.get('port'));
-	console.log(process.env.PORT);
 
 	// STARTS SERVER
 	var serverObject = http.createServer(app).listen(app.get('port'), config.methods.openServer(app));
