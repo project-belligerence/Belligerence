@@ -16,7 +16,11 @@
 		queryPageLimit: 5,
 		SteamAPIKey: process.env.API_KEY_STEAM,
 
-		newConnection: function() { return (this.protocol + '://'+ this.cred.user + ':' + this.cred.password + '@' + this.server + ":" + this.port + '/' + this.name); },
+		newConnection: function() {
+			if (process.env.CLEARDB_DATABASE_URL) return process.env.CLEARDB_DATABASE_URL;
+
+			return (this.protocol + '://'+ this.cred.user + ':' + this.cred.password + '@' + this.server + ":" + this.port + '/' + this.name);
+		},
 	};
 
 })();
