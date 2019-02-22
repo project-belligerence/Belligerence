@@ -16,7 +16,7 @@
 				util = require('util'),
 				session = require('express-session'),
 				SteamStrategy = require('passport-steam').Strategy,
-				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + ":" + config.port + "/");
+				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/");
 
 			passport.serializeUser(function(user, done) { done(null, user);	});
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
