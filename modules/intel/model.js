@@ -73,7 +73,8 @@
 
 						model.setDataValue('hashField', newHash);
 					}
-				}
+				},
+				freezeTableName: true
 			}
 		);
 

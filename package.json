@@ -58,6 +58,7 @@
     "requestify": "^0.2.5",
     "require-reload": "^0.2.2",
     "sequelize": "^3.6.0",
+    "sequelize-heroku": "^2.0.0",
     "serve-favicon": "^2.3.0",
     "sharp": "^0.20.1",
     "simple-crypto-js": "^1.1.1",
