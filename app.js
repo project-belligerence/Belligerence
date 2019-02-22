@@ -19,6 +19,8 @@
 
 			env = process.env.NODE_ENV || config.env,
 
+			port = ((process.env.PORT !== "undefined") ? process.env.PORT : (process.env.APP_PORT || config.port)),
+
 			app = module.exports = express(),
 
 			// Runs scheduled tasks.
@@ -31,7 +33,7 @@
 	config.methods.setupPassportSteam(app);
 
 	// ENVIRONMENTS
-	app.set('port', process.env.APP_PORT || config.port);
+	app.set('port', port);
 	app.set('view engine', 'ejs');
 	app.use(morgan('dev'));
 
@@ -43,7 +45,7 @@
 	routes.setup(app, express);
 
 	// STARTS SERVER
-	var serverObject = http.createServer(app).listen((process.env.PORT || app.get('port')), config.methods.openServer(app));
+	var serverObject = http.createServer(app).listen(app.get('port'), config.methods.openServer(app));
 
 	// INITIALIZES WEBSOCKET
 	config.websocket.init(serverObject);
