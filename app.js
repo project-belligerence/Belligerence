@@ -43,7 +43,7 @@
 	routes.setup(app, express);
 
 	// STARTS SERVER
-	var serverObject = http.createServer(app).listen(app.get('port'), config.methods.openServer(app));
+	var serverObject = http.createServer(app).listen((process.env.PORT || app.get('port')), config.methods.openServer(app));
 
 	// INITIALIZES WEBSOCKET
 	config.websocket.init(serverObject);
