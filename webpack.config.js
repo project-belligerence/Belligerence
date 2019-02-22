@@ -11,7 +11,6 @@
 
 	var
 		uglifyConfig = {
-			sourceMap: false,
 			comments: false,
 			compress: { warnings: false	}
 		},
