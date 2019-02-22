@@ -41,16 +41,6 @@
 	app.use(express.static(path.join(__dirname, 'public')));
 	app.use(express.static(path.join(__dirname, 'uploads')));
 
-	function createFolders() {
-		var fs = require('fs'),
-			path = require('path');
-		try {
-			fs.mkdirSync('uploads/images/avatars/players');
-		} catch (err) { if (err.code !== 'EEXIST') throw err; }
-	}
-
-	createFolders();
-
 	// SETS UP ROUTES
 	routes.setup(app, express);
 
