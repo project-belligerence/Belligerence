@@ -45,7 +45,7 @@
 		var fs = require('fs'),
 			path = require('path');
 		try {
-			fs.mkdirSync(path.join(__dirname, 'uploads/images/avatars/players'));
+			fs.mkdirSync('uploads/images/avatars/players');
 		} catch (err) { if (err.code !== 'EEXIST') throw err; }
 	}
 
