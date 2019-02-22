@@ -3,6 +3,7 @@
 
 	var
 		path = require('path'),
+		dotenv = require('dotenv').config(),
 		debug = (process.env.NODE_ENV !== "production"),
 		webpack = require('webpack'),
 		BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -75,7 +76,7 @@
 	buildConfig.entry.vendors.push('bootstrap/dist/js/bootstrap.min');
 	buildConfig.entry.vendors.push('angular-ui-bootstrap/dist/ui-bootstrap-tpls');
 
-	if (!(debug)) buildConfig.plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyConfig));
+	if (!debug) buildConfig.plugins.push(new webpack.optimize.UglifyJsPlugin(uglifyConfig));
 
 	module.exports = buildConfig;
 

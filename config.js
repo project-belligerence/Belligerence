@@ -12,7 +12,7 @@ var getConfig = function(config) {
 
 module.exports = {
 	env: 'development',
-	port: process.env.PORT,
+	port: process.env.APP_PORT,
 
 	folders: getConfig('folders'),
 	files: getConfig('files'),

@@ -37,6 +37,7 @@ $RECYCLE.BIN/
 /logs
 /uploads
 /build
+/public/js
 
 # Go away npm
 package-lock.json

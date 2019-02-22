@@ -24,6 +24,8 @@
 			// Runs scheduled tasks.
 			scheduled = config.scheduled();
 
+	console.log(process.env.APP_PORT);
+
 	// CONNECTS TO DATABASE
 	var	sequelize = new Sequelize(config.db.newConnection());
 
@@ -31,7 +33,7 @@
 	config.methods.setupPassportSteam(app);
 
 	// ENVIRONMENTS
-	app.set('port', process.env.PORT || config.port);
+	app.set('port', process.env.APP_PORT || config.port);
 	app.set('view engine', 'ejs');
 	app.use(morgan('dev'));
 
@@ -41,6 +43,9 @@
 
 	// SETS UP ROUTES
 	routes.setup(app, express);
+
+	console.log(app.get('port'));
+	console.log(process.env.PORT);
 
 	// STARTS SERVER
 	var serverObject = http.createServer(app).listen(app.get('port'), config.methods.openServer(app));
