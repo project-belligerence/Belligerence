@@ -65,3 +65,4 @@ Temporary Items
 .apdisk
 *.sublime-project
 *.sublime-workspace
+views/components/singletons/dev.ejs
