@@ -39,7 +39,7 @@
 
 			function formWebsocketUrl(location, query) {
 				var host = location.host(), port = location.port(),
-					addr = ("ws://" + host + ":" + port + "/" + query);
+					addr = ("wss://" + host + ":" + port + "/" + query);
 				return addr;
 			}
 		}
