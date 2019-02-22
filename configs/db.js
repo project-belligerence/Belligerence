@@ -17,11 +17,10 @@
 		SteamAPIKey: process.env.API_KEY_STEAM,
 
 		newConnection: function() {
-			// if (process.env.CLEARDB_DATABASE_URL) return process.env.CLEARDB_DATABASE_URL;
+			if (process.env.CLEARDB_DATABASE_URL) return process.env.CLEARDB_DATABASE_URL;
+			if (process.env.JAWSDB_URL) return process.env.JAWSDB_URL;
 
-			// return (this.protocol + '://'+ this.cred.user + ':' + this.cred.password + '@' + this.server + ":" + this.port + '/' + this.name);
-
-			return "mysql://v98onukvyfddfdxl:tgggsyao6xk26v7b@yhrz9vns005e0734.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/c369402qkwrglgn7";
+			return (this.protocol + '://'+ this.cred.user + ':' + this.cred.password + '@' + this.server + ":" + this.port + '/' + this.name);
 		},
 	};
 
