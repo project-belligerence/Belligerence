@@ -23,7 +23,7 @@
 
 			passport.use(new SteamStrategy({
 				returnURL: ("https://belligerence.herokuapp.com/auth/steam/return"),
-				realm: "https://belligerence.herokuapp.com",
+				realm: "https://belligerence.herokuapp.com/",
 				apiKey: config.db.SteamAPIKey
 		  	},
 		  	function(identifier, profile, done) {

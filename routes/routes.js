@@ -611,7 +611,10 @@
 
 		app.get('/auth/steam', passport.authenticate('steam'), function(req, res) {});
 		app.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: '/' }),
-			function(req, res) { res.redirect('/signup?step=steam'); }
+			function(req, res) {
+				console.log("!!!!!!!!!!!!!!!");
+				res.redirect('/signup?step=steam');
+			}
 		);
 
 		// MOUNT API ROUTES
