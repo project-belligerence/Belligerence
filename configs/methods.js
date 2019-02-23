@@ -21,8 +21,8 @@
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
 
 			passport.use(new SteamStrategy({
-				returnURL: "https://localhost:" + process.env.PORT + "/auth/steam/return",
-				realm: "https://localhost:" + process.env.PORT + "/",
+				returnURL: "https://belligerence.herokuapp.com/auth/steam/return",
+				realm: "https://belligerence.herokuapp.com/",
 				apiKey: config.db.SteamAPIKey,
 		  	},
 		  	function(identifier, profile, done) {
