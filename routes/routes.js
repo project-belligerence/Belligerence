@@ -609,8 +609,13 @@
 		app.get('/directive/:directive', renderDirective);
 		app.get('/modals/:modal', renderModal);
 
+		function use_orginalurl(req, res, next) {
+			req.url = req.originalUrl;
+			next();
+		}
+
 		app.get('/auth/steam', passport.authenticate('steam'));
-		app.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: '/' }),
+		app.get('/auth/steam/return', use_orginalurl, passport.authenticate('steam', { failureRedirect: '/' }),
 			function(req, res) {
 				console.log("!!!!!!!!!!!!!!!");
 				res.redirect('/signup?step=steam');

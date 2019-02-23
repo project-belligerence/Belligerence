@@ -20,6 +20,9 @@
 			passport.serializeUser(function(user, done) { done(null, user);	});
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
 
+			console.log("=========== ATTEMPTING TO CREATE STRATEGY WITH:");
+			console.log(config.db.SteamAPIKey);
+
 			passport.use(new SteamStrategy({
 				returnURL: "https://belligerence.herokuapp.com/auth/steam/return",
 				realm: "https://belligerence.herokuapp.com/",
