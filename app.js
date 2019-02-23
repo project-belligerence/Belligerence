@@ -29,9 +29,6 @@
 	// CONNECTS TO DATABASE
 	var	sequelize = new Sequelize(config.db.newConnection());
 
-	// SETUP PASSPORT
-	config.methods.setupPassportSteam(app);
-
 	// ENVIRONMENTS
 	app.set('port', port);
 	app.set('view engine', 'ejs');
@@ -40,6 +37,9 @@
 	app.set('views', __dirname + '/' + config.folders.views);
 	app.use(express.static(path.join(__dirname, 'public')));
 	app.use(express.static(path.join(__dirname, 'uploads')));
+
+	// SETUP PASSPORT
+	config.methods.setupPassportSteam(app);
 
 	// SETS UP ROUTES
 	routes.setup(app, express);

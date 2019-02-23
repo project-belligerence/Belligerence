@@ -14,8 +14,11 @@
 			var config = require('./../config.js'),
 				passport = require('passport'),
 				session = require('express-session'),
+				RedisStore = require('connect-redis')(session),
 				SteamStrategy = require('passport-steam').Strategy,
-				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/");
+				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/"),
+
+				redisConnect = { url: process.env.REDISTOGO_URL, logErrors: true };
 
 			passport.serializeUser(function(user, done) { done(null, user);	});
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
@@ -27,7 +30,7 @@
 				returnURL: "https://belligerence.herokuapp.com/auth/steam/return",
 				realm: "https://belligerence.herokuapp.com/",
 				apiKey: config.db.SteamAPIKey,
-				stateless: true,
+				https: true,
 				proxy: true
 		  	},
 		  	function(identifier, profile, done) {
@@ -38,10 +41,20 @@
 				});
 			}));
 
-			app.use(session({ secret: process.env.STEAM_SESSION_SECRET, name: process.env.STEAM_SESSION_NAME, resave: true,	saveUninitialized: true	}));
+			app.use(session({
+				secret: process.env.STEAM_SESSION_SECRET,
+				name: process.env.STEAM_SESSION_NAME,
+				store: new RedisStore(redisConnect),
+				resave: false,
+				saveUninitialized: true
+			}));
 
 			app.use(passport.initialize());
 			app.use(passport.session());
+
+			console.log("=========== PASSPORT CREATOR:");
+			console.log(passport);
+
 		},
 		closeServer: function() {
 			console.log("SERVER STOPPED.");
