@@ -369,22 +369,24 @@
 	}
 
 	function doLog(req, text, file, folder) {
-		var fs = require('fs');
+		if (process.env.ENABLE_LOGGING) {
+			var fs = require('fs');
 
-		var newDate = new Date();
+			var newDate = new Date();
 
-		var readDate = newDate.toLocaleTimeString(),
-			logIP = (req.connection.remoteAddress || "NO IP"),
-			finalLog = "(" + logIP + ") " + readDate + ": " + text;
+			var readDate = newDate.toLocaleTimeString(),
+				logIP = (req.connection.remoteAddress || "NO IP"),
+				finalLog = "(" + logIP + ") " + readDate + ": " + text;
 
-		var finalFolder = (folder || "logs");
+			var finalFolder = (folder || "logs");
 
-		var finalFile = "[" + newDate.getDate() + " " + (newDate.getMonth()+1) + " " + newDate.getFullYear() + "] " + (file || 'default_log.txt');
+			var finalFile = "[" + newDate.getDate() + " " + (newDate.getMonth()+1) + " " + newDate.getFullYear() + "] " + (file || 'default_log.txt');
 
-		fs.appendFile(finalFolder + "/" + finalFile, finalLog + "\n", function (err) {
-		  if (err) return console.log(err);
-		  console.log("'" + text + "' has been logged into " + finalFile + ".");
-		});
+			fs.appendFile(finalFolder + "/" + finalFile, finalLog + "\n", function (err) {
+			  if (err) return console.log(err);
+			  console.log("'" + text + "' has been logged into " + finalFile + ".");
+			});
+		}
 	}
 
 	// http://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case by CMS
