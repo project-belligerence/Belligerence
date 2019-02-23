@@ -13,7 +13,6 @@
 		setupPassportSteam: function(app) {
 			var config = require('./../config.js'),
 				passport = require('passport'),
-				util = require('util'),
 				session = require('express-session'),
 				SteamStrategy = require('passport-steam').Strategy,
 				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/");
@@ -22,9 +21,9 @@
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
 
 			passport.use(new SteamStrategy({
-				returnURL: ("https://belligerence.herokuapp.com/auth/steam/return"),
-				realm: "https://belligerence.herokuapp.com/",
-				apiKey: config.db.SteamAPIKey
+				returnURL: "https://localhost:" + process.env.PORT + "/auth/steam/return",
+				realm: "https://localhost:" + process.env.PORT + "/",
+				apiKey: config.db.SteamAPIKey,
 		  	},
 		  	function(identifier, profile, done) {
 				process.nextTick(function () {
