@@ -24,9 +24,12 @@
 				returnURL: "https://belligerence.herokuapp.com/auth/steam/return",
 				realm: "https://belligerence.herokuapp.com/",
 				apiKey: config.db.SteamAPIKey,
+				stateless: true,
+				proxy: true
 		  	},
 		  	function(identifier, profile, done) {
 				process.nextTick(function () {
+					console.log("==========", identifier, profile);
 					profile.identifier = identifier;
 					return done(null, profile);
 				});

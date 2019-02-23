@@ -609,7 +609,7 @@
 		app.get('/directive/:directive', renderDirective);
 		app.get('/modals/:modal', renderModal);
 
-		app.get('/auth/steam', passport.authenticate('steam'), function(req, res) {});
+		app.get('/auth/steam', passport.authenticate('steam'));
 		app.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: '/' }),
 			function(req, res) {
 				console.log("!!!!!!!!!!!!!!!");
