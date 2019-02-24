@@ -5,7 +5,6 @@
 
 	var 	express = require('express'),
 			dotenv = require('dotenv').config(),
-			Sequelize = require('sequelize'),
 
 			methodOverride = require('method-override'),
 			http = require('http'),
@@ -27,7 +26,7 @@
 			scheduled = config.scheduled();
 
 	// CONNECTS TO DATABASE
-	var	sequelize = new Sequelize(config.db.newConnection());
+	config.db.connectToDatabase();
 
 	// ENVIRONMENTS
 	app.set('port', port);

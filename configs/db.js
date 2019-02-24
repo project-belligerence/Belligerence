@@ -22,6 +22,25 @@
 
 			return (this.protocol + '://'+ this.cred.user + ':' + this.cred.password + '@' + this.server + ":" + this.port + '/' + this.name);
 		},
+
+		connectToDatabase: function() {
+			var Sequelize = require('sequelize'),
+				options = {
+					port: process.env.DB_PORT,
+					dialect: process.env.DB_PROTOCOL,
+					host: process.env.ADDRESS,
+					sync: { force: false },
+					pool: { max: 10, min: 1, idle: 1000 }
+				},
+				sequelize = new Sequelize(this.server, this.cred.user, this.cred.password, options),
+				debugDB = false;
+
+				//this.newConnection()
+
+			if (debugDB) { setInterval(function () { sequelize.query('SELECT SLEEP(1);'); }, 2000); }
+
+			return sequelize;
+		}
 	};
 
 })();

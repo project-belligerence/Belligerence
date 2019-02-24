@@ -67,3 +67,4 @@ Temporary Items
 *.sublime-workspace
 views/components/singletons/dev.ejs
 public/js/vendors.bundle.js
+binding.gyp
