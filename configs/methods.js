@@ -16,46 +16,46 @@
 				session = require('express-session'),
 				RedisStore = require('connect-redis')(session),
 				SteamStrategy = require('passport-steam').Strategy,
-				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/"),
+				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + ":" + process.env.APP_PORT + "/"),
 
-				redisConnect = { url: process.env.REDISTOGO_URL, logErrors: true };
+				redisConnect = { url: process.env.REDISTOGO_URL, logErrors: true },
+
+				sessionObject = {
+					secret: process.env.STEAM_SESSION_SECRET,
+					name: process.env.STEAM_SESSION_NAME,
+					resave: false,
+					saveUninitialized: true,
+					https: true,
+					proxy: true
+				};
 
 			passport.serializeUser(function(user, done) { done(null, user);	});
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
 
-			console.log("=========== ATTEMPTING TO CREATE STRATEGY WITH:");
-			console.log(config.db.SteamAPIKey);
-
-			// ping
+			if (process.env.NODE_ENV === "production") {
+				baseURL = "https://belligerence.herokuapp.com/";
+				sessionObject[store] = new RedisStore(redisConnect);
+			}
 
 			passport.use(new SteamStrategy({
-				returnURL: "https://belligerence.herokuapp.com/auth/steam/return",
-				realm: "https://belligerence.herokuapp.com/",
 				apiKey: config.db.SteamAPIKey,
-				https: true,
-				proxy: true
+				returnURL: baseURL + "auth/steam/return",
+				realm: baseURL
 		  	},
 		  	function(identifier, profile, done) {
 				process.nextTick(function () {
-					console.log("==========", identifier, profile);
+					console.log("========== IDENTIFIER | PROFILE", identifier, profile);
 					profile.identifier = identifier;
 					return done(null, profile);
 				});
 			}));
 
-			app.use(session({
-				secret: process.env.STEAM_SESSION_SECRET,
-				name: process.env.STEAM_SESSION_NAME,
-				store: new RedisStore(redisConnect),
-				resave: false,
-				saveUninitialized: true
-			}));
+			app.use(session(sessionObject));
 
 			app.use(passport.initialize());
 			app.use(passport.session());
 
-			console.log("=========== PASSPORT CREATOR:");
-			console.log(passport);
+			console.log("========== Initialized session.");
 
 		},
 		closeServer: function() {
