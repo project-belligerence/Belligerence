@@ -18,6 +18,8 @@
 				SteamStrategy = require('passport-steam').Strategy,
 				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + ":" + process.env.APP_PORT + "/"),
 
+				steam_API_Key = process.env.API_KEY_STEAM,
+
 				redisConnect = { url: process.env.REDISTOGO_URL, logErrors: true },
 
 				sessionObject = {
@@ -37,14 +39,15 @@
 				sessionObject.store = new RedisStore(redisConnect);
 			}
 
+			console.log("steam_API_Key", steam_API_Key, typeof steam_API_Key);
+
 			passport.use(new SteamStrategy({
-				apiKey: "410A051BA5B9E02F3FDC99E3CAE6A78A",
+				apiKey: steam_API_Key,
 				returnURL: baseURL + "auth/steam/return",
 				realm: baseURL
 		  	},
 		  	function(identifier, profile, done) {
 				process.nextTick(function () {
-					console.log("========== IDENTIFIER | PROFILE", identifier, profile);
 					profile.identifier = identifier;
 					return done(null, profile);
 				});
@@ -54,8 +57,6 @@
 
 			app.use(passport.initialize());
 			app.use(passport.session());
-
-			console.log("========== Initialized session.");
 
 		},
 		closeServer: function() {
