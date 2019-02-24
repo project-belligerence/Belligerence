@@ -38,8 +38,7 @@
 			}
 
 			passport.use(new SteamStrategy({
-				//apiKey: config.db.SteamAPIKey,
-				profile: false,
+				apiKey: "410A051BA5B9E02F3FDC99E3CAE6A78A",
 				returnURL: baseURL + "auth/steam/return",
 				realm: baseURL
 		  	},
