@@ -26,6 +26,8 @@
 			console.log("=========== ATTEMPTING TO CREATE STRATEGY WITH:");
 			console.log(config.db.SteamAPIKey);
 
+			// ping
+
 			passport.use(new SteamStrategy({
 				returnURL: "https://belligerence.herokuapp.com/auth/steam/return",
 				realm: "https://belligerence.herokuapp.com/",
