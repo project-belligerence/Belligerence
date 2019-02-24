@@ -20,7 +20,8 @@
 		}
 
 		function initializeConnection(listener, data) {
-			if (!NOTIFICATIONS_ENABLED) return false;
+			//if (!NOTIFICATIONS_ENABLED) return false;
+			return false;
 
 			try {
 				if (!listener) throw("Invalid websocket parameters.");
@@ -45,7 +46,8 @@
 		}
 
 		function initCtrlWS(scope, sockets) {
-			if (!NOTIFICATIONS_ENABLED) return false;
+			//if (!NOTIFICATIONS_ENABLED) return false;
+			return false;
 
 			var ctrlSockets = sockets;
 
