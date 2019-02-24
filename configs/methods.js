@@ -34,7 +34,7 @@
 
 			if (process.env.NODE_ENV === "production") {
 				baseURL = "https://belligerence.herokuapp.com/";
-				sessionObject[store] = new RedisStore(redisConnect);
+				sessionObject["store"] = new RedisStore(redisConnect);
 			}
 
 			passport.use(new SteamStrategy({
