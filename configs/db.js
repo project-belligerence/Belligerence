@@ -29,8 +29,8 @@
 					port: process.env.DB_PORT,
 					dialect: process.env.DB_PROTOCOL,
 					host: process.env.ADDRESS,
-					pool: { max: process.env.DB_MAX_POOL, min: 0, idle: 1000 },
-					sync: { force: false }
+					pool: { maxConnections: process.env.DB_MAX_POOL, minConnections: 0, maxIdleTime: 1000 },
+					sync: { force: true }
 				},
 				sequelize = new Sequelize(this.server, this.cred.user, this.cred.password, options),
 				debugDB = false;

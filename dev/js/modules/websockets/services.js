@@ -20,66 +20,69 @@
 		}
 
 		function initializeConnection(listener, data) {
-			//if (!NOTIFICATIONS_ENABLED) return false;
-			return false;
-
-			try {
-				if (!listener) throw("Invalid websocket parameters.");
-
-				var listenerObj = { listener: listener },
-					dataV = (data ? data : {}),
-					finalQuery = apiServices.generateQueryFromState(_.merge(listenerObj, dataV), "", [], true),
-					fUrl = formWebsocketUrl($location, finalQuery),
-					ws = $websocket(fUrl);
-				ws.initialTimeout = 5000;
-				ws.maxTimeout = 5000;
-				ws.reconnectIfNotNormalClose = true;
-
-				return ws;
-			} catch(e) { console.error(e); }
 
 			function formWebsocketUrl(location, query) {
 				var host = location.host(), port = location.port(),
 					addr = ("wss://" + host + ":" + port + "/" + query);
 				return addr;
 			}
+
+			if (false) {
+				if (!NOTIFICATIONS_ENABLED) return false;
+
+				try {
+					if (!listener) throw("Invalid websocket parameters.");
+
+					var listenerObj = { listener: listener },
+						dataV = (data ? data : {}),
+						finalQuery = apiServices.generateQueryFromState(_.merge(listenerObj, dataV), "", [], true),
+						fUrl = formWebsocketUrl($location, finalQuery),
+						ws = $websocket(fUrl);
+					ws.initialTimeout = 5000;
+					ws.maxTimeout = 5000;
+					ws.reconnectIfNotNormalClose = true;
+
+					return ws;
+				} catch(e) { console.error(e); }
+			}
 		}
 
 		function initCtrlWS(scope, sockets) {
-			//if (!NOTIFICATIONS_ENABLED) return false;
-			return false;
+			if (false) {
+				if (!NOTIFICATIONS_ENABLED) return false;
 
-			var ctrlSockets = sockets;
+				var ctrlSockets = sockets;
 
-			return $q(function(resolve, reject) {
-				Object.keys(ctrlSockets).forEach(function(key) {
+				return $q(function(resolve, reject) {
+					Object.keys(ctrlSockets).forEach(function(key) {
 
-					if (ctrlSockets.hasOwnProperty(key)) {
-						var socket = ctrlSockets[key],
-							fullEvent = (ctrlSockets[key].filter ? ctrlSockets[key].filter() : key),
-							filterV = (socket.filter ? socket.filter() : "");
+						if (ctrlSockets.hasOwnProperty(key)) {
+							var socket = ctrlSockets[key],
+								fullEvent = (ctrlSockets[key].filter ? ctrlSockets[key].filter() : key),
+								filterV = (socket.filter ? socket.filter() : "");
 
-						if (!(apiServices.inArray(fullEvent, WEBSOCKET_EVENTS))) {
-							socket.ws = initializeConnection(key, socket.socketData);
-							socket.ws._normalCloseCode = 1005;
+							if (!(apiServices.inArray(fullEvent, WEBSOCKET_EVENTS))) {
+								socket.ws = initializeConnection(key, socket.socketData);
+								socket.ws._normalCloseCode = 1005;
 
-							registerEvent(socket.ws, "onMessage", socket.onMessage, filterV);
+								registerEvent(socket.ws, "onMessage", socket.onMessage, filterV);
 
-							if (socket.notification) {
-								registerEvent(socket.ws, "onMessage", function() { return callNotification(socket); }, filterV);
+								if (socket.notification) {
+									registerEvent(socket.ws, "onMessage", function() { return callNotification(socket); }, filterV);
+								}
+
+								scope.$on("$destroy", function() {
+									WEBSOCKET_EVENTS = _.without(WEBSOCKET_EVENTS, fullEvent);
+									socket.ws.close();
+								});
+
+								WEBSOCKET_EVENTS.push(joinFilter([fullEvent]));
 							}
-
-							scope.$on("$destroy", function() {
-								WEBSOCKET_EVENTS = _.without(WEBSOCKET_EVENTS, fullEvent);
-								socket.ws.close();
-							});
-
-							WEBSOCKET_EVENTS.push(joinFilter([fullEvent]));
 						}
-					}
+					});
+					return resolve(ctrlSockets);
 				});
-				return resolve(ctrlSockets);
-			});
+			}
 		}
 
 		function callNotification(socket) {
