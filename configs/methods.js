@@ -16,9 +16,9 @@
 				session = require('express-session'),
 				RedisStore = require('connect-redis')(session),
 				SteamStrategy = require('passport-steam').Strategy,
-				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + ":" + process.env.APP_PORT + "/"),
-
 				steam_API_Key = process.env.API_KEY_STEAM,
+
+				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + ":" + process.env.APP_PORT + "/"),
 
 				redisConnect = { url: process.env.REDISTOGO_URL, logErrors: true },
 
@@ -35,11 +35,9 @@
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
 
 			if (process.env.NODE_ENV === "production") {
-				baseURL = "https://belligerence.herokuapp.com/";
+				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/");
 				sessionObject.store = new RedisStore(redisConnect);
 			}
-
-			console.log("steam_API_Key", steam_API_Key, typeof steam_API_Key);
 
 			passport.use(new SteamStrategy({
 				apiKey: steam_API_Key,
