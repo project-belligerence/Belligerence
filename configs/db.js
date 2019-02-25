@@ -9,33 +9,39 @@
 			user: process.env.DB_CRED_USER,
 			password: process.env.DB_CRED_PASS,
 		},
-		port: process.env.DB_PORT,
-		sessionDurationMinutes: process.env.SESSION_DURATION,
+		port: parseInt(process.env.DB_PORT),
+		sessionDurationMinutes: parseInt(process.env.SESSION_DURATION),
 		secretKey: process.env.DB_SECRET_KEY,
 		hashSize: 20,
 		queryPageLimit: 5,
 		SteamAPIKey: process.env.API_KEY_STEAM,
 
-		newConnection: function() {
-			if (process.env.CLEARDB_DATABASE_URL) return process.env.CLEARDB_DATABASE_URL;
-			if (process.env.JAWSDB_URL) return process.env.JAWSDB_URL;
+		newConnection: function(options) {
+			var Sequelize = require('sequelize'), URI;
 
-			return (this.protocol + '://'+ this.cred.user + ':' + this.cred.password + '@' + this.server + ":" + this.port + '/' + this.name);
+			if (process.env.CLEARDB_DATABASE_URL) URI = process.env.CLEARDB_DATABASE_URL;
+			if (process.env.JAWSDB_URL) URI = process.env.JAWSDB_URL;
+
+			if (URI) { return new Sequelize(URI, options); }
+			else {
+				console.log("Server", this.server);
+				console.log("User", this.cred.user);
+				console.log("Password", this.cred.password);
+
+				return new Sequelize(this.server, this.cred.user, this.cred.password, options);
+			}
 		},
 
 		connectToDatabase: function() {
-			var Sequelize = require('sequelize'),
-				options = {
-					port: process.env.DB_PORT,
+				var options = {
+					port: parseInt(process.env.DB_PORT),
+					host: "remotemysql.com",
 					dialect: process.env.DB_PROTOCOL,
-					host: process.env.ADDRESS,
-					pool: { maxConnections: process.env.DB_MAX_POOL, minConnections: 0, maxIdleTime: 1000 },
+					pool: { maxConnections: parseInt(process.env.DB_MAX_POOL), minConnections: 0, maxIdleTime: 1000 },
 					sync: { force: true }
 				},
-				sequelize = new Sequelize(this.server, this.cred.user, this.cred.password, options),
+				sequelize = this.newConnection(options),
 				debugDB = false;
-
-				//this.newConnection()
 
 			if (debugDB) { setInterval(function () { sequelize.query('SELECT SLEEP(1);'); }, 2000); }
 

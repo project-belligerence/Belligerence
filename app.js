@@ -16,7 +16,7 @@
 			routes = require('./routes/routes.js'),
 			models = require('./modules/index.js').getModels(),
 
-			env = process.env.NODE_ENV || config.env,
+			env = (process.env.NODE_ENV || config.env),
 
 			port = ((process.env.PORT !== "undefined") ? process.env.PORT : (process.env.APP_PORT || config.port)),
 

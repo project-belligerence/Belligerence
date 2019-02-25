@@ -2,11 +2,13 @@
 
 	'use strict';
 
+	console.log("HERE COMES THE MAYO");
+
 	var fs        = require("fs"),
 		path      = require("path"),
 		Sequelize = require("sequelize"),
 		config    = require(__dirname + '/../config.js'),
-		sequelize = new Sequelize(config.db.newConnection()),
+		sequelize = config.db.connectToDatabase(),
 		ssaclAttributeRoles = require('ssacl-attribute-roles'),
 
 		folders = fs.readdirSync(__dirname).filter(function(file) {

@@ -583,8 +583,7 @@
 
 	function generateRawQuery(req, res, baseTable, selectString, extraStatement, whereHook, queryData, callback) {
 		var	_ = require('lodash'),
-			Sequelize = require('sequelize'),
-			sequelize = new Sequelize(config.db.newConnection()),
+			sequelize = config.db.connectToDatabase(),
 			qSort = queryData.order[0][0],
 			qOrder = queryData.order[0][1],
 			mainSelect = (getType(baseTable) === "array") ? baseTable[0] : (" FROM `" + baseTable + "` ");
