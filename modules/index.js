@@ -2,8 +2,6 @@
 
 	'use strict';
 
-	console.log("HERE COMES THE MAYO");
-
 	var fs        = require("fs"),
 		path      = require("path"),
 		Sequelize = require("sequelize"),

@@ -23,22 +23,23 @@
 			if (process.env.JAWSDB_URL) URI = process.env.JAWSDB_URL;
 
 			if (URI) { return new Sequelize(URI, options); }
-			else {
-				console.log("Server", this.server);
-				console.log("User", this.cred.user);
-				console.log("Password", this.cred.password);
-
-				return new Sequelize(this.server, this.cred.user, this.cred.password, options);
-			}
+			else { return new Sequelize(this.name, this.cred.user, this.cred.password, options); }
 		},
 
 		connectToDatabase: function() {
 				var options = {
 					port: parseInt(process.env.DB_PORT),
-					host: process.env.ADDRESS,
+					host: this.server,
+
 					dialect: process.env.DB_PROTOCOL,
-					pool: { maxConnections: parseInt(process.env.DB_MAX_POOL), minConnections: 0, maxIdleTime: 1000 },
-					sync: { force: true }
+					pool: {
+						maxConnections: parseInt(process.env.DB_MAX_POOL),
+						max: parseInt(process.env.DB_MAX_POOL),
+						minConnections: 0,
+						min: 0,
+						maxIdleTime: 10000,
+						acquire: 30000
+					}
 				},
 				sequelize = this.newConnection(options),
 				debugDB = false;
