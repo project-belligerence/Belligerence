@@ -28,6 +28,9 @@
 	// CONNECTS TO DATABASE
 	config.db.connectToDatabase();
 
+	// MOUNTS SESSION
+	app.use(config.methods.mountSession());
+
 	// ENVIRONMENTS
 	app.set('port', port);
 	app.set('view engine', 'ejs');
@@ -38,7 +41,7 @@
 	app.use(express.static(path.join(__dirname, 'uploads')));
 
 	// SETUP PASSPORT
-	config.methods.setupPassportSteam(app);
+	config.methods.setupPassport(app);
 
 	// SETS UP ROUTES
 	routes.setup(app, express);

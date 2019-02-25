@@ -27,22 +27,22 @@
 		},
 
 		connectToDatabase: function() {
-				var options = {
-					port: parseInt(process.env.DB_PORT),
-					host: this.server,
+			var options = {
+				port: parseInt(process.env.DB_PORT),
+				host: this.server,
 
-					dialect: process.env.DB_PROTOCOL,
-					pool: {
-						maxConnections: parseInt(process.env.DB_MAX_POOL),
-						max: parseInt(process.env.DB_MAX_POOL),
-						minConnections: 0,
-						min: 0,
-						maxIdleTime: 10000,
-						acquire: 30000
-					}
-				},
-				sequelize = this.newConnection(options),
-				debugDB = false;
+				dialect: process.env.DB_PROTOCOL,
+				pool: {
+					maxConnections: parseInt(process.env.DB_MAX_POOL),
+					max: parseInt(process.env.DB_MAX_POOL),
+					minConnections: 0,
+					min: 0,
+					maxIdleTime: 10000,
+					acquire: 30000
+				}
+			},
+			sequelize = this.newConnection(options),
+			debugDB = false;
 
 			if (debugDB) { setInterval(function () { sequelize.query('SELECT SLEEP(1);'); }, 2000); }
 

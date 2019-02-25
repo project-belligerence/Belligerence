@@ -10,52 +10,56 @@
 			this.data = ((data.rows || data) || '');
 			this.code = (this.success ? (code || 200) : (code || 400));
 		},
-		setupPassportSteam: function(app) {
+		setupPassport: function(app) {
 			var config = require('./../config.js'),
 				passport = require('passport'),
-				session = require('express-session'),
-				RedisStore = require('connect-redis')(session),
-				SteamStrategy = require('passport-steam').Strategy,
-				steam_API_Key = process.env.API_KEY_STEAM,
 
-				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + ":" + process.env.APP_PORT + "/"),
+				nextTickFunction = function(identifier, profile, done) {
+					process.nextTick(function () { profile.identifier = identifier;	return done(null, profile);	});
+				},
 
-				redisConnect = { url: process.env.REDISTOGO_URL, logErrors: true },
+			baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + ":" + process.env.APP_PORT + "/");
 
-				sessionObject = {
-					secret: process.env.STEAM_SESSION_SECRET,
-					name: process.env.STEAM_SESSION_NAME,
-					resave: false,
-					saveUninitialized: true,
-					https: true,
-					proxy: true
-				};
+			if (process.env.NODE_ENV === "production") { baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/"); }
 
 			passport.serializeUser(function(user, done) { done(null, user);	});
 			passport.deserializeUser(function(obj, done) { done(null, obj);	});
 
-			if (process.env.NODE_ENV === "production") {
-				baseURL = (process.env.PROTOCOL + "://" + process.env.ADDRESS + "/");
-				sessionObject.store = new RedisStore(redisConnect);
-			}
-
-			passport.use(new SteamStrategy({
-				apiKey: steam_API_Key,
-				returnURL: baseURL + "auth/steam/return",
-				realm: baseURL
-		  	},
-		  	function(identifier, profile, done) {
-				process.nextTick(function () {
-					profile.identifier = identifier;
-					return done(null, profile);
-				});
-			}));
-
-			app.use(session(sessionObject));
+			passport.use(this.getPassportSteam(baseURL, nextTickFunction));
 
 			app.use(passport.initialize());
 			app.use(passport.session());
+		},
+		getPassportSteam: function(baseURL, nextTickFunction) {
+			var SteamStrategy = require('passport-steam').Strategy,
+				steam_API_Key = process.env.API_KEY_STEAM;
 
+			return new SteamStrategy({
+				apiKey: steam_API_Key,
+				returnURL: (baseURL + "auth/steam/return"),
+				realm: baseURL
+		  	}, nextTickFunction);
+		},
+		mountSession: function() {
+			var session = require('express-session'),
+				RedisStore = require('connect-redis')(session),
+
+				sessionObject = {
+					resave: false,
+					saveUninitialized: true,
+					https: true,
+					proxy: true,
+
+					secret: process.env.STEAM_SESSION_SECRET,
+					name: process.env.STEAM_SESSION_NAME
+				};
+
+			if (process.env.NODE_ENV === "production") {
+				var redisConnect = { url: process.env.REDISTOGO_URL, logErrors: true };
+				sessionObject.store = new RedisStore(redisConnect);
+			}
+
+			return session(sessionObject);
 		},
 		closeServer: function() {
 			console.log("SERVER STOPPED.");
