@@ -35,7 +35,7 @@
 		connectToDatabase: function() {
 				var options = {
 					port: parseInt(process.env.DB_PORT),
-					host: "remotemysql.com",
+					host: process.env.ADDRESS,
 					dialect: process.env.DB_PROTOCOL,
 					pool: { maxConnections: parseInt(process.env.DB_MAX_POOL), minConnections: 0, maxIdleTime: 1000 },
 					sync: { force: true }
