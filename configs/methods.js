@@ -50,8 +50,8 @@
 					https: true,
 					proxy: true,
 
-					secret: process.env.STEAM_SESSION_SECRET,
-					name: process.env.STEAM_SESSION_NAME
+					name: process.env.SESSION_NAME,
+					secret: process.env.SESSION_SECRET
 				};
 
 			if (process.env.NODE_ENV === "production") {
