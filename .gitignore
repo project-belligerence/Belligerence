@@ -68,3 +68,4 @@ Temporary Items
 views/components/singletons/dev.ejs
 public/js/vendors.bundle.js
 binding.gyp
+public/js/app.min.js

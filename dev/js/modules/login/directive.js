@@ -44,6 +44,7 @@
 					vm.selfSide = (vm.selfInfo.PMC ? vm.selfInfo.PMC.sideField : vm.selfInfo.sideField);
 
 					vm.quickRoutes = [
+						{ icon: "ion-home", name: "Dashboard", route: "app.private.dashboard" },
 						{ icon: "ion-android-cart", name: "Stores", route: "app.public.market" },
 						{ icon: "ion-document-text", name: "Contracts", route: "app.private.operations" },
 						{ icon: "ion-archive", name: "Inbox", route: "app.private.messages" }

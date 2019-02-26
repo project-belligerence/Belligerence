@@ -2,17 +2,29 @@
 	'use strict';
 
 	var
+		_ = require('lodash'),
+		sharp = require('sharp'),
+		multer = require('multer'),
+		s3Storage = require('multer-sharp-s3'),
+
+		aws = require('aws-sdk'),
+		awsConfig = {
+			secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+			accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+			region: process.env.AWS_REGION
+		},
+		s3 = new aws.S3(),
+
 		PMCModel = require('./../index.js').getModels().pmc,
 		PlayerModel = require('./../index.js').getModels().players,
 		config = require('./../../config.js'),
 		API = require('./../../routes/api.js'),
-		_ = require('lodash'),
-		sharp = require('sharp'),
-		multer = require('multer'),
+
 		settingsObject = {},
 		finalFileName = ""
 	;
 
+	aws.config.update(awsConfig);
 	sharp.cache(false);
 
 	exports.uploadPlayerAvatar = uploadPlayerAvatar;
@@ -155,14 +167,63 @@
 		});
 	}
 
+	function generateS3Path(req, file, cb) {
+		filterNameAWS(req, file, function(filtered_file) {
+			makeDestinationAWS(req, file, function(destination) {
+				var finalDestination = (destination + filtered_file);
+				cb(null, finalDestination);
+			});
+		});
+	}
+
+	function getMulterStorage() {
+		switch (true) {
+			case (_.isString(process.env.AWS_ACCESS_KEY_ID)): {
+
+					var storageObject = s3Storage({
+						s3: s3,
+						Key: generateS3Path,
+						Bucket: process.env.S3_BUCKET_NAME,
+						ACL: 'public-read',
+						multiple: true,
+						normalize: true,
+						toFormat: {
+							type: (settingsObject.alpha ? "png" : "jpeg"),
+							options: {
+								progressive: true,
+								quality: settingsObject.quality
+							},
+						},
+						resize: [
+							{
+								suffix: "main",
+								width: (settingsObject.mainSize * settingsObject.aspectRatio[0]),
+								height: (settingsObject.mainSize * settingsObject.aspectRatio[1])
+							},
+							{
+								suffix: "thumb",
+								width: (settingsObject.thumbSize * settingsObject.aspectRatio[0]),
+								height: (settingsObject.thumbSize * settingsObject.aspectRatio[1])
+							}
+						]
+					});
+
+				return storageObject;
+
+			} break;
+			default: {
+				return multer.diskStorage({ destination: makeDestination, filename: filterName });
+			} break;
+		}
+	}
+
 	function handleUploadOld(req, res, done) {
-		var
-			storage = multer.diskStorage({destination: makeDestination, filename: filterName}),
-			upload = multer({storage: storage, fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName)
-		;
+		var upload = multer({ storage: getMulterStorage(), fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName);
 
 		return upload(req, res, function(err) {
 			if (err) return handleError(req, res, err);
+
+			if (_.isString(process.env.AWS_ACCESS_KEY_ID)) { return done(); }
 
 			return sharp(settingsObject.destination + finalFileName)
 				.resize((settingsObject.thumbSize * (settingsObject.aspectRatio[0])), (settingsObject.thumbSize * settingsObject.aspectRatio[1]))
@@ -184,14 +245,14 @@
 	}
 
 	function handleUpload(req, res, done) {
-		var
-			storage = multer.diskStorage({destination: makeDestination, filename: filterName}),
-			upload = multer({storage: storage, fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName),
+		var upload = multer({storage: getMulterStorage(req), fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName),
 			defaultBackgroundPicture = (config.folders.uploads + "/" + config.folders.uploads_images + "/content/" + "default_bg.png")
 		;
 
 		return upload(req, res, function(err) {
 			if (err) return handleError(req, res, err);
+
+			if (_.isString(process.env.AWS_ACCESS_KEY_ID)) { return done(); }
 
 			return sharp(defaultBackgroundPicture)
 				.overlayWith((settingsObject.destination + finalFileName))
@@ -217,6 +278,21 @@
 	}
 
 	function makeDestination(req, file, cb) { return cb(null, settingsObject.destination); }
+	function makeDestinationAWS(req, file, cb) { return cb(settingsObject.destination); }
+
+	function filterNameAWS(req, file, cb) {
+		var newFileName = (function(v, a) {
+				var fFormat = a ? "png" : "jpg";
+				switch(v) {
+					case "avatar": { return (settingsObject.uploadName + "." + fFormat); }
+					default: { return (settingsObject.uploadName + "." + fFormat); }
+				}
+			})(settingsObject.header, settingsObject.alpha);
+
+			finalFileName = newFileName;
+
+		return cb(newFileName);
+	}
 
 	function filterName(req, file, cb) {
 		var md5	= require("md5"),

@@ -46,6 +46,7 @@
 
 				server: {
 					files: [
+						'.env',
 						'app.js',
 						'config.js',
 						config.folders.config + '/**/*.js',

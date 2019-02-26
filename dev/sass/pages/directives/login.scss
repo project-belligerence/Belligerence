@@ -236,9 +236,10 @@
 		.button-section {
 			.route-button {
 				@include transition(background-color .25s);
+				@include factor-property(margin-right, 2);
+				@include factor-property(margin-top, 2);
 				cursor: pointer;
 				padding: factor(2);
-				@include factor-property(margin-right, 2);
 				background-color: $main_color;
 				text-align: center;
 
