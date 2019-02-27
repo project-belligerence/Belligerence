@@ -171,6 +171,7 @@
 		filterNameAWS(req, file, function(filtered_file) {
 			makeDestinationAWS(req, file, function(destination) {
 				var finalDestination = (destination + filtered_file);
+				console.log(">>>>", finalDestination);
 				cb(null, finalDestination);
 			});
 		});
@@ -196,12 +197,14 @@
 						},
 						resize: [
 							{
-								suffix: "main",
+								prefix: "main",
+								delimiter: "_",
 								width: (settingsObject.mainSize * settingsObject.aspectRatio[0]),
 								height: (settingsObject.mainSize * settingsObject.aspectRatio[1])
 							},
 							{
-								suffix: "thumb",
+								prefix: "thumb",
+								delimiter: "_",
 								width: (settingsObject.thumbSize * settingsObject.aspectRatio[0]),
 								height: (settingsObject.thumbSize * settingsObject.aspectRatio[1])
 							}
@@ -245,8 +248,8 @@
 	}
 
 	function handleUpload(req, res, done) {
-		var upload = multer({storage: getMulterStorage(req), fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName),
-			defaultBackgroundPicture = (config.folders.uploads + "/" + config.folders.uploads_images + "/content/" + "default_bg.png")
+		var upload = multer({storage: getMulterStorage(), fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName),
+			defaultBackgroundPicture = "public/images/content/default_bg.png"
 		;
 
 		return upload(req, res, function(err) {
