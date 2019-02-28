@@ -283,14 +283,17 @@
 				filteredProperties = []
 			;
 
-			if (req.body.displayname) update.displaynameField = req.body.displayname;
-			if (req.body.motto) update.mottoField = req.body.motto;
-			if (req.body.bio) update.bioField = req.body.bio;
-			if (req.body.tags) update.tagsField = (req.body.tags || []);
-			if (req.body.location) update.locationField = req.body.location;
-			if (req.body.visibility) update.privateVisibility = req.body.visibility;
-			if (req.body.open_applications) update.openForApplications = req.body.open_applications;
-			if (req.body.colors) update.colorsField = req.body.colors;
+			if (API.methods.isValid(req.body.displayname)) update.displaynameField = req.body.displayname;
+			if (API.methods.isValid(req.body.motto)) update.mottoField = req.body.motto;
+			if (API.methods.isValid(req.body.bio)) update.bioField = req.body.bio;
+			if (API.methods.isValid(req.body.location)) update.locationField = req.body.location;
+			if (API.methods.isValid(req.body.visibility)) update.privateVisibility = req.body.visibility;
+			if (API.methods.isValid(req.body.open_applications)) update.openForApplications = req.body.open_applications;
+			if (API.methods.isValid(req.body.colors)) update.colorsField = req.body.colors;
+
+			if (API.methods.isValid(req.body.tags)) {
+				update.tagsField = (req.body.tags || []);
+			} else { update.tagsField = []; }
 
 			update.tierNameFields = ['CEO','Commander', 'Officer', 'Sargeant', 'Soldier'];
 
