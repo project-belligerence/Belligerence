@@ -38,6 +38,7 @@ $RECYCLE.BIN/
 /uploads
 /build
 /public/js/*
+/public/styles/*
 
 # It's complicated
 views/components/singletons/dev.ejs
