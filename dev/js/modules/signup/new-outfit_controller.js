@@ -166,7 +166,7 @@
 				displayname: vm.formCharacters.inputOutfitDisplayname.text,
 				motto: vm.formCharacters.inputOutfitMotto.text,
 				location: vm.formCharacters.inputOutfitLocation.value,
-				description: vm.formCharacters.inputOutfitDescription.text,
+				bio: vm.formCharacters.inputOutfitDescription.text,
 			};
 
 			apiServices.requestPOST({url: "/api/playeractions/startPMC", data: outfitInfo}).then(function(data) {

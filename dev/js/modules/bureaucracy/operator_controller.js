@@ -26,7 +26,7 @@
 					title: "Switch class", icon: "arrow-swap",
 					description: "Changes your current contract type at the cost of resetting your account. Requires you not to be part of an Outfit.",
 					state: "class-change",
-					enable: ((vm.selfInfo.contractType > 0) && !(vm.selfInfo.PMC)),
+					enable: (!vm.selfInfo.PMC),
 					route: "app.private.bureaucracy-operator"
 				}
 			),
@@ -35,7 +35,7 @@
 					title: "New Outfit", icon: "ios-people",
 					description: "Start a new Outfit as its Commander. Requires you not to be part of an Outfit.",
 					state: "class-change",
-					enable: ((vm.selfInfo.contractType === 1) && !(vm.selfInfo.PMC)),
+					enable: ((vm.selfInfo.contractType <= 1) && !(vm.selfInfo.PMC)),
 					route: "app.private.new-outfit"
 				}
 			)

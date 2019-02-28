@@ -97,6 +97,8 @@
 
 						vm.currentOutfitPrivacy = { selectedVisibilityIndex: 0, currentPrivacySettings: [] };
 
+						vm.pmcInfo.bio = (vm.pmcInfo.bio ? vm.pmcInfo.bio : "No description.");
+
 						vm.visibilitySettings = getVisibilityOptions("outfit");
 
 						vm.currentOutfitPrivacy.selectedVisibilityIndex = getPrivacyIndex(vm.pmcInfo.private_visibility, true);

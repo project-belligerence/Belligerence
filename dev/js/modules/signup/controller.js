@@ -147,15 +147,6 @@
 			},
 		};
 
-		vm.formCharacters.inputUnitUsername.text = "myusername";
-		vm.formCharacters.inputUnitAlias.text = "Neefay";
-		vm.formCharacters.inputUnitEmail.text = "neefay@belligerence.com";
-		vm.formCharacters.inputUnitDescription.text = "Got yourself a target that requires some extra punch? Maybe some building that needs to up in the air? For all your heavy demolition needs, I'm your guy.";
-		vm.formCharacters.inputUnitLocation.value = 0;
-
-		vm.formCharacters.inputUnitPassword.text = "abc123123321321";
-		vm.formCharacters.inputUnitPassword2.text = vm.formCharacters.inputUnitPassword.text;
-
 		if ($stateParams.key) { changeStep(1); } else {
 			if ($stateParams.step === "steam") { changeStep(1); } else { changeStep(vm.startingStep); }
 		}
@@ -359,27 +350,19 @@
 				access_key: vm.accessKeyValue,
 				remember: true
 			};
-			apiServices.requestPOST({url: "api/generalactions/newPlayer", data: playerInfo}).then(function(data) {
+			apiServices.requestPOST({ url: "api/generalactions/newPlayer", data: playerInfo }).then(function(data) {
 				if (!data) return console.warn(data);
 				if (!data.data) return console.warn(data);
 
 				if (data.data.success) {
 					var returnedHash = data.data.data.hashField;
 
-					console.log("Calling for log-in...");
-
 					loginServices.callLoginSimple(playerInfo, function(data2) {
-
-						console.log("Logged in-successfully...");
-
 						Upload.upload({
 							url: '/api/playeractions/uploadPlayerAvatar',
 							headers: { 'x-access-session-token': apiServices.getToken()	},
 							data: {	avatar_picture: Upload.dataUrltoBlob(vm.croppedDataUrl, vm.currentUploadedAvatar)},
 						}).then(function(response) {
-
-							console.log("Redirecting to dashboard...");
-
 							var doneRoute = "app.private.dashboard";
 							if (playerInfo.contract === 0) doneRoute = "app.private.new-outfit";
 
