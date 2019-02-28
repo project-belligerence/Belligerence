@@ -5,10 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "heroku-postbuild": "grunt build && webpack -p",
-    "test": "npm run test-models && npm run test-integration",
-    "test-models": "mocha modules/*/*.test.js",
-    "test-integration": "mocha test/integration/*.test.js"
+    "heroku-postbuild": "grunt build && webpack -p"
   },
   "dependencies": {
     "2d-css-matrix-parse": "^1.0.0",
