@@ -321,14 +321,10 @@
 
 		req.body.id = req.body.steam_id;
 
-		console.log("============ 0");
-
 		var hasAccessKey = false,
 			accessKeyObj = {},
 
 			handleAllPromises = new Promise(function(resolve, reject) {
-
-				console.log("============ 1");
 
 				var readKeyPromise = new Promise(function(resolve_key, reject) {
 					if (req.body.access_key) {
@@ -341,21 +337,14 @@
 
 							resolve_key();
 						});
-					} else { console.log("============ 2"); resolve_key(); }
+					} else { resolve_key(); }
 				});
 
 				return readKeyPromise.then(function() {
-					console.log("============ 3");
-
 					var validateSteam = new Promise(function(resolve_steam, reject) {
-						console.log("============ 4");
 						if (hasAccessKey && accessKeyObj.skipSteamField) return resolve();
 
-						console.log("=========== VALIDATING STEAM ACCOUNT...");
-
 						GeneralMethods.getSteamValidFunc(req, res, function(data) {
-
-							console.log("=========== RETURNED STEAM DATA:", data);
 							if (!API.methods.validate(req, res, [(data[0])], "Invalid Steam ID.")) { return 0; }
 							resolve_steam();
 						});
