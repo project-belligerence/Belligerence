@@ -13,6 +13,7 @@
 			joinFilter: joinFilter
 		},
 		NOTIFICATIONS_ENABLED = true,
+		ENABLE_WEBSOCKETS = (process.env.ENABLE_WEBSOCKETS || false),
 		WEBSOCKET_EVENTS = [];
 
 		if (apiServices.isValidBrowser()) {
@@ -23,11 +24,12 @@
 
 			function formWebsocketUrl(location, query) {
 				var host = location.host(), port = location.port(),
-					addr = ("wss://" + host + ":" + port + "/" + query);
+					protocol = ((process.env.NODE_ENV === "production") ? "wss://" : "ws://"),
+					addr = (protocol + host + ":" + port + "/" + query);
 				return addr;
 			}
 
-			if (NOTIFICATIONS_ENABLED) {
+			if (ENABLE_WEBSOCKETS) {
 				if (!NOTIFICATIONS_ENABLED) return false;
 
 				try {
@@ -48,7 +50,7 @@
 		}
 
 		function initCtrlWS(scope, sockets) {
-			if (NOTIFICATIONS_ENABLED) {
+			if (ENABLE_WEBSOCKETS) {
 				if (!NOTIFICATIONS_ENABLED) return false;
 
 				var ctrlSockets = sockets;
