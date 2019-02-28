@@ -12,7 +12,7 @@
 			initCtrlWS: initCtrlWS,
 			joinFilter: joinFilter
 		},
-		NOTIFICATIONS_ENABLED = false,
+		NOTIFICATIONS_ENABLED = true,
 		WEBSOCKET_EVENTS = [];
 
 		if (apiServices.isValidBrowser()) {
@@ -27,7 +27,7 @@
 				return addr;
 			}
 
-			if (false) {
+			if (NOTIFICATIONS_ENABLED) {
 				if (!NOTIFICATIONS_ENABLED) return false;
 
 				try {
@@ -48,7 +48,7 @@
 		}
 
 		function initCtrlWS(scope, sockets) {
-			if (false) {
+			if (NOTIFICATIONS_ENABLED) {
 				if (!NOTIFICATIONS_ENABLED) return false;
 
 				var ctrlSockets = sockets;
