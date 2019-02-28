@@ -11,8 +11,7 @@
 				},
 				validMachines: {
 					type: DataTypes.TEXT,
-					field: 'valid_machines',
-					defaultValue: ''
+					field: 'valid_machines'
 				}
 			}
 		);

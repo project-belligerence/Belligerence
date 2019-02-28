@@ -12,7 +12,6 @@
 				validMachines: {
 					type: DataTypes.TEXT,
 					field: 'valid_machines',
-					defaultValue: '',
 					get: function() {
 						var API = require('./../../routes/api.js');
 						return API.methods.getPseudoArray(this.getDataValue('validMachines'));
