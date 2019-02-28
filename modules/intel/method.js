@@ -131,7 +131,7 @@
 		req.serverValues = {};
 		req.serverValues.contextLimit = config.numbers.modules.intel.queryLimit;
 
-		var MainTable = 'intel_tables',
+		var MainTable = 'intel_table',
 			entity = API.methods.getMainEntity(req),
 			baseAttributes = "id, original_poster_hash AS originalPosterHash, poster_hash AS posterHash, display AS displayAs, " +
 							 "poster_details AS posterDetails, original_poster_details AS originalPosterDetails, " +
@@ -140,10 +140,10 @@
 							 "hashField," +
 							 "createdAt as createdAt ",
 			countQuery =	"(SELECT COUNT(*) FROM `cheers_tables`" +
-						 	"WHERE cheers_tables.target = intel_tables.hashField" +
+						 	"WHERE cheers_tables.target = intel_table.hashField" +
 							") AS totalCheers, " +
 							"(SELECT COUNT(*) FROM `comments_tables`" +
-						 	"WHERE comments_tables.subjectField = intel_tables.hashField" +
+						 	"WHERE comments_tables.subjectField = intel_table.hashField" +
 							") AS totalComments";
 
 		API.methods.generateRawQuery(req, res,
@@ -287,7 +287,7 @@
 				/*
 					var CommentsMethods = require('./../index.js').getMethods().comments;
 
-					CommentsMethods.getEntityComments(req, res, "intel_tables", entry[0].dataValues.hashField, function(comments) {
+					CommentsMethods.getEntityComments(req, res, "intel_table", entry[0].dataValues.hashField, function(comments) {
 						entry[0].dataValues.comments = comments;
 						API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
 					});

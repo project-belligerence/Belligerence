@@ -166,24 +166,30 @@
 
 	function post(req, res, params, done) {
 
-		if(!API.methods.validate(req, res, [params])) { return 0; }
+		/*
+			This takes a ton of db space and is not currently being used at all.
+		*/
 
-		var update = {};
+		return done();
 
-		if (params.buyer) update.buyerHash = params.buyer;
-		if (params.buyer_IP) update.buyerIPField = params.buyer_IP;
-		if (params.recipient_type) update.recipientType = params.recipient_type;
-		if (params.recipient) update.recipientHash = params.recipient;
-		if (params.seller) update.sellerHash = params.seller;
-		if (params.seller_type) update.sellerType = params.seller_type;
-		if (params.type) update.typeField = params.type;
-		if (params.object) update.objectField = params.object;
-		if (params.amount) update.amountField = params.amount;
-		if (params.cost) update.costField = params.cost;
-		if (params.details) update.detailsField = params.details;
-		if (params.notes) update.notesField = params.notes;
+		// if(!API.methods.validate(req, res, [params])) { return 0; }
 
-		mainModel.sync({force: false}).then(function() { mainModel.create(update).then(function(entry) { return done(); });	});
+		// var update = {};
+
+		// if (params.buyer) update.buyerHash = params.buyer;
+		// if (params.buyer_IP) update.buyerIPField = params.buyer_IP;
+		// if (params.recipient_type) update.recipientType = params.recipient_type;
+		// if (params.recipient) update.recipientHash = params.recipient;
+		// if (params.seller) update.sellerHash = params.seller;
+		// if (params.seller_type) update.sellerType = params.seller_type;
+		// if (params.type) update.typeField = params.type;
+		// if (params.object) update.objectField = params.object;
+		// if (params.amount) update.amountField = params.amount;
+		// if (params.cost) update.costField = params.cost;
+		// if (params.details) update.detailsField = params.details;
+		// if (params.notes) update.notesField = params.notes;
+
+		// mainModel.sync({force: false}).then(function() { mainModel.create(update).then(function(entry) { return done(); });	});
 	}
 
 	function put(req, res) {

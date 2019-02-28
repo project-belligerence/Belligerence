@@ -27,7 +27,8 @@
 				},
 				cheersDetails: { // Dummy field that contains the hashes of all users that have cheered the content.
 					type: DataTypes.STRING,
-					field: 'cheers'
+					field: 'cheers',
+					defaultValue: ""
 				},
 				hashField: {
 					type: DataTypes.STRING,

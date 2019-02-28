@@ -66,7 +66,7 @@
 			switch (v) {
 				case "item": { return "items_table"; }
 				case "upgrade": { return "upgrades_table"; }
-				case "intel": { return "intel_tables"; }
+				case "intel": { return "intel_table"; }
 				case "player": { return "players_table"; }
 				case "pmc": { return "pmc_table"; }
 			}
@@ -191,6 +191,7 @@
 					object.commenterField = player.hashField;
 					object.subjectField = subject.hashField;
 					object.typeField = req.body.type;
+					object.cheersDetails = "";
 
 					if (req.body.body) object.bodyField = req.body.body;
 					if (req.body.title) object.titleField = req.body.title;
