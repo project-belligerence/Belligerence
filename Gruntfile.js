@@ -115,6 +115,7 @@
 		});
 
 		grunt.registerTask('default', ['parallel:web']);
+		grunt.registerTask('build', ['sass']);
 	};
 
 })();
