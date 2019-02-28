@@ -1833,8 +1833,11 @@
 			function getSingleAndPicture(getSingle, hash) {
 				return services.$q(function(resolve) {
 					getSingle(hash).then(function(data) {
-						var cContent = vm.contentSubController.contentList[vm.contentSubController.pageState],
-							picture_property = data[cContent.picture_property],
+
+						var curMode = vm.contentSubController.pageState,
+							objectData = ((curMode === "store") ? data.data.data : data),
+							cContent = vm.contentSubController.contentList[vm.contentSubController.pageState],
+							picture_property = objectData[cContent.picture_property],
 							picture_extension = cContent.picture_extension;
 
 						services.apiServices.loadXHR("/images/modules/" + vm.contentSubController.contentList[vm.contentSubController.pageState].url + "/main_" + picture_property + "." + picture_extension).then(function(blob) {
