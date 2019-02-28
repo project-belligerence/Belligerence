@@ -163,9 +163,6 @@
 		function modalRedeemCode() {
 			var newModal = uiServices.createModal('RedeemCode', {});
 			return newModal.result.then(function(choice) {
-				if (choice) {
-					if (choice.fundsField > 0) { fundsServices.showChangedFunds(choice.fundsField); }
-				}
 				return choice;
 			});
 		}
