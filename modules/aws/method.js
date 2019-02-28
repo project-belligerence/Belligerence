@@ -23,6 +23,7 @@
 	exports.uploadStream = uploadStream;
 	exports.getBucketItems = getBucketItems;
 	exports.deleteBucketObjects = deleteBucketObjects;
+
 	exports.AWS_ENABLED = AWS_ENABLED;
 
 	// ===============================================================

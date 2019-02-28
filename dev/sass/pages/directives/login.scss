@@ -202,10 +202,7 @@
 			}
 		}
 
-		.player-avatar {
-			display: inline-block;
-			height: 150px;
-		}
+		.player-avatar { display: inline-block; }
 
 		.info-contract {
 			vertical-alignment: bottom;
@@ -279,7 +276,6 @@
 				.info-contract { .icon, .name { @include font-size(factor(2.5)); } }
 			}
 			.player-avatar {
-				height: 90px;
 				.medium-2 { @include size(85px); }
 			}
 
