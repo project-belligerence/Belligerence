@@ -265,7 +265,7 @@
 				{
 					model: FactionsModel,
 					attributes: ["hashField", "nameField", "sideField", "assetsField", "MapId"],
-					where: { "$factions.participant_table.leader$": true }
+					where: { "$Factions.participant_table.leader$": true }
 				}
 			];
 
@@ -308,7 +308,7 @@
 			{
 				model: FactionsModel,
 				attributes: ["hashField", "nameField", "sideField", "assetsField", "MapId"],
-				where: { "$factions.participant_table.leader$": true }
+				where: { "$Factions.participant_table.leader$": 1 }
 			}
 		];
 
