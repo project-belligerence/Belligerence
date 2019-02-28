@@ -321,35 +321,51 @@
 
 		req.body.id = req.body.steam_id;
 
+		console.log("============ 0");
+
 		var hasAccessKey = false,
 			accessKeyObj = {},
 
 			handleAllPromises = new Promise(function(resolve, reject) {
-				new Promise(function(resolve, reject) {
+
+				console.log("============ 1");
+
+				var readKeyPromise = new Promise(function(resolve_key, reject) {
 					if (req.body.access_key) {
 						var AccessKeysMethods = require('./../index.js').getMethods().access_keys;
 
 						AccessKeysMethods.checkKeyValidityFUNC(req.body.access_key, function(obj) {
-							console.log(obj.entry.nameField);
 							if (!API.methods.validate(req, res, [obj.entry], "Invalid key.")) { return 0; }
 							hasAccessKey = true;
 							accessKeyObj = obj.entry;
-							resolve();
+
+							resolve_key();
 						});
-					} else { resolve(); }
-				}).then(function() {
-					new Promise(function(resolve, reject) {
+					} else { console.log("============ 2"); resolve_key(); }
+				});
+
+				return readKeyPromise.then(function() {
+					console.log("============ 3");
+
+					var validateSteam = new Promise(function(resolve_steam, reject) {
+						console.log("============ 4");
 						if (hasAccessKey && accessKeyObj.skipSteamField) return resolve();
 
+						console.log("=========== VALIDATING STEAM ACCOUNT...");
+
 						GeneralMethods.getSteamValidFunc(req, res, function(data) {
+
+							console.log("=========== RETURNED STEAM DATA:", data);
 							if (!API.methods.validate(req, res, [(data[0])], "Invalid Steam ID.")) { return 0; }
-							resolve();
+							resolve_steam();
 						});
 					});
-				}).then(function() { resolve(); });
+
+					return validateSteam.then(function() { resolve(); });
+				});
 			});
 
-		handleAllPromises.then(function() {
+		return handleAllPromises.then(function() {
 			var update = {}, filteredTagProperties = [];
 
 			if (API.methods.isValid(req.body.username)) update.usernameField = req.body.username;
@@ -378,16 +394,18 @@
 				update.tagsField = filteredTagProperties;
 
 				if (!API.methods.validate(req, res, [(update.tagsField.length <= config.numbers.general.tagsLimit)], config.messages().modules.tags.tooMany)) { return 0; }
-			}
+			} else { update.tagsField = []; }
 
-			new Promise(function(resolve, reject) {
+			var readAccessKey = new Promise(function(resolve, reject) {
 				if (hasAccessKey && accessKeyObj) {
 					var AccessKeysModel = require('./../index.js').getModels().access_keys;
 					AccessKeysModel.findOne({ where: { seedField: accessKeyObj.seedField }}).then(function(keyEntry) {
 						keyEntry.update({ usedField: true }).then(resolve);
 					});
 				} else { resolve(); }
-			}).then(function() {
+			});
+
+			return readAccessKey.then(function() {
 				if (isAdmin) {
 					if (!API.methods.validateParameter(req, res, [
 						[[req.body.missionsWon, req.body.missionsFailed, req.body.tier, req.body.funds, req.body.prestige], 'number'],
@@ -417,7 +435,9 @@
 					PlayerModel.findOne({where: {$or: [{'usernameField': req.body.username}, {'steamIDField': req.body.steam_id}]}}).then(function(player) {
 						if (!API.methods.validate(req, res, [!player], config.messages().entry_exists(req.body.username))) { return 0; }
 
-						PlayerModel.create(update).then(function(player) { API.methods.sendResponse(req, res, true, config.messages().new_entry, player); });
+						return PlayerModel.create(update).then(function(player) {
+							API.methods.sendResponse(req, res, true, config.messages().new_entry, "player");
+						});
 					});
 				});
 			});

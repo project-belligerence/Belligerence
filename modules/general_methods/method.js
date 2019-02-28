@@ -192,11 +192,14 @@
 		req.body.property = "steam_id";
 		req.body.value = req.body.id;
 
+		console.log("=========== REQUESTING TO KNOW ABOUT: ", req.body.value);
+
 		PlayerMethods.findPlayerByPropertyFunc(req, res, function(data) {
 			if (!API.methods.validate(req, res, [!data.exists], "This Steam ID is already registered.")) { return 0; }
 
-			requestify.get(baseURL+'='+reqGame+'&key='+reqAPI+'&steamid=' + reqId, { timeout: 10000 }).then(function(response) {
+			requestify.get((baseURL+'='+reqGame+'&key='+reqAPI+'&steamid='+reqId), { timeout: 10000 }).then(function(response) {
 				var doneResponse = response.getBody().playerstats.stats[0].value;
+				console.log("=========== DONE RESPONSE:", doneResponse);
 				return callback([true, doneResponse]);
 			}).fail(function(response) {
 				return callback([false, -1]);
