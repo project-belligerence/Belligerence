@@ -36,13 +36,12 @@
 			var options = {
 				port: parseInt(process.env.DB_PORT),
 				host: this.server,
-
 				dialect: process.env.DB_PROTOCOL,
 				pool: {
 					maxConnections: parseInt(process.env.DB_MAX_POOL),
 					max: parseInt(process.env.DB_MAX_POOL),
-					minConnections: 0,
-					min: 0,
+					minConnections: 1,
+					min: 1,
 					maxIdleTime: 10000,
 					acquire: 30000
 				}
