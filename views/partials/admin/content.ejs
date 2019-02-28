@@ -377,7 +377,7 @@
 						<div class="dropdown-section" ng-if="::(contentObject.input === 'dropdown')" ng-cloak>
 							<div class="dropdown">
 								<button class="btn btn-muted medium dropdown-toggle" type="button" data-toggle="dropdown">
-									<span ng-bind="(contentObject.filter ? contentObject.filter([CtrlAdmin.contentSubController.objectModel[(contentObject.property + 'Input')]]) : contentObject.options[CtrlAdmin.contentSubController.findIndexInObject(contentObject.options, 'data', CtrlAdmin.contentSubController.objectModel[(contentObject.property + 'Input')])].text)"></span>
+									<span ng-bind="(contentObject.filter ? contentObject.filter([CtrlAdmin.contentSubController.objectModel[(contentObject.property + 'Input')]]) : contentObject.options[CtrlAdmin.contentSubController.objectModel[(contentObject.property + 'Input')]].text)"></span>
 								</button>
 								<ul class="dropdown-menu">
 									<li ng-click="CtrlAdmin.contentSubController.changeDropdownValue(contentObject.property, option.data)" ng-repeat="option in contentObject.options track by $index">
