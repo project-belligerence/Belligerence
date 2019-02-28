@@ -40,8 +40,8 @@
 				pool: {
 					maxConnections: parseInt(process.env.DB_MAX_POOL),
 					max: parseInt(process.env.DB_MAX_POOL),
-					minConnections: 1,
-					min: 1,
+					minConnections: 0,
+					min: 0,
 					maxIdleTime: 10000,
 					acquire: 30000
 				}
