@@ -5,6 +5,7 @@
 
 	var Methods = require('./../modules/index.js').getMethods(),
 		Models = require('./../modules/index.js').getModels(),
+		AWSMethods = Methods.aws,
 		Players = Methods.players,
 		PlayerSettings = Methods.player_settings,
 		PMC = Methods.pmc,
@@ -73,13 +74,14 @@
 			PlayerActionsRouter = express.Router(),
 			PMCActionsRouter = express.Router(),
 			AdminRouter = express.Router(),
-			GeneralActionsRouter = express.Router();
+			GeneralActionsRouter = express.Router(),
+			S3ActionsRouter = express.Router();
 
-		indexRouter
-			.get('/', function(req, res) { res.sendStatus(200); })
-		;
+		indexRouter.get('/', function(req, res) { res.sendStatus(200); });
 
 		testingRouter
+			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.owner))
+
 			.post('/minMaxTest', function(req, res) {
 				res.json(API.methods.minMax(req.body.min, req.body.max, req.body.value));
 			})
@@ -131,6 +133,10 @@
 				});
 			})
 			.post('/updateItemsValue', Items.updateItemsValue)
+		;
+
+		S3ActionsRouter
+				.get('/:FilePath*', AWSMethods.getS3File)
 		;
 
 		PlayerActionsRouter // For actions that are specifically related to the player.
@@ -609,17 +615,26 @@
 		app.get('/directive/:directive', renderDirective);
 		app.get('/modals/:modal', renderModal);
 
+		// MOUNT STEAM PASSPORT ROUTES
 		app.get('/auth/steam', passport.authenticate('steam'), function(req, res) {});
 		app.get('/auth/steam/return', passport.authenticate('steam', { failureRedirect: '/' }),
 			function(req, res) { res.redirect('/signup?step=steam'); }
 		);
 
-		// MOUNT API ROUTES
-		app.use(bodyParser.urlencoded({extended: true}));
-		app.use(bodyParser.json({limit: '1mb'}));
+		// CONFIGURE BODY PARSER FOR APIS
+		app.use(bodyParser.urlencoded({ extended: true }));
+		app.use(bodyParser.json({ limit: '1mb' }));
 
+		// MOUNT INDEX
 		app.use('/', indexRouter);
+
+		// AND S3 IMAGES ROUTES
+		if (AWSMethods.AWS_ENABLED) app.use('/images', S3ActionsRouter);
+
+		// MOUNT TESTING ROUTE
 		app.use('/testRoute', testingRouter);
+
+		// MOUNT API ROUTES
 		app.use('/api/players', playersRouter);
 		app.use('/api/pmc', PMCRouter);
 		app.use('/api/upgrades', UpgradesRouter);
@@ -633,6 +648,7 @@
 		app.use('/api/generalactions', GeneralActionsRouter);
 		app.use('/api/adminactions', AdminRouter);
 
+		// MOUNT THE ANUS ROUTE
 		app.get('*', renderIndex);
 	}
 

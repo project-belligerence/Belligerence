@@ -9,6 +9,12 @@
 			user: process.env.DB_CRED_USER,
 			password: process.env.DB_CRED_PASS,
 		},
+		aws: {
+			secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+			accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+			region: process.env.AWS_REGION,
+			bucket: process.env.S3_BUCKET_NAME
+		},
 		port: parseInt(process.env.DB_PORT),
 		sessionDurationMinutes: parseInt(process.env.SESSION_DURATION),
 		secretKey: process.env.DB_SECRET_KEY,

@@ -5,26 +5,20 @@
 		_ = require('lodash'),
 		sharp = require('sharp'),
 		multer = require('multer'),
-		s3Storage = require('multer-sharp-s3'),
-
-		aws = require('aws-sdk'),
-		awsConfig = {
-			secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-			accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-			region: process.env.AWS_REGION
-		},
-		s3 = new aws.S3(),
 
 		PMCModel = require('./../index.js').getModels().pmc,
 		PlayerModel = require('./../index.js').getModels().players,
+		AWSMethods = require('./../index.js').getMethods().aws,
 		config = require('./../../config.js'),
 		API = require('./../../routes/api.js'),
 
 		settingsObject = {},
-		finalFileName = ""
+		finalFileName = "",
+
+		AWS_ENABLED = AWSMethods.AWS_ENABLED,
+		IS_DEV = (process.env.NODE_ENV === "development")
 	;
 
-	aws.config.update(awsConfig);
 	sharp.cache(false);
 
 	exports.uploadPlayerAvatar = uploadPlayerAvatar;
@@ -33,50 +27,87 @@
 	exports.uploadIntelPicture = uploadIntelPicture;
 	exports.getImagesInFolder = getImagesInFolder;
 	exports.deleteImageinFolder = deleteImageinFolder;
+	exports.deleteContentImageFUNC = deleteContentImageFUNC;
 
 	var
-		generalSettings = {
-			thumbName: "thumb",
-			mainName: "main"
-		},
+		generalSettings = { thumbName: "thumb", mainName: "main" },
 		allowedContent = ['items', 'modifiers', 'stores', 'upgrades', 'advisories', 'objectives', 'maps', 'factions'],
 		old_upload_content = ['upgrades', 'objectives', 'advisories', 'factions'],
 		has_alpha = ['upgrades', 'objectives', 'advisories']
 	;
 
 	function getImagesInFolder(req, res) {
-		var fs = require('fs'),
-			pathArg = config.folders.uploads + "/" + config.folders.uploads_images + "/" + req.query.folder + "/" + req.query.type + "/",
-			filesList = [];
+		var getFolderFunction = (AWS_ENABLED ? AWSMethods.getBucketItems : getFoldersLocal),
+			folderPath = makeUploadDestination((config.folders.uploads + "/" + config.folders.uploads_images + "/" + req.query.folder + "/" + req.query.type + "/"));
 
-		fs.readdir(pathArg, function(err, items) {
+		getFolderFunction(folderPath, function(items) {
+			processItems(items, function(folderList) {
+				return API.methods.sendResponse(req, res, true, "Returning folders", folderList);
+			});
+		});
+
+		function getFoldersLocal(path, cb) { require('fs').readdir(path, function(err, items) { return cb(items); }); }
+
+		function processItems(items, cb) {
+			var filesList = [];
 			items.forEach(function(file) {
 				var uniqueFile = file.split("_")[0];
 				if (uniqueFile === "thumb") filesList.push(((file.split("_")[1]).split(".")[0]));
 			});
-			return API.methods.sendResponse(req, res, true, "Returning folders", filesList);
-		});
+			return cb(filesList);
+		}
 	}
 
 	function deleteImageinFolder(req, res) {
-		var fs = require('fs'),
-			pathArg = config.folders.uploads + "/" + config.folders.uploads_images + "/" + req.body.folder + "/" + req.body.type + "/",
-			filename = pathArg + "main_" + req.body.id + "." + req.body.extension,
-			filenameThumb = pathArg + "thumb_" + req.body.id + "." + req.body.extension;
+		var params = {
+			path: (config.folders.uploads + "/" + config.folders.uploads_images + "/" + req.body.folder + "/" + req.body.type + "/"),
+			filename: req.body.id,
+			extension: req.body.extension
+		};
 
-		fs.stat(filename, function(err, stat) {
-			if (err === null) {
-				fs.unlink(filename);
-				fs.unlink(filenameThumb);
-			}
+		deleteContentImageFUNC(params, function() {
 			return API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
 		});
 	}
 
+	function deleteContentImageFUNC(params, cb) {
+		var finalPath = makeUploadDestination(params.path),
+			filename = (finalPath + "main_" + params.filename + "." + params.extension),
+			filenameThumb = (finalPath + "thumb_" + params.filename + "." + params.extension),
+
+			deleteFilesFunction = (AWS_ENABLED ? AWSMethods.deleteBucketObjects : deleteImagesLocal);
+
+		deleteFilesFunction([filename, filenameThumb], cb);
+	}
+
+	function deleteImagesLocal(files, cb) {
+		var fs = require('fs'),
+			main = files[0],
+			thumb = files[1];
+		fs.stat(main, function(err, stat) {
+			if (err === null) {
+				fs.unlink(main, function() {
+				fs.unlink(thumb, cb);
+				});
+			}
+		});
+	}
+
+	function makeUploadDestination(path) {
+		if (!(AWS_ENABLED)) return path;
+		var nPath = path.split("/"), fPath = [];
+		for (var i = 0; i <= (nPath.length - 1); i++) { if (i > 1) fPath.push(nPath[i]); }
+		return fPath.join("/");
+	}
+
+	function getStorageFolderCb(req, file, cb) { return cb(null, getStorageFolder()); }
+
+	function getStorageFolder() { return ((IS_DEV ? (config.folders.uploads + process.env.TEMP_FOLDER) : process.env.TEMP_FOLDER) + "/"); }
+
 	function uploadPlayerAvatar(req, res) {
 		settingsObject = {
 			header: 'avatar',
-			destination: config.folders.uploads + "/" + config.folders.uploads_images + "/avatars/" + "players/",
+			destination: makeUploadDestination(config.folders.uploads + "/" + config.folders.uploads_images + "/avatars/" + "players/"),
 			originalName: 'avatar_picture',
 			quality: 85,
 			mainSize: 250,
@@ -95,7 +126,7 @@
 	function uploadPMCAvatar(req, res) {
 		settingsObject = {
 			header: 'avatar',
-			destination: config.folders.uploads + "/" + config.folders.uploads_images + "/avatars/" + "pmc/",
+			destination: makeUploadDestination(config.folders.uploads + "/" + config.folders.uploads_images + "/avatars/" + "pmc/"),
 			originalName: 'avatar_picture',
 			quality: 85,
 			mainSize: 350,
@@ -114,7 +145,7 @@
 	function uploadIntelPicture(req, res) {
 		settingsObject = {
 			header: 'intel',
-			destination: config.folders.uploads + "/" + config.folders.uploads_images + "/modules/" + "intel/",
+			destination: makeUploadDestination(config.folders.uploads + "/" + config.folders.uploads_images + "/modules/" + "intel/"),
 			originalName: 'intel_picture',
 			quality: 85,
 			mainSize: 350,
@@ -144,7 +175,7 @@
 		settingsObject = {
 			header: 'module',
 			alpha: (API.methods.inArray(type, has_alpha)),
-			destination: config.folders.uploads + "/" + config.folders.uploads_images + "/modules/" + type + "/",
+			destination: makeUploadDestination(config.folders.uploads + "/" + config.folders.uploads_images + "/modules/" + type + "/"),
 			originalName: 'module_picture',
 			quality: 100,
 			mainSize: 350,
@@ -169,9 +200,8 @@
 
 	function generateS3Path(req, file, cb) {
 		filterNameAWS(req, file, function(filtered_file) {
-			makeDestinationAWS(req, file, function(destination) {
+			getDestinationAWS(req, file, function(destination) {
 				var finalDestination = (destination + filtered_file);
-				console.log(">>>>", finalDestination);
 				cb(null, finalDestination);
 			});
 		});
@@ -179,43 +209,11 @@
 
 	function getMulterStorage() {
 		switch (true) {
-			case (_.isString(process.env.AWS_ACCESS_KEY_ID)): {
-
-					var storageObject = s3Storage({
-						s3: s3,
-						Key: generateS3Path,
-						Bucket: process.env.S3_BUCKET_NAME,
-						ACL: 'public-read',
-						multiple: true,
-						normalize: true,
-						toFormat: {
-							type: (settingsObject.alpha ? "png" : "jpeg"),
-							options: {
-								progressive: true,
-								quality: settingsObject.quality
-							},
-						},
-						resize: [
-							{
-								prefix: "main",
-								delimiter: "_",
-								width: (settingsObject.mainSize * settingsObject.aspectRatio[0]),
-								height: (settingsObject.mainSize * settingsObject.aspectRatio[1])
-							},
-							{
-								prefix: "thumb",
-								delimiter: "_",
-								width: (settingsObject.thumbSize * settingsObject.aspectRatio[0]),
-								height: (settingsObject.thumbSize * settingsObject.aspectRatio[1])
-							}
-						]
-					});
-
-				return storageObject;
-
+			case (AWS_ENABLED): {
+				return AWSMethods.getS3Storage(settingsObject, generateS3Path);
 			} break;
 			default: {
-				return multer.diskStorage({ destination: makeDestination, filename: filterName });
+				return multer.diskStorage({ destination: getDestination, filename: filterName });
 			} break;
 		}
 	}
@@ -226,7 +224,7 @@
 		return upload(req, res, function(err) {
 			if (err) return handleError(req, res, err);
 
-			if (_.isString(process.env.AWS_ACCESS_KEY_ID)) { return done(); }
+			if (AWS_ENABLED) { return done(); }
 
 			return sharp(settingsObject.destination + finalFileName)
 				.resize((settingsObject.thumbSize * (settingsObject.aspectRatio[0])), (settingsObject.thumbSize * settingsObject.aspectRatio[1]))
@@ -248,40 +246,71 @@
 	}
 
 	function handleUpload(req, res, done) {
-		var upload = multer({storage: getMulterStorage(), fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName),
-			defaultBackgroundPicture = "public/images/content/default_bg.png"
-		;
+		var storage = multer.diskStorage({ destination: getStorageFolderCb, filename: filterName }),
+			upload = multer({storage: storage, fileFilter: filterFile, limits: { fileSize: settingsObject.maxSizeKb * 1024 }}).single(settingsObject.originalName);
 
 		return upload(req, res, function(err) {
 			if (err) return handleError(req, res, err);
 
-			if (_.isString(process.env.AWS_ACCESS_KEY_ID)) { return done(); }
+			var thumbName = (settingsObject.destination + generalSettings.thumbName + "_" + finalFileName),
+				mainName = (settingsObject.destination + generalSettings.mainName + "_" + finalFileName),
 
-			return sharp(defaultBackgroundPicture)
-				.overlayWith((settingsObject.destination + finalFileName))
-				.toBuffer(function(err, data) {
-					return sharp(data)
-						.resize(settingsObject.thumbSize)
-						.toFile((settingsObject.destination + generalSettings.thumbName + "_" + finalFileName), function(err) {
-							if (err) return handleError(req, res, err);
-							return sharp(defaultBackgroundPicture)
-								.overlayWith((settingsObject.destination + finalFileName))
-								.resize(settingsObject.mainSize)
-								.toFile(settingsObject.destination + generalSettings.mainName + "_" + finalFileName , function(err) {
-									if (err) return handleError(req, res, err);
+				cacheFile = (getStorageFolder() + finalFileName);
 
-									require('fs').unlink((settingsObject.destination + finalFileName), function(err) {
-										if (err) throw Error(err);
-										return done();
-									});
-								});
-						});
+				createOverlay(function(stream) {
+					resizeStream(stream, "mainSize", function(stream_main) {
+					resizeStream(stream, "thumbSize", function(stream_thumb) {
+							saveStream(stream_main, mainName, function() {
+							saveStream(stream_thumb, thumbName, function() {
+								removeCached(cacheFile, done);
+							});
+							});
+					});
+					});
 				});
+
+			function createOverlay(cb) {
+				var defaultBackgroundPicture = (config.folders.public + "/" + config.folders.uploads_images + "/upload/upload_bg.jpg");
+
+				return sharp(defaultBackgroundPicture)
+					.overlayWith(cacheFile)
+					.toBuffer(function(err, stream) {
+						if (err) return handleError(req, res, err);
+						return cb(stream);
+					});
+			}
+
+			function resizeStream(stream, size, cb) {
+				return sharp(stream)
+					.resize(settingsObject[size])
+					.toBuffer(function(err, stream_result) {
+						if (err) return handleError(req, res, err);
+						return cb(stream_result);
+					});
+			}
+
+			function saveStream(stream, filePath, cb) {
+				if (AWS_ENABLED) { AWSMethods.uploadStream(stream, filePath, cb); }
+				else {
+					sharp(stream)
+					.toFile(filePath, function(err) {
+						if (err) return handleError(req, res, err);
+						return cb();
+					});
+				}
+			}
+
+			function removeCached(target, cb) {
+				require('fs').unlink(target, function(err) {
+					if (err) return handleError(req, res, err);
+					return done();
+				});
+			}
 		});
 	}
 
-	function makeDestination(req, file, cb) { return cb(null, settingsObject.destination); }
-	function makeDestinationAWS(req, file, cb) { return cb(settingsObject.destination); }
+	function getDestination(req, file, cb) { return cb(null, settingsObject.destination); }
+	function getDestinationAWS(req, file, cb) { return cb(settingsObject.destination); }
 
 	function filterNameAWS(req, file, cb) {
 		var newFileName = (function(v, a) {

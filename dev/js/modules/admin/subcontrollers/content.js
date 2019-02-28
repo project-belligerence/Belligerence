@@ -1833,9 +1833,16 @@
 			function getSingleAndPicture(getSingle, hash) {
 				return services.$q(function(resolve) {
 					getSingle(hash).then(function(data) {
-						services.apiServices.loadXHR("/images/modules/" + vm.contentSubController.contentList[vm.contentSubController.pageState].url + "/main_" + hash + ".jpg").then(function(blob) {
+						var cContent = vm.contentSubController.contentList[vm.contentSubController.pageState],
+							picture_property = data[cContent.picture_property],
+							picture_extension = cContent.picture_extension;
+
+						services.apiServices.loadXHR("/images/modules/" + vm.contentSubController.contentList[vm.contentSubController.pageState].url + "/main_" + picture_property + "." + picture_extension).then(function(blob) {
 				  			vm.contentSubController[vm.contentSubController.objectCtrl].currentUploadedAvatar = blob;
 				  			resolve(data);
+						}, function() {
+							vm.contentSubController[vm.contentSubController.objectCtrl].currentUploadedAvatar = "";
+							resolve(data);
 						});
 					});
 				});
@@ -2044,6 +2051,16 @@
 						var dMessage = ["success", "Object picture uploaded."];
 						if (!data.data.success) dMessage = ["warning", data.data.message];
 						if (!suppress) services.alertsServices.addNewAlert(dMessage[0], dMessage[1]);
+
+						var cContent = vm.contentSubController.contentList[vm.contentSubController.pageState],
+							picture_property = vm.contentSubController.objectData[cContent.picture_property],
+							picture_extension = cContent.picture_extension;
+
+						services.apiServices.loadXHR("/images/modules/" + vm.contentSubController.contentList[vm.contentSubController.pageState].url + "/main_" + picture_property + "." + picture_extension).then(function(blob) {
+				  			vm.contentSubController[vm.contentSubController.objectCtrl].currentUploadedAvatar = blob;
+						}, function() {
+							vm.contentSubController[vm.contentSubController.objectCtrl].currentUploadedAvatar = currentUploadedAvatar;
+						});
 					};
 
 				if (hideCrop) { return services.adminServices.uploadModulePicture(objectId, vm.contentSubController.currentObjectHash, currentUploadedAvatar).then(resolveFunction); }

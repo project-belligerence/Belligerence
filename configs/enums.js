@@ -132,6 +132,8 @@
 			unauthorized: 401,
 			forbidden: 403,
 
+			not_found: 404,
+
 			sub_code: {
 				banned: 10,
 				no_token: 11,

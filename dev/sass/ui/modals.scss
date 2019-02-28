@@ -137,6 +137,11 @@
 						height: 260px;
 						overflow-y: scroll;
 
+						.loading-placeholder {
+							text-align: center;
+							@include factor-property(margin-top, 10);
+						}
+
 						.image-single {
 							@include transition(margin-right .25s);
 

@@ -102,6 +102,11 @@
 					<hr />
 
 					<ul class="image-list">
+
+						<div class="loading-placeholder" ng-if="(ModalController.currentFolderImages.length === 0)">
+							<img src="svg-loaders/spinning-circles-black.svg" />
+						</div>
+
 						<li class="image-single comment-animation" ng-class="{'selected': (ModalController.checkSelected(image))}" ng-repeat="image in (ModalController.currentFolderImages | filter:ModalController.imageSearchFilter:strict) track by $index" ng-init="deleteMode = false;">
 
 							<div ng-click="ModalController.selectImage(image)">

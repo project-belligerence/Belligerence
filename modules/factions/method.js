@@ -267,21 +267,16 @@
 
 	function deleteEntry(req, res) {
 		var objectID = req.params.Hash,
-			fs = require('fs');
+			fs = require('fs'),
+			UploadMethods = require('./../index.js').getMethods().upload;
 
-		mainModel.findOne({where: {"hashField": objectID}}).then(function(entry) {
+		mainModel.findOne({where: { "hashField": objectID }}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
 
-			var destination = config.folders.uploads + "/" + config.folders.uploads_images + "/" + config.folders.modules + "/" + "factions/",
-				filename = destination + "main_" + req.params.Hash + ".jpg",
-				filenameThumb = destination + "thumb_" + req.params.Hash + ".jpg";
+			var destination = (config.folders.uploads + "/" + config.folders.uploads_images + "/" + config.folders.modules + "/" + "factions/"),
+				params = { path: destination, filename: req.params.Hash, extension: ".jpg" };
 
-			fs.stat(filename, function(err, stat) {
-				if (err === null) {
-					fs.unlink(filename);
-					fs.unlink(filenameThumb);
-				}
-
+			UploadMethods.deleteContentImageFUNC(params, function() {
 				entry.destroy().then(function() {
 					API.methods.sendResponse(req, res, true, config.messages().entry_deleted);
 				});
