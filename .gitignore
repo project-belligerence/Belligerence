@@ -37,10 +37,16 @@ $RECYCLE.BIN/
 /logs
 /uploads
 /build
-/public/js
+/public/js/*
+
+# It's complicated
+views/components/singletons/dev.ejs
 
 # Go away npm
 package-lock.json
+
+# Thank you for the nightmares, node-gyp
+binding.gyp
 
 # No workspace stuff either
 *.sublime-workspace
@@ -63,9 +69,3 @@ package-lock.json
 Network Trash Folder
 Temporary Items
 .apdisk
-*.sublime-project
-*.sublime-workspace
-views/components/singletons/dev.ejs
-public/js/vendors.bundle.js
-binding.gyp
-public/js/app.min.js
