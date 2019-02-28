@@ -40,6 +40,11 @@ $RECYCLE.BIN/
 /public/js/*
 /public/styles/*
 
+# Too large for the repo
+/public/images/bg/*
+/public/images/favicons/*.png
+/public/images/favicons/*.ico
+
 # It's complicated
 views/components/singletons/dev.ejs
 
