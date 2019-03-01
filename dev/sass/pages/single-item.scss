@@ -83,7 +83,7 @@
 					text-align: center;
 					padding: factor(1) factor(2);
 					@include font-size(factor(3));
-					background: url("/images/cardbg_light.png") repeat 100%;
+					background: $bg_white_lightest repeat 100%;
 				}
 			}
 

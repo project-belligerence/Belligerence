@@ -24,15 +24,17 @@ $logo_belligerence_small_width: 265px;
 
 $header_background: url('/images/bg/main_bg.jpg');
 
-$first_background: url('/images/bg/1_bg.png');
-$second_background: url('/images/bg/2_bg.png');
-$third_background: url('/images/bg/3_bg.png');
-$fourth_background: url('/images/bg/4_bg.png');
-$fifth_background: url('/images/bg/5_bg.png');
+$fp_intro_first_background: url('/images/bg/1_bg.png');
+$fp_intro_second_background: url('/images/bg/2_bg.png');
+$fp_intro_third_background: url('/images/bg/3_bg.png');
+$fp_intro_fourth_background: url('/images/bg/4_bg.png');
+$fp_intro_fifth_background: url('/images/bg/5_bg.png');
 
 $factions_icon: url('/images/icons/factions-icon.png');
 $city_icon: url('/images/icons/city-icon.png');
 $mission_icon: url('/images/icons/mission-icon.png');
+
+$bg_white_lightest: url("/images/cardbg_light.png");
 
 /* ================= */
 
@@ -58,8 +60,8 @@ $mission_icon: url('/images/icons/mission-icon.png');
 	@include generate_background_image($logo_belligerence_small_inverted, $logo_belligerence_small_height, $logo_belligerence_small_width);
 }
 
-.fp_first_section_bg { @include generate_background_image($first_background); }
-.fp_second_section_bg { @include generate_background_image($second_background); }
-.fp_third_section_bg { @include generate_background_image($third_background); }
-.fp_fourth_section_bg { @include generate_background_image($fourth_background); }
-.fp_fifth_section_bg { @include generate_background_image($fifth_background); }
+.fp_first_section_bg { @include generate_background_image($fp_intro_first_background); }
+.fp_second_section_bg { @include generate_background_image($fp_intro_second_background); }
+.fp_third_section_bg { @include generate_background_image($fp_intro_third_background); }
+.fp_fourth_section_bg { @include generate_background_image($fp_intro_fourth_background); }
+.fp_fifth_section_bg { @include generate_background_image($fp_intro_fifth_background); }

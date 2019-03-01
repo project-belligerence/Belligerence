@@ -182,7 +182,7 @@
 		.logged-column {
 			@include factor-property(margin-bottom, 2);
 			padding: 0 factor(1);
-			background: url("/images/cardbg_light.png");
+			background: $bg_white_lightest;
 			display: inline-block;
 
 			&.short {
@@ -209,7 +209,7 @@
 
 			.icon, .name {
 				padding: 0 factor(1);
-				background: url("/images/cardbg_light.png");
+				background: $bg_white_lightest;
 				display: inline-block;
 				@include font-size(factor(3));
 				color: #000;

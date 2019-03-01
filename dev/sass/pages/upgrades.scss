@@ -206,7 +206,7 @@
 			h3 {
 				@include factor-property(padding, 2);
 				color: #333;
-				background: url("/images/cardbg_light.png") repeat 100%;
+				background: $bg_white_lightest repeat 100%;
 			}
 		}
 
@@ -498,7 +498,7 @@
 		.anchor-container {
 			&:hover {
 				.upgrade-name {
-					background: url("/images/cardbg_light.png") repeat 100%;
+					background: $bg_white_lightest repeat 100%;
 					color: $main_color;
 				}
 			}
@@ -532,7 +532,7 @@
 			}
 
 			.text {
-				background: url("/images/cardbg_light.png") repeat 100%;
+				background: $bg_white_lightest repeat 100%;
 
 				@include font-size(factor(2));
 				@include factor-property(padding, 1);
@@ -665,7 +665,7 @@
 					@include font-size(factor(1.8));
 					font-weight: 800;
 					color: #111;
-					background: url("/images/cardbg_light.png") repeat 100%;
+					background: $bg_white_lightest repeat 100%;
 				}
 			}
 

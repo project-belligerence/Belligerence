@@ -941,7 +941,7 @@
 						text-align: center;
 						padding: factor(1) factor(2);
 						@include font-size(factor(3));
-						background: url("/images/cardbg_light.png") repeat 100%;
+						background: $bg_white_lightest repeat 100%;
 					}
 				}
 
@@ -1071,7 +1071,7 @@
 								text-align: center;
 								width: inherit;
 								display: block;
-								background: url("/images/cardbg_light.png") repeat 100%;
+								background: $bg_white_lightest repeat 100%;
 								color: #111;
 								font-family: $main_font;
 								letter-spacing: -1px;
@@ -1330,7 +1330,7 @@
 								letter-spacing: -1px;
 								box-shadow: 0px 0px 5px #000;
 
-								background: url("/images/cardbg_light.png") repeat 100%;
+								background: $bg_white_lightest repeat 100%;
 								color: #111;
 							}
 
@@ -1435,7 +1435,7 @@
 									.icon {
 										display: inline-block;
 										line-height: 0.8;
-										background: url(/images/cardbg_light.png) repeat 100%;
+										background: $bg_white_lightest repeat 100%;
 
 										@include font-size(factor(4));
 										padding: factor(1) factor(1.5);
