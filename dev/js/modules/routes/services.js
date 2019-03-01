@@ -22,6 +22,9 @@
 			$rootScope.$broadcast("updatePageTitle", toState.routeName);
 		}
 
+		function failRoute() { $rootScope.routeError = 5; }
+		function cleanRoute() { $rootScope.routeError = null; }
+
 		function directToBannedRoute(event, toState, toParams, fromState, fromParams) {
 			if ($rootScope.routeError === 10) {
 				event.preventDefault();
@@ -33,6 +36,7 @@
 		function securePrivateRoute(event, toState, toParams, fromState, fromParams) {
 			var prevFromState = fromState;
 			if (((toState.name) && (toState.name.match(/^app\.private\./))) && !(apiServices.getToken())) {
+				failRoute();
 				event.preventDefault();
 				alertsServices.addNewAlert("warning", "You must be logged in to continue.");
 				if (prevFromState.name === "") $state.go("app.public.frontpage");
@@ -87,6 +91,7 @@
 		function endTransitionRoute(event, toState, toParams, fromState, fromParams) {
 			$("#page-top").removeClass("darken");
 			$("#loading-bar .bar").removeClass("broaden");
+			cleanRoute();
 		}
 
 		function scrollToTop(event, toState, toParams, fromState, fromParams) {

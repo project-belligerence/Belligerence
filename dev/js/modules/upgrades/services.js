@@ -306,7 +306,7 @@
 			savedPosition = (JSON.parse(getLastPosCookies()) || {}),
 			intialX = (reset ? windowHalfWidth : (savedPosition.x || windowHalfWidth)),
 			intialY = (reset ? windowHalfHeight : (savedPosition.y || windowHalfHeight)),
-			initialZoom = (reset ? 0.5 : (savedPosition.zoom || windowHalfWidth));
+			initialZoom = (reset ? 0.5 : (savedPosition.zoom || 0.5));
 
 			mainElement.css({"transform": "translate(" + intialX + "px ," + intialY + "px)"});
 

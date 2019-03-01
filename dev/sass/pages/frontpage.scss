@@ -14,7 +14,7 @@
 	@include factor-property(margin-bottom, 15);
 
 	@include breakpoint("medium") { margin-bottom: 0; }
-	@include breakpoint("small") { padding-bottom: 20px; }
+	@include breakpoint("small") { padding-bottom: 60px; }
 
 	#belligerence-logo {
 		position: relative;
@@ -74,6 +74,29 @@
 	}
 }
 
+#fp-scroll-invite {
+	position: absolute;
+	width: 100%;
+	height: 0px;
+
+	.icons-container {
+		position: relative;
+		top: -30px;
+		text-align: center;
+		.icon {
+			line-height: 0;
+			color: #fff;
+			text-shadow: 0px 0px 5px #000, 0px 0px 10px #000;
+
+			&.ion-mouse { @include font-size(factor(7)); }
+			&.ion-arrow-down-c {
+				@include font-size(factor(4));
+				position: absolute;
+			}
+		}
+	}
+}
+
 #fp-content-intro-alert {
 	background: $bg_white_lightest;
 	color: #111;
@@ -127,8 +150,6 @@
 			}
 		}
 	}
-
-
 }
 
 #fp-content-section-outer {

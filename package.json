@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "2d-css-matrix-parse": "^1.0.0",
+    "angular": "^1.5.8",
     "angular-animate": "^1.5.8",
     "angular-bootstrap-colorpicker": "^3.0.31",
     "angular-cookies": "^1.6.0",
@@ -70,7 +71,6 @@
     "grunt-cli": "^0.1.13"
   },
   "devDependencies": {
-    "angular": "^1.5.8",
     "expect.js": "^0.3.1",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^1.0.0",

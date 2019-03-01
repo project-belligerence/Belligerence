@@ -336,6 +336,11 @@ $cheer_background_color_active: $main_color_dark;
 
 			margin-right: $section_button_margin_right;
 			padding: $section_button_padding;
+
+			.icon {
+				position: relative;
+				&.ion-android-person-add { left: -2px; }
+			}
 		}
 	}
 
