@@ -1,0 +1,19 @@
+(function() {
+	'use strict';
+
+	var moduleName = 'Legal';
+
+	angular.module((moduleName + 'Module'), [])
+		.controller(("LegalController"), require("./controller").function)
+		.directive(('cookiesDirective'), require("./cookies-directive").function)
+	;
+
+	exports.legal = {
+		name: moduleName.toLowerCase(),
+		routeName: "Legal",
+		url: "legal",
+		templateUrl: ('partial/' + (moduleName.toLowerCase()) + '.ejs'),
+		controller: "LegalController",
+		controllerAs: ('Ctrl' + moduleName)
+	};
+})();

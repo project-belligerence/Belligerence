@@ -44,7 +44,7 @@
 			&.green { background: url("/images/honeybg_green.png") repeat 100%; }
 
 			&.dark {
-				background: url("/images/cardbg_inverted_light.png") repeat 100%;
+				background: $bg_grey_light repeat 100%;
 				color: #fff;
 			}
 
@@ -60,7 +60,7 @@
 				&:hover { background: url("/images/cardbg_dark.png") repeat 100%; }
 				&.selected {
 					cursor: default;
-					background: url("/images/cardbg_inverted_light.png") repeat 100%;
+					background: $bg_grey_light repeat 100%;
 					color: #fff;
 				}
 			}

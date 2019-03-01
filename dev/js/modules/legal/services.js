@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	ObjectServicesFunction.$inject = ["$timeout", "apiServices"];
+	ObjectServicesFunction.$inject = [];
 
-	function ObjectServicesFunction($timeout, apiServices) {
+	function ObjectServicesFunction() {
 
 		var methods = {
 		};

@@ -1267,3 +1267,28 @@ tags-input {
 		}
 	}
 }
+
+/* ===============================
+
+	ACCORDION PANELS
+
+.panel
+
+================================== */
+
+.panel-heading {
+	@include transition(background-color .25s);
+
+	background-color: $main_color;
+	&:hover { background-color: $main_color_dark; }
+
+	h4 {
+		@include font-size(factor(3));
+		a:hover, a:active, a:focus { color: #ccc; }
+	}
+}
+
+.panel {
+	background-color: #111;
+	border: 1px solid #fff;
+}

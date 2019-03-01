@@ -49,6 +49,7 @@
 					.state('app.public.mission-single', require(getModule('missions')).single)
 					.state('app.public.upgrades', require(getModule('upgrades')).route)
 					.state('app.public.upgrade-single', require(getModule('upgrades')).single)
+					.state('app.public.tos', require(getModule('legal')).legal)
 
 				.state('app.private', new routeObject())
 					.state('app.private.dashboard', require(getModule('dashboard')).route)

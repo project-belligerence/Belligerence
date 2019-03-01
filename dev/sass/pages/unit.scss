@@ -529,7 +529,7 @@
 		@include factor-property(margin-bottom, 2);
 		padding: 0 factor(2);
 		color: #ddd;
-		background: url("/images/cardbg_inverted_light.png") repeat 100%;
+		background: $bg_grey_light repeat 100%;
 		letter-spacing: -1px;
 
 		border-left: 3px solid #777;

@@ -180,7 +180,7 @@
 			currentPos = (uiServices.getTransformScale(mainElement.css("transform")).translate),
 			savedPosition = { x: currentPos.x, y: currentPos.y, zoom: currentScale };
 
-			$cookies.put("upgradeScreen:savedPosition", JSON.stringify(savedPosition));
+			$cookies.put("upgradeScreenSavedPosition", JSON.stringify(savedPosition));
 		}
 
 		function createNewUpgradeIcon(pOwnedUpgrades, totalItems, index, parent, upgrade, isMainParent) {
@@ -292,7 +292,7 @@
 		}
 
 		function getLastPosCookies() {
-			return ($cookies.get("upgradeScreen:savedPosition") || "{}");
+			return ($cookies.get("upgradeScreenSavedPosition") || "{}");
 		}
 
 		function initDraggingOnScreen(reset) {

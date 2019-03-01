@@ -1,23 +1,23 @@
 (function() {
 	'use strict';
 
-	TemplateDirectiveFunctions.$inject = ["$scope", "$timeout", "apiServices"];
+	ObjectDirectiveFunctions.$inject = ["$scope", "$timeout", "apiServices"];
 
-	function TemplateDirectiveFunctions($scope, $timeout, apiServices) {
+	function ObjectDirectiveFunctions($scope, $timeout, apiServices) {
 		var vm = this;
 
 		$scope.myVariable = true;
 	}
 
-	function TemplateDirectiveFunction() {
+	function ObjectDirectiveFunction() {
 		return {
 			scope: {
 			},
 			restrict : "EA",
 			templateUrl: "",
-			controller: TemplateDirectiveFunctions
+			controller: ObjectDirectiveFunctions
 		};
 	}
 
-	exports.function = TemplateDirectiveFunction;
+	exports.function = ObjectDirectiveFunction;
 })();

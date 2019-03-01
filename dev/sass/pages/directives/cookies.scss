@@ -1,0 +1,37 @@
+#cookies-alert-bar {
+	position: fixed;
+	bottom: 0;
+
+	width: 100%;
+	z-index: 999;
+
+	#cookies-bar {
+		box-shadow: 0px 0px 10px #000;
+		padding: factor(2);
+		margin: factor(2);
+		color: #fff;
+		display: grid;
+
+		background: $bg_grey_light;
+
+		.cookie-text {
+			font-weight: bolder;
+			padding: 0 factor(1);
+			p {
+				text-shadow: 0px 0px 5px #000, 0px 0px 10px rgba(0,0,0,.5), 0px 0px 10px rgba(0,0,0,.7);
+
+				a { text-shadow: none; }
+			}
+		}
+
+		.button-container {
+			position: relative;
+			text-align: right;
+
+			@include breakpoint("small") {
+				text-align: center;
+				margin: factor(2) 0;
+			}
+		}
+	}
+}

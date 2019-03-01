@@ -35,7 +35,8 @@
 		'NavModule',
 		'FooterModule',
 		'UpgradesModule',
-		'WebsocketsModule'
+		'WebsocketsModule',
+		'LegalModule'
 	]);
 
 	function getModule(module) { return ("./modules/" + module + "/init"); }
@@ -74,4 +75,5 @@
 	require(getModule("missions"));
 	require(getModule("operations"));
 	require(getModule("websockets"));
+	require(getModule("legal"));
 })();

@@ -43,6 +43,7 @@
 				requestPUT: requestPUT,
 				requestDELETE: requestDELETE,
 				getInfo: getInfo,
+				simpleGET: simpleGET,
 				getQuery: getQuery,
 				getQuerySimple: getQuerySimple,
 				applyControlledClass: applyControlledClass,
@@ -597,6 +598,21 @@
 		function requestPOST(request) { return makeRequest({method: "POST", cache: ((request.cache !== null) ? request.cache : false)}, request); }
 		function requestDELETE(request) { return makeRequest({method: "DELETE", cache: ((request.cache !== null) ? request.cache : false)}, request); }
 		function requestPUT(request) { return makeRequest({method: "PUT", cache: ((request.cache !== null) ? request.cache : false)}, request); }
+
+		function simpleGET(url) {
+			return $http({ method: "GET", url: url, cache: true }).then(handleData, logError);
+
+			function handleData(data) {
+				if (!data) return logError(data);
+				if (data.status !== 200) logError(data);
+				return data.data;
+			}
+
+			function logError(data) {
+				if (!data.data) return console.warn("ERROR ON REQUEST:", data);
+				alertsServices.addNewAlert("danger", (data.status + ": " + data.data.message));
+			}
+		}
 
 		function makeRequest(type, request) {
 			return $timeout(function() {

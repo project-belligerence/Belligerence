@@ -13,7 +13,7 @@
 	exports.route = {
 		name: moduleName.toLowerCase(),
 		routeName: "Template Page",
-		url: "outfit/:pmcHash",
+		url: "",
 		templateUrl: ('partial/' + (moduleName.toLowerCase()) + '.ejs'),
 		controller: (moduleName.toLowerCase() + 'Controller'),
 		controllerAs: ('Ctrl' + moduleName),

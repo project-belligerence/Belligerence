@@ -1,0 +1,32 @@
+<div class="container-fluid">
+<div ng-if="::(!CookiesCtrl.warningRead)" ng-cloak>
+	<div id="cookies-bar">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-10 col-sm-9">
+					<div class="row">
+						<div class="cookie-text">
+							<p>
+								BELLIGERENCE utilizes cookies to track your user session; none of it is shared with any external services or third-parties, and by continuing you hereby agree to it.
+							</p>
+							<p>
+								While you're at it, check out the <a href="/legal">Legal terms</a>.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2 col-sm-3">
+					<div class="row">
+						<div class="button-container">
+							<a type="button" class="btn btn-default medium" ng-click="::CookiesCtrl.markWarningRead()">
+								<i class="icon ion-thumbsup"></i>
+								No problem!
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>

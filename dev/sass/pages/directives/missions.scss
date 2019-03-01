@@ -512,7 +512,7 @@
 									display: inline-block;
 									@include font-size(factor(3.5));
 									font-family: $main_font;
-									background: url("/images/cardbg_inverted_light.png") repeat 100%;
+									background: $bg_grey_light repeat 100%;
 									line-height: 0.8;
 									padding: factor(1);
 									box-shadow: 0px 0px 3px #111;

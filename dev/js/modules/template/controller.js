@@ -1,12 +1,12 @@
 (function() {
 	'use strict';
 
-	TemplateControllerFunction.$inject = ["$scope", "$timeout", "apiServices"];
+	ObjectControllerFunction.$inject = ["$scope", "$timeout", "apiServices"];
 
-	function TemplateControllerFunction($scope, $timeout, apiServices) {
+	function ObjectControllerFunction($scope, $timeout, apiServices) {
 		var vm = this;
 
 	}
 
-	exports.function = TemplateControllerFunction;
+	exports.function = ObjectControllerFunction;
 })();
