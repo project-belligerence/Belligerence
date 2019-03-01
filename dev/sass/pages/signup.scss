@@ -452,7 +452,17 @@
 									display: inline-block;
 									span {
 										@include font-size(factor(2));
-										a { color: white; }
+
+										a {
+											color: #111;
+											background: white;
+											padding: factor(1);
+											font-weight: bolder;
+
+											&:hover {
+												border-radius: 10px;
+											}
+										}
 									}
 								}
 

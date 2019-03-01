@@ -16,4 +16,13 @@
 		controller: "LegalController",
 		controllerAs: ('Ctrl' + moduleName)
 	};
+
+	exports.app_rules = {
+		name: moduleName.toLowerCase(),
+		routeName: "Rules",
+		url: "rules",
+		templateUrl: ('partial/rules.ejs'),
+		controller: "LegalController",
+		controllerAs: ('Ctrl' + moduleName)
+	};
 })();

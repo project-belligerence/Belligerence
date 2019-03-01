@@ -18,3 +18,20 @@
 
 	.end-call { @include factor-property(margin-top, 7); }
 }
+
+#rules-container {
+	@include factor-property(padding-bottom, 30);
+
+	h4 { line-height: 1.8; }
+
+	.rules-list {
+		.section {
+			ol li {
+				@include font-size(factor(2.5));
+				@include factor-property(margin-bottom, 2);
+			}
+		}
+	}
+
+	.end-call { @include factor-property(margin-top, 7); }
+}
