@@ -62,6 +62,8 @@
 			vm.applyControlledClass = apiServices.applyControlledClass;
 			vm.setBarProperties = setBarProperties;
 
+			vm.askReportObject = conflictsServices.askReportObject;
+
 			function initializeConflictInfo(object) {
 				vm.renderInfo.faction_sides = determineSides(object);
 				vm.renderInfo.factions = setFactionsToRender(object, vm.renderInfo.faction_sides);

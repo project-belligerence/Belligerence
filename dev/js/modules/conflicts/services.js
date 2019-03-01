@@ -101,7 +101,7 @@
 
 		function askReportObject(args) {
 			var
-			modalOptions = { alias: args.nameField, hashProperty: "hashField", hash: args.hashField, content: "Conflict", types: ["objectData", "objectBugged"] },
+			modalOptions = { alias: args.nameField, hashProperty: "hashField", hash: args.hashField, content: "conflict", types: ["objectData", "objectBugged"] },
 			newModal = uiServices.createModal('SendReport', modalOptions);
 
 			newModal.result.then(function(choice) {
