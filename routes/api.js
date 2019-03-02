@@ -56,7 +56,8 @@
 		generateRawQuery: generateRawQuery,
 		getBoolean: getBoolean,
 		boolToString: boolToString,
-		generatePaginatedQuery: generatePaginatedQuery
+		generatePaginatedQuery: generatePaginatedQuery,
+		returnNpmDependencies: returnNpmDependencies
 	};
 
 	function getPlayerObject(hash) {
@@ -210,6 +211,26 @@
 				return validateEntriesRecursive(req, res, modelFolder, validateProperty, entries, done);
 			});
 		} else { return done(true); }
+	}
+
+	function returnNpmDependencies(req, res) {
+		var fs = require('fs'),
+			packagesPath = "./package.json";
+
+		fs.readFile(packagesPath, function(e, data) {
+			if (e) return console.log(e);
+
+			var npmPackage = JSON.parse(data),
+				packageDeps = npmPackage.dependencies,
+				depObj = [];
+
+			for (var dep in packageDeps) {
+				var ver = ((packageDeps[dep][0] === "g") ? "??" : packageDeps[dep]);
+				depObj.push({ name: dep, ver: ver.substring(1) });
+			}
+
+			sendResponse(req, res, true, "", depObj);
+		});
 	}
 
 	function limitString(string, pLength, end) {

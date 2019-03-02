@@ -1,6 +1,6 @@
 {
   "name": "Belligerence",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "description": "A game where PMCs, Soldiers and Freelancers fight for money.",
   "main": "app.js",
   "scripts": {

@@ -25,4 +25,14 @@
 		controller: "LegalController",
 		controllerAs: ('Ctrl' + moduleName)
 	};
+
+	exports.about = {
+		name: moduleName.toLowerCase(),
+		routeName: "About & Acknowledgements",
+		url: "about",
+		templateUrl: ('partial/about.ejs'),
+		controller: "LegalController",
+		controllerAs: ('Ctrl' + moduleName)
+	};
+
 })();

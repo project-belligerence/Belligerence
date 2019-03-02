@@ -73,6 +73,7 @@
 			getPrestigeRankCost: getPrestigeRankCost,
 			validateAccessKey: validateAccessKey,
 			redeemAccessKey: redeemAccessKey,
+			getNpmPackages: getNpmPackages,
 
 			deployItem: deployItem,
 			requestAirdrop: requestAirdrop
@@ -299,6 +300,8 @@
 		function redeemAccessKey(hash) {
 			return apiServices.requestPOST({url: (apiAnchor + "redeemAccessKey/"), data: { keyHash: hash } });
 		}
+
+		function getNpmPackages() { return apiServices.getInfo(apiAnchor + "getNpmPackages"); }
 
 		// =======================================================
 		// ============== PRESENTATION STUFF =====================

@@ -51,6 +51,7 @@
 					.state('app.public.upgrade-single', require(getModule('upgrades')).single)
 					.state('app.public.legal', require(getModule('legal')).legal)
 					.state('app.public.rules', require(getModule('legal')).app_rules)
+					.state('app.public.about', require(getModule('legal')).about)
 
 				.state('app.private', new routeObject())
 					.state('app.private.dashboard', require(getModule('dashboard')).route)

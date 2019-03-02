@@ -20,6 +20,48 @@
 			};
 		}];
 
+		var destroyOnScroll = [function() {
+			return  {
+				restrict: 'A',
+				scope: {
+					distance: "=?",
+					fadeFnc: "=?",
+					duration: "=?"
+				},
+				link: link
+			};
+
+			function link(scope, el, attrs) {
+				var defaults = {
+					distance: 2.5,
+					fadeFnc: "fadeOut",
+					duration: 250
+				};
+
+				attrs.distance = (angular.isUndefined(attrs.distance) ? defaults.distance : attrs.distance);
+				attrs.fadeFnc = (angular.isUndefined(attrs.fadeFnc) ? defaults.fadeFnc : attrs.fadeFnc);
+				attrs.duration = (angular.isUndefined(attrs.duration) ? defaults.duration : attrs.duration);
+
+				handleScrollIcon();
+
+				function handleScrollIcon() {
+					var scrollIconDOM = $(el),
+						windowDOM = $(window),
+						scrollHandle = windowDOM.scroll(handleScroll);
+
+					function handleScroll() {
+						var currentScroll = windowDOM.scrollTop(),
+							scrollIconTop = scrollIconDOM.position().top;
+						if (currentScroll >= (scrollIconTop / attrs.distance)) {
+							destroyIcon();
+							windowDOM.off("scroll", handleScroll);
+						}
+					}
+					function destroyIcon() { scrollIconDOM[attrs.fadeFnc](attrs.duration, function() { scrollIconDOM.remove(); }); }
+				}
+			}
+		}];
+
 		var dropdownCheckbox = ['$timeout', 'apiServices', function($timeout, apiServices) {
 			return {
 				restrict: 'E',
@@ -233,18 +275,14 @@
 						});
 					}
 				}
-
-				// $(window).resize(function() {
-				// 	positionElements(jEL);
-				// 	setElementsSize(jEL);
-				// });
 			}
 		}];
 
 		var directives = {
 			ngHTMLFunction: ngHTMLFunction,
 			createRadialMenu: createRadialMenu,
-			dropdownCheckbox: dropdownCheckbox
+			dropdownCheckbox: dropdownCheckbox,
+			destroyOnScroll: destroyOnScroll
 		};
 
 		return directives;

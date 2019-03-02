@@ -1,17 +1,23 @@
 (function() {
 	'use strict';
 
-	ObjectControllerFunction.$inject = ["$scope", "$timeout", "apiServices"];
+	ObjectControllerFunction.$inject = ["apiServices", "generalServices"];
 
-	function ObjectControllerFunction($scope, $timeout, apiServices) {
+	function ObjectControllerFunction(apiServices, generalServices) {
 		var vm = this;
 
+		vm.getProjectLicense = getProjectLicense;
 		vm.getChevron = getChevron;
+		vm.getNpmPackages = getNpmPackages;
 
-		getProjectLicense();
+		function getNpmPackages() {
+			generalServices.getNpmPackages().then(function(packages) { vm.npmPackages = packages; });
+		}
 
 		function getProjectLicense() {
-			apiServices.simpleGET(("https://api.github.com/repos/Neefay/Belligerence/license")).then(function(data) {
+			var repoURL = "https://api.github.com/repos/Neefay/Belligerence/license";
+
+			apiServices.simpleGET(repoURL).then(function(data) {
 				getProjectLicenseDetails(data.license.url);
 			});
 		}

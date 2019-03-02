@@ -1,12 +1,28 @@
-#legal-container {
+#legal-container, #rules-container, #about-container {
 	@include factor-property(padding-bottom, 30);
 
+	h1 { letter-spacing: -7px; }
 	h4 { line-height: 1.8; }
 
-	.terms-list {
-		p { @include factor-property(text-indent, 5); }
+	.hr-margin {
+		margin: factor(5) 0;
 	}
 
+	.end-call { @include factor-property(margin-top, 7); }
+	.text-list {
+		p { @include factor-property(text-indent, 5); }
+		&.size-medium { p {
+			@include font-size(factor(2.2));
+			line-height: 2;
+		}}
+		&.spacing { @include factor-property(margin-top, 3); }
+	}
+
+	.spacing { @include factor-property(margin-top, 5); }
+	.spacing-2 { @include factor-property(margin-top, 10); }
+}
+
+#legal-container {
 	.license {
 		code {
 			display: inline-block;
@@ -15,15 +31,9 @@
 			@include factor-property(margin-bottom, 1);
 		}
 	}
-
-	.end-call { @include factor-property(margin-top, 7); }
 }
 
 #rules-container {
-	@include factor-property(padding-bottom, 30);
-
-	h4 { line-height: 1.8; }
-
 	.rules-list {
 		.section {
 			ol li {
@@ -32,6 +42,76 @@
 			}
 		}
 	}
+}
 
-	.end-call { @include factor-property(margin-top, 7); }
+#about-container {
+
+	.min-height-1 {
+		.person-object {
+			min-height: 110px;
+		}
+	}
+
+	.min-height-2 {
+		.person-object {
+			min-height: 150px;
+		}
+	}
+
+	.dep-list {
+		.single-dep {
+			@include transition(background .25s, color .25s);
+
+			display: inline-block;
+			background: #fff;
+			padding: factor(1);
+			margin: factor(1);
+			color: #000;
+
+			.name {
+				font-weight: bolder;
+				@include font-size(factor(2.2));
+			}
+
+			&:hover {
+				background: $main_color;
+				color: #fff;
+			}
+		}
+	}
+
+	.person-object {
+		vertical-align: top;
+		@include factor-property(margin-bottom, 7);
+
+		@include font-size(factor(3));
+		letter-spacing: -1px;
+
+		padding: 0 factor(1);
+
+		&.align-center {
+			text-align: center;
+		}
+
+		.role {
+			border-left: 5px solid $main_color;
+			@include factor-property(padding-left, 3);
+			letter-spacing: -1px;
+			text-transform: uppercase;
+			display: inline-block;
+		}
+
+		.name {
+			@include factor-property(margin-top, 1);
+			@include font-size(factor(4));
+			font-family: $main_font;
+			text-shadow: 0px 0px 10px #000, 0px 0px 10px #000;
+		}
+
+		.remark {
+			@include font-size(factor(2.5));
+			color: #bbb;
+			&::before { content: "— " };
+		}
+	}
 }

@@ -1,0 +1,435 @@
+<div id="about-container" class="container-fluid top-spacer" ng-init="Ctrl = CtrlLegal; Ctrl.getNpmPackages();">
+	<div class="container">
+		<div class="row">
+
+			<h1>About</h1>
+			<h3>Everything you've wanted to know about <strong>BELLIGERENCE</strong> - and then some!</h3>
+
+			<uib-accordion>
+				<div uib-accordion-group is-open="status.aboutOpen">
+					<uib-accordion-heading>
+						About the Project <i class="icon pull-right" ng-class="Ctrl.getChevron(status.aboutOpen)"></i>
+					</uib-accordion-heading>
+
+					<div class="col-md-12 section">
+						<div class="row">
+							<h2>Debriefing</h2>
+							<h3>A little about how it all came to be.</h3>
+						</div>
+
+						<div class="row">
+							<div class="text-list size-medium">
+								<p>
+									I'll leave this project's long and nearly nearly auto-biographical proper post-mortem for later - for now, I'll just try my best to describe the thoughts that come to my head when thinking about this whole ordeal.
+								</p>
+							</div>
+							<div class="text-list size-medium spacing">
+								<h4>Cause</h4>
+								<p>
+									Portfolio, mostly. And I say mostly because there's obviously that part inside of me that always wanted to actually try my hand at makig a video game, or at least the closest thing I could excuse myself to. Initially this was just going to be a simple app to prove my (assumed) proficiency in AngularJS (keep in mind this was 2015) and as a funny hook, connect with ArmA 3, a favorite video game of mine, through some mySQL library. Boy, did it escalate from here.
+								</p>
+								<p>
+									I wanted to create something that would give players a sense of persistence, a sense of meaning and weight to every action and mission, that winning <i>this one fire-fight</i> could change the course of the entire community, that even while you were in-game, you were part of a living and breathing system much larger than a single person.
+								</p>
+							</div>
+							<div class="text-list size-medium spacing">
+								<h4>Challenges</h4>
+								<p>
+									I'll try not to get too long winded for now about this. Let's just say that once you have games like Jagged Alliance 2, MGS5, and 7.62 as your main inspirations, there's a lot in your head you have to live up to - and once you finish that sweet design doc and think to yourself "<i>Yeah, should take about a year give it or take.</i>", remember that you might be like me and be absolutely awful at over-estimating yourself.
+								</p>
+								<p>
+									As it turns out, doing something is easy. But doing something the way you want it, that's where your blood and sweat will drop. Even though I've had to axe a bunch of features or leave them for later, the way things I expected to finish in one night took an entire week (or longer) made me realize that getting things the way I wanted wasn't gonna be anywhere like I imagined in my head.
+								</p>
+								<p>
+									After this project became my full-time occupation, I've had to develop habits like using time management techniques (🍅), keeping an ever-expanding to-do list (well over 5000 lines at this point), and by the end, even track my progress or lack-thereof with a calendar, just so I had a projection on when I'd be done. I missed that projection by three months btw, which reminds me: <i>always take your estimated time to complete any given task, and multiply it by three or four</i>. Trust me, it's for your own health.
+								</p>
+							</div>
+							<div class="text-list size-medium spacing">
+								<h4>Consequences</h4>
+								<p>
+									What can I say? This is a world where people are measured by their results, not their words or promises. I suppose this is the largest lesson I've taken from this project, the look on people's face once you've been telling them "just one more thing" for years now. How you yourself lose the ability to even feel excited about finishing a feature because you know it's just some file processing algorithm no one will understand anyway even though it took you the whole month. I mean for God's sake, for an entire year all I had was server-side stuff, printed onto a console, nothing else. Try justifying your life to your loved ones when all you have is the same empty promises that this "thing" you're working on will one day do all of those incredible things, and watch as they go from raising their eye-brows to openly mocking you to outright saying they've lost all faith in you. Just thinking about it makes me depressed.
+								</p>
+								<p>
+									This is already too long, so I'll wrap it up. The consequences of this project, is that I've learned the true meaning of the word "support". Once you've hit the third year slaving away with barely any palpable results, the worst part won't be doubting yourself, but when others do, too. And of course, the best part will be when they give you a (literal or not) pat on the back and say "<i>You can do it!</i>". It may sound stupid, but just thinking of all the people who stood by my side when I had not one hint of self-considence brings tears to my grown-man eyes. Just a simple note of encouragement had the power to keep me going for nights on end; a short inquiry about the progress motivated me to have something to show for the next week.
+								</p>
+								<p>
+									<strong>BELLIGERENCE</strong> took 3 years and a few months from concept to this point. It's by far the largest undertaking I've ever done in my life and what I would call my magnum opus. It's changed my friendships, my relationships - it's changed me, permanently. I hope you conclude it was worth it. I know it was.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div uib-accordion-group is-open="status.creditsOpen">
+					<uib-accordion-heading>
+						Credits & Special Thanks <i class="icon pull-right" ng-class="Ctrl.getChevron(status.creditsOpen)"></i>
+					</uib-accordion-heading>
+
+					<div class="col-md-12 section">
+						<div class="row">
+							<h1>Credits & Special Thanks</h1>
+							<h3>In advance: I'm sorry if I forgot anyone. It's been a long road.</h3>
+						</div>
+
+						<div class="row spacing-2">
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="person-object align-center">
+										<div class="role">Project Creation</div>
+										<div class="name">Ian Ribeiro</div>
+										<div class="remark">Really needs some sleep now.</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row spacing min-height-1">
+							<div class="col-sm-4">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">DEBUGGING</div>
+										<div class="name">Sircrab</div>
+										<div class="remark">Also huge thanks for the multer-s3 package!</div>
+									</div>
+									<div class="person-object">
+										<div class="role">INITIAL PLANNING</div>
+										<div class="name">Croguy</div>
+									</div>
+									<div class="person-object">
+										<div class="role">Concept testing & Guido</div>
+										<div class="name">Royal</div>
+										<div class="remark">Friend through many years and much trouble. Thanks dude.</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">DEBUGGING</div>
+										<div class="name">Alice</div>
+									</div>
+									<div class="person-object">
+										<div class="role">PLANNING</div>
+										<div class="name">SonixApache</div>
+										<div class="remark">All-around nice guy.</div>
+									</div>
+									<div class="person-object">
+										<div class="role">Proof of concept testing</div>
+										<div class="name">nigel</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">DEBUGGING</div>
+										<div class="name">Komachi</div>
+									</div>
+									<div class="person-object">
+										<div class="role">Planning</div>
+										<div class="name">Coryf88</div>
+										<div class="remark">Absolute coding beast. I honestly don't know what I'd do without your help.</div>
+									</div>
+									<div class="person-object">
+										<div class="role">Content</div>
+										<div class="name">heroes maker</div>
+										<div class="remark">Needs an intervention for his mil-surp addiction.</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row spacing-1">
+							<div class="col-sm-2">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Icons</div>
+										<div class="name">Ionicons</div>
+										<div class="remark">
+											<a href="https://ionicons.com/v2/" target="_blank">ionicons v2</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Icons</div>
+										<div class="name">iconmonstr</div>
+										<div class="remark">
+											<a href="https://iconmonstr.com/license/" target="_blank">License</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Support</div>
+										<div class="name">Sequelize Community</div>
+										<div class="remark">
+											Thanks for the help, especially to its creator, <a href="https://github.com/mickhansen" target="_blank">Mick Hansen</a>.
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row spacing">
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Best Support</div>
+										<div class="name">Eszo</div>
+										<div class="remark">I'm sorry. I know it's been really hard, but I can't thank you enough for the effort you've been putting into holding on, and how much it means to me. <br/>I love you. ❤</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Family</div>
+										<div class="name">Mom</div>
+										<div class="remark">Thank you for not kicking me out of the house. And for the food. And the clothes. And listening to ranting. Love you momma.</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Family</div>
+										<div class="name">Fábio Ribeiro</div>
+										<div class="remark">You may not be here with us anymore to see this, but this goes out to you, lil' bro. I still miss you every day.</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">pet</div>
+										<div class="name">Gatinha</div>
+										<div class="remark">How can you say you love your pet after a decade without naming it? I'm a monster, but she still cuddles me.</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row spacing min-height-2">
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="name">Clarissa D'Orival</div>
+										<div class="remark">I know you did your best. Thank you for the years and years of relentless support. I'm a bit late, but I hope you like it.</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Ariel Riello</div>
+										<div class="remark">The only person I can still get drunk with, thank God you're still around!</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="name">Vitor Minghini</div>
+										<div class="remark">My favorite Communist bastard.</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Eduardo Minghini</div>
+										<div class="remark">One day I'll come over to the gym. One day. But not today.</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="name">Lennon Policastro</div>
+										<div class="remark">Waking up at 4am, working on my portfolio.</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Adrian Galassi</div>
+										<div class="remark">There's still hope for the north-east.</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="name">Kapot</div>
+										<div class="remark">I fucking told you Monster Hunter was good!</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Wladimir Parrillo</div>
+										<div class="remark">Will probably never read this but thanks for the vote of confidence.</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row spacing min-height-1">
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="name">Dornan</div>
+										<div class="remark">We're gonna make it buddy. Thank you for everything.</div>
+									</div>
+									<div class="person-object">
+										<div class="role">weedman</div>
+										<div class="name">KiltedKaboodle</div>
+										<div class="remark">DUDE</div>
+									</div>
+									<div class="person-object">
+										<div class="role">Asian Mexican</div>
+										<div class="name">42nfl19</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Engee</div>
+										<div class="remark"><strong>WHAT DAY IS IT?!</strong></div>
+									</div>
+									<div class="person-object">
+										<div class="name">J.P.</div>
+										<div class="remark">Take me to the tulip fields.</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Role model</div>
+										<div class="name">Chiefrocker</div>
+									</div>
+									<div class="person-object">
+										<div class="name">m4tko</div>
+										<div class="remark">Whitest man who has ever lived.</div>
+									</div>
+									<div class="person-object">
+										<div class="role">Friendly-firer</div>
+										<div class="name">Archi</div>
+										<div class="remark">Seems to have a peculiar understanding of "friendly".</div>
+									</div>
+									<div class="person-object">
+										<div class="role">AT meister</div>
+										<div class="name">Mancakefacepan</div>
+										<div class="remark">"You better jump off the tank if you see him on your flank."</div>
+									</div>
+									<div class="person-object">
+										<div class="name">McGabe</div>
+										<div class="remark">scran on da den bois</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Dr. MA BA Hons.</div>
+										<div class="name">Wronglets</div>
+										<div class="remark">I'm onto your moral subversion techniques, you don't fool me!</div>
+									</div>
+									<div class="person-object">
+										<div class="name">QuizNo</div>
+										<div class="remark">"<strong>BROTHER</strong>" H.H.</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Luxes</div>
+										<div class="remark">Half-euro, half-burger, full bro.</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Avrore</div>
+										<div class="remark"><strong>[ CENSORED BY EU LAW ]</strong></div>
+									</div>
+									<div class="person-object">
+										<div class="name">NamJew</div>
+										<div class="remark">What took you so long?</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Normie</div>
+										<div class="name">Edge</div>
+									</div>
+									<div class="person-object">
+										<div class="role">meme Maestro</div>
+										<div class="name">.gif</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Clever</div>
+										<div class="remark">THANK YOU FOR YOUR SERVICE</div>
+									</div>
+									<div class="person-object">
+										<div class="name">🅱imo</div>
+										<div class="remark">Made everyone gay. Good job.</div>
+									</div>
+									<div class="person-object">
+										<div class="name">Kilgore Trout</div>
+										<div class="remark">VROOM VROOM SKRRRRT</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row spacing-1">
+							<div class="col-sm-6">
+								<div class="row">
+									<div class="person-object">
+										<div class="name">BromA</div>
+										<div class="remark">My second family, my brothers, my comrades.</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="row">
+									<div class="person-object">
+										<div class="name">RWCD</div>
+										<div class="remark">I still miss you guys so much. I'm sorry I stopped coming to chat.</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row spacing-2">
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="person-object align-center">
+										<div class="role">best person</div>
+										<div class="name">You</div>
+										<div class="remark">Thank you for getting this far!</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div uib-accordion-group is-open="status.depsOpen">
+					<uib-accordion-heading>
+						Libraries <i class="icon pull-right" ng-class="Ctrl.getChevron(status.depsOpen)"></i>
+					</uib-accordion-heading>
+
+					<div class="col-md-12 section">
+						<div class="row">
+							<h2>Libraries</h2>
+							<h3>All of the current third-party dependencies.</h3>
+						</div>
+
+						<div class="row">
+							<div class="dep-list" ng-if="Ctrl.npmPackages">
+								<ul>
+									<a class="single-dep" ng-href="https://www.npmjs.com/package/{{::(dep.name)}}" target="_blank" ng-repeat="dep in Ctrl.npmPackages track by $index">
+										<li>
+											<span class="name" ng-bind="::(dep.name)"></span>
+											<span class="ver" ng-bind="::(dep.ver)"></span>
+										</li>
+									</a>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</uib-accordion>
+		</div>
+	</div>
+</div>
+
+<footer-directive></footer-directive>

@@ -371,6 +371,7 @@
 				/* General */
 				.get('/getSides', GeneralMethods.getSides)
 				.get('/getRegions', GeneralMethods.getRegions)
+				.get('/getNpmPackages', API.methods.returnNpmDependencies)
 
 			.use(API.methods.authenticateToken)
 			.use(API.methods.validatePlayerPrivilege(config.privileges().tiers.user))

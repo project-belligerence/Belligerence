@@ -13,7 +13,7 @@
 
 		function markWarningRead() {
 			$cookies.put('cookiesWarningOK', true);
-			removeBar()
+			removeBar();
 		}
 
 		function removeBar() {
