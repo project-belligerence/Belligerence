@@ -24,7 +24,7 @@
 
 		newConnection: function(options) {
 			var Sequelize = require('sequelize');
-			else { return new Sequelize(this.name, this.cred.user, this.cred.password, options); }
+			return new Sequelize(this.name, this.cred.user, this.cred.password, options);
 		},
 
 		connectToDatabase: function() {
