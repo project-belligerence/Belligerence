@@ -23,12 +23,7 @@
 		SteamAPIKey: process.env.API_KEY_STEAM,
 
 		newConnection: function(options) {
-			var Sequelize = require('sequelize'), URI;
-
-			if (process.env.CLEARDB_DATABASE_URL) URI = process.env.CLEARDB_DATABASE_URL;
-			if (process.env.JAWSDB_URL) URI = process.env.JAWSDB_URL;
-
-			if (URI) { return new Sequelize(URI, options); }
+			var Sequelize = require('sequelize');
 			else { return new Sequelize(this.name, this.cred.user, this.cred.password, options); }
 		},
 
