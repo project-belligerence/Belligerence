@@ -159,7 +159,7 @@
 
 			$state.go($state.$current.self.name, newState, { notify: false });
 
-			console.log("Attempted to change state...");
+			console.log("Attempted to change state...", $state);
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
