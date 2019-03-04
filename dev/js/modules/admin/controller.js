@@ -107,8 +107,8 @@
 							console.log(vm);
 							console.log(vm.contentSubController);
 							console.log(vm.contentSubController.subViews);
-							console.log(vm.contentSubController.subViews[state]);
 							console.log(state);
+							console.log(vm.contentSubController.subViews[state]);
 							console.log("========================");
 							return vm.contentSubController.subViews[state];
 						} break;
