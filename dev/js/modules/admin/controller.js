@@ -169,32 +169,21 @@
 			vm.currentViewHTML = undefined;
 
 			console.log("Changing to state:", state);
-			console.log("vm.menuOptions", vm.menuOptions);
 
 			$timeout(250).then(function() {
 				var menuOption = ((state === "main") ? {} : vm.menuOptions[state]);
 
-				console.log("menuOption", menuOption);
-
 				apiServices.resolveFunction(menuOption.required).then(function() {
-					console.log("Resolved REQUIRED.");
 					var initFunction = (menuOption.controller || apiServices.nullCbFunction);
 					apiServices.resolveFunction(initFunction).then(function() {
-						console.log("Resolved INIT.");
 						if (menuOption.view) {
-							console.log("Has view, loading...");
 							adminServices.loadNewView(menuOption.view).then(function(html) {
-								console.log("New View");
 								if (html) vm.currentViewHTML = html;
 								vm.pageState = state;
-								console.log("CALLING UPDATE_URL state", state);
+								console.log("CALLING UPDATE_URL state", state, vm.pageState);
 								vm.updateURL('menu', state);
-								console.log("vm.pageState", vm.pageState);
 							});
-						} else {
-							vm.pageState = state; vm.updateURL('menu', state);
-							console.log("Changed state to:", vm.pageState);
-						}
+						} else { vm.pageState = state; vm.updateURL('menu', state); }
 					});
 				}, function() {
 					alertsServices.addNewAlert("warning", "An error has occured.");
