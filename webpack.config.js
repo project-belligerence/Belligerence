@@ -16,9 +16,9 @@
 		},
 
   		buildConfig = {
-  			caching: true,
+  			caching: false,
 			context: __dirname,
-			devtool: debug ? "inline-sourcemap" : null,
+			devtool: (debug ? "inline-sourcemap" : null),
 			entry: {
 				app: "./dev/js/app.js",
 				vendors: [

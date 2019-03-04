@@ -64,6 +64,8 @@
 			// )
 		};
 
+		console.log("$STATE:", $state);
+
 		changeState(($state.params.menu || "main"));
 
 		// ============================================================
@@ -144,14 +146,11 @@
 		function updateURL(property, value) {
 			var newState = {};
 			newState[property] = value;
-			if (property === "menu") {
-				newState.section = null;
-				// newState.editHash = null;
-			}
+			if (property === "menu") newState.section = null;
 
 			$stateParams = newState;
 			$state.params = newState;
-			$state.go($state.$current.self.name, newState, {notify: false});
+			$state.go($state.$current.self.name, newState, { notify: false });
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
@@ -159,6 +158,8 @@
 		function changeState(state) {
 			vm.pageState = "null";
 			vm.currentViewHTML = undefined;
+
+			console.log("Changing to state:", state);
 
 			$timeout(250).then(function() {
 				var menuOption = ((state === "main") ? {} : vm.menuOptions[state]);
