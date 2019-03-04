@@ -142,16 +142,9 @@
 			if (property === "menu") newState.section = null;
 
 			$stateParams = newState;
-			console.log("$stateParams", $stateParams);
 			$state.params = newState;
-			console.log("New state", $state);
 
-			console.log("New URL $state:", $state, "New State", newState);
-
-			$timeout(function(){
-				$state.go($state.$current.self.name, newState, { notify: false });
-				console.log("Attempted to change state...", $state);
-			}, 1);
+			$state.go($state.$current.self.name, newState);
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
@@ -160,9 +153,7 @@
 			vm.pageState = "null";
 			vm.currentViewHTML = undefined;
 
-			console.log("Changing to state:", state);
-
-			$timeout(1000).then(function() {
+			$timeout(250).then(function() {
 				var menuOption = ((state === "main") ? {} : vm.menuOptions[state]);
 
 				apiServices.resolveFunction(menuOption.required).then(function() {
@@ -172,7 +163,6 @@
 							adminServices.loadNewView(menuOption.view).then(function(html) {
 								if (html) vm.currentViewHTML = html;
 								vm.pageState = state;
-								console.log("CALLING UPDATE_URL state", state, vm.pageState);
 								vm.updateURL('menu', state);
 							});
 						} else { vm.pageState = state; vm.updateURL('menu', state); }
