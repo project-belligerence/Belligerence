@@ -171,11 +171,10 @@
 
 			console.log("New URL $state:", $state, "New State", newState);
 
-			$timeout(function(){
+			$timeout(function() {
 				$state.go($state.$current.self.name, newState, { notify: false });
-				console.log("Attempted to change state...", $state);
 				cb(true);
-			}, 1);
+			}, 50);
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
@@ -192,13 +191,13 @@
 				apiServices.resolveFunction(menuOption.required).then(function() {
 					var initFunction = (menuOption.controller || apiServices.nullCbFunction);
 					vm.updateURLCb("menu", state, function() {
+						console.log("Attempted to change state...", $state);
 						apiServices.resolveFunction(initFunction).then(function() {
 							if (menuOption.view) {
 								adminServices.loadNewView(menuOption.view).then(function(html) {
 									if (html) vm.currentViewHTML = html;
 									vm.pageState = state;
 									console.log("CALLING UPDATE_URL state", state, vm.pageState);
-									vm.updateURL('menu', state);
 								});
 							} else { vm.pageState = state; vm.updateURL('menu', state); }
 						});
