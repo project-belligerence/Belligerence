@@ -100,6 +100,7 @@
 			var
 				currentMenu = $location.$$search.menu,
 				subCtrlState = (function(menu, state) {
+					console.log("MENU", menu, "STATE", state);
 					switch(menu) {
 						case "content": { return vm.contentSubController.contentList[(state || vm.contentSubController.pageState)]; } break;
 						default: {
