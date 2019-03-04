@@ -21,6 +21,7 @@
 
 		vm.menuItem = adminServices.menuItem;
 		vm.updateURL = updateURL;
+		vm.updateURLCb = updateURLCb;
 		vm.clearEdit = clearEdit;
 
 		vm.menuOptions = {
@@ -70,7 +71,7 @@
 
 		// ============================================================
 
-		function clearEdit() { updateURL("editHash", null); }
+		function clearEdit() { updateURL("editHash", null, null); }
 
 		function invokeSubController(module) {
 			// 	For the record: I should've used the $injector service here, but I found out about it too late.
@@ -144,6 +145,19 @@
 		}
 
 		function updateURL(property, value) {
+			var newState = {};
+			newState[property] = value;
+			if (property === "menu") newState.section = null;
+
+			$stateParams = newState;
+			$state.params = newState;
+
+			$state.go($state.$current.self.name, newState, { notify: false });
+
+			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
+		}
+
+		function updateURLCb(property, value, cb) {
 			console.log("Update URL", property, value);
 
 			var newState = {};
@@ -157,9 +171,11 @@
 
 			console.log("New URL $state:", $state, "New State", newState);
 
-			$timeout(function(){ $state.go($state.$current.self.name, newState, { notify: false }); });
-
-			console.log("Attempted to change state...", $state);
+			$timeout(function(){
+				$state.go($state.$current.self.name, newState, { notify: false });
+				console.log("Attempted to change state...", $state);
+				cb(true);
+			}, 1);
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
@@ -175,15 +191,17 @@
 
 				apiServices.resolveFunction(menuOption.required).then(function() {
 					var initFunction = (menuOption.controller || apiServices.nullCbFunction);
-					apiServices.resolveFunction(initFunction).then(function() {
-						if (menuOption.view) {
-							adminServices.loadNewView(menuOption.view).then(function(html) {
-								if (html) vm.currentViewHTML = html;
-								vm.pageState = state;
-								console.log("CALLING UPDATE_URL state", state, vm.pageState);
-								vm.updateURL('menu', state);
-							});
-						} else { vm.pageState = state; vm.updateURL('menu', state); }
+					vm.updateURLCb("menu", state, function() {
+						apiServices.resolveFunction(initFunction).then(function() {
+							if (menuOption.view) {
+								adminServices.loadNewView(menuOption.view).then(function(html) {
+									if (html) vm.currentViewHTML = html;
+									vm.pageState = state;
+									console.log("CALLING UPDATE_URL state", state, vm.pageState);
+									vm.updateURL('menu', state);
+								});
+							} else { vm.pageState = state; vm.updateURL('menu', state); }
+						});
 					});
 				}, function() {
 					alertsServices.addNewAlert("warning", "An error has occured.");
