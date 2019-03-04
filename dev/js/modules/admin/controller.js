@@ -144,7 +144,7 @@
 			$stateParams = newState;
 			$state.params = newState;
 
-			$state.go($state.$current.self.name, newState);
+			$state.go($state.$current.self.name, newState, { notify: true });
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
