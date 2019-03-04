@@ -157,7 +157,7 @@
 
 			console.log("New URL $state:", $state, "New State", newState);
 
-			$state.go($state.$current.self.name, newState, { notify: false });
+			// $state.go($state.$current.self.name, newState, { notify: false });
 
 			console.log("Attempted to change state...");
 
