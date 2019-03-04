@@ -160,9 +160,13 @@
 			vm.currentViewHTML = undefined;
 
 			console.log("Changing to state:", state);
+			console.log("vm.menuOptions", vm.menuOptions);
 
 			$timeout(250).then(function() {
 				var menuOption = ((state === "main") ? {} : vm.menuOptions[state]);
+
+				console.log("menuOption", menuOption);
+
 				apiServices.resolveFunction(menuOption.required).then(function() {
 					var initFunction = (menuOption.controller || apiServices.nullCbFunction);
 					apiServices.resolveFunction(initFunction).then(function() {
