@@ -168,15 +168,22 @@
 				console.log("menuOption", menuOption);
 
 				apiServices.resolveFunction(menuOption.required).then(function() {
+					console.log("Resolved REQUIRED.");
 					var initFunction = (menuOption.controller || apiServices.nullCbFunction);
 					apiServices.resolveFunction(initFunction).then(function() {
+						console.log("Resolved INIT.");
 						if (menuOption.view) {
+							console.log("Has view, loading...");
 							adminServices.loadNewView(menuOption.view).then(function(html) {
+								console.log("New View", html);
 								if (html) vm.currentViewHTML = html;
 								vm.pageState = state;
 								vm.updateURL('menu', state);
 							});
-						} else { vm.pageState = state; vm.updateURL('menu', state); }
+						} else {
+							vm.pageState = state; vm.updateURL('menu', state);
+							console.log("Changed state to:", vm.pageState);
+						}
 					});
 				}, function() {
 					alertsServices.addNewAlert("warning", "An error has occured.");
