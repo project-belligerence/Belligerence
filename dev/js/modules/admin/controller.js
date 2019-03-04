@@ -21,7 +21,6 @@
 
 		vm.menuItem = adminServices.menuItem;
 		vm.updateURL = updateURL;
-		vm.updateURLCb = updateURLCb;
 		vm.clearEdit = clearEdit;
 
 		vm.menuOptions = {
@@ -106,16 +105,7 @@
 					console.log("MENU", menu, "STATE", state);
 					switch(menu) {
 						case "content": { return vm.contentSubController.contentList[(state || vm.contentSubController.pageState)]; } break;
-						default: {
-							console.log("========================");
-							console.log(vm);
-							console.log(vm.contentSubController);
-							console.log(vm.contentSubController.subViews);
-							console.log(state);
-							console.log(vm.contentSubController.subViews[state]);
-							console.log("========================");
-							return vm.contentSubController.subViews[state];
-						} break;
+						default: { return vm.contentSubController.subViews[state]; } break;
 					}
 				})(currentMenu, state),
 
@@ -145,19 +135,6 @@
 		}
 
 		function updateURL(property, value) {
-			var newState = {};
-			newState[property] = value;
-			if (property === "menu") newState.section = null;
-
-			$stateParams = newState;
-			$state.params = newState;
-
-			$state.go($state.$current.self.name, newState, { notify: false });
-
-			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
-		}
-
-		function updateURLCb(property, value, cb) {
 			console.log("Update URL", property, value);
 
 			var newState = {};
@@ -171,10 +148,10 @@
 
 			console.log("New URL $state:", $state, "New State", newState);
 
-			$timeout(function() {
+			$timeout(function(){
 				$state.go($state.$current.self.name, newState, { notify: false });
-				cb(true);
-			}, 50);
+				console.log("Attempted to change state...", $state);
+			}, 1);
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
@@ -185,22 +162,20 @@
 
 			console.log("Changing to state:", state);
 
-			$timeout(250).then(function() {
+			$timeout(1000).then(function() {
 				var menuOption = ((state === "main") ? {} : vm.menuOptions[state]);
 
 				apiServices.resolveFunction(menuOption.required).then(function() {
 					var initFunction = (menuOption.controller || apiServices.nullCbFunction);
-					vm.updateURLCb("menu", state, function() {
-						console.log("Attempted to change state...", $state);
-						apiServices.resolveFunction(initFunction).then(function() {
-							if (menuOption.view) {
-								adminServices.loadNewView(menuOption.view).then(function(html) {
-									if (html) vm.currentViewHTML = html;
-									vm.pageState = state;
-									console.log("CALLING UPDATE_URL state", state, vm.pageState);
-								});
-							} else { vm.pageState = state; vm.updateURL('menu', state); }
-						});
+					apiServices.resolveFunction(initFunction).then(function() {
+						if (menuOption.view) {
+							adminServices.loadNewView(menuOption.view).then(function(html) {
+								if (html) vm.currentViewHTML = html;
+								vm.pageState = state;
+								console.log("CALLING UPDATE_URL state", state, vm.pageState);
+								vm.updateURL('menu', state);
+							});
+						} else { vm.pageState = state; vm.updateURL('menu', state); }
 					});
 				}, function() {
 					alertsServices.addNewAlert("warning", "An error has occured.");
