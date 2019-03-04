@@ -144,13 +144,22 @@
 		}
 
 		function updateURL(property, value) {
+			console.log("Update URL", property, value);
+
 			var newState = {};
 			newState[property] = value;
 			if (property === "menu") newState.section = null;
 
 			$stateParams = newState;
+			console.log("$stateParams", $stateParams);
 			$state.params = newState;
+			console.log("New state", $state);
+
+			console.log("New URL $state:", $state, "New State", newState);
+
 			$state.go($state.$current.self.name, newState, { notify: false });
+
+			console.log("Attempted to change state...");
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
@@ -175,10 +184,11 @@
 						if (menuOption.view) {
 							console.log("Has view, loading...");
 							adminServices.loadNewView(menuOption.view).then(function(html) {
-								console.log("New View", html);
+								console.log("New View");
 								if (html) vm.currentViewHTML = html;
 								vm.pageState = state;
 								vm.updateURL('menu', state);
+								console.log("vm.pageState", vm.pageState);
 							});
 						} else {
 							vm.pageState = state; vm.updateURL('menu', state);
