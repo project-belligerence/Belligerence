@@ -157,7 +157,7 @@
 
 			console.log("New URL $state:", $state, "New State", newState);
 
-			// $state.go($state.$current.self.name, newState, { notify: false });
+			$state.go($state.$current.self.name, newState, { notify: false });
 
 			console.log("Attempted to change state...");
 
@@ -187,6 +187,7 @@
 								console.log("New View");
 								if (html) vm.currentViewHTML = html;
 								vm.pageState = state;
+								console.log("CALLING UPDATE_URL state", state);
 								vm.updateURL('menu', state);
 								console.log("vm.pageState", vm.pageState);
 							});
