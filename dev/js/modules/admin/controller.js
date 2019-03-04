@@ -102,7 +102,16 @@
 				subCtrlState = (function(menu, state) {
 					switch(menu) {
 						case "content": { return vm.contentSubController.contentList[(state || vm.contentSubController.pageState)]; } break;
-						default: { return vm.contentSubController.subViews[state]; } break;
+						default: {
+							console.log("========================");
+							console.log(vm);
+							console.log(vm.contentSubController);
+							console.log(vm.contentSubController.subViews);
+							console.log(vm.contentSubController.subViews[state]);
+							console.log(state);
+							console.log("========================");
+							return vm.contentSubController.subViews[state];
+						} break;
 					}
 				})(currentMenu, state),
 
