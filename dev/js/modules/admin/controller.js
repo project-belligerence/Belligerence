@@ -64,13 +64,11 @@
 			// )
 		};
 
-		console.log("$STATE:", $state);
-
 		changeState(($state.params.menu || "main"));
 
 		// ============================================================
 
-		function clearEdit() { updateURL("editHash", null, null); }
+		function clearEdit() { updateURL("editHash", null); }
 
 		function invokeSubController(module) {
 			// 	For the record: I should've used the $injector service here, but I found out about it too late.
@@ -102,7 +100,6 @@
 			var
 				currentMenu = $location.$$search.menu,
 				subCtrlState = (function(menu, state) {
-					console.log("MENU", menu, "STATE", state);
 					switch(menu) {
 						case "content": { return vm.contentSubController.contentList[(state || vm.contentSubController.pageState)]; } break;
 						default: { return vm.contentSubController.subViews[state]; } break;
@@ -135,8 +132,6 @@
 		}
 
 		function updateURL(property, value) {
-			console.log("Update URL", property, value);
-
 			var newState = {};
 			newState[property] = value;
 			if (property === "menu") newState.section = null;
@@ -144,7 +139,8 @@
 			$stateParams = newState;
 			$state.params = newState;
 
-			$state.go($state.$current.self.name, newState, { notify: true });
+			// This method of transition causes issues
+			$state.go($state.$current.self.name, newState, { notify: false });
 
 			$('html, body').animate({ scrollTop: ($('#admin-page').offset().top - 200) }, 'fast');
 		}
@@ -155,7 +151,6 @@
 
 			$timeout(250).then(function() {
 				var menuOption = ((state === "main") ? {} : vm.menuOptions[state]);
-
 				apiServices.resolveFunction(menuOption.required).then(function() {
 					var initFunction = (menuOption.controller || apiServices.nullCbFunction);
 					apiServices.resolveFunction(initFunction).then(function() {
