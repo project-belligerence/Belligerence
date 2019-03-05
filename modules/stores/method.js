@@ -17,6 +17,7 @@
 	exports.getAll = getAll;
 	exports.get = get;
 	exports.put = put;
+	exports.deleteStore = deleteStore;
 	exports.getStoreSpecializations = getStoreSpecializations;
 	exports.getStoreStatuses = getStoreStatuses;
 	exports.getStoreStock = getStoreStock;
@@ -110,6 +111,15 @@
 			UpgradesMethods.getAssociatedUpgrades([entry], function(nEntries) {
 				API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
 			});
+		});
+	}
+
+	function deleteStore(req, res) {
+		var objectID = req.params.Hash;
+
+		mainModel.findOne({where: { hashField: objectID }}).then(function(entry) {
+			if (!API.methods.validate(req, res, [entry], config.messages().entry_not_found(req.params.Hash))) { return 0; }
+			entry.destroy().then(function() { API.methods.sendResponse(req, res, true, config.messages().entry_deleted); });
 		});
 	}
 

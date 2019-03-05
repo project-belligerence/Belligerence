@@ -552,6 +552,7 @@
 				.get('/getStores', Stores.getAll)
 				.get('/getStoreStockAdmin/:Hash', Stores.getStoreStockAdmin)
 				.put('/editStore/:Hash', Stores.put)
+				.delete('/deleteStore/:Hash', Stores.deleteStore)
 				.post('/addStoreStock/:Hash', Stores.addStoreStock)
 				.post('/removeStoreStock/:Hash', Stores.removeStoreStock)
 				.put('/updateStoreStock/:Hash', Stores.updateStoreStock)

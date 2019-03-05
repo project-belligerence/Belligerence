@@ -419,7 +419,7 @@
 								});
 							});
 						},
-						delete: services.adminServices.deleteItem,
+						delete: services.adminServices.deleteStore,
 						resupply: function(hash) {
 							services.marketServices.askReRollStore().then(function(choice) {
 								if (choice) {

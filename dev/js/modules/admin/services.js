@@ -20,6 +20,7 @@
 			removeStoreStock: removeStoreStock,
 			getStoreStock: getStoreStock,
 			updateStoreStockRecursive: updateStoreStockRecursive,
+			deleteStore: deleteStore,
 
 			deleteUpgrade: deleteUpgrade,
 			addUpgrade: addUpgrade,
@@ -107,6 +108,7 @@
 		function addStoreStock(hash, data) { return apiServices.requestPOST({ url: apiAnchor + "addStoreStock/" + (hash || ""), data: data }); }
 		function getStoreStock(hash) { return apiServices.getInfo(apiAnchor + "getStoreStockAdmin/" + (hash || "")); }
 		function editStore(hash, data) { return apiServices.requestPUT({ url: apiAnchor + "editStore/" + hash, data: data }); }
+		function deleteStore(hash, data) { return apiServices.requestDELETE({ url: apiAnchor + "deleteStore/" + hash }); }
 		function updateStoreStockRecursive(hash, data) { return apiServices.requestPUT({ url: apiAnchor + "updateStoreStockRecursive/" + hash, data: data }); }
 		function removeStoreStock(hash, data) {	return apiServices.requestPOST({ url: apiAnchor + "removeStoreStock/" + (hash || ""), data: data }); }
 
