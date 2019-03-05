@@ -8,8 +8,8 @@
 		},
 		modules: {
 			players: {
-				startingCashFreelancer: 5000,
-				startingCashPMC: 5000,
+				startingCashFreelancer: 50000,
+				startingCashPMC: 50000,
 				usernameLength: [5, 32],
 				passwordLength: [6, 64],
 				bioLength: [0, 255],

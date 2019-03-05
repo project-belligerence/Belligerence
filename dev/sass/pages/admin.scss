@@ -102,8 +102,9 @@
 	}
 
 	#content-render {
+		min-height: 500px;
 
-		.table-responsive { min-height: 500px; }
+		.table-responsive { min-height: 250px; }
 
 		.filter-containers {
 
