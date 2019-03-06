@@ -97,7 +97,7 @@
 	}
 }
 
-#fp-content-intro-alert {
+#fp-content-intro-alert, #fp-content-donation {
 	background: $bg_white_lightest;
 	color: #111;
 
@@ -150,6 +150,12 @@
 			}
 		}
 	}
+}
+
+#fp-content-donation {
+	background: url("/images/honeybg_green.png") repeat 100%;
+	color: #fff;
+	@include factor-property(padding-bottom, 2);
 }
 
 #fp-content-section-outer {
