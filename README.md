@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/Neefay/Belligerence">
-   <img src="https://belligerence-test-1.s3.us-east-2.amazonaws.com/data/logo.png" alt="Belligerence">
+   <img src="https://belligerence-test-1.s3.us-east-2.amazonaws.com/data/logo2.png" alt="Belligerence">
   </a>
    <br/><br/>
   <a href="https://github.com/Neefay/Belligerence/commits/master">
