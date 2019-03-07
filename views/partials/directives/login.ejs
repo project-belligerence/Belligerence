@@ -24,7 +24,7 @@
 						<div class="input-group-addon">
 							<i class="icon ion-person"></i>
 						</div>
-						<input type="text" class="form-control" id="loginInputUsername" ng-model="loginForm.username" placeholder="User"  ng-minlength="5" ng-maxlength="12" ng-required="true">
+						<input type="text" class="form-control" id="loginInputUsername" ng-model="loginForm.username" placeholder="User" ng-minlength="5" ng-maxlength="32" ng-required="true">
 					</div>
 				</div>
 				<div class="form-group">
@@ -32,7 +32,7 @@
 						<div class="input-group-addon">
 							<i class="icon ion-locked"></i>
 						</div>
-						<input type="password" class="form-control" id="loginInputPassword" ng-model="loginForm.password" placeholder="Password" ng-required="true">
+						<input type="password" class="form-control" id="loginInputPassword" ng-model="loginForm.password" ng-minlength="6" ng-maxlength="64" placeholder="Password" ng-required="true">
 					</div>
 				</div>
 				<div class="form-group-inline">
