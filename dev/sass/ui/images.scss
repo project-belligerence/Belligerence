@@ -66,3 +66,5 @@ $bg_grey_light: url("/images/cardbg_inverted_light.png");
 .fp_third_section_bg { @include generate_background_image($fp_intro_third_background); }
 .fp_fourth_section_bg { @include generate_background_image($fp_intro_fourth_background); }
 .fp_fifth_section_bg { @include generate_background_image($fp_intro_fifth_background); }
+
+.icon-spinner-small { @include size(20px); }

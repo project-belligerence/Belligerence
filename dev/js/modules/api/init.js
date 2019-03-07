@@ -11,6 +11,7 @@
 		.directive('aDisabled', require("./directive")().aDisabled)
 		.directive('lastRepeat', require("./directive")().LastRepeatFunction)
 		.filter("kebabCase", require("./filters")().kebabCase)
+		.config(require("./configs")().httpInterceptor)
 	;
 
 	angular.module((moduleName + 'Module'), [(moduleName + 'ServicesModule')]);

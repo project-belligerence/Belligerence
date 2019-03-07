@@ -10,11 +10,6 @@ $duration_time_fast: 1s;
 $duration_time_slow: 5s;
 $duration_time_slowest: 15s;
 
-@keyframes spin {
-	from {transform:rotate(0deg);}
-	to {transform:rotate(360deg);}
-}
-
 .anm-all {
 	* {
 		$delay: .25s;
@@ -155,6 +150,13 @@ $duration_time_slowest: 15s;
 	50% { background-color: lighten($animationColor, 20%); }
 	100% { background-color: lighten($animationColor, 0%); }
 }
+
+@include keyframes(spin) {
+	0% { @include prefix(transform, rotate(0deg)); }
+	100% { @include prefix(transform, rotate(360deg)); }
+}
+
+.spin-slow-anim { @include prefix(animation, spin ($duration_time_fast) ease-in-out infinite); }
 
 .bounce-arrow-scroll-slow { @include prefix(animation, bounce-arrow-scroll ($duration_time_fast * 3) ease-in-out infinite); }
 

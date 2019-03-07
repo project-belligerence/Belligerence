@@ -20,6 +20,97 @@
 			};
 		}];
 
+		var httpSensitive = ["$rootScope", "$timeout", function($rootScope, $timeout) {
+			return  {
+				restrict: 'A',
+				link: {
+					pre: pre,
+					post: post
+				}
+			};
+
+			function pre(scope, el, attrs) {
+				var btnEl = $(el);
+
+				el.bind('click touchstart', handleDisabled);
+
+				function handleDisabled(e) {
+					if (btnEl.hasClass("disabled")) {
+						e.preventDefault();
+						e.stopImmediatePropagation();
+					}
+				}
+			}
+
+			function post(scope, el, attrs) {
+				var btnEl = $(el),
+					remainingReqs = 0,
+					waitingToFinish = false;
+
+				$rootScope.$on("httpSensitive:block", handleHttpStart);
+				$rootScope.$on("httpSensitive:allow", handleHttpCompleted);
+
+				function handleHttpStart() {
+					remainingReqs++;
+					setButtonLoading(btnEl);
+				}
+
+				function setButtonLoading(btn) {
+					if (!btn.data("loading")) {
+						btn.data("loading", true);
+						btn.addClass("disabled");
+
+						renderIcon(btn, displayLoading);
+					}
+				}
+
+				function displayLoading(icon) {
+					icon.data("oldClass", icon.attr("class"));
+					icon.attr("class", "icon");
+					icon.html("<img class='icon-spinner-small' src='svg-loaders/spinning-circles-black.svg' />");
+				}
+
+				function removeLoading(icon) {
+					icon.html("<i class='icon'></i>");
+					icon.attr("class", icon.data("oldClass"));
+				}
+
+				function handleHttpCompleted() {
+					remainingReqs--;
+					if ((remainingReqs <= 0) && (!waitingToFinish)) recursiveCheck();
+				}
+
+				function unsetButtonLoading(btn) {
+					if (btn.data("loading")) {
+						btn.data("loading", null);
+						btnEl.removeClass("disabled");
+
+						renderIcon(btn, removeLoading);
+					}
+				}
+
+				function renderIcon(btnEl, fnc) {
+					if (btnEl.hasClass("section-button")) {
+						btnEl.find("li").each(function(i, li) {
+							if (i === 0) { fnc($($(li).contents()[0])); }
+						});
+					}
+				}
+
+				function recursiveCheck() {
+					waitingToFinish = true;
+
+					$timeout(function() {
+						if (remainingReqs <= 0) {
+							waitingToFinish = false;
+							remainingReqs = 0;
+							unsetButtonLoading(btnEl);
+						} else { recursiveCheck(); }
+					}, 3000);
+				}
+			}
+		}];
+
 		var destroyOnScroll = [function() {
 			return  {
 				restrict: 'A',
@@ -282,7 +373,8 @@
 			ngHTMLFunction: ngHTMLFunction,
 			createRadialMenu: createRadialMenu,
 			dropdownCheckbox: dropdownCheckbox,
-			destroyOnScroll: destroyOnScroll
+			destroyOnScroll: destroyOnScroll,
+			httpSensitive: httpSensitive
 		};
 
 		return directives;
