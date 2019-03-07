@@ -58,6 +58,11 @@
 		}
 	}
 
+	#mouse-warning {
+		@include factor-property(margin-top, 1);
+		display: none;
+	}
+
 	.dep-list {
 		.single-dep {
 			@include transition(background .25s, color .25s);

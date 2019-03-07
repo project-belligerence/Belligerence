@@ -7,12 +7,12 @@
 			<h3>See also the <a ui-sref="app.public.rules">Rules</a>. I mean it.</h3>
 
 			<uib-accordion>
-				<div uib-accordion-group is-open="status.termsOpen">
+				<div uib-accordion-group is-open="Ctrl.termsOpen">
 					<uib-accordion-heading>
-						Terms of Service <i class="icon pull-right" ng-class="Ctrl.getChevron(status.termsOpen)"></i>
+						Terms of Service <i class="icon pull-right" ng-class="Ctrl.getChevron(Ctrl.termsOpen)"></i>
 					</uib-accordion-heading>
 
-					<div class="col-md-12 section">
+					<div id="terms" class="col-md-12 section">
 
 						<div class="row">
 							<h2>Terms of Service</h2>
@@ -108,12 +108,12 @@
 
 				</div>
 
-				<div uib-accordion-group is-open="status.privacyOpen">
+				<div uib-accordion-group is-open="Ctrl.privacyOpen">
 					<uib-accordion-heading>
-						Privacy Policy <i class="icon pull-right" ng-class="Ctrl.getChevron(status.privacyOpen)"></i>
+						Privacy Policy <i class="icon pull-right" ng-class="Ctrl.getChevron(Ctrl.privacyOpen)"></i>
 					</uib-accordion-heading>
 
-					<div class="col-md-12 section">
+					<div id="privacy" class="col-md-12 section">
 
 						<div class="row">
 							<h2>Privacy Policy</h2>
@@ -140,12 +140,12 @@
 
 				</div>
 
-				<div uib-accordion-group is-open="status.licenseOpen">
+				<div uib-accordion-group is-open="Ctrl.licenseOpen">
 					<uib-accordion-heading>
-						License <i class="icon pull-right" ng-class="Ctrl.getChevron(status.licenseOpen)"></i>
+						License <i class="icon pull-right" ng-class="Ctrl.getChevron(Ctrl.licenseOpen)"></i>
 					</uib-accordion-heading>
 
-					<div class="col-md-12 section">
+					<div id="license" class="col-md-12 section">
 						<div class="row">
 							<h2>License</h2>
 							<h4>This project is open-source, as far as I'm concerned you can pick it apart and do whatever you want with it - however, I encourage contributors to submit pull requests so that everyone can benefit. Either way, here's the whole thing just so that we're clear.</h4>

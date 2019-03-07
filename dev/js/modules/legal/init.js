@@ -11,7 +11,7 @@
 	exports.legal = {
 		name: moduleName.toLowerCase(),
 		routeName: "Legal",
-		url: "legal",
+		url: "legal?&tab",
 		templateUrl: ('partial/' + (moduleName.toLowerCase()) + '.ejs'),
 		controller: "LegalController",
 		controllerAs: ('Ctrl' + moduleName)
@@ -29,7 +29,7 @@
 	exports.about = {
 		name: moduleName.toLowerCase(),
 		routeName: "About & Acknowledgements",
-		url: "about",
+		url: "about?&tab",
 		templateUrl: ('partial/about.ejs'),
 		controller: "LegalController",
 		controllerAs: ('Ctrl' + moduleName)

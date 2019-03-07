@@ -6,9 +6,9 @@
 			<h3>Everything you've wanted to know about <strong>BELLIGERENCE</strong> - and then some!</h3>
 
 			<uib-accordion>
-				<div uib-accordion-group is-open="status.aboutOpen">
+				<div id="about" uib-accordion-group is-open="Ctrl.aboutOpen">
 					<uib-accordion-heading>
-						About the Project <i class="icon pull-right" ng-class="Ctrl.getChevron(status.aboutOpen)"></i>
+						About the Project <i class="icon pull-right" ng-class="Ctrl.getChevron(Ctrl.aboutOpen)"></i>
 					</uib-accordion-heading>
 
 					<div class="col-md-12 section">
@@ -60,15 +60,26 @@
 					</div>
 				</div>
 
-				<div uib-accordion-group is-open="status.creditsOpen">
+				<div uib-accordion-group is-open="Ctrl.creditsOpen">
 					<uib-accordion-heading>
-						Credits & Special Thanks <i class="icon pull-right" ng-class="Ctrl.getChevron(status.creditsOpen)"></i>
+						Credits & Special Thanks <i class="icon pull-right" ng-class="Ctrl.getChevron(Ctrl.creditsOpen)"></i>
 					</uib-accordion-heading>
 
-					<div class="col-md-12 section">
+					<div id="credits" class="col-md-12 section">
 						<div class="row">
 							<h1>Credits & Special Thanks</h1>
 							<h3>In advance: I'm sorry if I forgot anyone. It's been a long road.</h3>
+						</div>
+						<div class="row">
+							<a role="button" class="section-button medium-2" ng-click="Ctrl.rollOverCredits()">
+								<ul>
+									<li><i class="icon ion-android-person-add"></i></li>
+									<li>Roll Credits!</li>
+								</ul>
+							</a>
+							<div id="mouse-warning">
+								<i>Keep your cursor away from the screen to start!</i>
+							</div>
 						</div>
 
 						<div class="row spacing-2">
@@ -89,7 +100,7 @@
 									<div class="person-object">
 										<div class="role">DEBUGGING</div>
 										<div class="name">Sircrab</div>
-										<div class="remark">Also huge thanks for the multer-s3 package!</div>
+										<div class="remark">Also huge thanks for the multer-s3 module!</div>
 									</div>
 									<div class="person-object">
 										<div class="role">INITIAL PLANNING</div>
@@ -140,6 +151,17 @@
 						</div>
 
 						<div class="row spacing-1">
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="person-object">
+										<div class="role">Inspiration</div>
+										<div class="name"><a href="https://arma3.com" target="_blank">Bohemia Interactive</a></div>
+										<div class="remark">
+											Awesome devs, made one of my favorite series of all time. Psst, call me.
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="col-sm-2">
 								<div class="row">
 									<div class="person-object">
@@ -214,7 +236,7 @@
 										<div class="remark">I'm sorry. I know it's been really hard, but I can't thank you enough for the effort you've been putting into holding on, and how much it meant to me.</div>
 									</div>
 									<div class="person-object">
-										<div class="name">Clarissa D'Orival</div>
+										<div class="name">Clarissa d'Orival</div>
 										<div class="remark">I know you did your best. Thank you for the years and years of relentless support. I'm a bit late, but I hope you like it.</div>
 									</div>
 									<div class="person-object">
@@ -276,6 +298,7 @@
 									<div class="person-object">
 										<div class="role">Asian Mexican</div>
 										<div class="name">42nfl19</div>
+										<div class="remark">That f****** "Battle Buddies" song will never leave my head.</div>
 									</div>
 									<div class="person-object">
 										<div class="name">Engee</div>
@@ -292,6 +315,7 @@
 									<div class="person-object">
 										<div class="role">Role model</div>
 										<div class="name">Chiefrocker</div>
+										<div class="remark">The OG, da real MVP.</div>
 									</div>
 									<div class="person-object">
 										<div class="name">m4tko</div>
@@ -300,7 +324,7 @@
 									<div class="person-object">
 										<div class="role">Friendly-firer</div>
 										<div class="name">Archi</div>
-										<div class="remark">Seems to have a peculiar understanding of "friendly".</div>
+										<div class="remark">So progressive he sees no color, even on the battlefield.</div>
 									</div>
 									<div class="person-object">
 										<div class="role">AT meister</div>
@@ -343,14 +367,17 @@
 									<div class="person-object">
 										<div class="role">Normie</div>
 										<div class="name">Edge</div>
+										<div class="remark">Emasculated me through chess.</div>
 									</div>
 									<div class="person-object">
 										<div class="role">meme Maestro</div>
 										<div class="name">.gif</div>
+										<div class="remark">Knows the truth about Engineers.</div>
 									</div>
 									<div class="person-object">
+										<div class="role">War Hero</div>
 										<div class="name">Clever</div>
-										<div class="remark">THANK YOU FOR YOUR SERVICE</div>
+										<div class="remark">Also honorary Witch Doctor.</div>
 									</div>
 									<div class="person-object">
 										<div class="name">🅱imo</div>
@@ -397,9 +424,9 @@
 					</div>
 				</div>
 
-				<div uib-accordion-group is-open="status.depsOpen">
+				<div id="libraries" uib-accordion-group is-open="Ctrl.librariesOpen">
 					<uib-accordion-heading>
-						Libraries <i class="icon pull-right" ng-class="Ctrl.getChevron(status.depsOpen)"></i>
+						Libraries <i class="icon pull-right" ng-class="Ctrl.getChevron(Ctrl.librariesOpen)"></i>
 					</uib-accordion-heading>
 
 					<div class="col-md-12 section">
