@@ -112,7 +112,9 @@
 					image.src = attrs.backgroundImage;
 				}
 
-				function getUncached() { return (attrs["no-cache"] ? "" : ("?nocache=" + Math.random())); }
+				// function getUncached() { return (attrs["no-cache"] ? "" : ("?nocache=" + Math.random())); }
+
+				function getUncached() { return ""; }
 
 				function fadeOut(el) {
 					el.style.opacity = 1;
