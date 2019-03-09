@@ -278,6 +278,9 @@
 						font-weight: bold;
 					}
 				}
+
+				.body { word-break: break-word; }
+
 				.triangle-isosceles {
 					@include transition(border-color .15s);
 					position: relative;

@@ -251,6 +251,7 @@
 			}
 
 			.title {
+				word-break: break-word;
 				cursor: default;
 
 				text-align: center;
@@ -304,6 +305,7 @@
 				@include factor-property(margin-bottom, 4);
 				max-height: 150px;
 				overflow-y: hidden;
+				word-break: break-word;
 
 				p {
 					width: 94%;
