@@ -112,6 +112,7 @@
 					image.src = attrs.backgroundImage;
 				}
 
+				// One day we'll have our own server. That day is no today.
 				// function getUncached() { return (attrs["no-cache"] ? "" : ("?nocache=" + Math.random())); }
 
 				function getUncached() { return ""; }

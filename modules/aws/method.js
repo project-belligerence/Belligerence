@@ -8,6 +8,7 @@
 	var _ = require('lodash'),
 		AWS = require('aws-sdk'),
 		s3Storage = require('multer-sharp-s3'),
+		s3Cached = require('s3-cached'),
 
 		config = require('./../../config.js'),
 		API = require('./../../routes/api.js'),
@@ -74,13 +75,17 @@
 
 	function getS3File(req, res) {
 		var fileKey = mountPath(req.params, req.route),
-			params = { Bucket: config.db.aws.bucket, Key: fileKey };
+			s3 = s3Cached({
+				bucket: config.db.aws.bucket,
+				s3Options: {
+					accessKeyId: config.db.aws.accessKeyId,
+					secretAccessKey: config.db.aws.secretAccessKey
+				}
+			});
 
-		s3.getObject(params)
-			.createReadStream()
-			.on('error', handleError)
-			.pipe(res);
+		s3.getBinaryObjectCached(fileKey).then(handleRes).catch(handleError);
 
+		function handleRes(data) { res.send(new Buffer(data, 'binary')); }
 		function handleError (err) { res.status(config.enums.response_status.not_found).send(err); }
 	}
 
@@ -114,7 +119,7 @@
 
 	function mountPath(p, r) {
 		var key = p.FilePath += (p['0'] || '');
-		if (r.path.slice(-1) === '/' && key.slice(-1) !== '/') key += '/';
+		if ((r.path.slice(-1) === '/') && (key.slice(-1) !== '/')) key += '/';
 		return key;
 	}
 
