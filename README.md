@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/github/license/Neefay/Belligerence.svg">  
 </p>
 <p align="center">
-  <a href="https://belligerence.online">🖥 Live Alpha</a> hosted at <a href="https://www.heroku.com/">Heroku</a>.
+  <a href="https://belligerence.online">🖥 Live Alpha</a>.
 </p>
 
 ## ABOUT
