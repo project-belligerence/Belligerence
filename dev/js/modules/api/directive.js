@@ -113,9 +113,8 @@
 				}
 
 				// One day we'll have our own server. That day is no today.
-				// function getUncached() { return (attrs["no-cache"] ? "" : ("?nocache=" + Math.random())); }
-
-				function getUncached() { return ""; }
+				// That day has come.
+				function getUncached() { return (attrs["no-cache"] ? "" : ("?nocache=" + Math.random())); }
 
 				function fadeOut(el) {
 					el.style.opacity = 1;
