@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "build": "grunt build && webpack",
     "heroku-postbuild": "grunt build && webpack"
   },
   "dependencies": {
