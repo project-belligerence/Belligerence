@@ -21,7 +21,7 @@
 
 Developed over the course of three and a half years by one person, the project aim to prototype a different vision for shooter games, adding both persistency and a deep sense of progression.
 
-[📄 Read more about its history here](https://belligerence.herokuapp.com/about).
+[📄 Read more about its history here](https://belligerence.online/about).
 
 ## BRIEF FEATURES LIST
 
