@@ -1,22 +1,24 @@
 # How to build BELLIGERENCE
 
-## Prerequisites
+## Linux
+
+### Prerequisites
 
 * A host of some kind (Ubuntu 18.04 recommended)
 * Node >8.0
 * MySQL Server
 * Redis Server
     
-## Preparing the environment
+### Preparing the environment
 
 This section assumes you're using a Virtual Machine running Ubuntu 18.04
 
 First, install `node` (preferrably from node-source ppa), `mysql-server` and `redis` packages from apt
 
-For node-gyp, you will also need `gcc g++ make`
+For `node-gyp`, you will also need `gcc g++ make`
 
 
-## Installing Belligerence
+### Installing Belligerence
 1. Create a database for Belligerence to use:
 ```sql
 CREATE DATABASE myBelligerenceDatabase;
