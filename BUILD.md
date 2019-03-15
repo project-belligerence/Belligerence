@@ -7,7 +7,7 @@
 * A host of some kind (Ubuntu 18.04 recommended)
 * Node >8.0
 * MySQL Server
-* Redis Server
+* Redis Server (only required for production)
     
 ### Preparing the environment
 
