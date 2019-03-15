@@ -75,3 +75,6 @@ binding.gyp
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Jetbrains IDE
+.idea
