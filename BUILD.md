@@ -30,7 +30,7 @@ USE myBelligerenceDatabase;
 GRANT ALL PRIVILEGES ON myBelligerenceDatabase.* TO 'user'@'localhost' IDENTIFIED BY 'supersecretpassword';
 ```
 
-3. Clone repository somewhere and copy `.env.dist` into `.env` file. Edit resulting file, changing Database name and credentials that you're created previously. You will also need Steam API key that you can grab from [here](https://steamcommunity.com/dev/apikey)
+3. Clone repository somewhere and copy `.env.dist` into `.env` file. Edit resulting file, changing Database name and credentials that you've created previously. You will also need Steam API key that you can grab from [here](https://steamcommunity.com/dev/apikey)
 
 >WARNING: OAuth return url won't work if your server is not running on port 80, for that you will need to either proxy the server with `nginx`, or run `node` as superuser (not recommended)
 
