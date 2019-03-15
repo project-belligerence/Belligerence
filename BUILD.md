@@ -24,7 +24,7 @@ CREATE DATABASE myBelligerenceDatabase;
 
 2. Create a user that will manipulate database:
 ```sql
-USE DATABASE myBelligerenceDatabase;
+USE myBelligerenceDatabase;
 GRANT ALL PRIVILEGES ON myBelligerenceDatabase.* TO 'user'@'localhost' IDENTIFIED BY 'supersecretpassword';
 ```
 
