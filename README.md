@@ -69,4 +69,4 @@ Please however do keep in mind: this is barely scraping the surface of all of th
 
 ## BUILDING
 
-Instructions soon. I'll need to cook up a .env template along with all of the other instructions and that's currently beyond my scope.
+[Instructions](https://github.com/Neefay/Belligerence/blob/master/BUILD.md) - currently only available for Linux, Windows coming soon.
