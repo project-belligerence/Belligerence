@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/github/license/Neefay/Belligerence.svg">  
 </p>
 <p align="center">
-  <a href="https://belligerence.online">🖥 Live Alpha</a> hosted at <a href="https://www.heroku.com/">Heroku</a>.
+  <a href="https://belligerence.online">🖥 Live Alpha</a>.
 </p>
 
 ## ABOUT
@@ -21,7 +21,7 @@
 
 Developed over the course of three and a half years by one person, the project aim to prototype a different vision for shooter games, adding both persistency and a deep sense of progression.
 
-[📄 Read more about its history here](https://belligerence.herokuapp.com/about).
+[📄 Read more about its history here](https://belligerence.online/about).
 
 ## BRIEF FEATURES LIST
 
@@ -69,4 +69,4 @@ Please however do keep in mind: this is barely scraping the surface of all of th
 
 ## BUILDING
 
-Instructions soon. I'll need to cook up a .env template along with all of the other instructions and that's currently beyond my scope.
+[Instructions](https://github.com/Neefay/Belligerence/blob/master/BUILD.md) - currently only available for Linux, Windows coming soon.

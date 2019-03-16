@@ -138,7 +138,7 @@
 			var
 				modalOptions = {
 					header: { text: 'Post Intel', icon: args.modalIcon },
-					body: {	text: 'Are you use you want to post this Intel with the following settings?' },
+					body: {	text: 'Are you sure you want to post this Intel with the following settings?' },
 					choices: {
 						yes: { text: 'Yes', icon: 'ion-checkmark' },
 						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
@@ -156,7 +156,7 @@
 			var
 				modalOptions = {
 					header: { text: 'Edit Intel', icon: 'ion-edit' },
-					body: {	text: 'Are you use you want to submit the new changes to the Intel?' },
+					body: {	text: 'Are you sure you want to submit the new changes to the Intel?' },
 					choices: {
 						yes: { text: 'Yes', icon: 'ion-checkmark' },
 						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
@@ -174,7 +174,7 @@
 			var
 				modalOptions = {
 					header: { text: 'Delete Intel', icon: 'ion-trash-a' },
-					body: {	text: 'Are you use you want to delete this Intel?' },
+					body: {	text: 'Are you sure you want to delete this Intel?' },
 					choices: {
 						yes: { text: 'Yes', icon: 'ion-trash-a' },
 						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }

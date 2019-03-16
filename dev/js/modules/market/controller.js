@@ -420,7 +420,7 @@
 				var
 					modalOptions = {
 						header: { text: 'Confirm purchase', icon: "ion-ios-cart" },
-						body: {	text: 'Are you use you want to confirm your purchase?' },
+						body: {	text: 'Are you sure you want to confirm your purchase?' },
 						choices: {
 							yes: { text: 'Yes', icon: 'ion-checkmark' },
 							no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
@@ -449,7 +449,7 @@
 				var
 					modalOptions = {
 						header: { text: 'Clear your shopping cart?', icon: "ion-ios-cart-outline" },
-						body: {	text: 'Are you use you want to remove all items in your shopping cart? This cannot be undone.' },
+						body: {	text: 'Are you sure you want to remove all items in your shopping cart? This cannot be undone.' },
 						choices: {
 							yes: { text: 'Empty cart', icon: 'ion-close', class: "warning" },
 							no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
