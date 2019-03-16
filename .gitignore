@@ -57,6 +57,7 @@ binding.gyp
 # No workspace stuff either
 *.sublime-workspace
 *.sublime-project
+*.code-workspace
 
 # Environment variables
 *.env
