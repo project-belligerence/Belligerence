@@ -418,7 +418,21 @@
 			}
 		}
 
-		function validatePrivilege(player, tier) {	return (player.playerPrivilege <= tier); }
+		function privEnum() {
+			var perms = {
+				"owner": 0,
+				"admin": 1,
+				"moderator": 2,
+				"janitor": 3,
+				"user": 4
+			};
+			return Object.freeze(perms);
+		}
+
+		function validatePrivilege(player, tier) {
+			if (typeof tier === "string") tier = privEnum()[tier];
+			return (player.playerPrivilege <= tier);
+		}
 
 		function getOutfitPermissions(selfInfo) {
 			return (((selfInfo.PMC !== null) && (selfInfo.PMC !== undefined)) && (selfInfo.playerTier < 2));
