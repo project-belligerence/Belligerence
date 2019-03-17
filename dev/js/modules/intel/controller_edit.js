@@ -25,6 +25,7 @@
 		vm.maxFieldType = 0;
 		vm.enablePriceQuery = false;
 		vm.intelPrice = 0;
+		vm.emptyFee = 1;
 
 		if (vm.intelInfo.backgroundField === "own-hash") {
 			apiServices.loadXHR("/images/modules/intel/main_" + vm.intelInfo.hashField + ".jpg").then(function(blob) {
@@ -203,7 +204,11 @@
 				if (submitInfo.backgroundType) editSubmitInfo.background_type = submitInfo.backgroundType.value;
 				if (submitInfo.backgroundField) editSubmitInfo.background_field = submitInfo.backgroundField;
 
-				intelServices.getIntelPricePartial(editSubmitInfo).then(function(cost) { vm.intelPrice = cost; });
+				if (apiServices.validatePrivilege(playerInfo, "moderator")) {
+					vm.intelPrice = vm.emptyFee;
+				} else {
+					intelServices.getIntelPricePartial(editSubmitInfo).then(function(cost) { vm.intelPrice = cost; });
+				}
 
 				return editSubmitInfo;
 			}

@@ -19,6 +19,7 @@
 		vm.enablePriceQuery = false;
 		vm.maxFieldType = 0;
 		vm.intelPrice = 0;
+		vm.emptyFee = 1;
 
 		vm.formValues = {
 			titleField: "",
@@ -122,9 +123,14 @@
 						case "uploaded-picture": { return "own-hash"; } break;
 					}
 				})(submitInfo.backgroundType.value);
+
 				submitInfo.backgroundType = submitInfo.backgroundType.value;
 
-				intelServices.getIntelPrice(submitInfo).then(function(cost) { vm.intelPrice = cost; });
+				if (apiServices.validatePrivilege(playerInfo, "moderator")) {
+					$timeout(1).then(function() { vm.intelPrice = vm.emptyFee; });
+				} else {
+					intelServices.getIntelPrice(submitInfo).then(function(cost) { vm.intelPrice = cost; });
+				}
 			}
 		}
 
@@ -163,7 +169,6 @@
 			}
 
 			if ((goodFields === vm.textFields.length)) {
-
 				intelServices.askPostIntel(submitInfo).then(function(data) {
 					if (!data.data) return false;
 

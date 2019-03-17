@@ -358,8 +358,10 @@
 		});
 
 		var ActionsCostMethods = require('./../index.js').getMethods().actions_cost;
-		return ActionsCostMethods.getPropertyFunc(req, res, "costPostIntelBase", function(cost){
-			return callback(currentCost + cost);
+		return ActionsCostMethods.getPropertyFunc(req, res, "costPostIntelBase", function(cost) {
+			// Moderators can edit intel for free.
+			var allowFreeEdit = (req.playerInfo.playerPrivilege <= config.privileges().tiers.moderator);
+			return callback(allowFreeEdit ? 0 : (currentCost + cost));
 		});
 	}
 

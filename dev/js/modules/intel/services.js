@@ -156,7 +156,7 @@
 						no: { text: 'Cancel', icon: 'ion-arrow-left-c' }
 					},
 					cost: args.finalCost
-				},newModal = uiServices.createModal('GenericYesNo', modalOptions);
+				}, newModal = uiServices.createModal('GenericYesNo', modalOptions);
 
 			return newModal.result.then(function(choice) {
 				if (choice) { return postIntel(args); }
