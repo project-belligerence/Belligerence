@@ -271,7 +271,7 @@
 								var liPad = ((liIcon.length === 0) ? 0 : 40),
 									nWidth = ((parseInt($(liEl2).outerWidth(), 10) + liPad)),
 									nHeight = parseInt($(liEl2).outerHeight(), 10);
-								liElObj.css('width', "100%");
+								liElObj.css('width', "max-content");
 								liElObj.css('height', nHeight);
 							});
 
