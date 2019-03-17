@@ -1,9 +1,9 @@
 (function() {
 	'use strict';
 
-	ObjectControllerFunction.$inject = ["$scope", "$stateParams", "$timeout", "apiServices", "generalServices", "uiServices"];
+	ObjectControllerFunction.$inject = ["$scope", "$state", "$stateParams", "$timeout", "apiServices", "generalServices", "uiServices"];
 
-	function ObjectControllerFunction($scope, $stateParams, $timeout, apiServices, generalServices, uiServices) {
+	function ObjectControllerFunction($scope, $state, $stateParams, $timeout, apiServices, generalServices, uiServices) {
 		var vm = this;
 
 		vm.getProjectLicense = getProjectLicense;
@@ -38,6 +38,8 @@
 		}
 
 		function scrollCreditsHandler() {
+			if ($state.current.name !== "app.public.about") return false;
+
 			var tgtCtn = "about-container";
 			return uiServices.bindScrollToElement(tgtCtn, tgtCtn, function(tgt, ypos) {
 				if (vm.ui.creditsStarted) vm.ui.currentScroll = (ypos * -1) + 250;
