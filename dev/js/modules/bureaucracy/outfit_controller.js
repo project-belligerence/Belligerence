@@ -28,7 +28,8 @@
 					}),
 					new vm.menuItem({
 						title: "Transfer Outfit Leadership", icon: "person-stalker",
-						description: "Gives control of your Outfit to another Soldier. Requires you to be its Commander.",
+						description: "Gives control of your Outfit to another Soldier.",
+						requirement: "Requires you to be its Commander.",
 						state: "transfer-leadership",
 						enable: ((vm.selfInfo.PMC) && (vm.selfInfo.contractType === 0) && (vm.selfInfo.playerTier === 0) && (vm.unitsInfo.length > 0))
 					})

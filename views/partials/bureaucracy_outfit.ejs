@@ -2,12 +2,26 @@
 	<div id="bureaucracy-page" class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h2>Bureucracy</h2>
+				<h2>Outfit Bureaucracy</h2>
 				<h3>Administrative actions related to your Outfit's contract.</h3>
 				<hr />
 			</div>
 		</div>
-		<div class="col-md-12 fade-animation-fast" ng-if="(CtrlBureaucracyOutfit.pageState === 'main')" ng-cloak>
+
+		<div id="back-button" class="fade-animation-fast" ng-if="((CtrlBureaucracyOutfit.pageState !== 'main') && (CtrlBureaucracyOutfit.pageState !== 'none'))" ng-cloak>
+			<a
+				ng-click="CtrlBureaucracyOutfit.changeState('main')"
+				class="section-button medium animated"
+				role="button"
+			>
+				<ul>
+					<li><i class="icon ion-arrow-return-left"></i></li>
+					<li>Back</li>
+				</ul>
+			</a>
+		</div>
+
+		<div id="actions-section" class="col-md-12 fade-animation-fast" ng-if="(CtrlBureaucracyOutfit.pageState === 'main')" ng-cloak>
 			<div class="row">
 				<div class="actions col-md-3 col-sm-5 col-xs-12 noselect" ng-repeat="menuItem in CtrlBureaucracyOutfit.menuOptions" ng-class="{'muted': !(menuItem.enable) }">
 					<div
@@ -20,22 +34,12 @@
 						<div class="title" ng-bind="::(menuItem.title)"></div>
 						<hr />
 						<div class="description" ng-bind="::(menuItem.description)"></div>
+						<div class="requirement" ng-bind="::(menuItem.requirement)"></div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="back-button" class="fade-animation-fast" ng-if="(CtrlBureaucracyOutfit.pageState !== 'main') && (CtrlBureaucracyOutfit.pageState !== 'null')" ng-cloak>
-			<a
-				ng-click="CtrlBureaucracyOutfit.changeState('main')"
-				class="section-button medium animated"
-				role="button"
-			>
-				<ul>
-					<li><i class="icon ion-arrow-return-left"></i></li>
-					<li>Back</li>
-				</ul>
-			</a>
-		</div>
+
 		<div id="class-change" class="fade-animation-fast" ng-if="(CtrlBureaucracyOutfit.pageState === 'transfer-leadership')" ng-cloak>
 
 			<units-directive

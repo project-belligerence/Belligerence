@@ -21,6 +21,7 @@
 				title: params.title,
 				icon: "ion-"+params.icon,
 				description: params.description,
+				requirement: params.requirement,
 				state: params.state,
 				enable: params.enable,
 				route: params.route,

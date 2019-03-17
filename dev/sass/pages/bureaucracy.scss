@@ -2,6 +2,21 @@
 #bureaucracy-page {
 	@include factor-property(padding-bottom, 20);
 	#back-button { @include factor-property(margin-bottom, 5); }
+
+	#actions-section {
+		.actions {
+			.description {
+				display: inline-block;
+			}
+
+			.requirement {
+				display: inline-block;
+				@include factor-property(margin-top, 2);
+				font-weight: 800;
+			}
+		}
+	}
+
 	#class-change {
 		#class-selection-choices {
 			@include factor-property(padding-bottom, 15);

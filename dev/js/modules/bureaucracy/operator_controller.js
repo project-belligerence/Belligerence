@@ -24,7 +24,8 @@
 			new vm.menuItem(
 				{
 					title: "Switch class", icon: "arrow-swap",
-					description: "Changes your current contract type at the cost of resetting your account. Requires you not to be part of an Outfit.",
+					description: "Changes your current contract type at the cost of resetting your account.",
+					requirement: "Requires you not to be part of an Outfit.",
 					state: "class-change",
 					enable: (!vm.selfInfo.PMC),
 					route: "app.private.bureaucracy-operator"
@@ -33,7 +34,8 @@
 			new vm.menuItem(
 				{
 					title: "New Outfit", icon: "ios-people",
-					description: "Start a new Outfit as its Commander. Requires you not to be part of an Outfit.",
+					description: "Start a new Outfit as its Commander.",
+					requirement: "Requires you not to be part of an Outfit.",
 					state: "class-change",
 					enable: ((vm.selfInfo.contractType <= 1) && !(vm.selfInfo.PMC)),
 					route: "app.private.new-outfit"
