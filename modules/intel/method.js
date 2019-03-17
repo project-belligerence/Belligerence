@@ -62,7 +62,8 @@
 		if (req.playerInfo.id === -1) { return (entry.visibilityField == "everyone"); }
 
 		var ret = false,
-			friendList = {};
+			friendList = {},
+			hasPermissions = API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.moderator);
 
 		switch(entry.visibilityField) {
 			case "freelancers": {
@@ -96,10 +97,12 @@
 
 		if (entry.originalPosterHash === req.playerInfo.hashField) { ret = true; }
 
-		if (!(API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.moderator))) {
+		if (!(hasPermissions)) {
 			entry.originalPosterHash = null;
 			entry.originalPosterDetails = null;
 		}
+
+		ret = ((hasPermissions) ? true : ret);
 
 		return ret;
 	}
@@ -161,7 +164,8 @@
 				var	foundModels = [],
 					foundModelsHashes = [],
 					posterHashes = [],
-					originalPosterHashes = []
+					originalPosterHashes = [],
+					isAdmin = API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.admin)
 				;
 
 				foundModels = entries.rows;
@@ -218,7 +222,15 @@
 												}
 											}
 										} break;
-										case "anonymous": { currentModel.posterDetails = {alias: "Anonymous"}; }
+										case "anonymous": {
+											if (!(isAdmin)) {
+												currentModel.posterDetails = { alias: "Anonymous" };
+											} else {
+												currentModel.posterDetails = currentModel.originalPosterDetails;
+												currentModel.posterDetails.alias += " (Anon.)";
+												currentModel.displayAs = "player";
+											}
+										}
 									}
 								}
 
@@ -232,7 +244,7 @@
 
 								foundModels = proccessCheers(req, foundModels);
 
-								if (!(API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.admin))) {
+								if (!(isAdmin)) {
 									for (var i=0; i < foundModels.length; i++) {
 										if (foundModels[entriesToFilter[i]]) {
 											var hiddenMsg = config.messages().modules.intel.hidden;
@@ -267,7 +279,8 @@
 	}
 
 	function get(req, res) {
-		var objectID = req.params.Hash;
+		var objectID = req.params.Hash,
+			isAdmin = API.methods.validatePlayerPrivilegeFunc(req, config.privileges().tiers.admin);
 
 		mainModel.findOne({where: {"hashField": objectID}}).then(function(entry) {
 			if (!API.methods.validate(req, res, [entry], config.messages().no_entry)) { return 0; }
@@ -280,18 +293,16 @@
 					proccessIntelVisibility(req, entry)
 				], config.messages().bad_permission)) { return 0; }
 
+				entry.posterDetails = (isAdmin ? entry.originalPosterDetails : entry.posterDetails);
+
+				if (isAdmin) {
+					entry.posterDetails.alias += " (Anon.)";
+					entry.displayAs = "player";
+				}
+
 				entry = proccessCheers(req, [entry]);
 
 				API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
-
-				/*
-					var CommentsMethods = require('./../index.js').getMethods().comments;
-
-					CommentsMethods.getEntityComments(req, res, "intel_table", entry[0].dataValues.hashField, function(comments) {
-						entry[0].dataValues.comments = comments;
-						API.methods.sendResponse(req, res, true, config.messages().return_entry, entry);
-					});
-				*/
 			});
 		});
 	}

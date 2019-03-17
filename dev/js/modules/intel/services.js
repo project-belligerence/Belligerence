@@ -79,7 +79,7 @@
 
 			if (dummyIntel.displayAs === "anonymous") {
 				dummyIntel.posterUrl = "#";
-			} else { dummyIntel.posterUrl += "/" + dummyIntel.posterHash; }
+			} else { dummyIntel.posterUrl += "/" + (dummyIntel.posterHash || dummyIntel.originalPosterHash); }
 
 			return dummyIntel;
 		}
