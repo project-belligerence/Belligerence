@@ -93,21 +93,23 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-sm-8 extra-options" ng-if="((CtrlIntel.getPermissions(CtrlIntel.playerInfo, CtrlIntel.intelData)) && !(CtrlIntel.loadingIntel))" ng-cloak>
-						<div class="row">
-							<hr/>
-							<a ui-sref="app.private.intel-edit({intelHash: CtrlIntel.intelData.hashField})" class="section-button warning medium pull-left" role="button">
-								<ul>
-									<li><i class="icon ion-edit"></i></li>
-									<li>Edit</li>
-								</ul>
-							</a>
-							<a class="section-button muted medium pull-right" role="button" ng-click="CtrlIntel.askDeleteIntel()">
-								<ul>
-									<li><i class="icon ion-trash-a"></i></li>
-									<li>Delete</li>
-								</ul>
-							</a>
+					<div class="col-sm-8 extra-options" ng-if="!(CtrlIntel.loadingIntel)" ng-cloak>
+						<div ng-if="::(CtrlIntel.getPermissions(CtrlIntel.playerInfo, CtrlIntel.intelData))">
+							<div class="row">
+								<hr/>
+								<a ui-sref="app.private.intel-edit({intelHash: CtrlIntel.intelData.hashField})" class="section-button warning medium pull-left" role="button">
+									<ul>
+										<li><i class="icon ion-edit"></i></li>
+										<li>Edit</li>
+									</ul>
+								</a>
+								<a class="section-button muted medium pull-right" role="button" ng-click="CtrlIntel.askDeleteIntel()">
+									<ul>
+										<li><i class="icon ion-trash-a"></i></li>
+										<li>Delete</li>
+									</ul>
+								</a>
+							</div>
 						</div>
 					</div>
 					<div class="spinner col-sm-8" ng-if="(CtrlIntel.loadingIntel)" ng-cloak>

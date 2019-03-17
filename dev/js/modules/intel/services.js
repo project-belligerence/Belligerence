@@ -131,7 +131,19 @@
 		}
 
 		function getPermissions(player, intel) {
-			return ((player.playerPrivilege <= 3) || (player.hashField === (intel.posterHash || '123')));
+			var intelHash = (intel.posterHash || intel.originalPosterHash || '123'),
+				conditional = (
+					(player.playerPrivilege <= 3) ||
+					(player.hashField === intelHash)
+				);
+			if (player.PMC) {
+				if (
+					(intel.displayAs === "pmc") &&
+					(player.PMC.hashField === intelHash) &&
+					(player.playerTier <= 2)
+				) conditional = true;
+			}
+			return conditional;
 		}
 
 		function askPostIntel(args) {
