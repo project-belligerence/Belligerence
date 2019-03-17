@@ -408,11 +408,16 @@
 								background-size: 200%;
 								background-repeat: no-repeat;
 							}
-							background-size: 110%;
+							background-size: cover;
+							background-repeat: no-repeat;
+							background-position: center center;
 							color: #fff;
-							text-shadow: 0px 0px 5px #000;
 
-							a { color: #fff; text-shadow: 0px 0px 5px #111, 0px 0px 10px #111; }
+							$text_shadow_card: 0px 0px 5px rgba(1,1,1,.5), 0px 0px 5px rgba(1,1,1,.8), 0px 0px 10px #000;
+
+							text-shadow: $text_shadow_card;
+
+							a { color: #fff; text-shadow: $text_shadow_card; }
 
 							.content .info {
 								.alias {
@@ -423,7 +428,7 @@
 
 								.location {
 									color: #fff;
-									text-shadow: 0px 0px 5px #111, 0px 0px 10px #111;
+									text-shadow: $text_shadow_card;
 									&:hover { color: #ddd; }
 								}
 
