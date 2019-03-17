@@ -553,6 +553,7 @@
 					fnc: function() {
 						$cookies.remove('loggedInToken');
 						$rootScope.$broadcast("navbar:refreshDirective");
+						$rootScope.$broadcast("logoutEvent");
 					},
 					redirect: "app.public.frontpage"
 				},
@@ -562,6 +563,7 @@
 					fnc: function() {
 						$cookies.remove('loggedInToken');
 						$rootScope.$broadcast("navbar:refreshDirective");
+						$rootScope.$broadcast("logoutEvent");
 					},
 					redirect: "app.public.frontpage"
 				}
