@@ -193,14 +193,18 @@
 						color: #000;
 						background-color: #fff;
 						padding: factor(1);
+
 						hr {
 							margin-top: factor(1);
 							margin-bottom: factor(1);
 						}
+						.note { word-wrap: break-word; }
+
 						.date-container {
 							color: #000;
 							background-color: #fff;
 							display: inline-block;
+
 							.date {
 								position: relative;
 								top: -2px;

@@ -99,7 +99,7 @@
 									<hr>
 									<div class="date-container">
 										<i class="icon ion-calendar"></i>
-										<span class="date"><span ng-bind="::((CtrlMessages.sentReceived === 'received') ? 'Received' : 'Sent')"></span> <time-ago from-time='{{::message.sentAt}}'></time-ago></span>
+										<span class="date"><span ng-bind="::((CtrlMessages.sentReceived === 'received') ? 'Received' : 'Sent')"></span> <strong><time-ago from-time='{{::message.sentAt}}'></time-ago></span></strong>
 									</div>
 									<div class="choices-wrapper">
 										<div class="choices">
