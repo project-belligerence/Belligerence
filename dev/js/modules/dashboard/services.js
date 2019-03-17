@@ -151,9 +151,11 @@
 				if (choice) {
 					return playerServices.postClaimNetworth().then(function(data) {
 						if (data) {
-							fundsServices.showChangedFunds(amount);
-							alertsServices.addNewAlert("success", data.data.message);
-							return data.data.data;
+							if (data.success || data.data.success) {
+								fundsServices.showChangedFunds(amount);
+								alertsServices.addNewAlert("success", data.data.message);
+								return data.data.data;
+							}
 						} else { return false; }
 					});
 				} else { return false; }
