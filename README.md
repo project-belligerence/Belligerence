@@ -4,12 +4,12 @@
   </a>
    <br/><br/>
   <a href="https://github.com/Neefay/Belligerence/commits/master">
-    <img src="https://img.shields.io/github/package-json/v/Neefay/Belligerence.svg" alt="Current version">
+    <img src="https://img.shields.io/github/package-json/v/project-belligerence/Belligerence.svg" alt="Current version">
   </a>
   <a href="https://github.com/Neefay/Belligerence/issues">
-    <img src="https://img.shields.io/github/issues/Neefay/Belligerence.svg" alt="Issues">
+    <img src="https://img.shields.io/github/issues/project-belligerence/Belligerence.svg" alt="Issues">
   </a>
-  <img src="https://img.shields.io/github/license/Neefay/Belligerence.svg">  
+  <img src="https://img.shields.io/github/license/project-belligerence/Belligerence.svg">  
 </p>
 <p align="center">
   <a href="https://belligerence.online">🖥 Live Alpha</a>.
