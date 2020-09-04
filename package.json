@@ -65,7 +65,7 @@
     "sequelize-heroku": "^2.0.0",
     "serve-favicon": "^2.3.0",
     "sharp": "^0.20.1",
-    "simple-crypto-js": "^1.1.1",
+    "simple-crypto-js": "^3.0.0",
     "simplebar": "^2.0.0-beta.3",
     "ssacl-attribute-roles": "0.0.5",
     "validate.js": "^0.11.1",
